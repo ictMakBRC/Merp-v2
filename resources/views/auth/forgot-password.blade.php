@@ -1,25 +1,43 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+    <x-slot:title>
+        {{ __('Forgot Password | NIMS') }}
+        </x-slot>
+        <!-- Password recovery form -->
+        <div class="card mt-1 mt-lg-1 mb-5">
+            <div class="card-body">
+                <div class="border p-4 rounded">
+                    <div class="text-center">
+                        {{-- <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
+                            <img src="{{ asset('assets/nims_images/banner.png') }}" alt="logo-banner"
+                            style="height: 50px; width: 100%; display: block;">
+                        </div> --}}
+                        <h3 class="">{{ __('public.forgotpass') }}</h3>
+                        <span
+                            class="d-block text-muted">{{ __('public.forgot_pass_message') }}</span>
+                    </div>
+                    <div class="form-body">
+                        <form class="row g-3" method="POST" action="{{ route('password.email') }}">
+                            @csrf
+                            @include('layouts.messages')
+                            <x-auth-session-status class="mb-4" :status="session('status')" />
+                            <div class="col-12">
+                                <x-label for="inputEmailAddress" class="fw-bold">{{ __('public.email') }}</x-label>
+                                <input type="email" class="form-control" name="email" value="{{ old('email') }}"
+                                    required autofocus autocomplete="off">
+                            </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                            <div class="col-12">
+                                <div class="d-grid">
+                                    <x-button class="btn-success">{{ __('public.sendlink') }}</x-button>
+                                    <a href="{{ route('login') }}"
+                                        class="btn btn-lg btn-light mt-2">{{ __('public.backtologin') }}</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
+        <!-- /password recovery form -->
 </x-guest-layout>
