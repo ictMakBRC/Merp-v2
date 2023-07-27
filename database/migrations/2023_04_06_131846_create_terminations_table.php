@@ -15,13 +15,11 @@ return new class extends Migration
     {
         Schema::create('terminations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('emp_id')->nullable();
-            $table->foreignId('department_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->string('reason')->nullable();
             $table->date('termination_date')->nullable();
             $table->string('letter');
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

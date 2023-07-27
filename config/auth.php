@@ -112,4 +112,14 @@ return [
 
     'password_timeout' => 10800,
 
+     /*
+    |--------------------------------------------------------------------------
+    | Password Expiration
+    |--------------------------------------------------------------------------
+    |
+    | Here you may define the number of days for the user password to expire after which a user will be forced to change to a new one.
+    |
+    */
+    'password_expires_days' => 60,
+
 ];

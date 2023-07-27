@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('designation_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('emp_id')->nullable();
-            $table->unsignedBigInteger('department_id')->nullable();
-            $table->unsignedBigInteger('station_id')->nullable();
-            $table->unsignedBigInteger('from')->nullable();
-            $table->unsignedBigInteger('to')->nullable();
-            $table->unsignedBigInteger('supervisor')->nullable();
-            $table->unsignedBigInteger('official_contract_id')->nullable();
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('department_id')->nullable()->constrained('departments', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('station_id')->nullable()->constrained('stations', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('from')->nullable()->constrained('designations', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('to')->nullable()->constrained('designations', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('supervisor')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('official_contract_id')->nullable()->constrained('official_contracts', 'id')->onUpdate('cascade')->onDelete('restrict');
+
             $table->timestamps();
         });
     }

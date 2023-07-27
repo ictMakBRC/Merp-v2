@@ -8,6 +8,6 @@ class AssetsComponent extends Component
 {
     public function render()
     {
-        return view('livewire.assets-management.assets-component')->layout('layouts.assets');
+        return view('livewire.assets-management.assets-component')->layout('layouts.app');
     }
 }

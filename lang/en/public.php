@@ -129,24 +129,6 @@ return [
     'partners' => 'Partners',
     'add_new_platform' => 'Add new platform',
 
-    'home_dashboard_text' => "A real-time snapshot presentation of the relevant metrics and indicators on the laboratory network's performance",
-
-    'home_sample_referral_text' => 'Tracking samples shipments and their integrity while in transit and sequencing results within the laboratory network.',
-
-    'home_logistics_text' => 'Tracking the placement of orders, deliveries and consumption of the different supplies within the laboratory network.',
-
-    'home_training_text' => 'Managing training events, the materials, training evaluations and maintaining records of trainers and trainees.',
-
-    'home_eqa_text' => 'Tracking the implementation and improvement of quality standards and measures within the laboratory network.',
-
-    'home_documents_mgt_text' => 'A repository of documents for use in the Africa PGI laboratory network, such MTAs, custom invoices, SOPs, and Manuals.',
-
-    'home_helpdesk_text' => 'A platform dedicated to manage and resolve user inquiries, technical issues, and support within the laboratory network.',
-
-    'home_network_mgt_text' => 'Managing the Africa PGI network setup including regions, countries, institutions, dry ice points and the network map.',
-
-    'home_user_mgt_text' => 'Managing NIMS system settings, users, their roles and permissions, and tracking user activity on the system.',
-
     'contact_person_telephone' => 'Contact Person Telephone',
     'contact_person_email' => 'Contact Person Email',
 

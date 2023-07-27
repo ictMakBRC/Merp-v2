@@ -15,12 +15,13 @@ return new class extends Migration
     {
         Schema::create('banking_information', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->string('bank_name');
             $table->string('branch')->nullable();
             $table->string('account_name');
             $table->string('currency');
             $table->string('account_number');
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('work_experiences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('company');
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('monthly_salary')->nullable();
             $table->string('service_length');
             $table->longText('job_description')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

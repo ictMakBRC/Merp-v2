@@ -15,13 +15,11 @@ return new class extends Migration
     {
         Schema::create('appraisals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('emp_id')->nullable();
-            $table->foreignId('department_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
             $table->string('appraisal_file');
-            $table->unsignedBigInteger('uploaded_by')->nullable();
+            $table->foreignId('uploaded_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

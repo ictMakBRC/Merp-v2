@@ -8,6 +8,6 @@ class ProcurementMainDashboardComponent extends Component
 {
     public function render()
     {
-        return view('livewire.procurement.dashboard.procurement-main-dashboard-component')->layout('layouts.procurement');
+        return view('livewire.procurement.dashboard.procurement-main-dashboard-component')->layout('layouts.app');
     }
 }

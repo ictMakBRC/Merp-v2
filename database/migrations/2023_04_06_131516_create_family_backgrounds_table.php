@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('family_backgrounds', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->string('member_type');
             $table->string('surname');
             $table->string('first_name');
@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('employer')->nullable();
             $table->string('employer_address')->nullable();
             $table->string('employer_contact')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

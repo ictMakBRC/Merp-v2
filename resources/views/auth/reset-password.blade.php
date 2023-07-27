@@ -1,11 +1,9 @@
 <x-guest-layout>
     <x-slot:title>
-        {{ __('Reset Password | NIMS') }}
+        {{ __('Reset Password | ') }}
         </x-slot>
 
-
-
-        <div class="card-body p-0 auth-header-box">
+        <div class="card-body p-0 auth-header-bo">
             <div class="text-center p-3">
                 <a href="{{ route('login') }}" class="logo logo-admin">
                     <img src="{{ asset('assets/images/logos/merp-logo.png') }}" height="50" alt="logo"

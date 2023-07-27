@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('training_programs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('organised_by');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('training_length');
             $table->longText('training_description')->nullable();
             $table->string('certificate')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

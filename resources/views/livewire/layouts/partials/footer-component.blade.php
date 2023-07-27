@@ -1,5 +1,5 @@
 <div>
-    <footer class="page-footer">
-        <p class="mb-0"><span>&copy; {{ date('Y') }} <a href="#" class="text-success ">Makerere University Biomedical Research Centre</a></span>. All right reserved.</p>
+    <footer class="footer text-center text-s-start">
+        &copy; {{ date('Y') }} Makerere University Biomedical Research Centre. <span class="text-muted d-none d-sm-inline-block float-en">All right reserved.</span>
     </footer>
 </div>

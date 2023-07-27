@@ -1,5 +1,5 @@
-@if (count($errors) > 0)
 
+@if (count($errors) > 0)
     @foreach ($errors->all() as $error)
         <div class="alert alert-danger border-1 alert-dismissible fade show">
             <span class="fw-semibold">{{ $error }}</span>

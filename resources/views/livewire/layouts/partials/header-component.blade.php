@@ -1,72 +1,286 @@
-<header>
-    <div class="topbar d-flex align-items-center">
-        <nav class="navbar navbar-expand">
-            <div class="mobile-toggle-menu"><i class='bx bx-menu'></i>
-            </div>
-            <div class="search-bar flex-grow-1 d-none">
-                <div class="position-relative search-bar-box">
-                    <input type="text" class="form-control search-control" placeholder="Type to search..."> <span
-                        class="position-absolute top-50 search-show translate-middle-y"><i
-                            class='bx bx-search'></i></span>
-                    <span class="position-absolute top-50 search-close translate-middle-y"><i
-                            class='bx bx-x'></i></span>
-                </div>
-            </div>
-            <div class="top-menu ms-auto">
-                <ul class="navbar-nav align-items-center">
-                    {{-- <li class="nav-item mobile-search-icon">
-                        <a class="nav-link" href="#"> <i class='bx bx-search'></i>
+<div>
+    <div class="topbar">
+        <!-- Navbar -->
+        <nav class="navbar-custom" id="navbar-custom">
+            <ul class="list-unstyled topbar-nav float-end mb-0">
+                {{-- <li class="dropdown">
+                    <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
+                        <img src="assets/images/flags/us_flag.jpg" alt="" class="thumb-xxs rounded-circle">
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#"><img src="assets/images/flags/us_flag.jpg"
+                                alt="" height="15" class="me-2">English</a>
+                        <a class="dropdown-item" href="#"><img src="assets/images/flags/spain_flag.jpg"
+                                alt="" height="15" class="me-2">Spanish</a>
+                        <a class="dropdown-item" href="#"><img src="assets/images/flags/germany_flag.jpg"
+                                alt="" height="15" class="me-2">German</a>
+                        <a class="dropdown-item" href="#"><img src="assets/images/flags/french_flag.jpg"
+                                alt="" height="15" class="me-2">French</a>
+                    </div>
+                </li> --}}
+                <!--end topbar-language-->
+
+                {{-- <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
+                        <i class="ti ti-mail"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
+
+                        <h6
+                            class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
+                            Emails <span class="badge bg-soft-primary badge-pill">3</span>
+                        </h6>
+                        <div class="notification-menu" data-simplebar>
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">2 min ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <img src="assets/images/users/user-1.jpg" alt=""
+                                            class="thumb-sm rounded-circle">
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">Your order is placed</h6>
+                                        <small class="text-muted mb-0">Dummy text of the printing and industry.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">10 min ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <img src="assets/images/users/user-4.jpg" alt=""
+                                            class="thumb-sm rounded-circle">
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">Meeting with designers</h6>
+                                        <small class="text-muted mb-0">It is a long established fact that a
+                                            reader.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">40 min ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <img src="assets/images/users/user-2.jpg" alt=""
+                                            class="thumb-sm rounded-circle">
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">UX 3 Task complete.</h6>
+                                        <small class="text-muted mb-0">Dummy text of the printing.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">1 hr ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <img src="assets/images/users/user-5.jpg" alt=""
+                                            class="thumb-sm rounded-circle">
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">Your order is placed</h6>
+                                        <small class="text-muted mb-0">It is a long established fact that a
+                                            reader.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">2 hrs ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <img src="assets/images/users/user-3.jpg" alt=""
+                                            class="thumb-sm rounded-circle">
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">Payment Successfull</h6>
+                                        <small class="text-muted mb-0">Dummy text of the printing.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                        </div>
+                        <!-- All-->
+                        <a href="javascript:void(0);" class="dropdown-item text-center text-primary">
+                            View all <i class="fi-arrow-right"></i>
                         </a>
-                    </li> --}}
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <a  href="#" class="nav-link active dropdown-toggle" aria-current="page"
-                                data-bs-toggle="dropdown"><i class='bx bx-world me-1 fs-5'>{{ Config::get('languages')[App::getLocale()] }}</i></a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">
-                                <a class="dropdown-item" href="{{ route('lang', 'en') }}">English</a>
-                                <a class="dropdown-item" href="{{ route('lang', 'ar') }}">Arabic</a>
-                                <a class="dropdown-item" href="{{ route('lang', 'fr') }}">French</a>
-                                <a class="dropdown-item" href="{{ route('lang', 'es') }}">Spanish</a>
-                                <a class="dropdown-item" href="{{ route('lang', 'sw') }}">Swahili</a>
-                                <a class="dropdown-item" href="{{ route('lang', 'pt') }}">Portuguese</a>
+                    </div>
+                </li>
+
+                <li class="dropdown notification-list">
+                    <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
+                        <i class="ti ti-bell"></i>
+                        <span class="alert-badge"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
+
+                        <h6
+                            class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
+                            Notifications <span class="badge bg-soft-primary badge-pill">2</span>
+                        </h6>
+                        <div class="notification-menu" data-simplebar>
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">2 min ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <i class="ti ti-chart-arcs"></i>
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">Your order is placed</h6>
+                                        <small class="text-muted mb-0">Dummy text of the printing and industry.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">10 min ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <i class="ti ti-device-computer-camera"></i>
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">Meeting with designers</h6>
+                                        <small class="text-muted mb-0">It is a long established fact that a
+                                            reader.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">40 min ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <i class="ti ti-diamond"></i>
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">UX 3 Task complete.</h6>
+                                        <small class="text-muted mb-0">Dummy text of the printing.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">1 hr ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <i class="ti ti-drone"></i>
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">Your order is placed</h6>
+                                        <small class="text-muted mb-0">It is a long established fact that a
+                                            reader.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                            <!-- item-->
+                            <a href="#" class="dropdown-item py-3">
+                                <small class="float-end text-muted ps-2">2 hrs ago</small>
+                                <div class="media">
+                                    <div class="avatar-md bg-soft-primary">
+                                        <i class="ti ti-users"></i>
+                                    </div>
+                                    <div class="media-body align-self-center ms-2 text-truncate">
+                                        <h6 class="my-0 fw-normal text-dark">Payment Successfull</h6>
+                                        <small class="text-muted mb-0">Dummy text of the printing.</small>
+                                    </div>
+                                    <!--end media-body-->
+                                </div>
+                                <!--end media-->
+                            </a>
+                            <!--end-item-->
+                        </div>
+                        <!-- All-->
+                        <a href="javascript:void(0);" class="dropdown-item text-center text-primary">
+                            View all <i class="fi-arrow-right"></i>
+                        </a>
+                    </div>
+                </li> --}}
+
+                <li class="dropdown">
+                    <a class="nav-link dropdown-toggle nav-user" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/images/users/user-vector.png') }}"
+                                alt="profile-user" class="rounded-circle me-2 thumb-sm" />
+                            <div>
+                                <span class="d-none d-md-block fw-semibold font-12">{{ Auth::user()->name }} <i
+                                        class="mdi mdi-chevron-down"></i></span>
                             </div>
                         </div>
-                    </li>
-                    {{-- Header Notification list Goes here--}}
-                </ul>
-            </div>
-            <div class="user-box dropdown">
-                <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#"
-                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/images/user.png') }}"
-                        class="user-img" alt="User-avatar">
-                    <div class="user-info ps-3">
-                        <p class="user-name mb-0">{{ Auth::user()->name }}</p>
-                    </div>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="{{ route('user.account') }}"><i
-                                class="bx bx-user"></i><span>{{ __('public.profile') }}</span></a>
-                    </li>
-                    <li>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="{{ route('user.account') }}"><i
+                                class="ti ti-user font-16 me-1 align-text-bottom"></i> Profile</a>
+                        {{-- <a class="dropdown-item" href="#"><i class="ti ti-settings font-16 me-1 align-text-bottom"></i> Settings</a> --}}
                         <div class="dropdown-divider mb-0"></div>
-                    </li>
-                    <li><a class="dropdown-item" href="{{ route('home') }}"><i
-                        class="bx bx-left-arrow-alt"></i><span>{{ __('Check-out') }}</span></a>
-                    </li>
-                    <li>
-                        <div class="dropdown-divider mb-0"></div>
-                    </li>
-                    <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button class="dropdown-item"
                                 onclick="event.preventDefault(); this.closest('form').submit();"><i
-                                    class='bx bx-log-out-circle'></i>{{ __('public.logout') }}</button>
+                                    class='ti ti-power font-16 me-1 align-text-bottom'></i>{{ __('public.logout') }}</button>
                         </form>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </li>
+                <!--end topbar-profile-->
+                {{-- <li class="notification-list">
+                    <a class="nav-link arrow-none nav-icon offcanvas-btn" href="#" data-bs-toggle="offcanvas"
+                        data-bs-target="#Appearance" role="button" aria-controls="Rightbar">
+                        <i class="ti ti-settings ti-spin"></i>
+                    </a>
+                </li> --}}
+            </ul>
+            <!--end topbar-nav-->
+
+            <ul class="list-unstyled topbar-nav mb-0">
+                <li>
+                    <button class="nav-link button-menu-mobile nav-icon" id="togglemenu">
+                        <i class="ti ti-menu-2"></i>
+                    </button>
+                </li>
+                <li class="hide-phone app-search">
+                    <form role="search" action="#" method="get">
+                        <input type="search" name="search" class="form-control top-search mb-0"
+                            placeholder="Type text...">
+                        <button type="submit"><i class="ti ti-search"></i></button>
+                    </form>
+                </li>
+            </ul>
         </nav>
+        <!-- end navbar-->
     </div>
-</header>
+</div>

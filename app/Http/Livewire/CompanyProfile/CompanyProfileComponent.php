@@ -197,11 +197,11 @@ class CompanyProfileComponent extends Component
             'logo2' => $logo2Path,
         ]);
 
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Company profile updated successfully']);
+        $this->dispatch('alert', ['type' => 'success',  'message' => 'Company profile updated successfully']);
     }
 
     public function render()
     {
-        return view('livewire.company-profile.company-profile-component');
+        return view('livewire.company-profile.company-profile-component')->layout('layouts.app');
     }
 }

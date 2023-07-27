@@ -15,11 +15,9 @@ return new class extends Migration
     {
         Schema::create('exit_interviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('emp_id')->nullable();
-            $table->foreignId('department_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->string('interview_file');
-            $table->unsignedBigInteger('uploaded_by')->nullable();
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->longText('interview');
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

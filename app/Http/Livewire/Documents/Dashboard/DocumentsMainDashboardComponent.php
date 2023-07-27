@@ -8,6 +8,6 @@ class DocumentsMainDashboardComponent extends Component
 {
     public function render()
     {
-        return view('livewire.documents.dashboard.documents-main-dashboard-component')->layout('layouts.documents');
+        return view('livewire.documents.dashboard.documents-main-dashboard-component')->layout('layouts.app');
     }
 }
