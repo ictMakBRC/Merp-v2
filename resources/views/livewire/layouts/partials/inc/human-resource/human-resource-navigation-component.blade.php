@@ -19,7 +19,7 @@
                 <div class="collapse " id="sidebarAnalytics">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="analytics-customers.html" class="nav-link ">Classifications</a>
+                            <a href="{{route('human-resource-stations')}}" class="nav-link ">Classifications</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">

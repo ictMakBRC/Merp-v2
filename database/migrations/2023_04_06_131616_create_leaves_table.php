@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('payment_type')->nullable();
             $table->string('given_to');
             $table->integer('notice_days');
-            $table->string('details')->nullable();
-            $table->string('status');
+            $table->string('details')->nullable();  
+            $table->integer('is_active')->default(1);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

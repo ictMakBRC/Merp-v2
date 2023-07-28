@@ -26,4 +26,12 @@ class Station extends Model
             });
         }
     }
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()           
+                ->where('station_name', 'like', '%'.$search.'%')
+                ->orWhere('description', 'like', '%'.$search.'%');
+               
+    }
 }
