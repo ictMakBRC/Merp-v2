@@ -11,7 +11,7 @@
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-success me-2" wire:click="refresh()"><i
-                                        class="bx bx-revision" title="Refresh"></i></a>
+                                        class="ti ti-refresh" title="Refresh"></i></a>
   
                                     <div class="btn-group ms-auto">
                                         <button type="button"

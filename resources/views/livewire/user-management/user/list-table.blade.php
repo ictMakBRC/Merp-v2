@@ -28,7 +28,7 @@
                         @endif
                         <td>{{ date('d-m-Y', strtotime($user->created_at)) }}</td>
                         <td>
-                            <button class="btn  btn-outline-success" wire:click="editData({{ $user->id }})" title="{{__('public.edit')}}">
+                            <button class="btn btn btn-sm btn-outline-success" wire:click="editData({{ $user->id }})" data-bs-toggle="tooltip" data-bs-placement="right" title="{{__('public.edit')}}" data-bs-trigger="hover">
                                 <i class="ti ti-edit fs-18"></i></button>
                         </td>
                     </tr>

@@ -10,27 +10,12 @@
                 <a class="nav-link" href="{{ route('human-resource-dashboard') }}">{{ __('public.dashboard') }}</a>
             </li>
             <!--end nav-item-->
-
-            <li class="nav-item">
-                <a class="nav-link" href="#sidebarAnalytics" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="sidebarAnalytics">
-                    Settings
-                </a>
-                <div class="collapse " id="sidebarAnalytics">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a href="analytics-customers.html" class="nav-link ">Classifications</a>
-                        </li>
-                        <!--end nav-item-->
-                        <li class="nav-item">
-                            <a href="analytics-reports.html" class="nav-link ">Categories</a>
-                        </li>
-                        <!--end nav-item-->
-                    </ul>
-                    <!--end nav-->
-                </div>
-                <!--end sidebarAnalytics-->
-            </li>
+            @include('livewire.layouts.partials.inc.human-resource.inc.employees-nav')
+            @include('livewire.layouts.partials.inc.human-resource.inc.performance-nav')
+            @include('livewire.layouts.partials.inc.human-resource.inc.leaves-nav')
+            @include('livewire.layouts.partials.inc.human-resource.inc.grievances-nav')
+            @include('livewire.layouts.partials.inc.human-resource.inc.reports-nav')
+            @include('livewire.layouts.partials.inc.human-resource.inc.settings-nav')
             <!--end nav-item-->
         </ul>
         <!--end navbar-nav--->
