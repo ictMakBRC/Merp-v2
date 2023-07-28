@@ -5,6 +5,7 @@ namespace App\Http\Livewire\UserManagement;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Intervention\Image\Facades\Image;
 use Livewire\Component;
@@ -14,7 +15,7 @@ class UserProfileComponent extends Component
 {
     use WithFileUploads;
 
-    public $title;
+    // public $title;
 
     public $surname;
 
@@ -25,6 +26,8 @@ class UserProfileComponent extends Component
     public $name;
 
     public $email;
+
+    public $phone_code;
 
     public $contact;
 
@@ -42,94 +45,175 @@ class UserProfileComponent extends Component
 
     public $no_edit = false;
 
+    public $allow_update = false;
+
+    public $theme;
+
+    public $sidebar_color;
+
+    public $header_color;
+
     public function updated($fields)
     {
+        $this->allow_update = true;
+
         $this->validateOnly($fields, [
-            'title' => 'required',
-            'surname' => 'required',
-            'first_name' => 'required',
+            // 'title' => 'required|string',
+            'surname' => 'required|string',
+            'first_name' => 'required|string',
             'email' => 'required|email:filter',
-            'contact' => 'required',
-            'avatar' => ['image', 'mimes:jpg,png', 'max:500'],
+            'phone_code' => 'required|string',
+            'contact' => 'required|string',
+            'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
+            'current_password' => 'required|string',
         ]);
+
+    }
+
+    public function updatedTheme()
+    {
+        Auth::user()->update(['color_scheme' => $this->theme,
+            'header_color' => null,
+            'sidebar_color' => null]);
+        $this->dispatchBrowserEvent('switch-theme', ['theme' => $this->theme]);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Color theme updated successfully!']);
+    }
+
+    public function updateHeaderColor($color)
+    {
+        Auth::user()->update(['header_color' => $color]);
+        $this->dispatchBrowserEvent('switch-header-color', ['color' => $color]);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Color theme updated successfully!']);
+    }
+
+    public function updateSidebarColor($color)
+    {
+        Auth::user()->update(['sidebar_color' => $color]);
+        $this->dispatchBrowserEvent('switch-sidebar-color', ['color' => $color]);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Color theme updated successfully!']);
     }
 
     public function mount()
     {
-        $currentUser = User::where('id', auth()->user()->id)->first();
+        $currentUser = User::with('institution', 'trainer', 'nominee')->where('id', auth()->user()->id)->first();
         $this->edit_id = $currentUser->id;
-        $this->title = $currentUser->title;
+        // $this->title = $currentUser->title;
         $this->surname = $currentUser->surname;
         $this->first_name = $currentUser->first_name;
         $this->other_name = $currentUser->other_name;
         $this->name = $currentUser->name;
-        $this->contact = $currentUser->contact;
+
+        if (Str::contains($currentUser->contact, '-')) {
+
+            $this->contact = explode('-', $currentUser->contact)[1];
+            $this->phone_code = explode('-', $currentUser->contact)[0];
+        } else {
+            $this->contact = $currentUser->contact;
+        }
+
         $this->email = $currentUser->email;
+
+        if ($currentUser->trainer || $currentUser->nominee) {
+            $this->no_edit = true;
+        }
+
+        $this->theme = auth()->user()->color_scheme;
     }
 
     public function updateUser()
     {
         $this->validate([
-            'title' => ['required', 'string', 'max:6'],
-            'surname' => 'required',
-            'first_name' => 'required',
+            // 'title' => 'required|string',
+            'surname' => 'required|string',
+            'first_name' => 'required|string',
+            'phone_code' => 'required|string',
+            'contact' => 'required|string',
             'email' => 'required|email:filter',
-            'contact' => 'required',
+            'current_password' => 'required|string',
         ]);
-        $user = User::findOrFail(auth()->user()->id);
-        if ($this->avatar != null) {
-            $this->validate([
-                'avatar' => ['image', 'mimes:jpg,png', 'max:500'],
-            ]);
+        $user = auth()->user();
+        if (Hash::check($this->current_password, auth()->user()->password)) {
+            if ($this->avatar != null) {
+                $this->validate([
+                    'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
+                ]);
 
-            $avatarName = date('YmdHis').$this->surname.'.'.$this->avatar->extension();
+                $avatarName = date('YmdHis').$this->surname.'.'.$this->avatar->extension();
 
-            // Resize the photo to a width and height 150 pixels using intervention lib
-            $resizedPhoto = Image::make($this->avatar)->resize(150, 150, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+                // Resize the photo to a width and height 150 pixels using intervention lib
+                $resizedPhoto = Image::make($this->avatar)->resize(150, 150, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
 
-            $resizedPhoto->save(storage_path('app/public/photos/'.$avatarName));
-            $this->avatarPath = 'photos/'.$avatarName;
+                $resizedPhoto->save(storage_path('app/public/photos/'.$avatarName));
+                $this->avatarPath = 'photos/'.$avatarName;
 
-            if (file_exists(storage_path('app/public/').$user->avatar)) {
-                @unlink(storage_path('app/public/').$user->avatar);
+                if (file_exists(storage_path('app/public/').$user->avatar)) {
+                    @unlink(storage_path('app/public/').$user->avatar);
+                }
+            } else {
+                $this->avatarPath = $user->avatar;
             }
+
+            // if ($this->avatar != null) {
+            //     $this->validate([
+            //         'avatar' => ['image', 'mimes:jpg,png', 'max:100'],
+            //     ]);
+
+            //     $avatarName = date('YmdHis').$this->surname.'.'.$this->avatar->extension();
+            //     $this->avatarPath = $this->avatar->storeAs('photos', $avatarName, 'public');
+
+            //     if (file_exists(storage_path('app/public/').$user->avatar)) {
+            //         @unlink(storage_path('app/public/').$user->avatar);
+            //     }
+            // } else {
+            //     $this->avatarPath = $user->avatar;
+            // }
+
+            if ($this->no_edit) {
+                $user->avatar = $this->avatarPath;
+            } else {
+                // $user->title = $this->title;
+                $user->surname = $this->surname;
+                $user->first_name = $this->first_name;
+                $user->other_name = $this->other_name;
+                $user->name = $this->first_name;
+                $user->contact = $this->phone_code.'-'.$this->contact;
+                $user->email = $this->email;
+                $user->avatar = $this->avatarPath;
+            }
+
+            $user->update();
+            $this->current_password = null;
+            $this->allow_update = false;
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Account Information updated successfully!']);
         } else {
-            $this->avatarPath = $user->avatar;
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'error',
+                'message' => 'Password Mismatch!',
+                'text' => 'Oops! Your Current Password does not match our records!',
+            ]);
         }
-
-        $user->title = $this->title;
-        $user->surname = $this->surname;
-        $user->first_name = $this->first_name;
-        $user->other_name = $this->other_name;
-        $user->name = $this->first_name;
-        $user->contact = $this->contact;
-        $user->email = $this->email;
-        $user->avatar = $this->avatarPath;
-        $user->update();
-
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Account Information updated successfully!']);
     }
 
     public function changePassword()
     {
-        $currentUser = User::findOrFail(auth()->user()->id);
+        $currentUser = auth()->user();
         if (Hash::check($this->current_password, auth()->user()->password)) {
             if (Hash::check($this->password, Hash::make($this->current_password))) {
                 $this->dispatchBrowserEvent('swal:modal', [
                     'type' => 'warning',
-                    'message' => 'Password Failure!',
-                    'text' => 'Oops! You can not use your current password as your new password!',
+                    'message' => 'Oops! Password change failed!',
+                    'text' => 'You can not use your current password as your new password!',
                 ]);
             } else {
                 $this->validate([
                     'password' => ['required',
                         Password::min(8)
-                        ->mixedCase()
-                        ->numbers()
-                        ->symbols()
-                        ->uncompromised(),
+                            ->mixedCase()
+                            ->numbers()
+                            ->symbols()
+                            ->uncompromised(),
                         'confirmed', ],
                 ]);
                 $currentUser->update([
@@ -152,10 +236,51 @@ class UserProfileComponent extends Component
         }
     }
 
+    public function enableTwoFactorAuthentication($channel)
+    {
+        auth()->user()->update([
+            'two_factor_auth_enabled' => true,
+            'two_factor_channel' => $channel,
+        ]);
+
+        if ($channel == 'email') {
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'success',
+                'message' => 'Two factor authentication enable!',
+                'text' => 'You have enabled two factor authentication! you will be prompted for a secure, random token during authentication. You may retrieve this token from your email address.',
+            ]);
+        } else {
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'success',
+                'message' => 'Two factor authentication enable!',
+                'text' => 'You have enabled two factor authentication! you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone sms or whatsapp messaged to you.',
+            ]);
+        }
+
+    }
+
+    public function disableTwoFactorAuthentication()
+    {
+        auth()->user()->update([
+            'two_factor_auth_enabled' => false,
+            'two_factor_channel' => null,
+            'two_factor_code' => null,
+            'two_factor_expires_at' => null,
+        ]);
+
+        $this->dispatchBrowserEvent('swal:modal', [
+            'type' => 'success',
+            'message' => 'Two factor authentication disabled!',
+            'text' => 'Your account is nolonger authenticated with 2FA',
+        ]);
+
+    }
+
     public function render()
     {
-        $user = User::where('id', auth()->user()->id)->first();
+        $user = User::with('institution')->where('id', auth()->user()->id)->first();
 
         return view('livewire.user-management.user-profile-component', compact('user'))->layout('layouts.app');
+
     }
 }

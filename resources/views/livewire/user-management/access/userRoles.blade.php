@@ -11,12 +11,12 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    User Roles
+                                    {{ __('user-mgt.roles') }}
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" href="#" class="btn btn-success mb-2 me-1"
                                         data-bs-toggle="modal" data-bs-target="#addRole"><i
-                                            class="bx bx-plus"></i>New</a>
+                                            class="bx bx-plus"></i>{{ __('public.new') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -29,10 +29,11 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th class="th">Display Name</th>
-                                    <th class="th">Name</th>
-                                    <th class="th"># Permissions</th>
-                                    <th>Action</th>
+                                    <th class="th">{{ __('user-mgt.display_name') }}</th>
+                                    <th class="th">{{ __('user-mgt.name') }}</th>
+                                    <th class="th">{{ __('user-mgt.user_group') }}</th>
+                                    <th class="th"># {{ __('user-mgt.permissions') }}</th>
+                                    <th>{{ __('public.action') }}</th>
 
                                 </tr>
                             </thead>
@@ -42,35 +43,33 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $role->display_name }}</td>
                                         <td> {{ $role->name }}</td>
+                                        <td> {{ $role->user_group }}</td>
                                         <td>{{ $role->permissions_count }}</td>
-                                        <td class="table-action d-flex">
-                                            @if (\Laratrust\Helper::roleIsEditable($role))
-                                                <a href="{{ route('user-roles.edit', $role->id) }}"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="Edit"
-                                                    class="action-ico btn btn-outline-success mx-1">
-                                                    <i class="bx bx-edit"></i></a>
+                                        <td>
+                                            <div class="d-flex table-actions">
+                                                @if (\Laratrust\Helper::roleIsEditable($role))
+                                                <a href="{{ route('user-roles.edit', $role->id) }}" title="{{__('public.edit')}}"
+                                                    class="text-primary">
+                                                    <i class="bx bx-edit-alt"></i></a>
                                             @else
-                                                <a href="{{ route('user-roles.show', $role->id) }}"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                    data-bs-original-title="View"
-                                                    class="action-ico btn btn-outline-success">
+                                                <a href="{{ route('user-roles.show', $role->id) }}" title="{{__('public.view')}}"
+                                                    class="text-success">
                                                     <i class="bx bx-eye"></i></a>
                                             @endif
 
-                                            <form action="{{ route('user-roles.destroy', $role->id) }}" method="POST">
+                                            <form action="{{ route('user-roles.destroy', $role->id) }}" method="POST" title="{{__('public.delete')}}">
                                                 @method('DELETE')
                                                 @csrf
                                                 @if (\Laratrust\Helper::roleIsDeletable($role))
-                                                    <a href="#" class="action-ico btn btn-outline-danger mx-1"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                                        title="" data-bs-original-title="Delete"
+                                                    <a href="#"
                                                         onclick="event.preventDefault(); this.closest('form').submit();">
-                                                        <i class="bx bx-trash"></i></a>
+                                                        <i class="bx bx-trash text-danger"></i></a>
                                                 @else
                                                     {{-- <i class="uil-padlock"></i> --}}
                                                 @endif
                                             </form>
+                                            </div>
+                                           
                                         </td>
                                     </tr>
                                 @endforeach

@@ -11,7 +11,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Roles Assignment
+                                    {{ __('user-mgt.role_assignment') }}
                                 </h5>
                             </div>
                         </div>
@@ -24,10 +24,11 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th class="th">Name</th>
-                                    <th class="th">Roles</th>
-                                    <th class="th">Non Default Permissions</th>
-                                    <th>Action</th>
+                                    <th class="th">{{ __('public.name') }}</th>
+                                    <th class="th">{{ __('public.email') }}</th>
+                                    <th class="th">{{ __('user-mgt.roles') }}</th>
+                                    <th class="th">{{ __('user-mgt.non_default_permissions') }}</th>
+                                    <th>{{ __('public.action') }}</th>
 
                                 </tr>
                             </thead>
@@ -41,6 +42,9 @@
                                             {{ $user->fullName ?? 'The model doesn\'t have a `name` attribute' }}
                                         </td>
                                         <td>
+                                            {{ $user->email }}
+                                        </td>
+                                        <td>
                                             {{ $user->roles_count }}
                                         </td>
                                         @if (config('laratrust.panel.assign_permissions_to_user'))
@@ -49,11 +53,12 @@
                                             </td>
                                         @endif
                                         <td>
-                                            <a href="{{ route('user-roles-assignment.edit', $user->id) }}"
-                                                data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                data-bs-original-title="Assign"
-                                                class="action-ico btn btn-outline-success mx-1"> <i
-                                                    class="bx bx-edit"></i></a>
+                                            <div class="d-flex table-actions">
+                                                <a href="{{ route('user-roles-assignment.edit', $user->id) }}" title="{{__('user-mgt.role_assignment')}}"
+                                                    class="text-primary"> <i
+                                                        class="bx bx-edit-alt"></i></a>
+                                            </div>
+                                       
                                         </td>
                                     </tr>
                                 @endforeach

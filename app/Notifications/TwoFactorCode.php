@@ -31,7 +31,7 @@ class TwoFactorCode extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('AFRICA PGI-NIMS 2FA Token')
+            ->subject('MERP 2FA Token')
             ->greeting('Hello '.$notifiable->fullName)
             ->line('Your two factor code is '.$notifiable->two_factor_code)
             ->action('Verify Here', route('two-factor-auth'))

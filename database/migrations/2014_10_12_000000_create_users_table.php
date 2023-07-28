@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('category');
             $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('name',100);
             $table->string('email',100)->unique();
