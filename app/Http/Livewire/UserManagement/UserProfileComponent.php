@@ -15,21 +15,9 @@ class UserProfileComponent extends Component
 {
     use WithFileUploads;
 
-    // public $title;
-
-    public $surname;
-
-    public $first_name;
-
-    public $other_name;
-
     public $name;
 
     public $email;
-
-    public $phone_code;
-
-    public $contact;
 
     public $avatar;
 
@@ -42,92 +30,34 @@ class UserProfileComponent extends Component
     public $password_confirmation;
 
     public $edit_id;
-
-    public $no_edit = false;
-
     public $allow_update = false;
-
-    public $theme;
-
-    public $sidebar_color;
-
-    public $header_color;
 
     public function updated($fields)
     {
         $this->allow_update = true;
-
         $this->validateOnly($fields, [
             // 'title' => 'required|string',
-            'surname' => 'required|string',
-            'first_name' => 'required|string',
+            'name' => 'required|string',
             'email' => 'required|email:filter',
-            'phone_code' => 'required|string',
-            'contact' => 'required|string',
             'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
             'current_password' => 'required|string',
         ]);
 
     }
 
-    public function updatedTheme()
-    {
-        Auth::user()->update(['color_scheme' => $this->theme,
-            'header_color' => null,
-            'sidebar_color' => null]);
-        $this->dispatchBrowserEvent('switch-theme', ['theme' => $this->theme]);
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Color theme updated successfully!']);
-    }
-
-    public function updateHeaderColor($color)
-    {
-        Auth::user()->update(['header_color' => $color]);
-        $this->dispatchBrowserEvent('switch-header-color', ['color' => $color]);
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Color theme updated successfully!']);
-    }
-
-    public function updateSidebarColor($color)
-    {
-        Auth::user()->update(['sidebar_color' => $color]);
-        $this->dispatchBrowserEvent('switch-sidebar-color', ['color' => $color]);
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Color theme updated successfully!']);
-    }
-
     public function mount()
     {
-        $currentUser = User::with('institution', 'trainer', 'nominee')->where('id', auth()->user()->id)->first();
+        $currentUser = auth()->user();
         $this->edit_id = $currentUser->id;
-        // $this->title = $currentUser->title;
-        $this->surname = $currentUser->surname;
-        $this->first_name = $currentUser->first_name;
-        $this->other_name = $currentUser->other_name;
         $this->name = $currentUser->name;
-
-        if (Str::contains($currentUser->contact, '-')) {
-
-            $this->contact = explode('-', $currentUser->contact)[1];
-            $this->phone_code = explode('-', $currentUser->contact)[0];
-        } else {
-            $this->contact = $currentUser->contact;
-        }
-
         $this->email = $currentUser->email;
 
-        if ($currentUser->trainer || $currentUser->nominee) {
-            $this->no_edit = true;
-        }
-
-        $this->theme = auth()->user()->color_scheme;
     }
 
     public function updateUser()
     {
         $this->validate([
-            // 'title' => 'required|string',
-            'surname' => 'required|string',
-            'first_name' => 'required|string',
-            'phone_code' => 'required|string',
-            'contact' => 'required|string',
+            'name' => 'required|string',
             'email' => 'required|email:filter',
             'current_password' => 'required|string',
         ]);
@@ -145,7 +75,7 @@ class UserProfileComponent extends Component
                     $constraint->aspectRatio();
                 });
 
-                $resizedPhoto->save(storage_path('app/public/photos/'.$avatarName));
+                $resizedPhoto->save(storage_path('photos/'.$avatarName,'public'));
                 $this->avatarPath = 'photos/'.$avatarName;
 
                 if (file_exists(storage_path('app/public/').$user->avatar)) {
@@ -155,33 +85,10 @@ class UserProfileComponent extends Component
                 $this->avatarPath = $user->avatar;
             }
 
-            // if ($this->avatar != null) {
-            //     $this->validate([
-            //         'avatar' => ['image', 'mimes:jpg,png', 'max:100'],
-            //     ]);
-
-            //     $avatarName = date('YmdHis').$this->surname.'.'.$this->avatar->extension();
-            //     $this->avatarPath = $this->avatar->storeAs('photos', $avatarName, 'public');
-
-            //     if (file_exists(storage_path('app/public/').$user->avatar)) {
-            //         @unlink(storage_path('app/public/').$user->avatar);
-            //     }
-            // } else {
-            //     $this->avatarPath = $user->avatar;
-            // }
-
-            if ($this->no_edit) {
-                $user->avatar = $this->avatarPath;
-            } else {
-                // $user->title = $this->title;
-                $user->surname = $this->surname;
-                $user->first_name = $this->first_name;
-                $user->other_name = $this->other_name;
-                $user->name = $this->first_name;
-                $user->contact = $this->phone_code.'-'.$this->contact;
-                $user->email = $this->email;
-                $user->avatar = $this->avatarPath;
-            }
+            $user->avatar = $this->avatarPath;
+            $user->name = $this->name;
+            $user->email = $this->email;
+            $user->avatar = $this->avatarPath;
 
             $user->update();
             $this->current_password = null;
@@ -278,7 +185,7 @@ class UserProfileComponent extends Component
 
     public function render()
     {
-        $user = User::with('institution')->where('id', auth()->user()->id)->first();
+        $user = auth()->user();
 
         return view('livewire.user-management.user-profile-component', compact('user'))->layout('layouts.app');
 

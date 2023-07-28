@@ -25,7 +25,7 @@
                             <div class="mb-3 col-md-12">
                                 <label for="name" class="form-label">{{ __('public.name') }}</label>
                                 <input type="text" id="name" class="form-control" name="name"
-                                    value="{{ $user->fullName }}" required readonly>
+                                    value="{{ $user->name }}" required readonly>
                             </div>
                         </div>
                         @if (!$roles->isEmpty())

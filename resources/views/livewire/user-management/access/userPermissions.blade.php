@@ -1,6 +1,6 @@
 <x-app-layout>
     @push('css')
-        <link href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('assets/libs/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
     @endpush
     <!-- end row-->
     <div class="row">
@@ -17,7 +17,7 @@
                                 <div class="ms-auto">
                                     <a type="button" href="#" class="btn btn-success mb-2 me-1"
                                         data-bs-toggle="modal" data-bs-target="#addPermission"><i
-                                            class="bx bx-plus"></i>New</a>
+                                            class="ti ti-plus"></i>New</a>
                                 </div>
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                 <div class="card-body">
 
                     <div class="table-responsive">
-                        <table id="permissionsTable" class="table table-striped mb-0 w-100 nowrap">
+                        <table id="datatable" class="table table-striped mb-0 w-100 nowrap">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -75,17 +75,17 @@
     <!-- end row-->
     @include('livewire.user-management.access.createPermissionModal')
     @push('scripts')
-        <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/datatable/js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
         <script>
             $(document).ready(function() {
-                var table = $('#permissionsTable').DataTable({
+                var table = $('#datatable').DataTable({
                     lengthChange: false,
-                    buttons: ['copy', 'excel', 'pdf', 'print']
+                    buttons: ['excel']
                 });
 
                 table.buttons().container()
-                    .appendTo('#permissionsTable_wrapper .col-md-6:eq(0)');
+                    .appendTo('#datatable_wrapper .col-md-6:eq(0)');
             });
         </script>
     @endpush

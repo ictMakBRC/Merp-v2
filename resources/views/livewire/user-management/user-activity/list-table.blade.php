@@ -26,11 +26,11 @@
                         <td>{{ $key + 1 }}</td>
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <img src="{{ $log->causer?->avatar ? asset('storage/' . $log->causer?->avatar) : asset('assets/nims_images/user.png') }}"
+                                <img src="{{ $log->causer?->avatar ? asset('storage/' . $log->causer?->avatar) : asset('assets/images/users/user-vector.png') }} }}"
                                     class="rounded-circle" width="44" height="44" alt="">
                                 <div class="">
                                     <p class="mb-0">
-                                        {{ $log->causer != null ? $log->causer->fullName : '' }}</p>
+                                        {{ $log->causer != null ? $log->causer->name : '' }}</p>
                                 </div>
                             </div>
                         </td>

@@ -12,7 +12,7 @@
                                 </h5>
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-success" wire:click="refresh()"><i
-                                            class="bx bx-revision"></i></a>
+                                            class="ti ti-refresh"></i></a>
                                 </div>
                             </div>
                         </div>
