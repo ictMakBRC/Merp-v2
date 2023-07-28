@@ -58,7 +58,16 @@
 
 
     {{-- @livewireScripts --}}
-
+    <script>
+        window.addEventListener('close-modal', event => {
+            $('#createNewModal').modal('hide');
+            $('#delete_modal').modal('hide');
+            $('#show-delete-confirmation-modal').modal('hide');
+        });
+        window.addEventListener('delete-modal', event => {
+            $('#delete_modal').modal('show');
+        });
+    </script>
     @stack('scripts')
 
 
