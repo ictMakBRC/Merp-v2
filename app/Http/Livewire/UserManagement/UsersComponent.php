@@ -291,6 +291,11 @@ class UsersComponent extends Component
             }, function ($query) {
                 return $query;
             })
+            ->when($this->user_category != '', function ($query) {
+                $query->where('category', $this->user_category);
+            }, function ($query) {
+                return $query;
+            })
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

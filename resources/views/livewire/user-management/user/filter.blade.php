@@ -4,8 +4,9 @@
     <div class="mb-3 col-md-3">
         <label for="user_category" class="form-label">{{ __('user-mgt.user_category') }}</label>
         <select class="form-select select2" id="user_category" wire:model='user_category'>
-            <option selected value="0">All</option>
+            <option selected value="">All</option>
             <option value='Normal-User'>Normal User</option>
+            <option value='System-Admin'>System Admin</option>
             <option value='External-Application'>External Application</option>
         </select>
         <div class="text-info" wire:loading wire:target='user_category'>
