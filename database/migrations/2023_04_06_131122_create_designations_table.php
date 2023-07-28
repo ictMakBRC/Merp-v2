@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->integer('is_active')->default(1);
-            $table->boolean('is_active')->default(true);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
