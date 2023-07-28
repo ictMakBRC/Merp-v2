@@ -5,7 +5,7 @@
      <div class="modal-dialog modal-lg">
          <div class="modal-content">
              <div class="modal-header">
-                 <h5 class="modal-title" id="staticBackdropLabel">Create New Permission</h5>
+                 <h5 class="modal-title" id="staticBackdropLabel">{{ __('user-mgt.create_new_permission') }}</h5>
                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
              </div> <!-- end modal header -->
              <div class="modal-body">
@@ -14,25 +14,38 @@
 
                      <div class="row">
                          <div class="mb-3 col-md-6">
-                             <label for="name" class="form-label">Name/Code</label>
+                             <label for="name" class="form-label required">{{ __('user-mgt.name') }}</label>
                              <input type="text" id="name" class="form-control" name="name"
                                  placeholder="this-will-be-the-code-name" required>
                          </div>
                          <div class="mb-3 col-md-6">
-                             <label for="display_name" class="form-label">Display Name</label>
+                             <label for="display_name" class="form-label required">{{ __('user-mgt.display_name') }}</label>
                              <input type="text" id="display_name" class="form-control" name="display_name"
                                  placeholder="Edit user profile" required>
                          </div>
-                         <div class="mb-3 col-md-12">
-                             <label for="description" class="form-label">Description</label>
+                         <div class="col-md-6">
+                            <label for="target_module" class="form-label required">{{ __('user-mgt.target_module') }}</label>
+                            <select name="target_module" id="target_module" class="form-select">
+                                <option value="">Select</option>
+                                <option value="User Management">User Management</option>
+                                <option value="Network Management">Network Management</option>
+                                <option value="Logistics">Logistics</option>
+                                <option value="Commodity Management">Commodity Management</option>
+                                <option value="Sample Referral">Sample Referral</option>
+                                <option value="Training Management">Training Management</option>
+                                <option value="External Quality Assurance">External Quality Assurance</option>
+                            </select>
+                         </div>
+                         <div class="mb-3 col-md-6">
+                             <label for="description" class="form-label">{{ __('public.description') }}</label>
                              <textarea type="email" id="description" class="form-control" name="description"
                                  placeholder="Some description for the permission"></textarea>
                          </div>
                      </div>
                      <!-- end row-->
                      <div class="modal-footer">
-                         <x-button>{{ __('Save') }}</x-button>
-                         <x-button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{ __('Close') }}
+                         <x-button class="btn-success">{{ __('public.save') }}</x-button>
+                         <x-button type="button" class="btn btn-danger" data-bs-dismiss="modal">{{ __('public.close') }}
                          </x-button>
                      </div>
                  </form>

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('description')->nullable();
             $table->string('prefix')->nullable();
-            $table->string('status')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });

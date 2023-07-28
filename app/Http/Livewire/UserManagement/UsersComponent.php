@@ -2,16 +2,20 @@
 
 namespace App\Http\Livewire\UserManagement;
 
-use App\Exports\UsersExport;
+use App\Models\Role;
 use App\Models\User;
-use App\Notifications\SendPasswordNotification;
-use App\Services\GeneratorService;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
-use Livewire\WithFileUploads;
+use App\Data\User\UserData;
+use App\Exports\UsersExport;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use App\Services\GeneratorService;
+use App\Services\User\UserService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendPasswordNotification;
 
 class UsersComponent extends Component
 {
@@ -19,6 +23,8 @@ class UsersComponent extends Component
     use WithPagination;
 
     //Filters
+
+    public $user_category;
 
     public $from_date;
 
@@ -28,39 +34,31 @@ class UsersComponent extends Component
 
     public $userIds;
 
-    public $perPage = 10;
+    public $perPage = 50;
 
     public $search = '';
 
     public $orderBy = 'id';
 
-    public $orderAsc = true;
+    public $orderAsc = 0;
 
-    //User Fields
-
-    public $emp_id;
-
-    public $title;
-
-    public $surname;
-
-    public $first_name;
-
-    public $other_name;
+    // public $title;
 
     public $name;
 
-    public $email;
+    public $category;
 
-    public $contact;
+    public $email;
+    public $signaturePath;
+    public $signature;
+
+    public $role_id;
+
+    public $roles_array = [];
 
     public $is_active;
 
     public $password;
-
-    public $signature;
-
-    public $signaturePath;
 
     public $delete_id;
 
@@ -72,7 +70,13 @@ class UsersComponent extends Component
 
     public $toggleForm = false;
 
+    public $generateToken;
+
+    public $token = '';
+
     public $filter = false;
+
+    protected $user;
 
     public function updatedCreateNew()
     {
@@ -89,100 +93,106 @@ class UsersComponent extends Component
         'is_active' => 'status',
     ];
 
-    public function updated($fields)
+    public function updatedCategory()
     {
-        $this->validateOnly($fields, [
-            'title' => 'required',
-            'surname' => 'required',
-            'first_name' => 'required',
-            'email' => 'required|email:filter',
-            'contact' => 'required',
-            'is_active' => 'required',
-        ]);
-    }
-
-    public function updatedTitle()
-    {
-        $this->password = GeneratorService::password();
+        if (! $this->toggleForm) {
+            $this->password = GeneratorService::password();
+        }
     }
 
     public function storeUser()
     {
         $this->validate([
-            'title' => 'required|string|max:6',
-            'surname' => 'required',
-            'first_name' => 'required',
-            'email' => 'required|email:filter',
-            'contact' => 'required',
+            'name' => 'required|string',
+            'email' => 'required|email:filter|unique:users',
+            'category' => 'required|string',
             'is_active' => 'required|integer|max:3',
             'password' => ['required',
                 Password::min(8)
-                            ->mixedCase()
-                            ->numbers()
-                            ->symbols()
-                            ->uncompromised(), ],
+                    // ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),],
         ]);
 
-        $user = new User();
-        $user->emp_id = $this->emp_id;
-        $user->title = $this->title;
-        $user->surname = $this->surname;
-        $user->first_name = $this->first_name;
-        $user->other_name = $this->other_name;
-        $user->name = $this->first_name;
-        $user->contact = $this->contact;
-        $user->email = $this->email;
-        $user->password = Hash::make($this->password);
+        DB::transaction(function (){
 
-        if ($this->signature != null) {
-            $this->validate([
-                'signature' => ['image', 'mimes:jpg,png', 'max:100'],
-            ]);
+            if ($this->signature != null) {
+                $this->validate([
+                    'signature' => ['image', 'mimes:jpg,png', 'max:100'],
+                ]);
+    
+                $signatureName = date('YmdHis').$this->name.'.'.$this->signature->extension();
+                $this->signaturePath = $this->signature->storeAs('signatures', $signatureName, 'public');
+            } else {
+                $this->signaturePath = null;
+            }
 
-            $signatureName = date('YmdHis').$this->surname.'.'.$this->signature->extension();
-            $this->signaturePath = $this->signature->storeAs('signatures', $signatureName, 'public');
+            $userDTO = UserData::from([
+                'name'=>$this->name,
+                'category'=>$this->category,
+                'email'=>$this->email,
+                'password'=>Hash::make($this->password),
+                'is_active'=>$this->is_active,
+                'signature'=>$this->signaturePath,]
+            );
+
+            $userService = new UserService();
+
+            $this->user = $userService->createUser($userDTO);
+            if ($this->role_id) {
+                $this->user->attachRole($this->role_id);
+            }
+            $this->role_id = null;
+        });
+
+        if ($this->category == 'External-Application') {
+            if ($this->generateToken) {
+                $this->token = $this->user->createToken('api_token')->plainTextToken;
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'External application details created successfully']);
+                $this->dispatchBrowserEvent('swal:modal', [
+                    'type' => 'success',
+                    'message' => 'Token Generated successfully',
+                    'text' => 'Please copy and securely send the token to the respective institution for integration with MERP',
+                ]);
+            } else {
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'External application details created successfully']);
+            }
+
         } else {
-            $this->signaturePath = null;
-        }
 
-        $user->signature = $this->signature;
-        $user->save();
+            $greeting = 'Hello'.' '.$this->name;
+            $body = 'Your password is'.' '.$this->password;
+            $actiontext = 'Click here to Login';
+            $details = [
+                'greeting' => $greeting,
+                'body' => $body,
+                'actiontext' => $actiontext,
+                'actionurl' => url('/'),
+            ];
 
-        $greeting = 'Hello'.' '.$this->first_name.' '.$this->surname;
-        $body = 'Your password is'.' '.$this->password;
-        $actiontext = 'Click here to Login';
-        $details = [
-            'greeting' => $greeting,
-            'body' => $body,
-            'actiontext' => $actiontext,
-            'actionurl' => url('/'),
-        ];
+            try {
+                Notification::send($this->user, new SendPasswordNotification($details));
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User created and password sent successfully']);
+            } catch (\Exception $error) {
+                $this->dispatchBrowserEvent('swal:modal', [
+                    'type' => 'error',
+                    'message' => 'Oops! Email not Sent!',
+                    'text' => 'Something went wrong and the password could not be sent to user email address',
+                ]);
+            }
 
-        try {
-            Notification::send($user, new SendPasswordNotification($details));
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User created and password sent successfully']);
-        } catch (\Exception $error) {
-            $this->dispatchBrowserEvent('swal:modal', [
-                'type' => 'error',
-                'message' => 'Email not Sent!',
-                'text' => 'Oops! Something went wrong and the password could not be sent to user email address',
-            ]);
         }
 
         $this->resetInputs();
     }
 
-    public function editdata($id)
+    public function editData($id)
     {
         $user = User::findOrFail($id);
         $this->edit_id = $user->id;
-        $this->emp_id = $user->emp_id;
-        $this->title = $user->title;
-        $this->surname = $user->surname;
-        $this->first_name = $user->first_name;
-        $this->other_name = $user->other_name;
         $this->name = $user->name;
-        $this->contact = $user->contact;
+        $this->category = $user->category;
         $this->email = $user->email;
         $this->is_active = $user->is_active;
 
@@ -193,59 +203,72 @@ class UsersComponent extends Component
     public function updateUser()
     {
         $this->validate([
-            'title' => 'required|string|max:6',
-            'surname' => 'required',
-            'first_name' => 'required',
+            'category' => 'required|string',
+            'name' => 'required|string',
             'email' => 'required|email:filter',
-            'contact' => 'required',
             'is_active' => 'required|integer|max:3',
         ]);
-
+        
         $user = User::findOrFail($this->edit_id);
+        // dd($user);
+        try {
+            DB::transaction(function () use ($user) {
+                $user->name = $this->name;
+                $user->category = $this->category;
+                $user->email = $this->email;
+                $user->is_active = $this->is_active;
 
-        $user->emp_id = $this->emp_id;
-        $user->title = $this->title;
-        $user->surname = $this->surname;
-        $user->first_name = $this->first_name;
-        $user->other_name = $this->other_name;
-        $user->name = $this->first_name;
-        $user->contact = $this->contact;
-        $user->email = $this->email;
-        $user->is_active = $this->is_active;
+                if ($this->signature != null) {
+                    $this->validate([
+                        'signature' => ['image', 'mimes:jpg,png', 'max:100'],
+                    ]);
+        
+                    $signatureName = date('YmdHis').$this->name.'.'.$this->signature->extension();
+                    $this->signaturePath = $this->signature->storeAs('signatures', $signatureName, 'public');
+        
+                    if (file_exists(storage_path().$user->signature)) {
+                        @unlink(storage_path().$user->signature);
+                    }
+                } else {
+                    $this->signaturePath = $user->signature;
+                }
+                $user->signature = $this->signaturePath;
+        
+                $user->update();;
 
-        if ($this->signature != null) {
-            $this->validate([
-                'signature' => ['image', 'mimes:jpg,png', 'max:100'],
+                $this->resetInputs();
+                $this->createNew = false;
+                $this->toggleForm = false;
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User updated successfully!']);
+            });
+
+        } catch (\Throwable $th) {
+
+            dd($th);
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'error',
+                'message' => 'Operation failed!',
+                'text' => 'Oops! Something went wrong and the operation could not be performed. Please try again',
             ]);
-
-            $signatureName = date('YmdHis').$this->surname.'.'.$this->signature->extension();
-            $this->signaturePath = $this->signature->storeAs('signatures', $signatureName, 'public');
-
-            if (file_exists(storage_path('app/public/').$user->signature)) {
-                @unlink(storage_path('app/public/').$user->signature);
-            }
-        } else {
-            $this->signaturePath = $user->signature;
         }
-        $user->signature = $this->signaturePath;
-
-        $user->update();
-
-        $this->resetInputs();
-        $this->createNew = false;
-        $this->toggleForm = false;
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'User updated successfully!']);
     }
 
     public function resetInputs()
     {
-        $this->reset(['edit_id', 'password', 'emp_id', 'title', 'surname', 'first_name', 'other_name', 'signature', 'email', 'contact', 'is_active']);
+        $this->reset(['edit_id', 'password','category', 'email','is_active', 'generateToken','name','signature']);
     }
 
     public function refresh()
     {
         return redirect(request()->header('Referer'));
     }
+
+    public function resetToken()
+    {
+        $this->token = '';
+    }
+
+
 
     public function export()
     {
@@ -254,8 +277,8 @@ class UsersComponent extends Component
         } else {
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
-                'message' => 'Not Found!',
-                'text' => 'Oops! No Users selected for export!',
+                'message' => 'Oops! Not Found!',
+                'text' => 'No Users selected for export!',
             ]);
         }
     }
@@ -263,16 +286,16 @@ class UsersComponent extends Component
     public function filterUsers()
     {
         $users = User::search($this->search)
-                    ->when($this->user_status != '', function ($query) {
-                        $query->where('is_active', $this->user_status);
-                    }, function ($query) {
-                        return $query;
-                    })
-                    ->when($this->from_date != '' && $this->to_date != '', function ($query) {
-                        $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
-                    }, function ($query) {
-                        return $query;
-                    });
+            ->when($this->user_status != '', function ($query) {
+                $query->where('is_active', $this->user_status);
+            }, function ($query) {
+                return $query;
+            })
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            }, function ($query) {
+                return $query;
+            });
 
         $this->userIds = $users->pluck('id')->toArray();
 
@@ -281,10 +304,12 @@ class UsersComponent extends Component
 
     public function render()
     {
-        $users = $this->filterUsers()
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
+        $roles = Role::orderBy('name', 'asc')->get();
 
-        return view('livewire.user-management.users-component', compact('users'))->layout('layouts.app');
+        $users = $this->filterUsers()
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
+
+        return view('livewire.user-management.users-component', compact('users','roles'))->layout('layouts.app');
     }
 }

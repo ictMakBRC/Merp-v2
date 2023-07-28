@@ -12,13 +12,13 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    User Permissions
+                                    {{ __('user-mgt.permissions') }}
                                 </h5>
-                                {{-- <div class="ms-auto">
+                                <div class="ms-auto">
                                     <a type="button" href="#" class="btn btn-success mb-2 me-1"
                                         data-bs-toggle="modal" data-bs-target="#addPermission"><i
                                             class="bx bx-plus"></i>New</a>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -31,11 +31,11 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th class="th">Name</th>
-                                    <th class="th">Display Name</th>
-                                    <th class="th">Description</th>
-                                    <th class="th">Target Module</th>
-                                    <th>Action</th>
+                                    <th class="th">{{ __('user-mgt.name') }}</th>
+                                    <th class="th">{{ __('user-mgt.display_name') }}</th>
+                                    <th class="th">{{ __('public.description') }}</th>
+                                    <th class="th">{{ __('user-mgt.target_module') }}</th>
+                                    <th>{{ __('public.action') }}</th>
 
                                 </tr>
                             </thead>
@@ -55,10 +55,13 @@
                                         <td>
                                             {{ $permission->target_module }}
                                         </td>
-                                        <td class="table-action">
-                                            <a href="{{ route('user-permissions.edit', $permission->id) }}"
-                                                class="action-ico btn btn-outline-success mx-1"> <i
-                                                    class="bx bx-edit"></i></a>
+                                        <td>
+                                            <div class="d-flex table-actions">
+                                                <a href="{{ route('user-permissions.edit', $permission->id) }}"
+                                                    class="text-primary" title="{{__('public.edit')}}"> <i
+                                                        class="bx bx-edit-alt"></i></a>
+                                            </div>
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
@@ -70,7 +73,7 @@
         </div><!-- end col-->
     </div>
     <!-- end row-->
-    {{-- @include('livewire.user-management.access.createPermissionModal') --}}
+    @include('livewire.user-management.access.createPermissionModal')
     @push('scripts')
         <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
