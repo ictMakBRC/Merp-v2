@@ -1,6 +1,6 @@
 <li class="nav-item">
     <a class="nav-link" href="#employeeReportsMenu" data-bs-toggle="collapse" role="button" aria-expanded="false"
-        aria-controls="employeeReportsMenu">
+        aria-controls="employeeReportsMenu"><i class="ti ti-file-report me-2"></i>
         Reports
     </a>
     <div class="collapse " id="employeeReportsMenu">

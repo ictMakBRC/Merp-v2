@@ -1,6 +1,6 @@
 <li class="nav-item">
     <a class="nav-link" href="#humanResourceSettingsMenu" data-bs-toggle="collapse" role="button" aria-expanded="false"
-        aria-controls="humanResourceSettingsMenu"> <i class="ti ti-cog"></i>
+        aria-controls="humanResourceSettingsMenu"> <i class="ti ti-settings me-2"></i>
         Settings
     </a>
     <div class="collapse " id="humanResourceSettingsMenu">

@@ -1,6 +1,6 @@
 <li class="nav-item">
     <a class="nav-link" href="#performanceMenu" data-bs-toggle="collapse" role="button" aria-expanded="false"
-        aria-controls="performanceMenu">
+        aria-controls="performanceMenu"><i class="ti ti-file-analytics me-2"></i>
         Performance
     </a>
     <div class="collapse " id="performanceMenu">

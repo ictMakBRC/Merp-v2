@@ -1,12 +1,12 @@
 <li class="nav-item">
     <a class="nav-link" href="#employeeDataMenu" data-bs-toggle="collapse" role="button" aria-expanded="false"
-        aria-controls="employeeDataMenu">
+        aria-controls="employeeDataMenu"><i class="ti ti-users me-2"></i>
         Employees
     </a>
     <div class="collapse " id="employeeDataMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="{{ route('human-resource-stations') }}" class="nav-link ">Register Employee</a>
+                <a href="#" class="nav-link ">Register Employee</a>
             </li>
             <!--end nav-item-->
             <li class="nav-item">
