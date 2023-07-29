@@ -115,7 +115,7 @@
                                             @endif
                                             <td>{{ date('d-m-Y', strtotime($station->created_at)) }}</td>
                                             <td class="table-action">
-                                                <button wire:click="editData({{ $station->id }})" data-bs-toggle="modal" data-bs-target="#createNewModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                <button wire:click="editData({{ $station->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>
@@ -140,7 +140,7 @@
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {
-                    $('#createNewModal').modal('hide');
+                    $('#updateCreateModal').modal('hide');
                     $('#delete_modal').modal('hide');
                     $('#show-delete-confirmation-modal').modal('hide');
                 });

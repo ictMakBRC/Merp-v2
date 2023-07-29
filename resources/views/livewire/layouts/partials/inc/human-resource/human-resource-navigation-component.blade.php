@@ -14,16 +14,27 @@
             <li class="nav-item">
                 <a class="nav-link" href="#sidebarAnalytics" data-bs-toggle="collapse" role="button"
                     aria-expanded="false" aria-controls="sidebarAnalytics">
-                    Settings
+                    Manage
                 </a>
                 <div class="collapse " id="sidebarAnalytics">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="{{route('human-resource-stations')}}" class="nav-link ">Classifications</a>
+                            <a href="{{route('human-resource-departments')}}" class="nav-link ">Departments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('human-resource-stations')}}" class="nav-link ">Duty Stations</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a href="analytics-reports.html" class="nav-link ">Categories</a>
+                            <a href="{{route('human-resource-designations')}}" class="nav-link ">Designations</a>
+                        </li>
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a href="{{route('human-resource-holidays')}}" class="nav-link ">Holidays</a>
+                        </li>
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a href="{{route('human-resource-offices')}}" class="nav-link ">Offices</a>
                         </li>
                         <!--end nav-item-->
                     </ul>

@@ -4,16 +4,19 @@
             <div class="modal-header bg-success">
                 <h6 class="modal-title m-0" id="updateCreateModalTitle">
                     @if (!$toggleForm)
-                        New station
+                        New Designation
                     @else
-                        Edit station
+                        Edit Designation
                     @endif
                 </h6>
                 <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()" aria-label="Close"></button>
             </div><!--end modal-header-->            
            
-               
-            <form  @if ($toggleForm) wire:submit.prevent="updateStation" @else wire:submit.prevent="storeStation" @endif>
+            @if ($toggleForm)
+                <form   wire:submit.prevent="updateDesignation">
+            @else
+                <form  wire:submit.prevent="storeDesignation" >
+             @endif
                 <div class="modal-body">
                     <div class="row">
                         <div class="mb-3 col-md-12">
@@ -44,6 +47,7 @@
                             @enderror
                         </div>
                     </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" wire:click="close()" >{{ __('public.close') }}</button>

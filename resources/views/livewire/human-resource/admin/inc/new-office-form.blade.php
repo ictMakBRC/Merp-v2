@@ -4,16 +4,15 @@
             <div class="modal-header bg-success">
                 <h6 class="modal-title m-0" id="updateCreateModalTitle">
                     @if (!$toggleForm)
-                        New station
+                        New office
                     @else
-                        Edit station
+                        Edit office
                     @endif
                 </h6>
                 <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()" aria-label="Close"></button>
-            </div><!--end modal-header-->            
-           
-               
-            <form  @if ($toggleForm) wire:submit.prevent="updateStation" @else wire:submit.prevent="storeStation" @endif>
+            </div><!--end modal-header-->     
+            
+            <form  @if ($toggleForm) wire:submit.prevent="updateOffice" @else wire:submit.prevent="storeOffice" @endif >             
                 <div class="modal-body">
                     <div class="row">
                         <div class="mb-3 col-md-12">

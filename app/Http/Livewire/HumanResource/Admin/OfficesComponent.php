@@ -4,11 +4,11 @@ namespace App\Http\Livewire\HumanResource\Admin;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Global\Station;
+use App\Models\HumanResource\Office;
 
-class StationsComponent extends Component
+class OfficesComponent extends Component
 {
-
+    
     use WithPagination;
 
     //Filters
@@ -16,7 +16,7 @@ class StationsComponent extends Component
 
     public $to_date;
 
-    public $stationIds;
+    public $officeIds;
 
     public $perPage = 10;
 
@@ -66,31 +66,31 @@ class StationsComponent extends Component
         ]);
     }
 
-    public function storeStation()
+    public function storeOffice()
     {
         $this->validate([
-            'name' => 'required|string|unique:Stations',
+            'name' => 'required|string|unique:Offices',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
 
         ]);
 
-        $station = new Station();
-        $station->name = $this->name;
-        $station->is_active = $this->is_active;
-        $station->description = $this->description;
-        $station->save();
+        $office = new Office();
+        $office->name = $this->name;
+        $office->is_active = $this->is_active;
+        $office->description = $this->description;
+        $office->save();
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Station created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Office created successfully!']);
     }
 
-    public function editData(Station $station)
+    public function editData(Office $office)
     {
-        $this->edit_id = $station->id;
-        $this->name = $station->name;
-        $this->is_active = $station->is_active;
-        $this->description = $station->description;
+        $this->edit_id = $office->id;
+        $this->name = $office->name;
+        $this->is_active = $office->is_active;
+        $this->description = $office->description;
         $this->createNew = true;
         $this->toggleForm = true;
     }
@@ -107,26 +107,26 @@ class StationsComponent extends Component
         $this->reset(['name', 'is_active', 'description']);
     }
 
-    public function updateStation()
+    public function updateOffice()
     {
         $this->validate([
-            'name' => 'required|unique:stations,name,'.$this->edit_id.'',
+            'name' => 'required|unique:Offices,name,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
         ]);
 
-        $station = Station::find($this->edit_id);
-        $station->name = $this->name;
-        $station->is_active = $this->is_active;
-        $station->description = $this->description;
-        $station->update();
+        $office = Office::find($this->edit_id);
+        $office->name = $this->name;
+        $office->is_active = $this->is_active;
+        $office->description = $this->description;
+        $office->update();
 
         $this->resetInputs();
         $this->createNew = false;
         $this->toggleForm = false;
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Station updated successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Office updated successfully!']);
     }
 
     public function refresh()
@@ -136,36 +136,36 @@ class StationsComponent extends Component
 
     public function export()
     {
-        if (count($this->stationIds) > 0) {
-            // return (new StationsExport($this->stationIds))->download('Stations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+        if (count($this->officeIds) > 0) {
+            // return (new OfficesExport($this->OfficeIds))->download('Offices_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEventBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! Not Found!',
-                'text' => 'No Stations selected for export!',
+                'text' => 'No Offices selected for export!',
             ]);
         }
     }
 
-    public function filterStations()
+    public function filterOffices()
     {
-        $stations = Station::search($this->search)
+        $offices = Office::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
             });
 
-        $this->stationIds = $stations->pluck('id')->toArray();
+        $this->officeIds = $offices->pluck('id')->toArray();
 
-        return $stations;
+        return $offices;
     }
 
     public function render()
     {
-        $data['stations'] = $this->filterStations()
+        $data['offices'] = $this->filterOffices()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.admin.stations-component', $data)->layout('layouts.app');
+        return view('livewire.human-resource.admin.offices-component',$data)->layout('layouts.app');
     }
 }

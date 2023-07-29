@@ -2,22 +2,37 @@
 
 namespace App\Models\Global;
 
-use App\Models\AssetsManagement\Asset;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AssetsManagement\Asset;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity,CausesActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Departments')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
 
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = ['department_name', 'parent_department', 'type', 'description', 'status', 'prefix', 'autonumber', 'created_by'];
+    protected $fillable = ['name', 'parent_department', 'type', 'description', 'is_active', 'prefix',  'created_by'];
 
     public function users()
     {
@@ -69,5 +84,13 @@ class Department extends Model
                 $model->created_by = auth()->id();
             });
         }
+    }
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()           
+                ->where('name', 'like', '%'.$search.'%')
+                ->orWhere('description', 'like', '%'.$search.'%');
+               
     }
 }
