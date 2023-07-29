@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Admin;
+namespace App\Http\Livewire\HumanResource\Settings;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -203,6 +203,6 @@ class LeavesComponent extends Component
         $data['leaves'] = $this->filterLeaves()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.admin.leaves-component',$data)->layout('layouts.app');
+        return view('livewire.human-resource.settings.leaves-component',$data)->layout('layouts.app');
     }
 }

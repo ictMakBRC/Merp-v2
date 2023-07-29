@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Admin;
+namespace App\Http\Livewire\HumanResource\Settings;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -190,6 +190,6 @@ class HolidaysComponent extends Component
         $data['holidays'] = $this->filterHolidays()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.admin.holidays-component', $data)->layout('layouts.app');
+        return view('livewire.human-resource.settings.holidays-component', $data)->layout('layouts.app');
     }
 }

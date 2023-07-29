@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        System Desiginations (<span class="text-danger fw-bold">{{ $designations->total() }}</span>)
+                                        Stations (<span class="text-danger fw-bold">{{ $stations->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
-                                        Edit Designation
+                                        Edit Station
                                     @endif
 
                                 </h5>
@@ -103,19 +103,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($designations as $key => $designation)
+                                    @foreach ($stations as $key => $station)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $designation->name }}</td>
-                                            <td>{{ $designation->description ?? 'N/A' }}</td>
-                                            @if ($designation->is_active == 0)
+                                            <td>{{ $station->name }}</td>
+                                            <td>{{ $station->description ?? 'N/A' }}</td>
+                                            @if ($station->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
-                                            <td>{{ date('d-m-Y', strtotime($designation->created_at)) }}</td>
+                                            <td>{{ date('d-m-Y', strtotime($station->created_at)) }}</td>
                                             <td class="table-action">
-                                                <button wire:click="editData({{ $designation->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                <button wire:click="editData({{ $station->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>
@@ -126,7 +126,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $designations->links('vendor.livewire.bootstrap') }}
+                                    {{ $stations->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
         </div><!-- end col-->
     </div>
 
-    @include('livewire.human-resource.admin.inc.new-designation-form')
+    @include('livewire.human-resource.settings.inc.new-station-form')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {
