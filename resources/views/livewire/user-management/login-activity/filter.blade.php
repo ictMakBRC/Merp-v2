@@ -53,8 +53,7 @@
 
 <div class="row mb-0">
     <div class="mt-4 col-md-1">
-        <a type="button" class="btn btn-outline-success me-2" wire:click="export()"><i class="bx bx-export"
-                title="{{ __('public.export') }}"></i></a>
+        <x-export-button></x-export-button>
     </div>
     
     <div class="mb-3 col-md-2">

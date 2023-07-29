@@ -151,5 +151,7 @@ return [
     'disable' => 'Disable',
     'general_settings' => 'General settings',
     'filter' => 'Filter',
+    'refresh' => 'Refresh',
+    'create_new' => 'Create new',
     //Other text end
 ];

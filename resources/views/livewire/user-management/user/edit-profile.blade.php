@@ -11,69 +11,18 @@
                     <form wire:submit.prevent="updateUser">
 
                         <div class="row">
-                            {{-- <div class="mb-3 col-md-4">
-                                <label for="title" class="form-label required">{{__('public.title')}}</label>
-                                <select class="form-select" id="title" wire:model.lazy="title" @if ($no_edit) disabled @endif>
-                                    <option value="" selected>Select</option>
-                                    <option value="Mr">Mr</option>
-                                    <option value="Mrs">Mrs</option>
-                                    <option value="Ms">Ms</option>
-                                    <option value="Miss">Miss</option>
-                                    <option value="Dr">Dr</option>
-                                    <option value="Eng">Eng</option>
-                                    <option value="Prof">Prof</option>
-                                </select>
-                                @error('title')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div> --}}
-
                             <div class="mb-3 col-md-4">
-                                <label for="surname" class="form-label required">{{__('public.surname')}}</label>
-                                <input type="text" id="surname" class="form-control"
-                                    wire:model.lazy="surname" @if ($no_edit) disabled @endif>
-                                @error('surname')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-4">
-                                <label for="first_name" class="form-label required">{{__('public.first_name')}}</label>
-                                <input type="text" id="first_name" class="form-control"
-                                    wire:model.lazy="first_name" @if ($no_edit) disabled @endif>
-                                @error('first_name')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-4">
-                                <label for="other_name" class="form-label">{{__('public.other_name')}}</label>
-                                <input type="text" id="other_name" class="form-control"
-                                    wire:model.lazy="other_name" @if ($no_edit) disabled @endif>
-                                @error('other_name')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="usercontact" class="form-label required">{{__('public.contact')}}</label>
-                                <div class="input-group">
-                                    @include('layouts.country-codes')
-                                    <input type="number" id="usercontact" class="form-control"
-                                    wire:model.lazy="contact" @if ($no_edit) disabled @endif placeholder="{{ __('public.contact') }}" step="1">
-                                </div>
-
-                                @error('phone_code')
-                                    <div class="text-danger text-small">{{ $message }}</div>
-                                @enderror
-                                @error('contact')
+                                <label for="name" class="form-label required">{{__('public.name')}}</label>
+                                <input type="text" id="name" class="form-control"
+                                    wire:model.lazy="name">
+                                @error('name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label for="userEmail" class="form-label required">{{__('public.email_address')}}</label>
-                                <input type="email" id="userEmail" class="form-control" wire:model.lazy="email" @if ($no_edit) disabled @endif>
+                                <input type="email" id="userEmail" class="form-control" wire:model.lazy="email">
                                 @error('email')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -109,7 +58,7 @@
                 </div>
             </div>
             @include('livewire.user-management.user.security-settings')
-            @include('livewire.user-management.user.general-settings')
+            {{-- @include('livewire.user-management.user.general-settings') --}}
         </div>
     </div>
 </div>

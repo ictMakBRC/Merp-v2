@@ -1,6 +1,6 @@
 <x-app-layout>
     @push('css')
-        <link href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/libs/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
     @endpush
     <div class="row">
         <div class="col-12">
@@ -16,7 +16,7 @@
                                 <div class="ms-auto">
                                     <a type="button" href="#" class="btn btn-success mb-2 me-1"
                                         data-bs-toggle="modal" data-bs-target="#addRole"><i
-                                            class="bx bx-plus"></i>{{ __('public.new') }}</a>
+                                            class="ti ti-plus"></i>{{ __('public.new') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -84,13 +84,13 @@
     <!-- end row-->
     @include('livewire.user-management.access.createRoleModal')
     @push('scripts')
-        <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatable/js/dataTables.bootstrap5.min.js') }}"></script>
         <script>
             $(document).ready(function() {
                 var table = $('#rolesTable').DataTable({
                     lengthChange: false,
-                    buttons: ['copy', 'excel', 'pdf', 'print']
+                    buttons: ['excel']
                 });
 
                 table.buttons().container()
