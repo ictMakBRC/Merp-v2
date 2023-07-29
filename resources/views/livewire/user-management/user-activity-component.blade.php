@@ -12,8 +12,36 @@
                                 <div class="ms-auto">
                                     <a type="button" class="btn btn-outline-success me-2" wire:click="refresh()"><i
                                         class="ti ti-refresh" title="Refresh"></i></a>
+
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-outline-success me-0">{{ __('public.action') }}</button>
+                                            <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span class="sr-only">Toggle Dropdown</span> <i class="ti ti-caret-down"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#"
+                                                    wire:click="dumpAndClearTable(6)">{{__('user-mgt.backup_older_than_6_months')}}</a>
+                                                </li>
+    
+                                                <li><a class="dropdown-item" href="#"
+                                                    wire:click="dumpAndClearTable(6,true)">{{__('user-mgt.backup_and_clear_older_than_6_months')}}</a>
+                                                </li>
+    
+                                                <li><a class="dropdown-item" href="#"
+                                                    wire:click="dumpAndClearTable(12)">{{__('user-mgt.backup_older_than_a_year')}}</a>
+                                                </li>
+    
+                                                <li><a class="dropdown-item" href="#"
+                                                    wire:click="dumpAndClearTable(12,true)">{{__('user-mgt.backup_and_clear_older_than_a_year')}}</a>
+                                                </li>
+    
+                                                <li><a class="dropdown-item" href="#"
+                                                    wire:click="downloadBackupFolderAsZip()">{{__('user-mgt.download_all_backups')}}</a>
+                                                </li>
+                                            </div>
+                                        </div>
   
-                                    <div class="btn-group ms-auto">
+                                    {{-- <div class="btn-group ms-auto">
                                         <button type="button"
                                             class="btn btn-outline-success">{{ __('public.options') }}</button>
                                         <button type="button"
@@ -43,7 +71,7 @@
                                             </li>
 
                                         </ul>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>

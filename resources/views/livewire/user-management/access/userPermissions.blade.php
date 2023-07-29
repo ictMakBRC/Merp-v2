@@ -56,12 +56,9 @@
                                             {{ $permission->target_module }}
                                         </td>
                                         <td>
-                                            <div class="d-flex table-actions">
-                                                <a href="{{ route('user-permissions.edit', $permission->id) }}"
-                                                    class="text-primary" title="{{__('public.edit')}}"> <i
-                                                        class="bx bx-edit-alt"></i></a>
-                                            </div>
-                                            
+                                            <a href="{{ route('user-permissions.edit', $permission->id) }}"
+                                                class="btn btn-sm btn-outline-success" title="{{__('public.edit')}}"> <i
+                                                    class="ti ti-edit"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
