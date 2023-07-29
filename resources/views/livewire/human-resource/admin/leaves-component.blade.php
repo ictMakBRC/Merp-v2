@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        System Desiginations (<span class="text-danger fw-bold">{{ $designations->total() }}</span>)
+                                        System leaves (<span class="text-danger fw-bold">{{ $leaves->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
-                                        Edit Designation
+                                        Edit leave
                                     @endif
 
                                 </h5>
@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter stations</h6>
+                            <h6>Filter leaves</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>
@@ -96,26 +96,32 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Description</th>
+                                        <th>Duration</th>
+                                        <th>Notice Days</th>
+                                        <th>Carry Foward?</th>
+                                        <th>Paid?</th>
+                                        <th>Given to?</th>
                                         <th>Status</th>
-                                        <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($designations as $key => $designation)
+                                    @foreach ($leaves as $key => $leave)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $designation->name }}</td>
-                                            <td>{{ $designation->description ?? 'N/A' }}</td>
-                                            @if ($designation->is_active == 0)
+                                            <td>{{ $leave->name }}</td>
+                                            <td>{{ $leave->duration ?? 'N/A' }}</td>
+                                            <td>{{ $leave->notice_days??'N/A' }}</td>
+                                            <td>{{ $leave->is_payable }}</td>
+                                            <td>{{ $leave->given_to??'N/A' }}</td>
+                                            <td>{{ $leave->carriable??'N/A' }}</td>
+                                            @if ($leave->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
-                                            <td>{{ date('d-m-Y', strtotime($designation->created_at)) }}</td>
                                             <td class="table-action">
-                                                <button wire:click="editData({{ $designation->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                <button wire:click="editData({{ $leave->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>
@@ -126,7 +132,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $designations->links('vendor.livewire.bootstrap') }}
+                                    {{ $leaves->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -136,7 +142,7 @@
         </div><!-- end col-->
     </div>
 
-    @include('livewire.human-resource.admin.inc.new-designation-form')
+    @include('livewire.human-resource.admin.inc.new-leave-form')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {

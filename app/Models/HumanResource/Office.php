@@ -3,12 +3,13 @@
 namespace App\Models\HumanResource;
 
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Leave extends Model
+class Office extends Model
 {
     use HasFactory,LogsActivity,CausesActivity;
 
@@ -24,13 +25,24 @@ class Leave extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['name', 'duration', 'carriable', 'is_payable', 'payment_type', 'given_to', 'notice_days', 'details', 'status'];
+    protected $fillable = ['name', 'description', 'is_active', 'created_by'];
 
+    public static function boot()
+    {
+        parent::boot();
+        if (Auth::check()) {
+            self::creating(function ($model) {
+                $model->created_by = auth()->id();
+            });
+        }
+    }
+
+   
     public static function search($search)
     {
         return empty($search) ? static::query()
             : static::query()           
                 ->where('name', 'like', '%'.$search.'%')
-                ->orWhere('payment_type', 'like', '%'.$search.'%');               
+                ->orWhere('description', 'like', '%'.$search.'%');               
     }
 }

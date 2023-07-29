@@ -6,19 +6,24 @@
     <div class="collapse " id="humanResourceSettingsMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="#" class="nav-link ">Duty Stations</a>
+                <a href="{{route('human-resource-stations')}}" class="nav-link ">Duty Stations</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link ">Departments</a>
+                <a href="{{route('human-resource-departments')}}" class="nav-link ">Departments</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link ">Designations</a>
+                <a href="{{route('human-resource-designations')}}" class="nav-link ">Designations</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link ">Holidays</a>
+                <a href="{{route('human-resource-holidays')}}" class="nav-link ">Holidays</a>
             </li>
+
             <li class="nav-item">
-                <a href="#" class="nav-link ">Leaves</a>
+                <a href="{{route('human-resource-offices')}}" class="nav-link ">Offices</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{route('human-resource-leaves')}}" class="nav-link ">Leaves</a>
             </li>
 
             <li class="nav-item">

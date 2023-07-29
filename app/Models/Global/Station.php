@@ -2,20 +2,35 @@
 
 namespace App\Models\Global;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Station extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity,CausesActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Stations')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
 
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = ['station_name', 'description', 'status'];
+    protected $fillable = ['name', 'description', 'is_active'];
 
     public static function boot()
     {
@@ -30,7 +45,7 @@ class Station extends Model
     {
         return empty($search) ? static::query()
             : static::query()           
-                ->where('station_name', 'like', '%'.$search.'%')
+                ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('description', 'like', '%'.$search.'%');
                
     }

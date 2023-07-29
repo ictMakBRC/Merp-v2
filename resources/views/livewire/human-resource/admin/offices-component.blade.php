@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        System Desiginations (<span class="text-danger fw-bold">{{ $designations->total() }}</span>)
+                                        System offices (<span class="text-danger fw-bold">{{ $offices->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
-                                        Edit Designation
+                                        Edit office
                                     @endif
 
                                 </h5>
@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter stations</h6>
+                            <h6>Filter offices</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>
@@ -103,19 +103,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($designations as $key => $designation)
+                                    @foreach ($offices as $key => $office)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $designation->name }}</td>
-                                            <td>{{ $designation->description ?? 'N/A' }}</td>
-                                            @if ($designation->is_active == 0)
+                                            <td>{{ $office->name }}</td>
+                                            <td>{{ $office->description ?? 'N/A' }}</td>
+                                            @if ($office->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
-                                            <td>{{ date('d-m-Y', strtotime($designation->created_at)) }}</td>
+                                            <td>{{ date('d-m-Y', strtotime($office->created_at)) }}</td>
                                             <td class="table-action">
-                                                <button wire:click="editData({{ $designation->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                <button wire:click="editData({{ $office->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>
@@ -126,7 +126,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $designations->links('vendor.livewire.bootstrap') }}
+                                    {{ $offices->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
         </div><!-- end col-->
     </div>
 
-    @include('livewire.human-resource.admin.inc.new-designation-form')
+    @include('livewire.human-resource.admin.inc.new-office-form')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {

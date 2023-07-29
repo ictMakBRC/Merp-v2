@@ -10,6 +10,7 @@
                 <a class="nav-link" href="#">{{ __('public.dashboard') }}</a>
             </li>
             <!--end nav-item-->
+
             @include('livewire.layouts.partials.inc.human-resource.inc.employees-nav')
             @include('livewire.layouts.partials.inc.human-resource.inc.performance-nav')
             @include('livewire.layouts.partials.inc.human-resource.inc.leaves-nav')
