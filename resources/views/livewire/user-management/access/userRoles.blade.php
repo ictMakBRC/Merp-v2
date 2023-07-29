@@ -45,16 +45,16 @@
                                         <td> {{ $role->name }}</td>
                                         <td> {{ $role->user_group }}</td>
                                         <td>{{ $role->permissions_count }}</td>
-                                        <td>
-                                            <div class="d-flex table-actions">
+                                        <td class="text-end">
+                                            {{-- <div class="d-flex"> --}}
                                                 @if (\Laratrust\Helper::roleIsEditable($role))
                                                 <a href="{{ route('user-roles.edit', $role->id) }}" title="{{__('public.edit')}}"
-                                                    class="text-primary">
-                                                    <i class="bx bx-edit-alt"></i></a>
+                                                    class="btn btn-sm btn-outline-success">
+                                                    <i class="ti ti-edit"></i></a>
                                             @else
                                                 <a href="{{ route('user-roles.show', $role->id) }}" title="{{__('public.view')}}"
-                                                    class="text-success">
-                                                    <i class="bx bx-eye"></i></a>
+                                                    class="btn btn-sm btn-outline-info">
+                                                    <i class="ti ti-eye"></i></a>
                                             @endif
 
                                             <form action="{{ route('user-roles.destroy', $role->id) }}" method="POST" title="{{__('public.delete')}}">
@@ -62,13 +62,13 @@
                                                 @csrf
                                                 @if (\Laratrust\Helper::roleIsDeletable($role))
                                                     <a href="#"
-                                                        onclick="event.preventDefault(); this.closest('form').submit();">
-                                                        <i class="bx bx-trash text-danger"></i></a>
+                                                        onclick="event.preventDefault(); this.closest('form').submit();" class="btn btn-sm btn-outline-danger">
+                                                        <i class="ti ti-trash"></i></a>
                                                 @else
                                                     {{-- <i class="uil-padlock"></i> --}}
                                                 @endif
                                             </form>
-                                            </div>
+                                            {{-- </div> --}}
                                            
                                         </td>
                                     </tr>
