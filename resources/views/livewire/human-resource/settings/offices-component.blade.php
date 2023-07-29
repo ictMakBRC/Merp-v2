@@ -136,7 +136,7 @@
         </div><!-- end col-->
     </div>
 
-    @include('livewire.human-resource.admin.inc.new-office-form')
+    @include('livewire.human-resource.settings.inc.new-office-form')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {

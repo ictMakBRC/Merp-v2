@@ -2,11 +2,11 @@
 
 use App\Http\Livewire\Global\DepartmentsComponent;
 use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\HumanResource\Admin\HolidaysComponent;
-use App\Http\Livewire\HumanResource\Admin\StationsComponent;
-use App\Http\Livewire\HumanResource\Admin\DesignationsComponent;
-use App\Http\Livewire\HumanResource\Admin\LeavesComponent;
-use App\Http\Livewire\HumanResource\Admin\OfficesComponent;
+use App\Http\Livewire\HumanResource\Settings\HolidaysComponent;
+use App\Http\Livewire\HumanResource\Settings\StationsComponent;
+use App\Http\Livewire\HumanResource\Settings\DesignationsComponent;
+use App\Http\Livewire\HumanResource\Settings\LeavesComponent;
+use App\Http\Livewire\HumanResource\Settings\OfficesComponent;
 
 Route::group(['prefix' => 'human-resource'], function () {
     Route::get('stations', StationsComponent::class)->name('human-resource-stations');

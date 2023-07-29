@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Admin;
+namespace App\Http\Livewire\HumanResource\Settings;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -166,6 +166,6 @@ class StationsComponent extends Component
         $data['stations'] = $this->filterStations()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.admin.stations-component', $data)->layout('layouts.app');
+        return view('livewire.human-resource.settings.stations-component', $data)->layout('layouts.app');
     }
 }
