@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        System stations (<span class="text-danger fw-bold">{{ $stations->total() }}</span>)
+                                        Stations (<span class="text-danger fw-bold">{{ $stations->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
-                                        Edit station
+                                        Edit Station
                                     @endif
 
                                 </h5>

@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        System Holidays (<span class="text-danger fw-bold">{{ $holidays->total() }}</span>)
+                                        Holidays (<span class="text-danger fw-bold">{{ $holidays->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
                                         Edit holiday
