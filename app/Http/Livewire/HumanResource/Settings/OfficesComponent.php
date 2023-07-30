@@ -4,7 +4,7 @@ namespace App\Http\Livewire\HumanResource\Settings;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Office;
+use App\Models\HumanResource\Settings\Office;
 
 class OfficesComponent extends Component
 {

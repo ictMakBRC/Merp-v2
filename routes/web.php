@@ -41,7 +41,6 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], f
         require __DIR__.'/user_mgt.php';
     });
 
-    require __DIR__.'/hrstatic.php';
     require __DIR__.'/human_resource.php';
     require __DIR__.'/inventory.php';
     require __DIR__.'/assets.php';

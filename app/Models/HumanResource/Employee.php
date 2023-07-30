@@ -2,23 +2,38 @@
 
 namespace App\Models\HumanResource;
 
-use App\Models\Global\Department;
-use App\Models\Global\Station;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\HumanResource\Settings\Station;
+use App\Models\HumanResource\Settings\Department;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\HumanResource\Settings\Designation;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employee extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['emp_id', 'nin_number', 'prefix', 'surname', 'first_name', 'other_name',
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Employees')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $fillable = ['entry_type','emp_id', 'nin_number', 'prefix', 'surname', 'first_name', 'other_name',
         'gender', 'nationality', 'birthday', 'age', 'birth_place', 'religious_affiliation',
         'height', 'weight', 'blood_type', 'civil_status', 'address',
-        'email', 'alt_email', 'contact', 'alt_contact', 'designation_id', 'station_id', 'department_id', 'department_unit_id',
-        'reporting_to', 'work_type', 'join_date', 'status', 'tin_number', 'nssf_number',
+        'email', 'alt_email', 'contact', 'alt_contact', 'designation_id', 'station_id', 'department_id', 'cv',
+        'reporting_to', 'work_type', 'join_date', 'is_active', 'tin_number', 'nssf_number',
         'photo', 'signature', 'created_by', ];
 
     public function designation()

@@ -3,7 +3,6 @@
 use App\Http\Controllers\Auth\UserPermissionsController;
 use App\Http\Controllers\Auth\UserRolesAssignmentController;
 use App\Http\Controllers\Auth\UserRolesController;
-use App\Http\Livewire\CompanyProfile\CompanyProfileComponent;
 use App\Http\Livewire\UserManagement\LoginActivityComponent;
 use App\Http\Livewire\UserManagement\UserActivityComponent;
 use App\Http\Livewire\UserManagement\UsersComponent;
@@ -18,4 +17,3 @@ Route::group(['prefix' => 'user-mgt', 'middleware' => ['permission:access_user_m
     Route::get('loginActivity', LoginActivityComponent::class)->name('logs')->middleware('permission:view_login_activity');
 });
 
-Route::get('company-profile', CompanyProfileComponent::class)->name('company-profile')->middleware('permission:access_user_management_module');

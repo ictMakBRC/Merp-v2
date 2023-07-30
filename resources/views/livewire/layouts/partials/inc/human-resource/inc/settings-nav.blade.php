@@ -6,6 +6,9 @@
     <div class="collapse " id="humanResourceSettingsMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
+                <a href="{{route('company-profile')}}" class="nav-link ">Organization Profile</a>
+            </li>
+            <li class="nav-item">
                 <a href="{{route('human-resource-stations')}}" class="nav-link ">Duty Stations</a>
             </li>
             <li class="nav-item">
