@@ -2,10 +2,12 @@
 
 namespace App\Models\HumanResource;
 
-use App\Models\Global\Department;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\Models\HumanResource\Employee;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\Settings\Designation;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProjectContract extends Model
 {

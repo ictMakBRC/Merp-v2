@@ -2,10 +2,13 @@
 
 namespace App\Models\HumanResource;
 
-use App\Models\Global\Department;
-use App\Models\Global\Station;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\HumanResource\Employee;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\HumanResource\Settings\Station;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\Settings\Designation;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
 
 class DesignationHistory extends Model
 {

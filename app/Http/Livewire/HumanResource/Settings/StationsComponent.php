@@ -4,7 +4,7 @@ namespace App\Http\Livewire\HumanResource\Settings;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Global\Station;
+use App\Models\HumanResource\Settings\Station;
 
 class StationsComponent extends Component
 {

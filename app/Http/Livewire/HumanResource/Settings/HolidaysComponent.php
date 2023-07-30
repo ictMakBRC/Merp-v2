@@ -4,7 +4,7 @@ namespace App\Http\Livewire\HumanResource\Settings;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Holiday;
+use App\Models\HumanResource\Settings\Holiday;
 
 class HolidaysComponent extends Component
 {

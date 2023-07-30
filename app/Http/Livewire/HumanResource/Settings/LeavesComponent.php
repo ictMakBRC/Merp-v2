@@ -4,7 +4,7 @@ namespace App\Http\Livewire\HumanResource\Settings;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Leave;
+use App\Models\HumanResource\Settings\Leave;
 
 class LeavesComponent extends Component
 { 
