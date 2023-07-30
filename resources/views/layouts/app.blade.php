@@ -14,10 +14,9 @@
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
-
+    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/mobius1-selectr/selectr.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Include Select2 library and CSS -->
-    <link href="{{ asset('assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/libs/select2/css/select2-bootstrap4.css') }}" rel="stylesheet" />
 
      <!-- iziToast CSS -->
      <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
@@ -64,8 +63,8 @@
     <script src="{{ asset('assets/libs/sweetalert/sweetalert.min.js') }}"></script>
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
-    <script src="{{ asset('assets/js/index.js') }}"></script>
-
+    <script src="{{ asset('assets/js/index.js') }}"></script>    
+    <script src="{{ asset('assets/libs/mobius1-selectr/selectr.min.js') }}"></script>    
     @livewireScripts
 
     @stack('scripts')

@@ -1,6 +1,6 @@
 <div wire:ignore.self class="modal fade" id="updateCreateModal" tabindex="-1" role="dialog"
     aria-labelledby="updateCreateModalTitle" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <h6 class="modal-title m-0" id="updateCreateModalTitle">
@@ -19,7 +19,7 @@
                     <div class="row">
                         <div class="mb-3 col-md-4">
                             <label for="parent_deparment" class="form-label">Parent Department</label>
-                            <select class="form-select" id="parent_deparment" wire:model.defer="parent_department">
+                            <select class="form-select select2" id="parent_deparment" wire:model.defer="parent_department">
                                 <option selected value="">None</option>
                                 @foreach ($parent_departments as $parentdeparment)
                                     <option value="{{$parentdeparment->id}}">{{$parentdeparment->name}}</option>
@@ -41,7 +41,7 @@
 
                         <div class="mb-3 col-md-4">
                             <label for="type" class="form-label">Type</label>
-                            <select class="form-select" id="type" wire:model.defer="type">
+                            <select id="type" class="form-select select2" id="type" wire:model.defer="type">
                                 <option selected value="">Select</option>
                                 <option value='Department'>Department</option>
                                 <option value='Unit'>Unit</option>

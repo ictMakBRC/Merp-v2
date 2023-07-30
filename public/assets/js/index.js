@@ -59,3 +59,23 @@ $(function() {
 
 
 });
+
+document.addEventListener('livewire:load', function () {
+	var selectElements1 = document.querySelectorAll('.select2');    
+	selectElements1.forEach(function (selectElement) {
+		new Selectr(selectElement, {
+			searchable: true,
+			width: '200px',
+		});
+	});
+	Livewire.hook('message.processed', function (message, component) {
+		var selectElements = document.querySelectorAll('.select2');
+
+		selectElements.forEach(function (selectElement) {
+			new Selectr(selectElement, {
+				searchable: true,
+				width: '200px',
+			});
+		});
+	});
+});
