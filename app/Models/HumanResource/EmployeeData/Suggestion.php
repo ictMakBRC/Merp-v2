@@ -10,7 +10,7 @@ class Suggestion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['suggestion', 'source_dept', 'created_by'];
+    protected $guarded = ['id'];
 
     public static function boot()
     {

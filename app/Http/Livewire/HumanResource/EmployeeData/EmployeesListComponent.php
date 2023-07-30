@@ -34,6 +34,9 @@ class EmployeesListComponent extends Component
 
     public $filter = false;
 
+    public $user_category;
+    public $user_status;
+
     public function updatedCreateNew()
     {
         // $this->reset();

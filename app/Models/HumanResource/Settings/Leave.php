@@ -3,6 +3,7 @@
 namespace App\Models\HumanResource\Settings;
 
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +24,7 @@ class Leave extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['name', 'duration', 'carriable', 'is_payable', 'payment_type', 'given_to', 'notice_days', 'details', 'status'];
+    protected $guarded = ['id'];
 
     public static function search($search)
     {
@@ -31,5 +32,15 @@ class Leave extends Model
             : static::query()           
                 ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('payment_type', 'like', '%'.$search.'%');               
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        if (Auth::check()) {
+            self::creating(function ($model) {
+                $model->created_by = auth()->id();
+            });
+        }
     }
 }

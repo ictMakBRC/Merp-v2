@@ -2,31 +2,29 @@
 
 namespace App\Models\HumanResource\Settings;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CompanyProfile extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = [
-        'company_name',
-        'slogan',
-        'about',
-        'company_type',
-        'physical_address',
-        'address2',
-        'contact',
-        'alt_contact',
-        'email',
-        'alt_email',
-        'tin',
-        'logo',
-        'website',
-        'fax',
-        'created_by',
-    ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Organisation Profile')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $guarded = ['id'];
 
     public static function boot()
     {

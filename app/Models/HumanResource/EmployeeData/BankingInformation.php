@@ -2,14 +2,39 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BankingInformation extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Banking Information')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
 
     public $table = 'banking_information';
 
-    protected $fillable = ['employee_id', 'bank_name', 'branch', 'account_name', 'currency', 'account_number'];
+    protected $guarded = ['id'];
+
+    public static function boot()
+    {
+        parent::boot();
+        if (Auth::check()) {
+            self::creating(function ($model) {
+                $model->created_by = auth()->id();
+            });
+        }
+    }
 }

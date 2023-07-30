@@ -29,12 +29,7 @@ class Employee extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['entry_type','emp_id', 'nin_number', 'prefix', 'surname', 'first_name', 'other_name',
-        'gender', 'nationality', 'birthday', 'age', 'birth_place', 'religious_affiliation',
-        'height', 'weight', 'blood_type', 'civil_status', 'address',
-        'email', 'alt_email', 'contact', 'alt_contact', 'designation_id', 'station_id', 'department_id', 'cv',
-        'reporting_to', 'work_type', 'join_date', 'is_active', 'tin_number', 'nssf_number',
-        'photo', 'signature', 'created_by', ];
+    protected $guarded = ['id'];
 
     public function designation()
     {
@@ -49,11 +44,6 @@ class Employee extends Model
     public function station()
     {
         return $this->belongsTo(Station::class, 'station_id', 'id');
-    }
-
-    public function departmentunit()
-    {
-        return $this->belongsTo(Department::class, 'department_unit_id', 'id');
     }
 
     protected function fullName(): Attribute

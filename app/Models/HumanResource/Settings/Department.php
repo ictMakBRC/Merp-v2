@@ -31,7 +31,7 @@ class Department extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['name', 'parent_department', 'type', 'description', 'is_active', 'prefix',  'created_by'];
+    protected $guarded = ['id'];
 
     public function users()
     {

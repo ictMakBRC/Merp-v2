@@ -2,8 +2,11 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 use App\Models\HumanResource\Employee;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\HumanResource\Settings\Station;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Settings\Designation;
@@ -12,9 +15,21 @@ use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
 
 class DesignationHistory extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['employee_id', 'emp_id', 'department_id', 'from', 'to', 'gross_salary', 'official_contract_id', 'end_date'];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Designation History')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $guarded = ['id'];
 
     public function employee()
     {
@@ -50,4 +65,5 @@ class DesignationHistory extends Model
     {
         return $this->belongsTo(Designation::class, 'to', 'id');
     }
+
 }

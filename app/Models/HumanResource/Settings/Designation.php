@@ -17,14 +17,14 @@ class Designation extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Desginations')
+            ->useLogName('Designations')
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['name', 'description', 'is_active', 'created_by'];
+    protected $guarded = ['id'];
 
     public static function boot()
     {

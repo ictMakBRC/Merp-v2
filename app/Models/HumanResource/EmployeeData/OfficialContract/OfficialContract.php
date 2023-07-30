@@ -2,18 +2,33 @@
 
 namespace App\Models\HumanResource\EmployeeData\OfficialContract;
 
-use App\Models\Global\Department;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Global\Department;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\HumanResource\EmployeeData\Employee;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OfficialContract extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['employee_id', 'department_id', 'contract_name', 'start_date', 'end_date', 'gross_salary', 'contract_file', 'status', 'created_by'];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Official Contracts')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $guarded = ['id'];
 
     public function employee()
     {

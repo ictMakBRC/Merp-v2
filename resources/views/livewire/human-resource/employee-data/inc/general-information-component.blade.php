@@ -20,8 +20,8 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <label for="prefix" class="form-label required">Prefix</label>
-                <select class="form-select select2" id="prefix" wire:model.defer='prefix'>
+                <label for="title" class="form-label required">Prefix</label>
+                <select class="form-select select2" id="title" wire:model.defer='title'>
                     <option value="Mr.">Mr.</option>
                     <option value="Ms.">Ms.</option>
                     <option value="Miss.">Miss.</option>
@@ -146,9 +146,9 @@
                 <label for="designation_id" class="form-label required">Designation / Position</label>
                 <select class="form-select select2" id="designation_id" wire:model.lazy='designation_id'>
                     <option selected value="">Select</option>
-                    {{-- @foreach ($designations as $designation)
+                    @foreach ($designations as $designation)
                         <option value='{{ $designation->id }}'>{{ $designation->name }}</option>
-                    @endforeach --}}
+                    @endforeach
                 </select>
             </div>
     
@@ -156,9 +156,9 @@
                 <label for="station_id" class="form-label required">Official Duty Station</label>
                 <select class="form-select select2" id="station_id" wire:model.lazy='station_id'>
                     <option selected value="">Select</option>
-                    {{-- @foreach ($stations as $station)
-                        <option value='{{ $station->id }}'>{{ $station->station_name }}</option>
-                    @endforeach --}}
+                    @foreach ($stations as $station)
+                        <option value='{{ $station->id }}'>{{ $station->name }}</option>
+                    @endforeach
                 </select>
             </div>
 
@@ -166,9 +166,9 @@
                 <label for="department_id" class="form-label required">Department</label>
                 <select class="form-select select2" id="department_id" wire:model.lazy='department_id'>
                     <option selected value="">Select</option>
-                    {{-- @foreach ($departments as $department)
-                        <option value='{{ $department->id }}'>{{ $department->department_name }}</option>
-                    @endforeach --}}
+                    @foreach ($departments as $department)
+                        <option value='{{ $department->id }}'>{{ $department->name .' ('.$department->type.')' }}</option>
+                    @endforeach
     
                 </select>
             </div>
@@ -177,9 +177,9 @@
                 <label for="reporting_to" class="form-label">Reporting to</label>
                 <select class="form-select select2" id="reporting_to" wire:model.defer='reporting_to'>
                     <option selected value="">Select</option>
-                    {{-- @foreach ($employees as $employee)
+                    @foreach ($supervisors as $employee)
                         <option value='{{ $employee->id }}'>{{ $employee->fullName }}</option>
-                    @endforeach --}}
+                    @endforeach
                 </select>
             </div>
             
