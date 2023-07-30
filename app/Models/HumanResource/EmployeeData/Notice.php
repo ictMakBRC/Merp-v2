@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\HumanResource;
+namespace App\Models\HumanResource\EmployeeData;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\HumanResource\Employee;

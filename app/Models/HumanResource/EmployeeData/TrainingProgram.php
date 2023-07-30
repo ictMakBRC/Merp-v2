@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Models\HumanResource;
+namespace App\Models\HumanResource\EmployeeData;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class Suggestion extends Model
+class TrainingProgram extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['suggestion', 'source_dept', 'created_by'];
+    protected $fillable = ['employee_id', 'start_date', 'end_date', 'organised_by',
+        'training_name', 'training_length', 'training_description', 'certificate', 'created_by', ];
 
     public static function boot()
     {

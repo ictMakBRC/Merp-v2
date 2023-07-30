@@ -6,11 +6,11 @@
     <div class="collapse " id="employeeDataMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="#" class="nav-link ">Register Employee</a>
+                <a href="{{route('human-resource-capture-new-info')}}" class="nav-link ">Register Employee Info</a>
             </li>
             <!--end nav-item-->
             <li class="nav-item">
-                <a href="analytics-reports.html" class="nav-link ">All Employees</a>
+                <a href="{{route('human-resource-employees-list')}}" class="nav-link ">All Employees</a>
             </li>
             <!--end nav-item-->
             <li class="nav-item">

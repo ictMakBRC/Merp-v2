@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\HumanResource;
+namespace App\Models\HumanResource\EmployeeData;
 
 use Carbon\Carbon;
 use Spatie\Activitylog\LogOptions;
@@ -79,5 +79,13 @@ class Employee extends Model
                 $model->created_by = auth()->id();
             });
         }
+    }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()           
+                ->where('surname', 'like', '%'.$search.'%')
+                ->orWhere('first_name', 'like', '%'.$search.'%');               
     }
 }

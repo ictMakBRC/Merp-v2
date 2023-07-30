@@ -9,6 +9,8 @@ use App\Http\Livewire\HumanResource\Settings\StationsComponent;
 use App\Http\Livewire\HumanResource\Settings\DepartmentsComponent;
 use App\Http\Livewire\HumanResource\Settings\DesignationsComponent;
 use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
+use App\Http\Livewire\HumanResource\EmployeeData\EmployeeDataComponent;
+use App\Http\Livewire\HumanResource\EmployeeData\EmployeesListComponent;
 
 Route::group(['prefix' => 'human-resource'], function () {
     Route::get('dashboard', HumanResourceMainDashboardComponent::class)->name('human-resource-dashboard');
@@ -24,4 +26,9 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('leaves', LeavesComponent::class)->name('human-resource-leaves');
         
     });
+
+    Route::get('capture-new-info', EmployeeDataComponent::class)->name('human-resource-capture-new-info');
+    Route::get('employees', EmployeesListComponent::class)->name('human-resource-employees-list');
+
+    
 });
