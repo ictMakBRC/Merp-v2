@@ -6,6 +6,7 @@ use App\Models\User;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AssetsManagement\Asset;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,7 +26,7 @@ class Department extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-
+    protected $fillable =['asst_supervisor','supervisor','name','created_by','is_active'];
     /**
      * The attributes that are mass assignable.
      *
@@ -46,6 +47,15 @@ class Department extends Model
     public function child()
     {
         return $this->hasMany(Department::class, 'parent_department', 'id');
+    }
+    public function supervisor()
+    {
+        return $this->hasOne(Employee::class,'id', 'supervisor');
+    }
+
+    public function ast_supervisor()
+    {
+        return $this->hasOne(Employee::class, 'id', 'asst_supervisor');
     }
 
     public function assets()
