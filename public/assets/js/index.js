@@ -55,27 +55,29 @@ $(function() {
 			});
 	});
 
-
-document.addEventListener('livewire:load', function () {
-	var selectElements1 = document.querySelectorAll('.select2');    
-	selectElements1.forEach(function (selectElement) {
-		new Selectr(selectElement, {
-			searchable: true,
-			width: '200px',
-		});
+	window.addEventListener('livewire:load', () => {
+		initializeSelectr();
 	});
-	
-	Livewire.hook('message.processed', function (message, component) {
-		var selectElements = document.querySelectorAll('.select2');
 
-		selectElements.forEach(function (selectElement) {
-			new Selectr(selectElement, {
-				searchable: true,
-				width: '200px',
+	window.addEventListener('livewire:update', () => {
+		const selectrElements = document.querySelectorAll('.selectr-container');
+		selectrElements.forEach((element) => {
+			const selectrInstance = element.selectr;
+			selectrInstance.destroy(); // destroy the previous instances of Selectr
+		});
+
+		initializeSelectr();
+	});
+
+	function initializeSelectr() {
+		const selectrElements = document.querySelectorAll('.selectr');
+		selectrElements.forEach((element) => {
+			new Selectr(element, {
+				placeholder: element.dataset.placeholder ? element.dataset.placeholder : 'Select',
+				allowClear: Boolean(element.dataset.allowClear),
 			});
 		});
-	});
-});
+	}
 
 });
 
