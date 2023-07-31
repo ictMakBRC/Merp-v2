@@ -3,6 +3,7 @@
 namespace App\Models\HumanResource\EmployeeData;
 
 use Carbon\Carbon;
+use App\Services\GeneratorService;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -29,12 +30,7 @@ class Employee extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['entry_type','emp_id', 'nin_number', 'prefix', 'surname', 'first_name', 'other_name',
-        'gender', 'nationality', 'birthday', 'age', 'birth_place', 'religious_affiliation',
-        'height', 'weight', 'blood_type', 'civil_status', 'address',
-        'email', 'alt_email', 'contact', 'alt_contact', 'designation_id', 'station_id', 'department_id', 'cv',
-        'reporting_to', 'work_type', 'join_date', 'is_active', 'tin_number', 'nssf_number',
-        'photo', 'signature', 'created_by', ];
+    protected $guarded = [];
 
     public function designation()
     {
@@ -51,11 +47,6 @@ class Employee extends Model
         return $this->belongsTo(Station::class, 'station_id', 'id');
     }
 
-    public function departmentunit()
-    {
-        return $this->belongsTo(Department::class, 'department_unit_id', 'id');
-    }
-
     protected function fullName(): Attribute
     {
         return Attribute::make(
@@ -63,13 +54,13 @@ class Employee extends Model
         );
     }
 
-    protected function empAge(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Carbon::createFromFormat('Y-m-d', $this->birthday)->diffInYears(Carbon::today()),
+    // protected function getAge(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => Carbon::createFromFormat('Y-m-d', $this->birth_date)->diffInYears(Carbon::today()),
 
-        );
-    }
+    //     );
+    // }
 
     public static function boot()
     {
@@ -77,6 +68,13 @@ class Employee extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
+                $model->age = 78;
+                // $model->age = Carbon::createFromFormat('Y-m-d', $model->birth_date)->diffInYears(Carbon::today());
+                $model->employee_number = GeneratorService::employeeNo();
+            });
+
+            self::updating(function ($model) {
+                $model->age = Carbon::createFromFormat('Y-m-d', $model->birth_date)->diffInYears(Carbon::today());
             });
         }
     }

@@ -58,13 +58,13 @@
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
 
-    <script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script> --}}
     <script src="{{ asset('assets/libs/izitoast/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert/sweetalert.min.js') }}"></script>
     <!-- App js -->
-    <script src="{{ asset('assets/js/app.js') }}"></script>
-    <script src="{{ asset('assets/js/index.js') }}"></script>    
-    <script src="{{ asset('assets/libs/mobius1-selectr/selectr.min.js') }}"></script>    
+    <script src="{{ asset('assets/js/app.js') }}"></script>   
+    <script src="{{ asset('assets/libs/mobius1-selectr/selectr.min.js') }}"></script>
+    <script src="{{ asset('assets/js/index.js') }}"></script>   
     @livewireScripts
 
     @stack('scripts')

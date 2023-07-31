@@ -2,13 +2,37 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EmergencyContact extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['employee_id', 'contact_relationship',
-        'contact_name', 'contact_email', 'contact_address', 'contact_phone', ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Emergency Contact Information')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $guarded = ['id'];
+
+    public static function boot()
+    {
+        parent::boot();
+        if (Auth::check()) {
+            self::creating(function ($model) {
+                $model->created_by = auth()->id();
+            });
+        }
+    }
 }

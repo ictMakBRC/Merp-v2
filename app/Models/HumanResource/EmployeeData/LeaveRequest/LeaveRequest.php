@@ -2,15 +2,29 @@
 
 namespace App\Models\HumanResource\EmployeeData\LeaveRequest;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LeaveRequest extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['employee_id', 'emp_id', 'department_id', 'leave_id', 'start_date', 'end_date', 'length', 'reason', 'delegated_to', 'delegatee_status', 'duties_delegated', 'comment', 'delegatee_comment', 'approved_by', 'created_by'];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Leave Requests')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $guarded = ['id'];
 
     public function employee()
     {

@@ -11,7 +11,7 @@ class Notice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['notice', 'audience', 'expires_on', 'created_by'];
+    protected $guarded = ['id'];
 
     public function employee()
     {

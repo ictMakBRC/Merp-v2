@@ -2,16 +2,28 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EducationBackground extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['employee_id', 'level',
-        'school', 'start_date', 'end_date', 'award', 'award_document', ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Education Background')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $guarded = ['id'];
 
     public static function boot()
     {
