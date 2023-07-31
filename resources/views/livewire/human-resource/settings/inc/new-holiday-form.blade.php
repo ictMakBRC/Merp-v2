@@ -18,7 +18,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="holidayName" class="form-label">Holiday Name</label>
+                                    <label for="holidayName" class="form-label required">Holiday Name</label>
                                     <input type="text" id="holidayName" class="form-control" wire:model.defer="title" required>
                                 </div>
                             </div> <!-- end col -->
@@ -42,11 +42,11 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="startDate" class="form-label">Start Date</label>
+                                <label for="startDate" class="form-label required">Start Date</label>
                                 <input type="date" id="startDate" class="form-control" wire:model.defer="start_date" required>
                             </div>
                             <div class="mb-3 col-md-6">
-                                <label for="endDate" class="form-label">End Date</label>
+                                <label for="endDate" class="form-label required">End Date</label>
                                 <input type="date" id="endDate" class="form-control" wire:model.defer="end_date">
                             </div>
                             <div class="mb-3 col-md-12">

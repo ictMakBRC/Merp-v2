@@ -30,7 +30,7 @@
                             @enderror
                         </div>
                         <div class="mb-3 col-md-8">
-                            <label for="departmentName" class="form-label">
+                            <label for="departmentName" class="form-label required">
                                 Department/Unit Name
                             </label>
                             <input type="text" id="departmentName" class="form-control" wire:model.defer="name">
@@ -40,7 +40,7 @@
                         </div> <!-- end col -->
 
                         <div class="mb-3 col-md-4">
-                            <label for="type" class="form-label">Type</label>
+                            <label for="type" class="form-label required">Type</label>
                             <select id="type" class="form-select select2" id="type" wire:model.defer="type">
                                 <option selected value="">Select</option>
                                 <option value='Department'>Department</option>
@@ -53,7 +53,7 @@
                             @enderror
                         </div>
                         <div class="mb-3 col-md-4">
-                            <label for="prefix" class="form-label">
+                            <label for="prefix" class="form-label required">
                                 Prefix
                             </label>
                             <input type="text" id="prefix" class="form-control" wire:model.defer="prefix">                            
@@ -62,7 +62,7 @@
                             @enderror
                         </div>
                         <div class="mb-3 col-md-4">
-                            <label for="is_active" class="form-label">Status</label>
+                            <label for="is_active" class="form-label required">Status</label>
                             <select class="form-select" id="is_active" wire:model.defer="is_active">
                                 <option selected value="">Select</option>
                                 <option value='1'>Active</option>
