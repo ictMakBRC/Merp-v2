@@ -55,7 +55,7 @@ class GeneralEmployeeData extends Data
           'station_id' => 'required|integer',
           'department_id' => 'required|integer',
           'work_type' => 'required|string',
-          'join_date' => 'required|date',
+          'join_date' => 'required|date|before:today',
         ];
     }
     
