@@ -3,6 +3,7 @@
 namespace App\Models\HumanResource\EmployeeData;
 
 use Carbon\Carbon;
+use App\Services\GeneratorService;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +30,7 @@ class Employee extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     public function designation()
     {
@@ -53,13 +54,13 @@ class Employee extends Model
         );
     }
 
-    protected function empAge(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Carbon::createFromFormat('Y-m-d', $this->birthday)->diffInYears(Carbon::today()),
+    // protected function getAge(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => Carbon::createFromFormat('Y-m-d', $this->birth_date)->diffInYears(Carbon::today()),
 
-        );
-    }
+    //     );
+    // }
 
     public static function boot()
     {
@@ -67,6 +68,13 @@ class Employee extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
+                $model->age = 78;
+                // $model->age = Carbon::createFromFormat('Y-m-d', $model->birth_date)->diffInYears(Carbon::today());
+                $model->employee_number = GeneratorService::employeeNo();
+            });
+
+            self::updating(function ($model) {
+                $model->age = Carbon::createFromFormat('Y-m-d', $model->birth_date)->diffInYears(Carbon::today());
             });
         }
     }
