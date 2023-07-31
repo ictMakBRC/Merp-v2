@@ -3,6 +3,7 @@
 namespace App\Models\HumanResource\Settings;
 
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +24,7 @@ class Holiday extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['title', 'details', 'start_date', 'end_date', 'holiday_type','is_active','created_by'];
+    protected $guarded = ['id'];
     
     public static function search($search)
     {
@@ -31,5 +32,15 @@ class Holiday extends Model
             : static::query()           
                 ->where('title', 'like', '%'.$search.'%')
                 ->orWhere('description', 'like', '%'.$search.'%');               
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        if (Auth::check()) {
+            self::creating(function ($model) {
+                $model->created_by = auth()->id();
+            });
+        }
     }
 }

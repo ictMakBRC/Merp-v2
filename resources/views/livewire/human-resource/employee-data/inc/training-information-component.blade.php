@@ -17,7 +17,7 @@
         
         <div class="mb-3 col-md-6">
             <label for="training_name" class="form-label required">Title/Training Name</label>
-            <input type="text" id="training_name" class="form-control" wire:model.defer="training_name"
+            <input type="text" id="training_name" class="form-control" wire:model.defer="training_title"
                 placeholder="Title of Seminar/Conference/ Workshop/Short Courses">
         </div>
 

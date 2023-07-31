@@ -2,13 +2,37 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FamilyBackground extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
 
-    protected $fillable = ['employee_id', 'member_type',
-        'surname', 'first_name', 'middle_name', 'address', 'contact', 'occupation', 'employer', 'employer_address', 'employer_contact', ];
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Family Background Information')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
+
+    protected $guarded = ['id'];
+
+    public static function boot()
+    {
+        parent::boot();
+        if (Auth::check()) {
+            self::creating(function ($model) {
+                $model->created_by = auth()->id();
+            });
+        }
+    }
 }

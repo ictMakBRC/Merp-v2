@@ -29,7 +29,7 @@ class Station extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['name', 'description', 'is_active'];
+    protected $guarded = ['id'];
 
     public static function boot()
     {

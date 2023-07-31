@@ -24,7 +24,7 @@ class Office extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = ['name', 'description', 'is_active', 'created_by'];
+    protected $guarded = ['id'];
 
     public static function boot()
     {
