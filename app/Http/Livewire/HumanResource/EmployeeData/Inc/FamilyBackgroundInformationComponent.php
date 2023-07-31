@@ -23,6 +23,18 @@ class FamilyBackgroundInformationComponent extends Component
     //Dependants
     public $child_name;
     public $birth_date;
+
+    public $loadingInfo='';
+    
+    protected $listeners = [
+        'switchEmployee' => 'setEmployeeId',
+    ];
+
+    public function setEmployeeId($details)
+    {
+        $this->employee_id = $details['employeeId'];
+        $this->loadingInfo = $details['info'];
+    }
    
     public function render()
     {

@@ -14,6 +14,17 @@ class EducationInformationComponent extends Component
     public $award;
     public $award_document;
     
+    public $loadingInfo='';
+    
+    protected $listeners = [
+        'switchEmployee' => 'setEmployeeId',
+    ];
+
+    public function setEmployeeId($details)
+    {
+        $this->employee_id = $details['employeeId'];
+        $this->loadingInfo = $details['info'];
+    }
     public function render()
     {
         return view('livewire.human-resource.employee-data.inc.education-information-component');

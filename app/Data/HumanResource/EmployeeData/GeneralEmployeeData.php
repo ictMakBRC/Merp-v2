@@ -38,32 +38,62 @@ class GeneralEmployeeData extends Data
     public ?string $photo;
     public ?string $signature;
 
-    // public function __construct(?string $name = null, ?string $category = null, ?string $email = null,?string $password = null, ?int $is_active = null,$signature=null)
-    // {
-    //     $this->name = $name;
-    //     $this->category = $category;
-    //     $this->email = $email;
-    //     $this->password = $password;
-    //     $this->is_active = $is_active;
-    //     $this->signature = $signature;
-    // }
-
-      // Validation rules for the properties
-      public function rules(): array
-      {
-          return [
-            'entry_type' => 'required|string',
-            'title' => 'required|string',
-            'surname' => 'required|string|max:40',
-            'first_name' => 'required|string|max:40',
-            'gender' => 'required|string|max:6',
-            'nationality' => 'required|string',
-            'email' => 'required|string|email:filter|max:255|unique:employees',
-            'designation_id' => 'required|integer',
-            'station_id' => 'required|integer',
-            'department_id' => 'required|integer',
-            'work_type' => 'required|string',
-            'join_date' => 'required|date',
-          ];
-      }
+    // Validation rules for the properties
+    public function rules(): array
+    {
+        return [
+          'entry_type' => 'required|string',
+          'nin_number' => 'nullable|string|max:20|unique:employees',
+          'title' => 'required|string',
+          'surname' => 'required|string|max:40',
+          'first_name' => 'required|string|max:40',
+          'gender' => 'required|string|max:6',
+          'nationality' => 'required|string',
+          'email' => 'required|string|email:filter|max:255|unique:employees',
+          'alt_email' => 'nullable|string|email:filter|max:255|unique:employees',
+          'designation_id' => 'required|integer',
+          'station_id' => 'required|integer',
+          'department_id' => 'required|integer',
+          'work_type' => 'required|string',
+          'join_date' => 'required|date',
+        ];
+    }
+    
+    // Validation rules for the properties
+    public function resetInputs(): array
+    {
+        return [
+          'entry_type',
+              'nin_number',
+              'title',
+              'surname',
+              'first_name',
+              'other_name',
+              'gender',
+              'nationality',
+              'birth_date',
+              'birth_place',
+              'religious_affiliation',
+              'height',
+              'weight',
+              'blood_type',
+              'civil_status',
+              'address',
+              'email',
+              'alt_email',
+              'contact',
+              'alt_contact',
+              'designation_id',
+              'station_id',
+              'department_id',
+              'reporting_to',
+              'work_type',
+              'join_date',
+              'tin_number',
+              'nssf_number',
+              'signature',
+              'cv',
+              'photo',
+        ];
+    }
 }

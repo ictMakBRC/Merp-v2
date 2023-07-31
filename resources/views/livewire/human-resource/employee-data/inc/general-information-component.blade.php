@@ -121,8 +121,8 @@
 
             <div class="mb-3 col-md-2">
                 <label for="height" class="form-label">Height</label>
-                <input type="text" id="height" class="form-control" wire:model.defer='height'
-                    placeholder="In cm">
+                <input type="number" id="height" class="form-control" wire:model.defer='height'
+                    placeholder="In cm" step="0.01">
                 @error('height')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
@@ -130,8 +130,8 @@
 
             <div class="mb-3 col-md-2">
                 <label for="weight" class="form-label">Weight</label>
-                <input type="text" id="weight" class="form-control" nwire:model.defer='weight'
-                    placeholder="In Kg">
+                <input type="number" id="weight" class="form-control" wire:model.defer='weight'
+                    placeholder="In Kg" step="0.01">
                 @error('weight')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
@@ -292,7 +292,7 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <label for="nssf_number" class="form-label">Social Security No</label>
+                <label for="nssf_number" class="form-label">Social Security Number</label>
                 <input type="text" id="nssf_number" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='nssf_number'>
                 @error('nssf_number')
@@ -301,8 +301,8 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <label for="cv" class="form-label">CV/Resume</label>
-                <input type="file" id="cv" class="form-control" wire:model.lazy='cv' accept=".pdf">
+                <label for="cv{{$employee_id}}" class="form-label">CV/Resume</label>
+                <input type="file" id="cv{{$employee_id}}" class="form-control" wire:model.lazy='cv' accept=".pdf">
                 <div class="text-success text-small" wire:loading wire:target="cv">Uploading cv/resume
                 </div>
                 @error('cv')
@@ -311,8 +311,8 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <label for="photo" class="form-label">Photo (Passport Size)</label>
-                <input type="file" id="photo" class="form-control" wire:model.lazy='photo'
+                <label for="photo{{$employee_id}}" class="form-label">Photo (Passport Size)</label>
+                <input type="file" id="photo{{$employee_id}}" class="form-control" wire:model.lazy='photo'
                     accept=".jpg,.jpeg,.png">
                     <div class="text-success text-small" wire:loading wire:target="photo">Uploading photo
                     </div>
@@ -322,8 +322,8 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <label for="signature" class="form-label">Signature</label>
-                <input type="file" id="signature" class="form-control" wire:model.lazy='signature'
+                <label for="signature{{$employee_id}}" class="form-label">Signature</label>
+                <input type="file" id="signature{{$employee_id}}" class="form-control" wire:model.lazy='signature'
                     accept=".jpg,.jpeg,.png">
                     <div class="text-success text-small" wire:loading wire:target="signature">Uploading signature
                     </div>

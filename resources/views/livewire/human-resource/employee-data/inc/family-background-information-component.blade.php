@@ -1,4 +1,6 @@
 <div>
+    @include('livewire.human-resource.employee-data.inc.loading-info')
+
     <form>
         <div class="row">
 

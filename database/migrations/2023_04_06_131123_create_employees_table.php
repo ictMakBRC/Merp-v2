@@ -28,8 +28,8 @@ return new class extends Migration
             $table->integer('age');
             $table->string('birth_place')->nullable();
             $table->string('religious_affiliation')->nullable();
-            $table->string('height')->nullable();
-            $table->string('weight')->nullable();
+            $table->decimal('height', 5, 2)->nullable();
+            $table->decimal('weight', 5, 2)->nullable();
             $table->string('blood_type')->nullable();
             $table->string('civil_status')->nullable();
             $table->string('address')->nullable();

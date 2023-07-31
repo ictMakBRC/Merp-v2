@@ -13,6 +13,18 @@ class OfficialContractComponent extends Component
     public $start_date;
     public $end_date;
     public $contract_file;
+
+    public $loadingInfo='';
+    
+    protected $listeners = [
+        'switchEmployee' => 'setEmployeeId',
+    ];
+
+    public function setEmployeeId($details)
+    {
+        $this->employee_id = $details['employeeId'];
+        $this->loadingInfo = $details['info'];
+    }
     
     public function render()
     {
