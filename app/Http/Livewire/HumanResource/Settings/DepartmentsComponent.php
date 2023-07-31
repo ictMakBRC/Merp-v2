@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\HumanResource\Settings;
 
+use App\Models\HumanResource\EmployeeData\Employee;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Department;
@@ -37,9 +38,16 @@ class DepartmentsComponent extends Component
     public $delete_id;
 
     public $edit_id;
-
     
-    public $parent_department, $type, $prefix;
+    public $parent_department;
+
+    public $type;
+
+    public $prefix;
+
+    public $supervisor;
+
+    public $asst_supervisor;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -69,6 +77,8 @@ class DepartmentsComponent extends Component
             'type' => 'required|string',
             'prefix' => 'required|string',
             'parent_department' => 'nullable|integer',
+            'supervisor' => 'nullable|integer',
+            'asst_supervisor' => 'nullable|integer',
         ]);
     }
 
@@ -81,6 +91,8 @@ class DepartmentsComponent extends Component
             'type' => 'required|string',
             'prefix' => 'required|string',
             'parent_department' => 'nullable|integer',
+            'supervisor' => 'nullable|integer',
+            'asst_supervisor' => 'nullable|integer',
 
         ]);
 
@@ -88,6 +100,8 @@ class DepartmentsComponent extends Component
         $department->name = $this->name;
         $department->is_active = $this->is_active;
         $department->description = $this->description;
+        $department->supervisor = $this->supervisor;
+        $department->asst_supervisor = $this->asst_supervisor;
         $department->type = $this->type;
         $department->prefix = $this->prefix;
         $department->parent_department = $this->parent_department;
@@ -103,6 +117,8 @@ class DepartmentsComponent extends Component
         $this->name = $department->name;
         $this->is_active = $department->is_active;
         $this->description = $department->description;
+        $this->supervisor = $department->supervisor;
+        $this->asst_supervisor = $department->asst_supervisor;
         $this->type = $department->type;
         $this->prefix = $department->prefix;
         $this->parent_department = $department->parent_department;
@@ -131,12 +147,16 @@ class DepartmentsComponent extends Component
             'type' => 'required|string',
             'prefix' => 'required|string',
             'parent_department' => 'nullable|integer',
+            'supervisor' => 'nullable|integer',
+            'asst_supervisor' => 'nullable|integer',
         ]);
 
         $department = Department::find($this->edit_id);
         $department->name = $this->name;
         $department->is_active = $this->is_active;
         $department->description = $this->description;
+        $department->supervisor = $this->supervisor;
+        $department->asst_supervisor = $this->asst_supervisor;
         $department->type = $this->type;
         $department->prefix = $this->prefix;
         $department->parent_department = $this->parent_department;
@@ -188,6 +208,7 @@ class DepartmentsComponent extends Component
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
             $data['parent_departments'] = Department::all();
+            $data['department_heads'] = Employee::where('is_active',1)->get();
         return view('livewire.human-resource.settings.departments-component',$data)->layout('layouts.app');
     }
 }

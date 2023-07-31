@@ -17,9 +17,9 @@
             <form @if ($toggleForm) wire:submit.prevent="updateDepartment" @else wire:submit.prevent="storeDepartment" @endif>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-5">
                             <label for="parent_deparment" class="form-label">Parent Department</label>
-                            <select class="form-select select2" id="parent_deparment" wire:model.defer="parent_department">
+                            <select class="form-select selectr" id="parent_deparment" wire:model.defer="parent_department">
                                 <option selected value="">None</option>
                                 @foreach ($parent_departments as $parentdeparment)
                                     <option value="{{$parentdeparment->id}}">{{$parentdeparment->name}}</option>
@@ -29,7 +29,7 @@
                                     <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-8">
+                        <div class="mb-3 col-md-7">
                             <label for="departmentName" class="form-label required">
                                 Department/Unit Name
                             </label>
@@ -41,7 +41,7 @@
 
                         <div class="mb-3 col-md-4">
                             <label for="type" class="form-label required">Type</label>
-                            <select id="type" class="form-select select2" id="type" wire:model.defer="type">
+                            <select id="type" class="form-select selectr" id="type" wire:model.defer="type">
                                 <option selected value="">Select</option>
                                 <option value='Department'>Department</option>
                                 <option value='Unit'>Unit</option>
@@ -69,6 +69,30 @@
                                 <option value='2'>Inactive</option>
                             </select>
                             @error('is_active')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="supervisor" class="form-label">Department Supervisor</label>
+                            <select class="form-select selectr" id="supervisor" wire:model.defer="supervisor">
+                                <option selected value="">None</option>
+                                @foreach ($department_heads as $department_head)
+                                    <option value="{{$department_head->id}}">{{$department_head->fullName}}</option>
+                                @endforeach
+                            </select>
+                            @error('supervisor')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="asst_supervisor" class="form-label">Asst. Supervisor</label>
+                            <select class="form-select selectr" id="asst_supervisor" wire:model.defer="asst_supervisor">
+                                <option selected value="">None</option>
+                                @foreach ($department_heads as $asst_head)
+                                    <option value="{{$asst_head->id}}">{{$asst_head->fullName}}</option>
+                                @endforeach
+                            </select>
+                            @error('asst_supervisor')
                                     <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
