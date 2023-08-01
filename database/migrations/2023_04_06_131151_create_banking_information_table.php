@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('account_name');
             $table->string('currency');
             $table->string('account_number');
+            $table->boolean('is_default')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });

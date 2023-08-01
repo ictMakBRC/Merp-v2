@@ -54,13 +54,13 @@ class Employee extends Model
         );
     }
 
-    // protected function getAge(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn () => Carbon::createFromFormat('Y-m-d', $this->birth_date)->diffInYears(Carbon::today()),
+    protected function employeeAge(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Carbon::createFromFormat('Y-m-d', $this->birth_date)->diffInYears(Carbon::today()),
 
-    //     );
-    // }
+        );
+    }
 
     public static function boot()
     {
@@ -68,8 +68,7 @@ class Employee extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
-                $model->age = 78;
-                // $model->age = Carbon::createFromFormat('Y-m-d', $model->birth_date)->diffInYears(Carbon::today());
+                $model->age = Carbon::createFromFormat('Y-m-d', $model->birth_date)->diffInYears(Carbon::today());
                 $model->employee_number = GeneratorService::employeeNo();
             });
 

@@ -1,4 +1,5 @@
 <div>
+    @include('livewire.human-resource.employee-data.inc.loading-info')
     <form enctype="multipart/form-data">
         <div class="row">
             <div class="mb-3 col-md-6">

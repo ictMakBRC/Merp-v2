@@ -13,6 +13,19 @@ class TrainingInformationComponent extends Component
     public $training_title;
     public $description;
     public $certificate;
+
+    public $loadingInfo='';
+    
+    protected $listeners = [
+        'switchEmployee' => 'setEmployeeId',
+    ];
+
+    public function setEmployeeId($details)
+    {
+        $this->employee_id = $details['employeeId'];
+        $this->loadingInfo = $details['info'];
+    }
+    
     public function render()
     {
         return view('livewire.human-resource.employee-data.inc.training-information-component');
