@@ -19,10 +19,11 @@ return new class extends Migration
             $table->string('member_type');
             $table->string('surname');
             $table->string('first_name');
-            $table->string('middle_name')->nullable();
-            $table->string('address');
-            $table->string('contact');
-            $table->string('occupation');
+            $table->string('other_name')->nullable();
+            $table->string('member_status');
+            $table->string('address')->nullable();
+            $table->string('contact')->nullable();
+            $table->string('occupation')->nullable();
             $table->string('employer')->nullable();
             $table->string('employer_address')->nullable();
             $table->string('employer_contact')->nullable();

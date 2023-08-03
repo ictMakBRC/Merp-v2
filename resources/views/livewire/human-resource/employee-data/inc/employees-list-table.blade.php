@@ -12,9 +12,9 @@
                     <th>Gender</th>
                     <th>Contact</th>
                     <th>Email</th>
-                    {{-- <th>Designation</th>
                     <th>Department</th>
-                    <th>Work Type</th> --}}
+                    {{-- <th>Work Type</th> --}}
+                    <th>Designation</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -23,16 +23,15 @@
                 @foreach ($employees as $key => $employee)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $employee->emp_id }}</td>
+                        <td>{{ $employee->employee_number }}</td>
                         <td>{{ $employee->fullName }}</td>
                         <td>{{ $employee->gender }}</td>
                         <td>{{ $employee->contact }}</td>
                         <td>{{ $employee->email }}</td>
-                        {{-- <td>{{ $employee->designation?$employee->designation->name:'N/A' }}</td>
-                        <td>{{ $employee->department?$employee->department->department_name:'N/A' }}</td>
-                        <td>{{ $employee->work_type }}</td> --}}
+                        <td>{{ $employee->department?$employee->department->name:'N/A' }}</td>
+                        <td>{{ $employee->designation?$employee->designation->name:'N/A' }}</td>
                         @if (!$employee->is_active)
-                            <td><span class="badge bg-danger">{{ $employee->status }}</span></td>
+                            <td><span class="badge bg-danger">Inactive</span></td>
                         @else
                             <td><span class="badge bg-success">Active</span></td>
                         @endif

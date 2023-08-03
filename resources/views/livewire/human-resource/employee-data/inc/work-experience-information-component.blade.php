@@ -1,4 +1,6 @@
 <div>
+    @include('livewire.human-resource.employee-data.inc.loading-info')
+
     <form>
         <div class="row">
 
@@ -6,7 +8,7 @@
                 <label for="date1" class="form-label required">From</label>
                 <input type="date" id="date1" class="form-control" wire:model.defer="start_date" required>
             </div>
-            
+
             <div class="mb-3 col-md-3">
                 <label for="date2" class="form-label required">To</label>
                 <input type="date" id="date2" class="form-control" wire:model.defer="end_date" required>
