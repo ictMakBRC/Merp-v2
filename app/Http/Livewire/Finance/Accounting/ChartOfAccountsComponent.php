@@ -2,12 +2,15 @@
 
 namespace App\Http\Livewire\Finance\Accounting;
 
+use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Finance\Accounting\FmsChartOfAccount;
 use App\Models\Finance\Settings\FmsChartOfAccountsSubType;
 use App\Models\Finance\Settings\FmsChartOfAccountsType;
-use Livewire\Component;
+use App\Models\Finance\Settings\FmsFmsChartOfAccountType;
+use App\Models\Finance\Settings\FmsFmsChartOfAccountSubType;
 
-class FmsChartOfAccountsComponent extends Component
+class ChartOfAccountsComponent extends Component
 {
     use WithPagination;
 
@@ -31,9 +34,9 @@ class FmsChartOfAccountsComponent extends Component
 
     public $as_of;
 
-    public $sub_type_id;
+    public $sub_account_type;
 
-    public $type_id;
+    public $account_type;
 
     public $is_active;
 
@@ -43,12 +46,19 @@ class FmsChartOfAccountsComponent extends Component
 
     public $edit_id;
 
-    protected $paginationTheme = 'bootstrap';
 
     public $description;
 
     public $is_sub = false;
     public $sub_accounts = [];
+    
+    protected $paginationTheme = 'bootstrap';
+
+    public $createNew = false;
+
+    public $toggleForm = false;
+
+    public $filter = false;
     public function export()
     {
         // return (new CouriersExport())->download('Couriers.xlsx');
@@ -66,11 +76,11 @@ class FmsChartOfAccountsComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, [
-            'name' => 'required|unique:chart_of_accounts',
-            'code' => 'unique:chart_of_accounts',
+            'name' => 'required|unique:fms_chart_of_accounts',
+            'code' => 'unique:fms_chart_of_accounts',
             // 'is_active' => 'required|numeric',
-            'sub_type_id' => 'required|numeric',
-            'type_id' => 'required|numeric',
+            'account_type' => 'required|numeric',
+            'sub_account_type' => 'required|numeric',
 
         ]);
     }
@@ -78,22 +88,22 @@ class FmsChartOfAccountsComponent extends Component
     public function storeData()
     {
         $this->validate([
-            'name' => 'required|unique:chart_of_accounts',
-            'code' => 'unique:chart_of_accounts',
+            'name' => 'required|unique:fms_chart_of_accounts',
+            'code' => 'unique:fms_chart_of_accounts',
             // 'is_active' => 'required|numeric',
-            'sub_type_id' => 'required|numeric',
-            'type_id' => 'required|numeric',
+            'account_type' => 'required|numeric',
+            'sub_account_type' => 'required|numeric',
 
         ]);
-        $account = new ChartOfAccounts();
+        $account = new FmsChartOfAccount();
         $account->name = $this->name;
         $account->code = $this->code == '' ? '0' : $this->code;
-        $account->type_id = $this->type_id;
+        $account->account_type = $this->account_type;
+        $account->sub_account_type = $this->sub_account_type;
         $account->parent_account = $this->parent_account;
         $account->primary_balance = $this->primary_balance;
         $account->bank_balance = $this->bank_balance == '' ? '0' : $this->bank_balance;
         $account->as_of = $this->as_of;
-        $account->sub_type_id = $this->sub_type_id;
         $account->description = $this->description;
         $account->is_active = isset($this->is_active) ? 0 : 1;
         $account->save();
@@ -102,17 +112,17 @@ class FmsChartOfAccountsComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
     }
 
-    public function editdata(ChartOfAccounts $account)
+    public function editdata(FmsChartOfAccount $account)
     {
         $this->edit_id = $account->id;
         $this->name = $account->name;
         $this->code = $account->code;
-        $this->type_id = $account->type_id;
+        $this->account_type = $account->account_type;
         $this->parent_account = $account->parent_account;
         $this->primary_balance =$account->primary_balance;
         $this->bank_balance = $account->bank_balance;
         $this->as_of = $account->as_of;
-        $this->sub_type_id = $account->sub_type_id;
+        $this->sub_account_type = $account->sub_account_type;
         $this->description = $account->description;
         $this->is_active = $account->is_active;
         $this->mode = 'edit';
@@ -124,8 +134,8 @@ class FmsChartOfAccountsComponent extends Component
         $this->reset([
             'name',
             'code',
-            'type_id',
-            'sub_type_id',
+            'account_type',
+            'sub_account_type',
             'is_active',
             'description',
             'parent_account',
@@ -140,23 +150,23 @@ class FmsChartOfAccountsComponent extends Component
     public function updateData()
     {
         $this->validate([
-            'name' => 'required|unique:chart_of_accounts,name,'.$this->edit_id.'',
-            // 'is_active' => 'required|numeric',
-            'sub_type_id' => 'required|numeric',
-            'type_id' => 'required|numeric',
+            'name' => 'required|unique:fms_chart_of_accounts,name,'.$this->edit_id.'',
+            'is_active' => 'required|numeric',
+            'account_type' => 'required|numeric',
+            'sub_account_type' => 'required|numeric',
         ]);
 
-        $account = ChartOfAccounts::find($this->edit_id);
+        $account = FmsChartOfAccount::find($this->edit_id);
         $account->name = $this->name;
         $account->code = $this->code;
-        $account->type_id = $this->type_id;
+        $account->account_type = $this->account_type;
         $account->parent_account = $this->parent_account;
         $account->primary_balance = $this->primary_balance;
         $account->bank_balance = $this->bank_balance;
         $account->as_of = $this->as_of;
-        $account->sub_type_id = $this->sub_type_id;
+        $account->sub_account_type = $this->sub_account_type;
         $account->description = $this->description;
-        // $account->is_active = isset($this->is_active) ? 1 : 0;
+        $account->is_active = isset($this->is_active) ? 1 : 0;
         $account->update();
 
         $this->resetInputs();
@@ -186,15 +196,13 @@ class FmsChartOfAccountsComponent extends Component
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         $data['types'] = FmsChartOfAccountsType::all();
-        if($this->type_id != null){
-            $data['sub_types'] = FmsChartOfAccountsSubType::where('type_id', $this->type_id)->get();
-        }else{
-            $data['sub_types'] = [];
-        }       
+        
+        $data['sub_types'] = FmsChartOfAccountsSubType::where('type_id', $this->account_type)->get();
+             
         if($this->is_sub){
             $this->sub_accounts = FmsChartOfAccount::where('is_active',1)->with(['type'])
             ->orderBy('name', 'asc')->get();
         }
-        return view('livewire.finance.accounting.fms-chart-of-accounts-component');
+        return view('livewire.finance.accounting.fms-chart-of-accounts-component', $data);
     }
 }
