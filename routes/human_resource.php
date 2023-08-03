@@ -26,9 +26,12 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('leaves', LeavesComponent::class)->name('human-resource-leaves');
         
     });
+    Route::group(['prefix' => 'employees'], function () {
 
-    Route::get('capture-new-info', EmployeeDataComponent::class)->name('human-resource-capture-new-info');
-    Route::get('employees', EmployeesListComponent::class)->name('human-resource-employees-list');
+        Route::get('new-info', EmployeeDataComponent::class)->name('human-resource-capture-new-info');
+        Route::get('list', EmployeesListComponent::class)->name('human-resource-employees-list');
+
+    });
 
     
 });

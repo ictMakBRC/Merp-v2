@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('official_contracts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->longText('contract_summary')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('currency');
             $table->string('contract_file')->nullable();
             $table->integer('status')->default(1);
-            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }

@@ -27,7 +27,7 @@ class Department extends Model
     }
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var string[]
      */
@@ -51,11 +51,6 @@ class Department extends Model
     public function assets()
     {
         return $this->hasMany(Asset::class);
-    }
-
-    public function units()
-    {
-        return $this->hasMany(DepartmentUnit::class, 'department_id', 'id');
     }
 
     // protected $parentColumn = 'parent_id';
@@ -84,6 +79,7 @@ class Department extends Model
             });
         }
     }
+
     public static function search($search)
     {
         return empty($search) ? static::query()

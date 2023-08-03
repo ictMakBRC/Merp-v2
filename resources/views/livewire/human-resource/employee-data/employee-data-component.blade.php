@@ -6,7 +6,7 @@
                     <div class="col-sm-12 mt-1">
                         <div class="d-sm-flex align-items-center">
                             <h5 class="mb-2 mb-sm-0">
-                                Register new employee information <i class="text-success">{{$loadingInfo}}</i>
+                                Register new employee information <small class="text-success">{{$loadingInfo}}</small>
                             </h5>
                             <div class="ms-auto mb-2">
                                 <div class="row">
