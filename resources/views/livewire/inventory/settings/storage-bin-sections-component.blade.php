@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        Storage sections (<span class="text-danger fw-bold">{{ $sections->total() }}</span>)
+                                        Storage Bin sections (<span class="text-danger fw-bold">{{ $storageBins->total() }}</span>)
                                         {{-- @include('livewire.layouts.partials.inc.filter-toggle') --}}
                                     @else
-                                        Edit Section
+                                        Edit Storage Bin
                                     @endif
 
                                 </h5>
@@ -96,7 +96,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Store</th>
+                                        <th>Section</th>
                                         <th>Description</th>
                                         <th>Status</th>
                                         <th>Created at</th>
@@ -104,11 +104,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($sections as $key => $section)
+                                    @foreach ($storageBins as $key => $section)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $section->name }}</td>
-                                            <td>{{ $section->store->name??'N/A' }}</td>
+                                            <td>{{ $section->storageSection->name??'N/A' }}</td>
                                             <td>{{ $section->description ?? 'N/A' }}</td>
                                             @if ($section->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
@@ -128,7 +128,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $sections->links('vendor.livewire.bootstrap') }}
+                                    {{ $storageBins->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
         </div><!-- end col-->
     </div>
 
-    @include('livewire.inventory.settings.inc.new-storage-section-form')
+    @include('livewire.inventory.settings.inc.new-storage-bin-form')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {

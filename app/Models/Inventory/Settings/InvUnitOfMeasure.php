@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class InvStorageBin extends Model
+class InvUnitOfMeasure extends Model
 {
     use HasFactory,LogsActivity;
 
@@ -17,7 +17,7 @@ class InvStorageBin extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Storage Bins')
+            ->useLogName('Inventory UOMS')
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -28,12 +28,9 @@ class InvStorageBin extends Model
         'description',
         'created_by',
         'is_active',
+        'packaging_type',
     ];
 
-    public function storageSection()
-    {
-        return $this->BelongsTo(InvStorageSection::class, 'section_id', 'id');
-    }
       
     public static function boot()
     {
@@ -50,6 +47,7 @@ class InvStorageBin extends Model
         return empty($search) ? static::query()
         : static::query()
             ->where('name', 'like', '%'.$search.'%')
-            ->orWhere('description', 'like', '%'.$search.'%');
+            ->orWhere('description', 'like', '%'.$search.'%')
+            ->orWhere('packaging_type', 'like', '%'.$search.'%');
     }
 }

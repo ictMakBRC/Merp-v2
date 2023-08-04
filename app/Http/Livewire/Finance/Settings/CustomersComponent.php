@@ -270,7 +270,7 @@ class CustomersComponent extends Component
         }
     }
 
-    public function filtercustomers()
+    public function filterCustomers()
     {
         $customers = FmsCustomer::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
@@ -285,7 +285,10 @@ class CustomersComponent extends Component
     }
     public function render()
     {
+        $data['customers'] = $this->filterCustomers()
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
         
-        return view('livewire.finance.settings.customers-component');
+        return view('livewire.finance.settings.customers-component',$data);
     }
 }
