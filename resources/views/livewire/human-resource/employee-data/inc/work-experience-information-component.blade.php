@@ -59,10 +59,7 @@
                 <label for="currency" class="form-label">Currency</label>
                 <select class="form-select select2" id="currency" wire:model.defer="currency">
                     <option selected value="">Select</option>
-                    <option value="UGX">UGX</option>
-                    <option value="USD">USD</option>
-                    <option value="GBP">GBP</option>
-                    <option value="EUR">EUR</option>
+                    @include('layouts.currencies')
                 </select>
                 @error('currency')
                     <div class="text-danger text-small">{{ $message }}</div>

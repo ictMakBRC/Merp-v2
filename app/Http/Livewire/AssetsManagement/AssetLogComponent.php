@@ -11,30 +11,30 @@ use App\Models\HumanResource\Settings\Department;
 
 class AssetsComponent extends Component
 {
-    public ?int $asset_catalog_id;
-    public ?string $log_type;
-    public ?string $date_allocated;
-    public ?int $station_id;
-    public ?int $department_id;
-    public ?int $user_id;
-    public ?string $allocation_status;
+    public $asset_catalog_id;
+    public $log_type;
+    public $date_allocated;
+    public $station_id;
+    public $department_id;
+    public $user_id;
+    public $allocation_status;
 
-    public ?string $breakdown_number;
-    public ?string $breakdown_type;
-    public ?string $breakdown_date;
-    public ?string $breakdown_description;
-    public ?string $action_taken;
-    public ?string $date_breakdown_recorded;
-    public ?int $breakdown_status;
+    public $breakdown_number;
+    public $breakdown_type;
+    public $breakdown_date;
+    public $breakdown_description;
+    public $action_taken;
+    public $date_breakdown_recorded;
+    public $breakdown_status;
 
-    public ?string $asset_breakdown_id;
-    public ?string $service_type;
-    public ?string $date_serviced;
-    public ?string $service_action;
-    public ?string $service_recommendations;
-    public ?string $serviced_by;
-    public ?float $currency;
-    public ?string $next_service_date;
+    public $asset_breakdown_id;
+    public $service_type;
+    public $date_serviced;
+    public $service_action;
+    public $service_recommendations;
+    public $serviced_by;
+    public $currency;
+    public $next_service_date;
 
     public function storeLogDetails()
     {
@@ -51,19 +51,22 @@ class AssetsComponent extends Component
                 'department_id' => $this->department_id,
                 'user_id' => $this->user_id,
                 'allocation_status' => $this->allocation_status,
+
                 'breakdown_number' => $this->breakdown_number,
                 'breakdown_type' => $this->breakdown_type,
                 'breakdown_date' => $this->breakdown_date,
                 'breakdown_description' => $this->breakdown_description,
                 'action_taken' => $this->action_taken,
-                'date_breakdown_recorded' => $this->date_breakdown_recorded,
+                // 'date_breakdown_recorded' => $this->date_breakdown_recorded,
                 'breakdown_status' => $this->breakdown_status,
+
                 'asset_breakdown_id' => $this->asset_breakdown_id,
                 'service_type' => $this->service_type,
                 'date_serviced' => $this->date_serviced,
                 'service_action' => $this->service_action,
                 'service_recommendations' => $this->service_recommendations,
                 'serviced_by' => $this->serviced_by,
+                'cost' => $this->cost,
                 'currency' => $this->currency,
                 'next_service_date' => $this->next_service_date,
                 

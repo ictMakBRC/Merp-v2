@@ -6,6 +6,7 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Assets\Settings\AssetCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AssetsCatalog extends Model
@@ -23,6 +24,14 @@ class AssetsCatalog extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
+    protected $table='asset_catalog';
+
+    
+    public function category()
+    {
+        return $this->belongsTo(AssetCategory::class, 'asset_categories_id', 'id');
+    }
     
     public static function boot()
     {
@@ -32,5 +41,14 @@ class AssetsCatalog extends Model
                 $model->created_by = auth()->id();
             });
         }
+    }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()           
+                ->where('name', 'like', '%'.$search.'%')
+                ->orWhere('description', 'like', '%'.$search.'%');
+               
     }
 }
