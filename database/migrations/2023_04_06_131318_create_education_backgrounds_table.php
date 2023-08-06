@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('education_backgrounds', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('level');
             $table->string('school');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('award');
             $table->string('award_document')->nullable();
-            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }

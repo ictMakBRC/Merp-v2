@@ -11,6 +11,7 @@ use Livewire\WithFileUploads;
 class OfficialContractComponent extends Component
 {
     use WithFileUploads;
+    
     public $employee_id;
     public $contract_summary;
     public $gross_salary;
