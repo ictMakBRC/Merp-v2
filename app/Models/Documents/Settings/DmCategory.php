@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Inventory\Settings;
+namespace App\Models\Documents\Settings;
 
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class InvStorageBin extends Model
+class DmCategory extends Model
 {
     use HasFactory,LogsActivity;
 
@@ -17,7 +17,7 @@ class InvStorageBin extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Storage Bins')
+            ->useLogName('Document Categories')
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -27,12 +27,14 @@ class InvStorageBin extends Model
         'name',
         'description',
         'created_by',
+        'code',
+        'parent_id',
         'is_active',
     ];
 
-    public function storageSection()
+    public function parent()
     {
-        return $this->BelongsTo(InvStorageSection::class, 'section_id', 'id');
+        return $this->belongsTo(DmCategory::class , 'parent_id', 'id');
     }
       
     public static function boot()
@@ -53,3 +55,4 @@ class InvStorageBin extends Model
             ->orWhere('description', 'like', '%'.$search.'%');
     }
 }
+

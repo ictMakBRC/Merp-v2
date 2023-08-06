@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        Storage sections (<span class="text-danger fw-bold">{{ $sections->total() }}</span>)
+                                        Document categories (<span class="text-danger fw-bold">{{ $categories->total() }}</span>)
                                         {{-- @include('livewire.layouts.partials.inc.filter-toggle') --}}
                                     @else
-                                        Edit Section
+                                        Edit category
                                     @endif
 
                                 </h5>
@@ -96,28 +96,26 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Store</th>
+                                        <th>Parent</th>
                                         <th>Description</th>
                                         <th>Status</th>
-                                        <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($sections as $key => $section)
+                                    @foreach ($categories as $key => $category)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $section->name }}</td>
-                                            <td>{{ $section->store->name??'N/A' }}</td>
-                                            <td>{{ $section->description ?? 'N/A' }}</td>
-                                            @if ($section->is_active == 0)
+                                            <td>{{ $category->name }}</td>
+                                            <td>{{$category->parent->name??'N/A' }}</td>
+                                            <td>{{ $category->description ?? 'N/A' }}</td>
+                                            @if ($category->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
-                                            <td>{{ date('d-m-Y', strtotime($section->created_at)) }}</td>
                                             <td class="table-action">
-                                                <button wire:click="editData({{ $section->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                <button wire:click="editData({{ $category->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>
@@ -128,7 +126,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $sections->links('vendor.livewire.bootstrap') }}
+                                    {{ $categories->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -138,7 +136,7 @@
         </div><!-- end col-->
     </div>
 
-    @include('livewire.inventory.settings.inc.new-storage-section-form')
+    @include('livewire.documents.settings.inc.new-document-category-form')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {

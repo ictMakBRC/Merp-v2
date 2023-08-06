@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        System departments (<span class="text-danger fw-bold">{{ $accounts->total() }}</span>)
+                                        Chart of Accounts (<span class="text-danger fw-bold">{{ $accounts->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
-                                        Edit department
+                                        Edit Chart of Accounts 
                                     @endif
 
                                 </h5>
@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter departments</h6>
+                            <h6>Filter Chart of Accounts</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>
