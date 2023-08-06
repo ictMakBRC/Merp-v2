@@ -19,11 +19,11 @@
                 <div class="collapse " id="sidebarAnalytics">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="analytics-customers.html" class="nav-link ">Classifications</a>
+                            <a href="{{ route('documents-folders') }}" class="nav-link ">Folders</a>
                         </li>
-                        <!--end nav-item-->
-                        <li class="nav-item">
-                            <a href="analytics-reports.html" class="nav-link ">Categories</a>
+                         <!--end nav-item-->
+                         <li class="nav-item">
+                            <a href="{{ route('documents-categories') }}" class="nav-link ">Categories</a>
                         </li>
                         <!--end nav-item-->
                     </ul>
