@@ -42,7 +42,7 @@ class FmsCustomer extends Model
     'website', 
     'company_name', 
     'payment_terms', 
-    'payment_methos', 
+    'payment_methods', 
     'opening_balance',
     'sales_tax_registration', 
     'as_of', 

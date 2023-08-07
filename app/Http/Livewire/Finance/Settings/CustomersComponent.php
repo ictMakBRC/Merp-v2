@@ -53,7 +53,7 @@ class CustomersComponent extends Component
     public $website; 
     public $company_name; 
     public $payment_terms; 
-    public $payment_methos; 
+    public $payment_methods; 
     public $opening_balance;
     public $sales_tax_registration; 
     public $as_of; 
@@ -91,7 +91,7 @@ class CustomersComponent extends Component
             'website'=>'nullable|string', 
             'company_name'=>'nullable|string', 
             'payment_terms'=>'nullable|string', 
-            'payment_methos'=>'nullable|string', 
+            'payment_methods'=>'nullable|string', 
             'opening_balance'=>'nullable|numeric',
             'sales_tax_registration'=>'nullable', 
             'as_of'=>'required|date', 
@@ -126,7 +126,7 @@ class CustomersComponent extends Component
             $customer->website  = $this->website; 
             $customer->company_name  = $this->company_name; 
             $customer->payment_terms  = $this->payment_terms; 
-            $customer->payment_methos  = $this->payment_methos; 
+            $customer->payment_methods  = $this->payment_methods; 
             $customer->opening_balance = $this->opening_balance;
             $customer->sales_tax_registration  = $this->sales_tax_registration; 
             $customer->as_of  = $this->as_of; 
@@ -156,7 +156,7 @@ class CustomersComponent extends Component
                 $this->website =$customer->website; 
                 $this->company_name =$customer->company_name; 
                 $this->payment_terms =$customer->payment_terms; 
-                $this->payment_methos =$customer->payment_methos; 
+                $this->payment_methods =$customer->payment_methods; 
                 $this->opening_balance = $customer->opening_balance;
                 $this->sales_tax_registration =$customer->sales_tax_registration; 
                 $this->as_of =$customer->as_of; 
@@ -192,7 +192,7 @@ class CustomersComponent extends Component
             'website', 
             'company_name', 
             'payment_terms', 
-            'payment_methos', 
+            'payment_methods', 
             'opening_balance',
             'sales_tax_registration', 
             'as_of', 
@@ -223,7 +223,7 @@ class CustomersComponent extends Component
         $customer->website  = $this->website; 
         $customer->company_name  = $this->company_name; 
         $customer->payment_terms  = $this->payment_terms; 
-        $customer->payment_methos  = $this->payment_methos; 
+        $customer->payment_methods  = $this->payment_methods; 
         $customer->opening_balance = $this->opening_balance;
         $customer->sales_tax_registration  = $this->sales_tax_registration; 
         $customer->as_of  = $this->as_of; 
