@@ -273,9 +273,8 @@
                 <label for="operational_status" class="form-label required">{{ __('Operational Status') }}</label>
                 <select class="form-select" id="operational_status" wire:model.lazy="operational_status">
                     <option selected value="">Select</option>
-                    <option value='1'>Operational</option>
-                    <option value='0'>Non Operational</option>
-                    <option value='2'>Retired</option>
+                    <option value='1'>Operational/In-use</option>
+                    <option value='0'>Retired/Decommissioned</option>
                 </select>
                 @error('operational_status')
                     <div class="text-danger text-small">{{ $message }}</div>

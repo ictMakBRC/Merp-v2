@@ -1,23 +1,39 @@
-<div x-cloak x-show="create_new">
+<div>
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-
-                    <ul class="list-unstyled mb-2">
-                        <li class=""> <b>Asset Name</b> : {{ $asset_name ?? 'N/A' }}</li>
-                        <li class="mt-2"> <b> Brand </b> : {{ $brand ?? 'N/A' }}</li>
-                        <li class="mt-2"> <b> Model </b> : {{ $model ?? 'N/A' }}</li>
-                        <li class="mt-2"> <b> Serial Number </b> : {{ $serial_number ?? 'N/A' }}</li>
-                        <li class="mt-2"> <b> Barcode </b> : {{ $barcode ?? 'N/A' }}</li>
-                    </ul>
-
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0 w-100 sortable">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('Asset Name') }}</th>
+                                    {{-- <th>{{ __('Category') }}</th>
+                                    <th>{{ __('Classification') }}</th> --}}
+                                    <th>{{ __('Brand') }}</th>
+                                    <th>{{ __('Model') }}</th>
+                                    <th>{{ __('Serial No') }}</th>
+                                    <th>{{ __('Barcode') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ $asset_name }}</td>
+                                    <td>{{ $brand ?? 'N/A' }}</td>
+                                    <td>{{ $model ?? 'N/A' }}</td>
+                                    <td>{{ $serial_number ?? 'N/A' }}</td>
+                                    <td>{{ $barcode ?? 'N/A' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> <!-- end preview-->
                 </div><!--end card-body-->
             </div> <!--end card-->
         </div><!--end col-->
+
         <form wire:submit.prevent>
             <div class="row">
-                <div class="mb-3 col-md-3">
+                <div class="mb-3 col-md-4">
                     <label for="log_type" class="form-label required">{{ __('Log Type') }} </label>
                     <select class="form-select" id="log_type" wire:model.lazy="log_type">
                         <option selected value="">Select</option>
@@ -32,12 +48,12 @@
 
                 @if ($log_type == 'Allocation')
                     <div class="mb-3 col-md-4">
-                        <label for="station_id" class="form-label">{{ __('Station') }} </label>
+                        <label for="station_id" class="form-label required">{{ __('Station') }} </label>
                         <select class="form-select" id="station_id" wire:model.lazy="station_id">
                             <option selected value="">Select</option>
-                            {{-- @foreach ($departments as $department)
-                        <option value='{{ $department->id }}'>{{ $department->name }}</option>
-                    @endforeach --}}
+                            @foreach ($stations as $station)
+                                <option value='{{ $station->id }}'>{{ $station->name }}</option>
+                            @endforeach
                         </select>
                         @error('station_id')
                             <div class="text-danger text-small">{{ $message }}</div>
@@ -45,12 +61,12 @@
                     </div>
 
                     <div class="mb-3 col-md-4">
-                        <label for="department_id" class="form-label">{{ __('Department') }} </label>
+                        <label for="department_id" class="form-label required">{{ __('Department') }} </label>
                         <select class="form-select" id="department_id" wire:model.lazy="department_id">
                             <option selected value="">Select</option>
-                            {{-- @foreach ($departments as $department)
+                            @foreach ($departments as $department)
                                 <option value='{{ $department->id }}'>{{ $department->name }}</option>
-                            @endforeach --}}
+                            @endforeach
                         </select>
                         @error('department_id')
                             <div class="text-danger text-small">{{ $message }}</div>
@@ -58,14 +74,14 @@
                     </div>
 
                     <div class="mb-3 col-md-4">
-                        <label for="user_id" class="form-label">{{ __('User') }} </label>
-                        <select class="form-select" id="user_id" wire:model.lazy="user_id">
+                        <label for="employee_id" class="form-label">{{ __('Employee') }} </label>
+                        <select class="form-select" id="employee_id" wire:model.lazy="employee_id">
                             <option selected value="">Select</option>
-                            {{-- @foreach ($departments as $department)
-                                <option value='{{ $department->id }}'>{{ $department->name }}</option>
-                            @endforeach --}}
+                            @foreach ($employees as $employee)
+                                <option value='{{ $employee->id }}'>{{ $employee->fullName }}</option>
+                            @endforeach
                         </select>
-                        @error('user_id')
+                        @error('employee_id')
                             <div class="text-danger text-small">{{ $message }}</div>
                         @enderror
                     </div>
@@ -97,6 +113,7 @@
                             <option value="Software">Software</option>
                             <option value="Hardware">Hardware</option>
                             <option value="Human Error">Human Error</option>
+                            <option value="Other">Other</option>
                         </select>
                         @error('breakdown_type')
                             <div class="text-danger text-small">{{ $message }}</div>
@@ -133,8 +150,9 @@
                         <label for="breakdown_status" class="form-label required">{{ __('Breakdown Status') }}
                         </label>
                         <select class="form-select" id="breakdown_status" wire:model.lazy="breakdown_status">
-                            <option value="0">Pending Fix</option>
-                            <option value="1">Fixed</option>
+                            <option selected value="">Select</option>
+                            <option value="Pending Fix">Pending Fix</option>
+                            <option value="Fixed">Fixed</option>
                         </select>
                         @error('breakdown_status')
                             <div class="text-danger text-small">{{ $message }}</div>
@@ -144,7 +162,7 @@
 
                 @if ($log_type == 'Maintenance')
                     <div class="mb-3 col-md-4">
-                        <label for="breakdown_number" class="form-label required">{{ __('Breakdown Number') }}
+                        <label for="breakdown_number" class="form-label">{{ __('Breakdown Number') }}
                         </label>
                         <input type="text" id="breakdown_number" class="form-control"
                             wire:model.defer="breakdown_number">
@@ -196,19 +214,33 @@
                     </div>
 
                     <div class="mb-3 col-md-4">
+                        <label for="resolution_status"
+                            class="form-label required">{{ __('Issue Resolution status') }}
+                        </label>
+                        <select class="form-select" id="resolution_status" wire:model.lazy="resolution_status">
+                            <option selected value="">Select</option>
+                            <option value="Fully Fixed">Fully Fixed</option>
+                            <option value="Partially Fixed">Partially Fixed</option>
+                        </select>
+                        @error('resolution_status')
+                            <div class="text-danger text-small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-4">
                         <label for="serviced_by" class="form-label required">{{ __('Serviced By') }} </label>
                         <select class="form-select" id="serviced_by" wire:model.lazy="serviced_by">
                             <option selected value="">Select</option>
-                            {{-- @foreach ($departments as $department)
-                            <option value='{{ $department->id }}'>{{ $department->name }}</option>
-                        @endforeach --}}
+                            @foreach ($departments as $department)
+                                <option value='{{ $department->id }}'>{{ $department->name }}</option>
+                            @endforeach
                         </select>
                         @error('serviced_by')
                             <div class="text-danger text-small">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <div class="mb-3 col-md-4">
+                    <div class="mb-3 col-md-2">
                         <label for="cost" class="form-label required">{{ __('Cost') }} </label>
                         <input type="number" id="cost" class="form-control" wire:model.defer="cost"
                             step="0.02">
@@ -218,7 +250,7 @@
                     </div>
 
                     <div class="mb-3 col-md-2">
-                        <label for="currency" class="form-label">Currency</label>
+                        <label for="currency" class="form-label required">Currency</label>
                         <select class="form-select" id="currency" wire:model.lazy='currency'>
                             <option selected value="">Select</option>
                             @include('layouts.currencies')
@@ -229,7 +261,7 @@
                     </div>
 
                     <div class="mb-3 col-md-4">
-                        <label for="next_service_date" class="form-label required">{{ __('next_service_date') }}
+                        <label for="next_service_date" class="form-label required">{{ __('Next Service Date') }}
                         </label>
                         <input type="date" id="next_service_date" class="form-control"
                             wire:model.defer="breakdown_date">
@@ -239,12 +271,12 @@
                     </div>
                 @endif
 
-
             </div>
 
             <div class="modal-footer">
-                <x-button class="btn-success" wire:click='storeAsset'>{{ __('public.save') }}</x-button>
+                <x-button class="btn-success" wire:click='storeLogDetails'>{{ __('public.save') }}</x-button>
             </div>
         </form>
         <hr>
     </div>
+</div>

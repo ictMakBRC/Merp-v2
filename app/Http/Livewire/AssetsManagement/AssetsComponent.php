@@ -70,6 +70,20 @@ class AssetsComponent extends Component
      public $filter = false;
 
      public $asset;
+     public $asset_id;
+
+     public function updatedAssetId()
+     {
+         if ($this->asset_id) {
+             $this->emit('logAsset', [
+                 'assetId' => $this->asset_id,
+             ]);
+         }else{
+             $this->emit('logAsset', [
+                 'assetId' => null,
+             ]);
+         }
+     }
 
      public function updatedCreateNew()
      {

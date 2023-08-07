@@ -28,16 +28,20 @@
                         <td>{{ $asset->model ?? 'N/A' }}</td>
                         <td>{{ $asset->serial_number ?? 'N/A' }}</td>
                         <td>{{ $asset->acquisition_type ?? 'N/A' }}</td>
-                        @if ($asset->operational_status == 0)
-                            <td><span class="badge bg-warning">Not Operational</span></td>
-                        @elseif($asset->operational_status == 1)
+                        @if($asset->operational_status == 1)
                             <td><span class="badge bg-success">Operational</span></td>
                         @else
                             <td><span class="badge bg-danger">Retired</span></td>
                         @endif
                         <td>
-                            <button class="btn btn btn-sm btn-outline-success" wire:click="editData({{ $asset->id }})" data-bs-toggle="tooltip" data-bs-placement="right" title="{{__('public.edit')}}" data-bs-trigger="hover">
+                            <button class="btn btn btn-sm btn-outline-success" wire:click="editData({{ $asset->id }})"
+                                data-bs-toggle="tooltip" data-bs-placement="right" title="{{ __('public.edit') }}"
+                                data-bs-trigger="hover">
                                 <i class="ti ti-edit fs-18"></i></button>
+                            <button wire:click="$set('asset_id',{{ $asset->id }})" data-bs-toggle="modal"
+                                data-bs-target="#assetLoggerModal"
+                                class="action-ico btn-sm btn btn-outline-success mx-1">
+                                <i class="fa fa-edit"></i></button>
                         </td>
                     </tr>
                 @endforeach
