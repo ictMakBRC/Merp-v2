@@ -32,13 +32,13 @@ return new class extends Migration
             $table->string('billing_country')->nullable();
             $table->string('company_name')->nullable();
             $table->string('payment_terms')->nullable();
-            $table->string('payment_methos')->nullable();
+            $table->string('payment_methods')->nullable();
             $table->double('opening_balance',12,2)->default(0);
             $table->date('as_of')->nullable();
             $table->string('sales_tax_registration')->nullable();
             $table->boolean('is_active')->default(true);
             $table->foreignId('contract_id')->nullable();
-            $table->foreignId('contract_file')->nullable();
+            $table->string('contract_file')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
 
             $table->timestamps();
