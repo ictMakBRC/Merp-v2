@@ -35,17 +35,8 @@ class EmployeeFamilyData extends Data
      // Validation rules for the properties
      public function resetInputs(): array
      {
-         return [
-            'member_type',
-            'surname',
-            'first_name',
-            'member_status',
-            'address',
-            'contact',
-            'occupation',
-            'employer',
-            'employer_contact',
-            'employer_address',
-         ];
+        $allKeys = array_keys($this->rules());
+
+        return array_values(array_diff($allKeys,['employee_id']));
      }
 }

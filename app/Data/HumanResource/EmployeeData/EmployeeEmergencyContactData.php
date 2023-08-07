@@ -28,13 +28,8 @@ class EmployeeEmergencyContactData extends Data
      // Validation rules for the properties
      public function resetInputs(): array
      {
-         return [
-            'contact_name',
-            'contact_relationship',
-            'contact_address',
-            'contact_phone',
-            'contact_email',
+        $allKeys = array_keys($this->rules());
 
-         ];
+        return array_values(array_diff($allKeys,['employee_id']));
      }
 }

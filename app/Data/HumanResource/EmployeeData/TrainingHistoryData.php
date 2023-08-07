@@ -33,11 +33,6 @@ class TrainingHistoryData extends Data
      {
         $allKeys = array_keys($this->rules());
 
-        // Filter out the 'employee_id' key
-        $keysExceptEmployeeId = array_filter($allKeys, function ($key) {
-            return $key !== 'employee_id';
-        });
-
-        return $keysExceptEmployeeId;
+        return array_values(array_diff($allKeys,['employee_id']));
      }
 }

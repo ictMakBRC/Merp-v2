@@ -11,7 +11,7 @@ class AssetLogData extends Data
     public ?string $date_allocated;
     public ?int $station_id;
     public ?int $department_id;
-    public ?int $user_id;
+    public ?int $employee_id;
     public ?string $allocation_status;
 
     public ?string $breakdown_number;
@@ -19,46 +19,63 @@ class AssetLogData extends Data
     public ?string $breakdown_date;
     public ?string $breakdown_description;
     public ?string $action_taken;
-    public ?string $date_breakdown_recorded;
-    public ?int $breakdown_status;
+    public ?string $breakdown_status;
 
     public ?string $asset_breakdown_id;
     public ?string $service_type;
     public ?string $date_serviced;
     public ?string $service_action;
     public ?string $service_recommendations;
+    public ?string $resolution_status;
     public ?string $serviced_by;
-    public ?float $currency;
+    public ?float $cost;
+    public ?string $currency;
     public ?string $next_service_date;
 
     // Validation rules for the properties
-    public function rules(): array
+    public function allocationRules(): array
     {
         return [
-        'asset_catalog_id'=>'nullable|string',
-        'log_type'=>'nullable|string',
-        'date_allocated'=>'nullable|date|before_or_equal:today',
-        'station_id'=>'nullable|string',
-        'department_id'=>'nullable|string',
-        'user_id'=>'nullable|string',
-        'allocation_status'=>'nullable|string',
+        'asset_catalog_id'=>'required|integer',
+        'log_type'=>'required|string',
+        'date_allocated'=>'required|date|before_or_equal:today',
+        'station_id'=>'required|integer',
+        'department_id'=>'required|integer',
+        'employee_id'=>'nullable|string',
 
-        'breakdown_number'=>'nullable|string',
-        'breakdown_type'=>'nullable|string',
-        'breakdown_date'=>'nullable|date|before_or_equal:today',
-        'breakdown_description'=>'nullable|string',
-        'action_taken'=>'nullable|string',
-        'date_breakdown_recorded'=>'nullable|date|before_or_equal:today|after_or_equal:breakdown_date',
-        'breakdown_status'=>'nullable|string',
+        ];
+    }
 
-        'asset_breakdown_id'=>'nullable|integer',
-        'service_type'=>'nullable|string',
-        'date_serviced'=>'nullable|date|before_or_equal:today',
-        'service_action'=>'nullable|string',
-        'service_recommendations'=>'nullable|string',
-        'serviced_by'=>'nullable|string',
-        'currency'=>'nullable|numeric',
-        'next_service_date'=>'nullable|date|after:date_serviced',
+    public function breakdownRules(): array
+    {
+        return [
+        'asset_catalog_id'=>'required|integer',
+        'log_type'=>'required|string',
+        'breakdown_number'=>'required|string',
+        'breakdown_type'=>'required|string',
+        'breakdown_date'=>'required|date|before_or_equal:today',
+        'breakdown_description'=>'required|string',
+        'action_taken'=>'required|string',
+        'breakdown_status'=>'required|string',
+
+        ];
+    }
+
+    public function maintenanceRules(): array
+    {
+        return [
+        'asset_catalog_id'=>'required|integer',
+        'log_type'=>'required|string',
+        'asset_breakdown_id'=>'required|integer',
+        'service_type'=>'required|string',
+        'date_serviced'=>'required|date|before_or_equal:today',
+        'service_action'=>'required|string',
+        'service_recommendations'=>'required|string',
+        'resolution_status'=>'required|string',
+        'serviced_by'=>'required|string',
+        'cost'=>'required|numeric',
+        'currency'=>'required|string',
+        'next_service_date'=>'required|date|after:date_serviced',
 
         ];
     }
@@ -66,6 +83,7 @@ class AssetLogData extends Data
     // Validation rules for the properties
     public function resetInputs(): array
     {
-        return array_keys($this->rules());
+        $allKeys = array_keys([...$this->allocationRules(),...$this->breakdownRules(),...$this->maintenanceRules()]);
+        return array_values(array_diff($allKeys,['asset_catalog_id','log_type']));
     }
 }

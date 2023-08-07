@@ -37,21 +37,6 @@ class WorkingExperienceData extends Data
      {
         $allKeys = array_keys($this->rules());
 
-        // Filter out the 'employee_id' key
-        $keysExceptEmployeeId = array_filter($allKeys, function ($key) {
-            return $key !== 'employee_id';
-        });
-
-        return $keysExceptEmployeeId;
-        //  return [
-        //     'start_date',
-        //     'end_date',
-        //     'company',
-        //     'position_held',
-        //     'employment_type',
-        //     'monthly_salary',
-        //     'currency',
-        //     'key_responsibilities',
-        //  ];
+        return array_values(array_diff($allKeys,['employee_id']));
      }
 }

@@ -18,26 +18,24 @@ return new class extends Migration
             $table->date('date_allocated')->nullable();
             $table->foreignId('station_id')->nullable()->constrained('stations', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('department_id')->nullable()->constrained('departments', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('user_id')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->integer('allocation_status')->default(0);
-            $table->foreignId('allocation_recorded_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->integer('allocation_status')->nullable();
 
             $table->string('breakdown_number')->nullable()->unique();
             $table->string('breakdown_type')->nullable();
             $table->date('breakdown_date')->nullable();
             $table->string('breakdown_description')->nullable();
             $table->string('action_taken')->nullable();
-            $table->date('date_breakdown_recorded')->nullable();
-            $table->integer('breakdown_status')->nullable();
-            $table->foreignId('breakdown_entered_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->string('breakdown_status')->nullable();
            
             $table->unsignedBigInteger('asset_breakdown_id')->nullable();
             $table->string('service_type')->nullable();
             $table->date('date_serviced')->nullable();
             $table->text('service_action')->nullable();
             $table->text('service_recommendations')->nullable();
+            $table->string('resolution_status')->nullable();
             $table->string('serviced_by')->nullable();
-            $table->float('service_cost',12,2)->nullable();
+            $table->float('cost',12,2)->nullable();
             $table->string('currency')->nullable();
             $table->date('next_service_date')->nullable();
             $table->foreignId('servicing_recorded_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
