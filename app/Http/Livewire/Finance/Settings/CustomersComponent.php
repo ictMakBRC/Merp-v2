@@ -54,8 +54,8 @@ class CustomersComponent extends Component
     public $company_name; 
     public $payment_terms; 
     public $payment_methos; 
-    public $Opening_balance;
-    public $Sales_tax_registration; 
+    public $opening_balance;
+    public $sales_tax_registration; 
     public $as_of; 
     public $is_active;
     public $created_by;    
@@ -71,33 +71,42 @@ class CustomersComponent extends Component
         $this->resetPage();
     }
 
-    public function updated($fields)
+    public function validateCustomer()
     {
-        $this->validateOnly($fields, [
-            'name' => 'required|string',
-            'is_active' => 'required|string',
-            'description' => 'nullable|string',
-            'type' => 'required|string',
-            'prefix' => 'required|string',
-            'parent_customer' => 'nullable|integer',
-            'supervisor' => 'nullable|integer',
-            'asst_supervisor' => 'nullable|integer',
-        ]);
+        return  [
+            'account_number'=>'nullable|string',
+            'title'=>'nullable|string',
+            'surname'=>'required|string',
+            'first_name'=>'required|string',
+            'other_name'=>'nullable|string', 
+            'gender'=>'nullable|string', 
+            'nationality'=>'nullable|string',            
+            'address'=>'nullable|string', 
+            'city'=>'nullable|string', 
+            'email'=>'nullable|email', 
+            'alt_email'=>'nullable|string',
+            'contact'=>'nullable|string', 
+            'fax'=>'nullable|string', 
+            'alt_contact'=>'nullable|string', 
+            'website'=>'nullable|string', 
+            'company_name'=>'nullable|string', 
+            'payment_terms'=>'nullable|string', 
+            'payment_methos'=>'nullable|string', 
+            'opening_balance'=>'nullable|numeric',
+            'sales_tax_registration'=>'nullable', 
+            'as_of'=>'required|date', 
+            'is_active'=>'required|integer',
+        ];
     }
 
-    public function storecustomer()
+    public function updated($fields)
     {
-        $this->validate([
-            'name' => 'required|string|unique:customers',
-            'is_active' => 'required|numeric',
-            'description' => 'nullable|string',
-            'type' => 'required|string',
-            'prefix' => 'required|string',
-            'parent_customer' => 'nullable|integer',
-            'supervisor' => 'nullable|integer',
-            'asst_supervisor' => 'nullable|integer',
+        $this->validateOnly($fields, $this->validateCustomer());
+    }
 
-        ]);
+    public function storeCustomer()
+    {
+        // $this->validate($this->validateCustomer());
 
         $customer = new FmsCustomer();
             $customer->account_number = $this->account_number;
@@ -118,8 +127,8 @@ class CustomersComponent extends Component
             $customer->company_name  = $this->company_name; 
             $customer->payment_terms  = $this->payment_terms; 
             $customer->payment_methos  = $this->payment_methos; 
-            $customer->Opening_balance = $this->Opening_balance;
-            $customer->Sales_tax_registration  = $this->Sales_tax_registration; 
+            $customer->opening_balance = $this->opening_balance;
+            $customer->sales_tax_registration  = $this->sales_tax_registration; 
             $customer->as_of  = $this->as_of; 
             $customer->is_active = $this->is_active;
         $customer->save();
@@ -148,8 +157,8 @@ class CustomersComponent extends Component
                 $this->company_name =$customer->company_name; 
                 $this->payment_terms =$customer->payment_terms; 
                 $this->payment_methos =$customer->payment_methos; 
-                $this->Opening_balance = $customer->Opening_balance;
-                $this->Sales_tax_registration =$customer->Sales_tax_registration; 
+                $this->opening_balance = $customer->opening_balance;
+                $this->sales_tax_registration =$customer->sales_tax_registration; 
                 $this->as_of =$customer->as_of; 
                 $customer->is_active  =$customer->is_active;
         $this->createNew = true;
@@ -184,40 +193,17 @@ class CustomersComponent extends Component
             'company_name', 
             'payment_terms', 
             'payment_methos', 
-            'Opening_balance',
-            'Sales_tax_registration', 
+            'opening_balance',
+            'sales_tax_registration', 
             'as_of', 
             'is_active',
             'created_by',
             'edit_id']);
     }
 
-    public function updatecustomer()
+    public function updateCustomer()
     {
-        $this->validate([
-            'account_number'=>'nullable|string',
-            'title'=>'nullable|string',
-            'surname'=>'required|string',
-            'first_name'=>'required|string',
-            'other_name'=>'nullable|string', 
-            'gender'=>'nullable|string', 
-            'nationality'=>'nullable|string',            
-            'address'=>'nullable|string', 
-            'city'=>'nullable|string', 
-            'email'=>'nullable|email', 
-            'alt_email'=>'nullable|string',
-            'contact'=>'nullable|string', 
-            'fax'=>'nullable|string', 
-            'alt_contact'=>'nullable|string', 
-            'website'=>'nullable|string', 
-            'company_name'=>'nullable|string', 
-            'payment_terms'=>'nullable|string', 
-            'payment_methos'=>'nullable|string', 
-            'Opening_balance'=>'nullable|numeric',
-            'Sales_tax_registration'=>'nullable|string', 
-            'as_of'=>'required|date', 
-            'is_active'=>'required|integer',
-        ]);
+        $this->validate($this->validateCustomer());
 
         $customer = FmsCustomer::find($this->edit_id);
         $customer->account_number = $this->account_number;
@@ -238,8 +224,8 @@ class CustomersComponent extends Component
         $customer->company_name  = $this->company_name; 
         $customer->payment_terms  = $this->payment_terms; 
         $customer->payment_methos  = $this->payment_methos; 
-        $customer->Opening_balance = $this->Opening_balance;
-        $customer->Sales_tax_registration  = $this->Sales_tax_registration; 
+        $customer->opening_balance = $this->opening_balance;
+        $customer->sales_tax_registration  = $this->sales_tax_registration; 
         $customer->as_of  = $this->as_of; 
         $customer->is_active = $this->is_active;
         $customer->update();

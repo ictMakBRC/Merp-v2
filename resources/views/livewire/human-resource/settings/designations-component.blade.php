@@ -113,7 +113,7 @@
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
-                                            <td>{{ date('d-m-Y', strtotime($designation->created_at)) }}</td>
+                                            <td>@formatDate($designation->created_at)</td>
                                             <td class="table-action">
                                                 <button wire:click="editData({{ $designation->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
@@ -126,7 +126,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $designations->links('vendor.livewire.bootstrap') }}
+                                    {{ $designations->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                             </div>
                         </div>

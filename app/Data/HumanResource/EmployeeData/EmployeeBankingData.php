@@ -31,14 +31,8 @@ class EmployeeBankingData extends Data
      // Validation rules for the properties
      public function resetInputs(): array
      {
-         return [
-            // 'employee_id',
-            'bank_name',
-            'branch',
-            'account_name',
-            'account_number',
-            'currency',
-            'is_default',
-         ];
+        $allKeys = array_keys($this->rules());
+
+        return array_values(array_diff($allKeys,['employee_id']));
      }
 }

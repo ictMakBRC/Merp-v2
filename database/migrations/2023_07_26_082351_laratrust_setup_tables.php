@@ -41,7 +41,7 @@ class LaratrustSetupTables extends Migration
             $table->string('user_type');
 
             $table->foreign('role_id')->references('id')->on('roles')
-                ->onUpdate('cascade')->onDelete('cascade');
+                ->onUpdate('cascade')->onDelete('restrict');
 
             $table->primary(['user_id', 'role_id', 'user_type']);
         });
@@ -53,7 +53,7 @@ class LaratrustSetupTables extends Migration
             $table->string('user_type');
 
             $table->foreign('permission_id')->references('id')->on('permissions')
-                ->onUpdate('cascade')->onDelete('cascade');
+                ->onUpdate('cascade')->onDelete('restrict');
 
             $table->primary(['user_id', 'permission_id', 'user_type']);
         });
@@ -64,9 +64,9 @@ class LaratrustSetupTables extends Migration
             $table->unsignedBigInteger('role_id');
 
             $table->foreign('permission_id')->references('id')->on('permissions')
-                ->onUpdate('cascade')->onDelete('cascade');
+                ->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('role_id')->references('id')->on('roles')
-                ->onUpdate('cascade')->onDelete('cascade');
+                ->onUpdate('cascade')->onDelete('restrict');
 
             $table->primary(['permission_id', 'role_id']);
         });

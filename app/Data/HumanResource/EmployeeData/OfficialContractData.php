@@ -33,20 +33,6 @@ class OfficialContractData extends Data
      {
         $allKeys = array_keys($this->rules());
 
-        // Filter out the 'employee_id' key
-        $keysExceptEmployeeId = array_filter($allKeys, function ($key) {
-            return $key !== 'employee_id';
-        });
-
-        return $keysExceptEmployeeId;
-        //  return [
-        //     'contract_summary',
-        //     'gross_salary',
-        //     'currency',
-        //     'start_date',
-        //     'end_date',
-        //     'contract_file',
-
-        //  ];
+        return array_values(array_diff($allKeys,['employee_id']));
      }
 }
