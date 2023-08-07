@@ -40,7 +40,6 @@ return new class extends Migration
             $table->foreignId('contract_id')->nullable();
             $table->string('contract_file')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
-
             $table->timestamps();
         });
 
