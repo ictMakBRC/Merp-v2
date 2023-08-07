@@ -19,13 +19,24 @@
                 <div class="collapse " id="sidebarAnalytics">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="analytics-customers.html" class="nav-link ">Classifications</a>
+                            <a href="{{route('inventory-stores')}}" class="nav-link ">Stores</a>
+                        </li> 
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a href="{{ route('inventory-sections') }}" class="nav-link ">Storage Sections</a>
+                        </li>
+                         <!--end nav-item-->
+                         <li class="nav-item">
+                            <a href="{{ route('inventory-storage_bins') }}" class="nav-link ">Storage Bins</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a href="analytics-reports.html" class="nav-link ">Categories</a>
+                            <a href="{{ route('inventory-categories') }}" class="nav-link ">Categories</a>
                         </li>
                         <!--end nav-item-->
+                        <li class="nav-item">
+                            <a href="{{ route('inventory-unit_of_measures') }}" class="nav-link ">Unit of Measures</a>
+                        </li>
                     </ul>
                     <!--end nav-->
                 </div>

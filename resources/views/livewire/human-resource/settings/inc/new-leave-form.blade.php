@@ -19,21 +19,21 @@
                     <div class="row">
                         <div class="row col-md-12">
                             <div class="mb-3 col-md-4">
-                                <label for="leaveName" class="form-label">Name</label>
+                                <label for="leaveName" class="form-label required">Name</label>
                                 <input type="text" id="leaveName" class="form-control"  wire:model.defer="name" required>
                                 @error('name')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-2">
-                                <label for="duration" class="form-label">Days</label>
+                                <label for="duration" class="form-label required">Days</label>
                                 <input type="number" id="duration" class="form-control"  wire:model.defer="duration" required>
                                 @error('duration')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="carry_forward" class="form-label">Carry Foward</label>
+                                <label for="carry_forward" class="form-label required">Carry Foward</label>
                                 <select class="form-select" id="carry_forward"  wire:model.defer="carriable" required>
                                     <option selected value="">Select</option>
                                     <option value='No'>No</option>
@@ -44,7 +44,7 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="is_payable" class="form-label">Paid?</label>
+                                <label for="is_payable" class="form-label required">Paid?</label>
                                 <select class="form-select" id="is_payable"  wire:model.defer="is_payable" required>
                                     <option selected value="">Select</option>
                                     <option value='Yes'>Yes</option>
@@ -58,7 +58,7 @@
                         </div> <!-- end col -->
                         <div class="row col-md-12">
                             <div class="mb-3 col-md-3">
-                                <label for="payment_type" class="form-label">Payment Type</label>
+                                <label for="payment_type" class="form-label required">Payment Type</label>
                                 <select class="form-select" id="payment_type"  wire:model.defer="payment_type" required>
                                     <option selected value="">Select</option>
                                     <option value='Full Pay'>Full Pay</option>
@@ -71,7 +71,7 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="given_to" class="form-label">Given To</label>
+                                <label for="given_to" class="form-label required">Given To</label>
                                 <select class="form-select" id="given_to"  wire:model.defer="given_to" required>
                                     <option selected value="">Select</option>
                                     <option value='All'>All</option>
@@ -83,14 +83,14 @@
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="notice_days" class="form-label">Notice Days</label>
+                                <label for="notice_days" class="form-label required">Notice Days</label>
                                 <input type="number" id="notice_days" class="form-control"  wire:model.defer="notice_days" required>                                
                                 @error('notice_days')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3 col-md-3">
-                                <label for="is_active" class="form-label">Status</label>
+                                <label for="is_active" class="form-label required">Status</label>
                                 <select class="form-select" id="is_active"  wire:model.defer="is_active" required>
                                     <option selected value="">Select</option>
                                     <option value='1'>Active</option>

@@ -38,7 +38,7 @@
                         <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right"
                             title="Inventory Management" data-bs-trigger="hover">
                             <a href="#inventoryManagement" id="inventoryManagement-tab" class="nav-link">
-                                <i class="ti ti-tallymarks menu-icon"></i>
+                                <i class="fas fa-boxes menu-icon"></i>
                             </a>
                             <!--end nav-link-->
                         </li>
