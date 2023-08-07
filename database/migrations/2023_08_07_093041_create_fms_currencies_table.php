@@ -11,21 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('fms_currencies');
         Schema::create('fms_currencies', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique();
             $table->string('country')->nullable();
+            $table->boolean('system_default')->default(false);
+            $table->float('exchange_rate')->default(1);
             $table->timestamps();
         });
 
-        Schema::table('fms_customers', function (Blueprint $table) {
-            $table->string('currency')->nullable()->after('as_of');
-            $table->tinyText('billing_address')->nullable()->after('currency');
-            $table->string('billing_city')->nullable()->after('billing_address');
-            $table->string('billing_state')->nullable()->after('billing_city');
-            $table->string('billing_country')->nullable()->after('billing_state');
-        });
     }
 
     /**
