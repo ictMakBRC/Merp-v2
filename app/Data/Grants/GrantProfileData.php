@@ -29,8 +29,8 @@ class GrantProfileData extends Data
   public function rules(): array
   {
     return [
-      'grant_code' => 'required|string',
-      'grant_name' => 'required|string',
+      'grant_code' => 'required|string|unique:grant_profiles',
+      'grant_name' => 'required|string|unique:grant_profiles',
       'grant_type' => 'required|string',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',

@@ -41,8 +41,8 @@ class ProjectProfileData extends Data
   public function rules(): array
   {
     return [
-      'project_code' => 'required|string',
-      'name' => 'required|string',
+      'project_code' => 'required|string|unique:projects',
+      'name' => 'required|string|unique:projects',
       'grant_profile_id' => 'required|integer',
       'project_type' => 'required|string',
       'funding_source' => 'nullable|string',
