@@ -51,7 +51,7 @@ class Employee extends Model
     {
         return $this->belongsToMany(Project::class,'employee_project','employee_id','project_id')
         ->using(EmployeeProject::class) // Use the pivot model
-        ->withPivot(['designation_id', 'contract_summary','start_date','end_date','fte','gross_salary','contract_file','status']) // Include the additional attributes
+        ->withPivot(['designation_id', 'contract_summary','start_date','end_date','fte','gross_salary','contract_file_path','status']) // Include the additional attributes
         ->withTimestamps();
     }
 

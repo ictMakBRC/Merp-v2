@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('provider_id')->constrained('providers', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('document_name');
             $table->string('document_path');
+            $table->text('description')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });

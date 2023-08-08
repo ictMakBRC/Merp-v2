@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('procurement_subcategories', function (Blueprint $table) {
             $table->id();
             $table->string('category');
+            $table->string('code');
             $table->string('name');
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();

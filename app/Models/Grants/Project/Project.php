@@ -2,6 +2,7 @@
 
 namespace App\Models\Grants\Project;
 
+use App\Models\Grants\GrantProfile;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -29,20 +30,25 @@ class Project extends Model
     {
         return $this->belongsToMany(Employee::class,'employee_project','project_id','employee_id')
         ->using(EmployeeProject::class) // Use the pivot model
-        ->withPivot(['designation_id', 'contract_summary','start_date','end_date','fte','gross_salary','contract_file','status']) // Include the additional attributes
+        ->withPivot(['designation_id', 'contract_summary','start_date','end_date','fte','gross_salary','contract_file_path','status']) // Include the additional attributes
         ->withTimestamps();
     }
 
-    //pricinple investigator
+    //principal investigator
     public function pi()
     {
         return $this->belongsTo(Employee::class,'pi','id');
     }
 
-    //co pricinple investigator
+    //co principal investigator
     public function coPi()
     {
         return $this->belongsTo(Employee::class,'co_pi','id');
+    }
+
+    public function grant()
+    {
+        return $this->belongsTo(GrantProfile::class,'grant_profile_id','id');
     }
     
     public static function boot()

@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_documents', function (Blueprint $table) {
+        Schema::create('fms_customer_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('fms_customer_id')->constrained('fms_customers', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('document_name');
             $table->string('document_path');
             $table->text('description')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
+
     }
 
     /**
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_documents');
+        Schema::dropIfExists('fms_customer_documents');
     }
 };

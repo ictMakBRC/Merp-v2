@@ -25,6 +25,13 @@ class Provider extends Model
         // Chain fluent methods for configuration options
     }
 
+
+    public function procurementSubcategories()
+    {
+        return $this->belongsToMany(ProcurementSubcategory::class,'provider_procurement_subcategory','provider_id','procurement_subcategory_id')
+        ->withTimestamps();
+    }
+
     public static function boot()
     {
         parent::boot();

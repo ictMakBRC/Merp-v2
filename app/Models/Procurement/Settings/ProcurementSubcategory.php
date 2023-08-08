@@ -6,6 +6,7 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Procurement\Settings\Provider;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProcurementSubcategory extends Model
@@ -22,6 +23,12 @@ class ProcurementSubcategory extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
+    }
+
+    public function providers()
+    {
+        return $this->belongsToMany(Provider::class,'provider_procurement_subcategory','procurement_subcategory_id','provider_id')
+        ->withTimestamps();
     }
 
     public static function boot()
