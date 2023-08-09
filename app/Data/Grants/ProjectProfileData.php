@@ -7,6 +7,7 @@ use Spatie\LaravelData\Data;
 class ProjectProfileData extends Data
 {
   public ?string $project_code;
+  public ?string $project_category;
   public ?string $name;
   public ?int $grant_profile_id;
   public ?string $project_type;
@@ -22,8 +23,11 @@ class ProjectProfileData extends Data
 
   //PROJECT PROFILE DOCUMENTS
   public ?int $project_id;
+  public ?string $document_category;
+  public ?bool $expires;
   public ?string $document_name;
   public ?string $document_path;
+  public ?string $expiry_date;
   public ?string $description;
 
   //PROJECT EMPLOYEES
@@ -41,15 +45,16 @@ class ProjectProfileData extends Data
   public function rules(): array
   {
     return [
+      'project_category' => 'required|string',
       'project_code' => 'required|string|unique:projects',
       'name' => 'required|string|unique:projects',
-      'grant_profile_id' => 'required|integer',
+      'grant_profile_id' => 'nullable|integer',
       'project_type' => 'required|string',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency' => 'required|string',
-      'pi' => 'required|integer',
-      'co_pi' => 'required|integer',
+      'pi' => 'required_if:project_category,Primary|integer',
+      'co_pi' => 'nullable|integer',
       'start_date' => 'required|date',
       'end_date' => 'required|date|after:start_date',
       'project_summary' => 'required|string|max:255',
@@ -78,9 +83,12 @@ class ProjectProfileData extends Data
   {
     return [
       'project_id' => 'required|integer',
+      'document_category' => 'required|string',
+      'expires' => 'required|boolean',
       'document_name' => 'required|string',
       'document' => 'required|string',
-      'description' => 'required|string',
+      'expiry_date' => 'required_if:expires,true|date|after:today',
+      'description' => 'nullable|string',
     ];
   }
 

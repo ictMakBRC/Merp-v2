@@ -41,13 +41,15 @@ class ProcurementProviderService
         $procurementProvider->country = $procurementProviderDTO->country;
         $procurementProvider->payment_terms = $procurementProviderDTO->payment_terms;
         $procurementProvider->payment_method = $procurementProviderDTO->payment_method;
+        $procurementProvider->bank_name = $procurementProviderDTO->bank_name;
+        $procurementProvider->branch = $procurementProviderDTO->branch;
+        $procurementProvider->account_name = $procurementProviderDTO->account_name;
         $procurementProvider->bank_account = $procurementProviderDTO->bank_account;
-        $procurementProvider->alt_bank_account = $procurementProviderDTO->alt_bank_account;
         $procurementProvider->tin = $procurementProviderDTO->tin;
         $procurementProvider->tax_withholding_rate = $procurementProviderDTO->tax_withholding_rate;
         $procurementProvider->preferred_currency = $procurementProviderDTO->preferred_currency;
-        $procurementProvider->delivery_performance = $procurementProviderDTO->delivery_performance;
-        $procurementProvider->quality_ratings = $procurementProviderDTO->quality_ratings;
+        // $procurementProvider->delivery_performance = $procurementProviderDTO->delivery_performance;
+        // $procurementProvider->quality_ratings = $procurementProviderDTO->quality_ratings;
         $procurementProvider->notes = $procurementProviderDTO->notes;
         $procurementProvider->is_active = $procurementProviderDTO->is_active;    
     }
@@ -72,9 +74,12 @@ class ProcurementProviderService
 
    private function fillProviderDocumentFromDTO(ProviderDocument $providerDocument, ProcurementProviderData $providerDocumentDTO)
    {
-       $providerDocument->grant_profile_id = $providerDocumentDTO-> provider_id;
-       $providerDocument->document_name = $providerDocumentDTO->document_name;
-       $providerDocument->document_path = $providerDocumentDTO->document_path;
-       $providerDocument->description = $providerDocumentDTO->description;
+        $providerDocument->grant_profile_id = $providerDocumentDTO->provider_id;
+        $providerDocument->document_category = $providerDocumentDTO->document_category;
+        $providerDocument->expires = $providerDocumentDTO->expires;
+        $providerDocument->expiry_date = $providerDocumentDTO->expiry_date;
+        $providerDocument->document_name = $providerDocumentDTO->document_name;
+        $providerDocument->document_path = $providerDocumentDTO->document_path;
+        $providerDocument->description = $providerDocumentDTO->description;
    }
 }

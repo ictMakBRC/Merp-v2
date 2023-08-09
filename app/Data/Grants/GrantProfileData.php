@@ -21,8 +21,11 @@ class GrantProfileData extends Data
 
   //GRANT PROFILE DOCUMENTS
   public ?int $grant_profile_id;
+  public ?string $document_category;
+  public ?bool $expires;
   public ?string $document_name;
   public ?string $document_path;
+  public ?string $expiry_date;
   public ?string $description;
 
   // Validation rules for the properties

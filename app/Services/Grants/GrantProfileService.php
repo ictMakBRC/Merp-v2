@@ -61,9 +61,12 @@ class GrantProfileService
 
    private function fillGrantDocumentFromDTO(GrantDocument $grantDocument, GrantProfileData $grantDocumentDTO)
    {
-       $grantDocument->grant_profile_id = $grantDocumentDTO-> grant_profile_id;
-       $grantDocument->document_name = $grantDocumentDTO->document_name;
-       $grantDocument->document_path = $grantDocumentDTO->document_path;
-       $grantDocument->description = $grantDocumentDTO->description;
+        $grantDocument->grant_profile_id = $grantDocumentDTO->grant_profile_id;
+        $grantDocument->document_category = $grantDocumentDTO->document_category;
+        $grantDocument->expires = $grantDocumentDTO->expires;
+        $grantDocument->expiry_date = $grantDocumentDTO->expiry_date;
+        $grantDocument->document_name = $grantDocumentDTO->document_name;
+        $grantDocument->document_path = $grantDocumentDTO->document_path;
+        $grantDocument->description = $grantDocumentDTO->description;
    }
 }

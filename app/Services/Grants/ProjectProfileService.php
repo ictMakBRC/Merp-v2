@@ -63,7 +63,10 @@ class ProjectService
 
     private function fillProjectDocumentFromDTO(ProjectDocument $projectDocument, ProjectProfileData $projectDocumentDTO)
     {
-        $projectDocument->grant_profile_id = $projectDocumentDTO-> grant_profile_id;
+        $projectDocument->project_id = $projectDocumentDTO->project_id;
+        $projectDocument->document_category = $projectDocumentDTO->document_category;
+        $projectDocument->expires = $projectDocumentDTO->expires;
+        $projectDocument->expiry_date = $projectDocumentDTO->expiry_date;
         $projectDocument->document_name = $projectDocumentDTO->document_name;
         $projectDocument->document_path = $projectDocumentDTO->document_path;
         $projectDocument->description = $projectDocumentDTO->description;

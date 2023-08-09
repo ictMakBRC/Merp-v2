@@ -12,24 +12,24 @@
             <!--end nav-item-->
 
             <li class="nav-item">
-                <a class="nav-link" href="#sidebarAnalytics" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="sidebarAnalytics">
+                <a class="nav-link" href="#procurementSideBar" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="procurementSideBar">
                     Settings
                 </a>
-                <div class="collapse " id="sidebarAnalytics">
+                <div class="collapse " id="procurementSideBar">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="analytics-customers.html" class="nav-link ">Classifications</a>
+                            <a href="{{route('manage-providers')}}" class="nav-link ">Providers/Suppliers</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a href="analytics-reports.html" class="nav-link ">Categories</a>
+                            <a href="{{route('manage-subcategories')}}" class="nav-link ">Sectors & Categories</a>
                         </li>
                         <!--end nav-item-->
                     </ul>
                     <!--end nav-->
                 </div>
-                <!--end sidebarAnalytics-->
+                <!--end procurementSideBar-->
             </li>
             <!--end nav-item-->
         </ul>

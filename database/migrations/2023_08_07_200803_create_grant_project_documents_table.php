@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('project_documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained('projects', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->string('document_category');
+            $table->boolean('expires')->default(0);
             $table->string('document_name');
             $table->string('document_path');
+            $table->date('expiry_date')->nullable();
             $table->text('description')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();

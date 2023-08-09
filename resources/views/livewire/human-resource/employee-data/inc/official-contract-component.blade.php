@@ -31,16 +31,16 @@
             </div>
 
             <div class="mb-3 col-md-2">
-                <label for="date7" class="form-label required">From</label>
-                <input type="date" id="date1" class="form-control" wire:model.defer="start_date">
+                <label for="end_date" class="form-label required">From</label>
+                <input type="date" id="end_date" class="form-control" wire:model.defer="start_date">
                 @error('start_date')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3 col-md-2">
-                <label for="date8" class="form-label required">To</label>
-                <input type="date" id="date2" class="form-control" wire:model.defer="end_date">
+                <label for="end_date" class="form-label required">To</label>
+                <input type="date" id="end_date" class="form-control" wire:model.defer="end_date">
                 @error('end_date')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror

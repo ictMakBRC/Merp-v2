@@ -20,21 +20,26 @@ class ProcurementProviderData extends Data
   public ?string $country;
   public ?string $payment_terms;
   public ?string $payment_method;
+  public ?string $bank_name;
+  public ?string $branch;
+  public ?string $account_name;
   public ?string $bank_account;
-  public ?string $alt_bank_account;
   public ?string $tin;
   public ?float $tax_withholding_rate;
   public ?string $preferred_currency;
-  public ?float $delivery_performance;
-  public ?float $quality_ratings;
+  // public ?float $delivery_performance;
+  // public ?float $quality_ratings;
   public ?string $notes;
   public ?bool $is_active;
   
 
   //PROVIDER DOCUMENTS
   public ?int $provider_id;
+  public ?string $document_category;
+  public ?bool $expires;
   public ?string $document_name;
   public ?string $document_path;
+  public ?string $expiry_date;
   public ?string $description;
 
   // Validation rules for the properties
@@ -55,13 +60,15 @@ class ProcurementProviderData extends Data
         'country' => 'nullable|string',
         'payment_terms' => 'nullable|string',
         'payment_method' => 'required|string',
+        'bank_name' => 'required|string',
+        'branch' => 'required|string',
+        'account_name' => 'required|string',
         'bank_account' => 'required|string',
-        'alt_bank_account' => 'nullable|string',
         'tin' => 'required|string',
         'tax_withholding_rate' => 'nullable|numeric|min:0|max:100',
         'preferred_currency' => 'required|string',
-        'delivery_performance' => 'nullable|numeric|min:0|max:5',
-        'quality_ratings' => 'nullable|numeric|min:0|max:5',
+        // 'delivery_performance' => 'nullable|numeric|min:0|max:5',
+        // 'quality_ratings' => 'nullable|numeric|min:0|max:5',
         'notes' => 'nullable|string',
         'is_active' => 'boolean',
       ];
