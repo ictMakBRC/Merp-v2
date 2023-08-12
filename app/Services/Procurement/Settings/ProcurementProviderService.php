@@ -74,7 +74,7 @@ class ProcurementProviderService
 
    private function fillProviderDocumentFromDTO(ProviderDocument $providerDocument, ProcurementProviderData $providerDocumentDTO)
    {
-        $providerDocument->grant_profile_id = $providerDocumentDTO->provider_id;
+        $providerDocument->provider_id = $providerDocumentDTO->provider_id;
         $providerDocument->document_category = $providerDocumentDTO->document_category;
         $providerDocument->expires = $providerDocumentDTO->expires;
         $providerDocument->expiry_date = $providerDocumentDTO->expiry_date;
