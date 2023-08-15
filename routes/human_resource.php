@@ -1,17 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\HumanResource\Settings\CompanyProfileComponent;
 use App\Http\Livewire\HumanResource\Settings\LeavesComponent;
 use App\Http\Livewire\HumanResource\Settings\OfficesComponent;
 use App\Http\Livewire\HumanResource\Settings\HolidaysComponent;
 use App\Http\Livewire\HumanResource\Settings\StationsComponent;
 use App\Http\Livewire\HumanResource\Settings\DepartmentsComponent;
 use App\Http\Livewire\HumanResource\Settings\DesignationsComponent;
-use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
+use App\Http\Livewire\HumanResource\Settings\CompanyProfileComponent;
 use App\Http\Livewire\HumanResource\EmployeeData\EmployeeDataComponent;
 use App\Http\Livewire\HumanResource\EmployeeData\EmployeesListComponent;
 use App\Http\Livewire\HumanResource\Grievances\Create as RegisterGrievance;
+use App\Http\Livewire\HumanResource\GrievanceTypes\Index as GrievanceTypes;
+use App\Http\Livewire\HumanResource\GrievanceTypes\Create as CreateGrievanceTypes;
+use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
 
 Route::group(['prefix' => 'human-resource'], function () {
     Route::get('dashboard', HumanResourceMainDashboardComponent::class)->name('human-resource-dashboard');
@@ -35,6 +37,10 @@ Route::group(['prefix' => 'human-resource'], function () {
     });
     Route::group(['prefix' => 'grievances'], function () {
         Route::get('create', RegisterGrievance::class)->name('grievances.create');
+    });
+    Route::group(['prefix' => 'grievance-types'], function () {
+        Route::get('/', GrievanceTypes::class)->name('grievance-types');
+        Route::get('/create', CreateGrievanceTypes::class)->name('grievance-types.create');
     });
 
 

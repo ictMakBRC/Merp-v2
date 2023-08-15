@@ -18,8 +18,8 @@
     <link href="{{ asset('assets/libs/mobius1-selectr/selectr.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Include Select2 library and CSS -->
 
-     <!-- iziToast CSS -->
-     <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
+    <!-- iziToast CSS -->
+    <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
 
 
     @stack('css')
@@ -62,31 +62,31 @@
     <script src="{{ asset('assets/libs/izitoast/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert/sweetalert.min.js') }}"></script>
     <!-- App js -->
-    <script src="{{ asset('assets/js/app.js') }}"></script>   
+    <script src="{{ asset('assets/js/app.js') }}"></script>
     <script src="{{ asset('assets/libs/mobius1-selectr/selectr.min.js') }}"></script>
-    <script src="{{ asset('assets/js/index.js') }}"></script>  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.js"></script>  
-    
+    <script src="{{ asset('assets/js/index.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.js"></script>
+
     <script>
         window.addEventListener('livewire:load', () => {
             initializeSelectr();
         });
-    
+
         window.addEventListener('livewire:update', () => {
             const selectrElements = document.querySelectorAll('.selectr-container');
             selectrElements.forEach((element) => {
                 const selectrInstance = element.selectr;
                 selectrInstance.destroy(); // destroy the previous instances of Selectr
             });
-    
+
             initializeSelectr();
         });
-    
+
         function initializeSelectr() {
             const selectrElements = document.querySelectorAll('.selectr');
             selectrElements.forEach((element) => {
                 new Selectr(element, {
-                    searchable: true, 
+                    searchable: true,
                     width: '200px',
                 });
             });
