@@ -23,4 +23,12 @@ class GrievanceType extends Model
         return GrievanceTypeFactory::new();
     }
 
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()
+                ->where('name', 'like', '%'.$search.'%')
+                ->orWhere('description', 'like', '%'.$search.'%');
+    }
+
 }

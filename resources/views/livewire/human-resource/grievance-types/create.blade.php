@@ -5,14 +5,14 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
+                {{-- <div class="card-header">
                     <div class="flex justify-end mt-4">
                         <a type="button" class="btn btn-sm btn-outline-success me-2"><i class="ti ti-refresh"></i></a>
                         <a type="button" class="btn btn-sm me-2 btn-success">
                             <i class="ti ti-plus"></i>{{ __('public.new') }}
                         </a>
                     </div>
-                </div>
+                </div> --}}
                 <div class="card-body">
 
                     <div class="row mb-2">
@@ -47,7 +47,8 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <x-button class="btn-danger me-2">{{ __('public.cancel') }}</x-button>
+                                    <a href="{{route('grievance-types')}}" class="btn btn-danger me-2">{{
+                                        __('public.cancel') }}</a>
                                     <x-button class="btn-success">{{ __('public.save') }}</x-button>
                                 </div>
                             </form>
