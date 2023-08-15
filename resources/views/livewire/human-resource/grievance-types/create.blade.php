@@ -1,4 +1,7 @@
 <div>
+    @include('livewire.human-resource.grievance-types.breadcrumps', [
+    'heading' => 'Create',
+    ])
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -44,6 +47,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
+                                    <x-button class="btn-danger me-2">{{ __('public.cancel') }}</x-button>
                                     <x-button class="btn-success">{{ __('public.save') }}</x-button>
                                 </div>
                             </form>
@@ -53,12 +57,4 @@
             </div> <!-- end card -->
         </div><!-- end col-->
     </div>
-
-    <x-modals.dialog id="register-grievance">
-        <x-slot name="title">Register a Grievance</x-slot>
-        <x-slot name="content">Content</x-slot>
-        <x-slot name="footer">
-            <x-button.primary>Save</x-button.primary>
-        </x-slot>
-    </x-modals.dialog>
 </div>

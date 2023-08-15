@@ -5,9 +5,12 @@ namespace App\Http\Livewire\HumanResource\GrievanceTypes;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Models\HumanResource\GrievanceType;
+use Livewire\WithPagination;
 
 class Create extends Component
 {
+    use WithPagination;
+
     public $name;
     public $slug;
     public $description;
