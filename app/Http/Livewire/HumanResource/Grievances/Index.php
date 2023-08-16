@@ -29,29 +29,17 @@ class Index extends Component
 
     public $name;
 
-    public $is_active =1;
-
     public $description;
 
     public $totalMembers;
 
-    public $delete_id;
-
-    public $edit_id;
-
     protected $paginationTheme = 'bootstrap';
 
-    public $createNew = false;
-
-    public $toggleForm = false;
+    public $selectedGrievance;
 
     public $filter = false;
 
-    public function updatedCreateNew()
-    {
-        $this->resetInputs();
-        $this->toggleForm = false;
-    }
+
 
     public function updatingSearch()
     {
@@ -67,67 +55,9 @@ class Index extends Component
         ]);
     }
 
-    public function storeDesignation()
-    {
-        $this->validate([
-            'name' => 'required|string|unique:Designations',
-            'is_active' => 'required|numeric',
-            'description' => 'nullable|string',
-
-        ]);
-
-        $designation = new Designation();
-        $designation->name = $this->name;
-        $designation->is_active = $this->is_active;
-        $designation->description = $this->description;
-        $designation->save();
-        $this->dispatchBrowserEvent('close-modal');
-        $this->resetInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Designation created successfully!']);
-    }
-
-    public function editData(Designation $designation)
-    {
-        $this->edit_id = $designation->id;
-        $this->name = $designation->name;
-        $this->is_active = $designation->is_active;
-        $this->description = $designation->description;
-        $this->createNew = true;
-        $this->toggleForm = true;
-    }
-
-    public function close()
-    {
-        $this->createNew = false;
-        $this->toggleForm = false;
-        $this->resetInputs();
-    }
-
     public function resetInputs()
     {
         $this->reset(['name', 'is_active', 'description']);
-    }
-
-    public function updateDesignation()
-    {
-        $this->validate([
-            'name' => 'required|unique:designations,name,'.$this->edit_id.'',
-            'is_active' => 'required|numeric',
-            'description' => 'nullable|string',
-        ]);
-
-        $designation = Designation::find($this->edit_id);
-        $designation->name = $this->name;
-        $designation->is_active = $this->is_active;
-        $designation->description = $this->description;
-        $designation->update();
-
-        $this->resetInputs();
-        $this->createNew = false;
-        $this->toggleForm = false;
-        $this->dispatchBrowserEvent('close-modal');
-        $this->resetInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Designation updated successfully!']);
     }
 
     public function refresh()
@@ -148,7 +78,7 @@ class Index extends Component
         }
     }
 
-    public function filterDesignations()
+    public function filterGrievances()
     {
         $designations = Grievance::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
@@ -162,9 +92,22 @@ class Index extends Component
         return $designations;
     }
 
+    public function deleteData($grievanceId)
+    {
+        $this->selectedGrievance = $grievanceId;
+    }
+
+    public function delete()
+    {
+        $grievance = Grievance::findOrFail($this->selectedGrievance);
+        $grievance->delete();
+
+        return redirect()->to(route('grievances'));
+    }
+
     public function render()
     {
-        $data['designations'] = $this->filterDesignations()
+        $data['grievances'] = $this->filterGrievances()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         return view('livewire.human-resource.grievances.index', $data)->layout('layouts.app');

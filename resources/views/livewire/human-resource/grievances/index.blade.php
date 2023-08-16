@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
 
-                                    Grievances (<span class="text-danger fw-bold">{{ $designations->total() }}</span>)
+                                    Grievances (<span class="text-danger fw-bold">{{ $grievances->total() }}</span>)
 
 
                                 </h5>
@@ -105,24 +105,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($designations as $key => $designation)
+                                    @forelse ($grievances as $key => $grievance)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $designation->name }}</td>
-                                        <td>{{ $designation->type->name ?? 'N/A' }}</td>
-                                        @if ($designation->assignee == 'department')
+                                        <td>{{ $grievance->name }}</td>
+                                        <td>{{ $grievance->type->name ?? 'N/A' }}</td>
+                                        @if ($grievance->assignee == 'department')
                                         <td><span class="badge bg-danger">Department</span></td>
-                                        @elseif ($designation->assignee == 'administration')
+                                        @elseif ($grievance->assignee == 'administration')
                                         <td><span class="badge bg-warning">Department</span></td>
                                         @else
                                         <td><span class="badge bg-success">Both</span></td>
                                         @endif
-                                        <td>@formatDate($designation->created_at)</td>
-                                        <td class="table-action">
-                                            <button wire:click="editData({{ $designation->id }})" data-bs-toggle="modal"
-                                                data-bs-target="#updateCreateModal"
-                                                class="action-ico btn-sm btn btn-outline-primary mx-1">
-                                                <i class="fa fa-edit"></i></button>
+                                        <td>@formatDate($grievance->created_at)</td>
+                                        <td class="table-action d-flex">
+                                            <a href="{{route('grievances.update', $grievance->id)}}"
+                                                class="action-ico btn-sm text-primary mx-1">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <div wire:click="deleteData({{ $grievance->id }})" data-bs-toggle="modal"
+                                                data-bs-target="#delete_modal"
+                                                class="action-ico text-primary btn-outline-success mx-1">
+                                                <i class="las la-trash-alt text-danger font-16"></i>
+                                            </div>
                                         </td>
                                     </tr>
                                     @empty
@@ -136,7 +141,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $designations->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $grievances->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                             </div>
                         </div>
@@ -145,6 +150,39 @@
             </div> <!-- end card -->
         </div><!-- end col-->
     </div>
+
+    <!-- delete modal -->
+    <div wire:ignore.self class="modal fade" id="delete_modal" tabindex="-1" role="dialog"
+        aria-labelledby="deleteModalTitle" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h6 class="modal-title m-0" id="deleteModalTitle">
+                        Delete Existing Grievance
+                    </h6>
+                    <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()"
+                        aria-label="Close"></button>
+                </div>
+                <!--end modal-header-->
+                <div class="modal-body">
+                    <div class="row">
+                        Are you sure you want to delete this record
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-bs-dismiss="modal" wire:click="close()">{{
+                        __('public.close') }}</button>
+
+                    <x-button type="click" wire:click="delete" class="btn-danger btn-sm">Confirm</x-button>
+
+                </div>
+                <!--end modal-footer-->
+            </div>
+            <!--end modal-content-->
+        </div>
+        <!--end modal-dialog-->
+    </div>
+    <!--end modal-->
 
     @push('scripts')
     <script>
