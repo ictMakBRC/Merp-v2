@@ -11,6 +11,7 @@ use App\Http\Livewire\HumanResource\Settings\CompanyProfileComponent;
 use App\Http\Livewire\HumanResource\EmployeeData\EmployeeDataComponent;
 use App\Http\Livewire\HumanResource\EmployeeData\EmployeesListComponent;
 use App\Http\Livewire\HumanResource\Grievances\Create as RegisterGrievance;
+use App\Http\Livewire\HumanResource\Grievances\Index as Grievances;
 use App\Http\Livewire\HumanResource\GrievanceTypes\Index as GrievanceTypes;
 use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
 
@@ -35,6 +36,7 @@ Route::group(['prefix' => 'human-resource'], function () {
 
     });
     Route::group(['prefix' => 'grievances'], function () {
+        Route::get('/', Grievances::class)->name('grievances');
         Route::get('create', RegisterGrievance::class)->name('grievances.create');
     });
     Route::group(['prefix' => 'grievance-types'], function () {

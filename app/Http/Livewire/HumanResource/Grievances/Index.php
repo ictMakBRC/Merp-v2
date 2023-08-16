@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\GrievanceTypes;
+namespace App\Http\Livewire\HumanResource\Grievances;
 
+use App\Models\HumanResource\Grievance;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Designation;
 
-class Template extends Component
+class Index extends Component
 {
 
     use WithPagination;
@@ -149,7 +150,7 @@ class Template extends Component
 
     public function filterDesignations()
     {
-        $designations = Designation::search($this->search)
+        $designations = Grievance::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -166,6 +167,6 @@ class Template extends Component
         $data['designations'] = $this->filterDesignations()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.settings.designations-component', $data)->layout('layouts.app');
+        return view('livewire.human-resource.grievances.index', $data)->layout('layouts.app');
     }
 }
