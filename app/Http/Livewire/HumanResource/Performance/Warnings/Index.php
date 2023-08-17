@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\HumanResource\Performance\Warnings;
 
 use App\Models\HumanResource\Grievance;
+use App\Models\HumanResource\Performance\Warning;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\Designation;
 
 class Index extends Component
 {
@@ -17,7 +17,7 @@ class Index extends Component
 
     public $to_date;
 
-    public $designationIds;
+    public $warningIds;
 
     public $perPage = 10;
 
@@ -35,7 +35,7 @@ class Index extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $selectedGrievance;
+    public $selectedWarning;
 
     public $filter = false;
 
@@ -67,49 +67,49 @@ class Index extends Component
 
     public function export()
     {
-        if (count($this->DesignationIds) > 0) {
-            // return (new DesignationsExport($this->DesignationIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+        if (count($this->warningIds) > 0) {
+            // return (new DesignationsExport($this->warningIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEventBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! Not Found!',
-                'text' => 'No Designations selected for export!',
+                'text' => 'No Warnings selected for export!',
             ]);
         }
     }
 
-    public function filterGrievances()
+    public function filterWarnings()
     {
-        $designations = Grievance::search($this->search)
+        $warnings = Warning::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
             });
 
-        $this->designationIds = $designations->pluck('id')->toArray();
+        $this->warningIds = $warnings->pluck('id')->toArray();
 
-        return $designations;
+        return $warnings;
     }
 
-    public function deleteData($grievanceId)
+    public function deleteData($warningId)
     {
-        $this->selectedGrievance = $grievanceId;
+        $this->selectedWarning = $warningId;
     }
 
     public function delete()
     {
-        $grievance = Grievance::findOrFail($this->selectedGrievance);
+        $grievance = Warning::findOrFail($this->selectedWarning);
         $grievance->delete();
 
-        return redirect()->to(route('grievances'));
+        return redirect()->to(route('warnings'));
     }
 
     public function render()
     {
-        $data['grievances'] = $this->filterGrievances()
+        $data['warnings'] = $this->filterWarnings()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.grievances.index', $data)->layout('layouts.app');
+        return view('livewire.human-resource.performance.warnings.index', $data)->layout('layouts.app');
     }
 }
