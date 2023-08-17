@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        Item categories (<span class="text-danger fw-bold">{{ $categories->total() }}</span>)
+                                        Service categories (<span class="text-danger fw-bold">{{ $categories->total() }}</span>)
                                         {{-- @include('livewire.layouts.partials.inc.filter-toggle') --}}
                                     @else
                                         Edit category
@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter categories</h6>
+                            <h6>Filter Categories</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>

@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        Item categories (<span class="text-danger fw-bold">{{ $categories->total() }}</span>)
+                                        services (<span class="text-danger fw-bold">{{ $services->total() }}</span>)
                                         {{-- @include('livewire.layouts.partials.inc.filter-toggle') --}}
                                     @else
-                                        Edit category
+                                        Edit service
                                     @endif
 
                                 </h5>
@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter categories</h6>
+                            <h6>Filter services</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>
@@ -96,26 +96,28 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Description</th>
+                                        <th>Short Code</th>
+                                        <th>Current Rate</th>
                                         <th>Status</th>
                                         <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $key => $category)
+                                    @foreach ($services as $key => $service)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $category->name }}</td>
-                                            <td>{{ $category->description ?? 'N/A' }}</td>
-                                            @if ($category->is_active == 0)
+                                            <td>{{ $service->name }}</td>
+                                            <td>{{ $service->code ?? 'N/A' }}</td>
+                                            <td>{{ $service->exchange_rate ?? 'N/A' }}</td>
+                                            @if ($service->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
-                                            <td>{{ date('d-m-Y', strtotime($category->created_at)) }}</td>
+                                            <td>{{ date('d-m-Y', strtotime($service->created_at)) }}</td>
                                             <td class="table-action">
-                                                <button wire:click="editData({{ $category->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                <button  wire:click="editData({{ $service->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>
@@ -126,7 +128,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $categories->links('vendor.livewire.bootstrap') }}
+                                    {{ $services->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -135,8 +137,7 @@
             </div> <!-- end card -->
         </div><!-- end col-->
     </div>
-
-    @include('livewire.inventory.settings.inc.new-item-category-form')
+    @include('livewire.finance.settings.inc.new-service-form')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {

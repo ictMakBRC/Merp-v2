@@ -106,7 +106,7 @@ class CustomersComponent extends Component
 
     public function storeCustomer()
     {
-        // $this->validate($this->validateCustomer());
+        $this->validate($this->validateCustomer());
 
         $customer = new FmsCustomer();
             $customer->account_number = $this->account_number;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Finance\Settings;
+namespace App\Models\Finance\Accounting;
 
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
@@ -8,46 +8,48 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class FmsCurrency extends Model
+class FmsLedgerAccount extends Model
 {
-        
     use HasFactory,LogsActivity;
-
-    protected $fillable =[
-
-        'name',
-        'code',
-        'is_active',
-        'system_default',
-        'exchange_rate',
-        'updated_by',
-        'created_by'
-    ];
-
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Chart Of Accounts Sub types')
+            ->useLogName('Ledger Accounts')
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+    protected $fillable = [
+        'name',
+        'code',
+        'account_number',
+        'project_code',
+        'department_id',
+        'project_id',
+        'opening_balance',
+        'current_balance',
+        'as_of',
+        'created_by',  
+        'updated_by', 
+        'is_active',
+     
+    ];
 
+      
     public static function boot()
     {
         parent::boot();
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
-            });  
+            });
             self::updating(function ($model) {
                 $model->updated_by = auth()->id();
             });
-
         }
     }
 
@@ -56,6 +58,8 @@ class FmsCurrency extends Model
         return empty($search) ? static::query()
         : static::query()
             ->where('name', 'like', '%'.$search.'%')
-            ->where('code', 'like', '%'.$search.'%');
+            ->where('account_number', 'like', '%'.$search.'%')
+            ->orWhere('code', 'like', '%'.$search.'%');
     }
+
 }

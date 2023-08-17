@@ -49,6 +49,18 @@
                         <li class="nav-item">
                             <a href="{{ route('finance-customers') }}" class="nav-link ">Customers</a>
                         </li>
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a href="{{ route('finance-currencies') }}" class="nav-link ">Currencies</a>
+                        </li>
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a href="{{ route('finance-categories') }}" class="nav-link ">Service Categories</a>
+                        </li>
+                         <!--end nav-item-->
+                         <li class="nav-item">
+                            <a href="{{ route('finance-services') }}" class="nav-link ">Services</a>
+                        </li>
                     </ul>
                     <!--end nav-->
                 </div>
