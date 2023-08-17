@@ -56,8 +56,8 @@
 
                                     <div class="mb-3 col-md-5">
                                         <label for="file" class="form-label">Support File</label>
-                                        <input type="file" id="file" class="form-control" wire:model.defer="file_upload"
-                                            required>
+                                        <input type="file" id="file" class="form-control"
+                                            wire:model.defer="file_upload">
                                         @error('file_upload')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror

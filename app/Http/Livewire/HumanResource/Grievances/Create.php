@@ -27,7 +27,7 @@ class Create extends Component
     protected $rules = [
         'grievance_type_id' => 'required',
         'addressee' => 'required',
-        'file_upload' => 'file|required',
+        'file_upload' => 'file|nullable',
         'description' => 'nullable'
     ];
 
