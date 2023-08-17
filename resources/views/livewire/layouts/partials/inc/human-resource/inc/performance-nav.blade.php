@@ -6,14 +6,17 @@
     <div class="collapse " id="performanceMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="#appraisalsMenu" class="nav-link" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="appraisalsMenu">
+                <a href="#appraisalsMenu" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                    aria-controls="appraisalsMenu">
                     Appraisals
                 </a>
                 <div class="collapse " id="appraisalsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-doctor-shedule.html">All Appraisals</a>
+                            <a class="nav-link" href="{{route('appraisals.create')}}">New </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('appraisals')}}">All Appraisals</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
@@ -38,11 +41,11 @@
                 <div class="collapse" id="warningsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-patients.html">Create</a>
+                            <a class="nav-link" href="{{route('warnings.create')}}">Create</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-doctors.html">All Warnings</a>
+                            <a class="nav-link" href="{{route('warnings')}}">All Warnings</a>
                         </li>
                         <!--end nav-item-->
                     </ul>
@@ -59,11 +62,11 @@
                 <div class="collapse" id="terminationMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-patients.html">Create</a>
+                            <a class="nav-link" href="{{route('terminations.create')}}">Create</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-patients.html">All Terminations</a>
+                            <a class="nav-link" href="{{route('terminations')}}">All Terminations</a>
                         </li>
                         <!--end nav-item-->
                     </ul>
@@ -80,11 +83,11 @@
                 <div class="collapse" id="resignationMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-patients.html">Create</a>
+                            <a class="nav-link" href="{{route('resignations.create')}}">Create</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-payments.html">All Resignations</a>
+                            <a class="nav-link" href="{{route('resignations')}}">All Resignations</a>
                         </li>
                         <!--end nav-item-->
 
@@ -102,11 +105,11 @@
                 <div class="collapse" id="exitInterviewsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-patients.html">Create</a>
+                            <a class="nav-link" href="{{route('exit-interviews.create')}}">Create</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-staff.html">All Exit interviews</a>
+                            <a class="nav-link" href="{{route('exit-interviews')}}">All Exit interviews</a>
                         </li>
                         <!--end nav-item-->
 
