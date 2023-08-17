@@ -2,38 +2,42 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Appraisals;
 
+use App\Models\User;
 use Livewire\Component;
-use Illuminate\Support\Str;
-use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Grievance;
-use App\Models\HumanResource\GrievanceType;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\Performance\Appraisal;
 
 class Create extends Component
 {
-    use WithPagination;
     use WithFileUploads;
 
-    public $grievance_type_id;
+    public $department_id;
 
-    public $addressee;
+    public $employee_id;
+
+    public $start_date;
+
+    public $end_date;
 
     public $file_upload;
 
-    public $description;
+    public $departments;
 
-    public $grievanceTypes;
+    public $employees;
 
     protected $rules = [
-        'grievance_type_id' => 'required',
-        'addressee' => 'required',
+        'department_id' => 'nullable',
+        'employee_id' => 'nullable',
+        'start_date' => 'required',
+        'end_date' => 'required',
         'file_upload' => 'file|nullable',
-        'description' => 'nullable'
     ];
 
     public function mount()
     {
-        $this->grievanceTypes = GrievanceType::all();
+        $this->departments = Department::all();
+        $this->employees = User::all();
     }
 
 
@@ -41,20 +45,20 @@ class Create extends Component
     {
         $this->validate();
 
-        $grievance = Grievance::create([
-               'grievance_type_id' => $this->grievance_type_id,
-               'subject' => 'Subject',
-               'addressee' => $this->addressee,
-               'comment' => $this->description
+        $appraisal = Appraisal::create([
+               'department_id' => $this->department_id,
+               'employee_id' => $this->employee_id,
+               'start_date' => $this->start_date,
+               'end_date' => $this->end_date,
            ]);
 
-        $grievance->addMedia($this->file_upload)->toMediaCollection();
+        $appraisal->addMedia($this->file_upload)->toMediaCollection();
 
-        return redirect()->to(route('grievances'));
+        return redirect()->to(route('appraisals'));
     }
 
     public function render()
     {
-        return view('livewire.human-resource.grievances.create');
+        return view('livewire.human-resource.performance.appraisals.create');
     }
 }
