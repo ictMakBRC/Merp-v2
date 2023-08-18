@@ -2,61 +2,83 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Resignations;
 
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use App\Models\HumanResource\Grievance;
 use App\Models\HumanResource\GrievanceType;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\Performance\Resignation;
 
 class Edit extends Component
 {
-    use WithPagination;
     use WithFileUploads;
 
-    public $grievance_type_id;
+    public $department_id;
 
-    public $addressee;
+    public $employee_id;
 
     public $file_upload;
 
-    public $description;
+    public $hand_over_date;
 
-    public $grievanceTypes;
+    public $comment;
+
+    public $departments;
+
+    public $employees;
+
+    public $resignation;
 
     protected $rules = [
-        'grievance_type_id' => 'required',
-        'addressee' => 'required',
+        'department_id' => 'nullable',
+        'employee_id' => 'nullable',
+        'comment' => 'nullable',
+        'hand_over_date' => 'required',
         'file_upload' => 'file|nullable',
-        'description' => 'nullable'
     ];
 
-    public function mount(Grievance $grievance)
+    public function mount(Resignation $resignation)
     {
-        $this->grievance_type_id = $grievance->grievance_type_id;
-        $this->addressee = $grievance->addressee;
-        $this->description = $grievance->comment;
-        $this->grievanceTypes = GrievanceType::all();
+        $this->departments = Department::all();
+        $this->employees = User::all();
+        $this->resignation = $resignation;
+        $this->department_id = $resignation->department_id;
+        $this->hand_over_date = $resignation->hand_over_date;
+        $this->comment = $resignation->comment;
+    }
+
+    public function download()
+    {
+        $file = $this->resignation->getFirstMedia();
+        return response()->download(
+            $file->getPath(),
+            "{$file->file_name}"
+        );
     }
 
 
-    public function store()
+    public function update()
     {
         $this->validate();
 
-        $grievance = Grievance::create([
-               'grievance_type_id' => $this->grievance_type_id,
-               'subject' => 'Subject',
-               'addressee' => $this->addressee,
-               'comment' => $this->description
+        $this->resignation->update([
+            'department_id' => $this->department_id,
+            'employee_id' => $this->employee_id,
+            'comment' => $this->comment,
+            'hand_over_date' => $this->hand_over_date
            ]);
 
-        $grievance->addMedia($this->file_upload)->toMediaCollection();
-
-        return redirect()->to(route('grievances'));
+        if($this->file_upload) {
+            $this->resignation->getFirstMedia()?->delete();
+            $this->resignation->addMedia($this->file_upload)->toMediaCollection();
+        }
+        return redirect()->to(route('resignations'));
     }
 
     public function render()
     {
-        return view('livewire.human-resource.grievances.create');
+        return view('livewire.human-resource.performance.resignations.edit');
     }
 }

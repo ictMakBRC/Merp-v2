@@ -10,7 +10,7 @@
 
                     <div class="row mb-2">
                         <div class="col-sm-12 mt-3">
-                            <form wire:submit.prevent="store">
+                            <form wire:submit.prevent="update">
                                 <div class="row">
 
                                     <div class="mb-3 col-md-4">
@@ -55,6 +55,24 @@
                                         @error('file_upload')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
+
+                                        @if($termination->getFirstMedia())
+                                        <div class="file-box-content mt-4">
+                                            <div class="file-box">
+                                                <a href="#" wire:click="download" class="download-icon-link">
+                                                    <i class="las la-download file-download-icon"></i>
+                                                </a>
+                                                <div class="text-center">
+                                                    <i class="lar la-file-alt text-primary"></i>
+                                                    <h6 class="text-truncate">
+                                                        {{$termination->getFirstMedia()->file_name}}</h6>
+                                                    <small class="text-muted">@formatDate($termination->created_at) /
+                                                        {{number_format(($termination->getFirstMedia()->size)/2048,
+                                                        3)}}MB</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
                                     </div>
 
                                     <div class="mb-3 col-md-5">

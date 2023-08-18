@@ -20,12 +20,17 @@ class Create extends Component
 
     public $departments;
 
+    public $termination_date;
+
+    public $reason;
+
     public $employees;
 
     protected $rules = [
         'department_id' => 'nullable',
         'employee_id' => 'nullable',
         'reason' => 'required',
+        'termination_date' => 'required',
         'file_upload' => 'file|nullable',
     ];
 
@@ -43,7 +48,8 @@ class Create extends Component
         $termination = Termination::create([
                 'department_id' => $this->department_id,
                 'employee_id' => $this->employee_id,
-                'reason' => $this->description
+                'termination_date' => $this->termination_date,
+                'reason' => $this->reason
            ]);
 
         $termination->addMedia($this->file_upload)->toMediaCollection();

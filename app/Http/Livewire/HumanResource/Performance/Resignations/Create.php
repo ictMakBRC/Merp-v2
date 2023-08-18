@@ -18,6 +18,10 @@ class Create extends Component
 
     public $file_upload;
 
+    public $hand_over_date;
+
+    public $comment;
+
     public $departments;
 
     public $employees;
@@ -25,7 +29,8 @@ class Create extends Component
     protected $rules = [
         'department_id' => 'nullable',
         'employee_id' => 'nullable',
-        'reason' => 'required',
+        'comment' => 'nullable',
+        'hand_over_date' => 'required',
         'file_upload' => 'file|nullable',
     ];
 
@@ -43,7 +48,8 @@ class Create extends Component
         $resignation = Resignation::create([
                 'department_id' => $this->department_id,
                 'employee_id' => $this->employee_id,
-                'reason' => $this->description
+                'comment' => $this->comment,
+                'hand_over_date' => $this->hand_over_date
            ]);
 
         $resignation->addMedia($this->file_upload)->toMediaCollection();

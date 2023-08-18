@@ -61,7 +61,7 @@ class Edit extends Component
                  'employee_id' => $this->employee_id,
             ]);
         if($this->file_upload) {
-            $this->exitInterview->getFirstMedia()->delete();
+            $this->exitInterview->getFirstMedia()?->delete();
             $this->exitInterview->addMedia($this->file_upload)->toMediaCollection();
         }
 
