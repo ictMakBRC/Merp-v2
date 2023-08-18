@@ -91,7 +91,7 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::group(['prefix' => 'exit-interviews'], function () {
             Route::get('/', ExitInterviews::class)->name('exit-interviews');
             Route::get('create', RegisterExitInterview::class)->name('exit-interviews.create');
-            Route::get('/{exit-interview}', EditExitInterview::class)->name('exit-interviews.update');
+            Route::get('/{exitInterview}', EditExitInterview::class)->name('exit-interviews.update');
         });
     });
 

@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Resignations;
 
-use App\Models\HumanResource\Grievance;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\Designation;
+use App\Models\HumanResource\Grievance;
+use App\Models\HumanResource\Performance\Resignation;
 
 class Index extends Component
 {
@@ -17,7 +17,7 @@ class Index extends Component
 
     public $to_date;
 
-    public $designationIds;
+    public $resignationIds;
 
     public $perPage = 10;
 
@@ -35,7 +35,7 @@ class Index extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $selectedGrievance;
+    public $selectedResignation;
 
     public $filter = false;
 
@@ -67,49 +67,48 @@ class Index extends Component
 
     public function export()
     {
-        if (count($this->DesignationIds) > 0) {
-            // return (new DesignationsExport($this->DesignationIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+        if (count($this->resignationIds) > 0) {
         } else {
             $this->dispatchBrowserEventBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! Not Found!',
-                'text' => 'No Designations selected for export!',
+                'text' => 'No Resignations selected for export!',
             ]);
         }
     }
 
-    public function filterGrievances()
+    public function filterResignations()
     {
-        $designations = Grievance::search($this->search)
+        $resignations = Resignation::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
             });
 
-        $this->designationIds = $designations->pluck('id')->toArray();
+        $this->resignationIds = $resignations->pluck('id')->toArray();
 
-        return $designations;
+        return $resignations;
     }
 
-    public function deleteData($grievanceId)
+    public function deleteData($resignationId)
     {
-        $this->selectedGrievance = $grievanceId;
+        $this->selectedResignation = $resignationId;
     }
 
     public function delete()
     {
-        $grievance = Grievance::findOrFail($this->selectedGrievance);
-        $grievance->delete();
+        $resignation = Resignation::findOrFail($this->selectedResignation);
+        $resignation->delete();
 
-        return redirect()->to(route('grievances'));
+        return redirect()->to(route('resignations'));
     }
 
     public function render()
     {
-        $data['grievances'] = $this->filterGrievances()
+        $data['resignations'] = $this->filterResignations()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.grievances.index', $data)->layout('layouts.app');
+        return view('livewire.human-resource.performance.resignations.index', $data)->layout('layouts.app');
     }
 }

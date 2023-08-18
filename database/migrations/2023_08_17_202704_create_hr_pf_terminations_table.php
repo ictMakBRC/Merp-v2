@@ -10,11 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('hr_pf_warnings', function (Blueprint $table) {
+        Schema::create('hr_pf_terminations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id')->nullable()->index('employee_warnings_employee_id_foreign');
-            $table->unsignedBigInteger('department_id')->nullable()->index('employee_warnings_department_id_foreign');
+            $table->unsignedBigInteger('employee_id')->nullable()->index('terminations_employee_id_foreign');
+            $table->unsignedBigInteger('department_id')->nullable()->index('terminations_department_id_foreign');
             $table->string('reason')->nullable();
+            $table->date('termination_date')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
         });
@@ -25,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('hr_pf_warnings');
+        Schema::dropIfExists('hr_pf_tarminations');
     }
 };

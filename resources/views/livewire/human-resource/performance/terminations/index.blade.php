@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
 
-                                    Grievances (<span class="text-danger fw-bold">{{ $grievances->total() }}</span>)
+                                    Terminations (<span class="text-danger fw-bold">{{ $terminations->total() }}</span>)
 
 
                                 </h5>
@@ -17,7 +17,7 @@
                                         wire:click="export()">Export</a>
                                     <a type="button" class="btn btn-sm btn-outline-primary me-2"
                                         wire:click="refresh()"><i class="mdi mdi-refresh"></i></a>
-                                    <a href="{{route('grievances.create')}}" class="btn btn-sm me-2 btn-primary">
+                                    <a href="{{route('terminations.create')}}" class="btn btn-sm me-2 btn-primary">
                                         <i class="fa fa-plus"></i>New
                                     </a>
                                 </div>
@@ -98,32 +98,26 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Employee Name</th>
-                                        <th>Type</th>
+                                        <th>Department</th>
                                         <th>Assignee</th>
                                         <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($grievances as $key => $grievance)
+                                    @forelse ($terminations as $key => $termination)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $grievance->name }}</td>
-                                        <td>{{ $grievance->type->name ?? 'N/A' }}</td>
-                                        @if ($grievance->assignee == 'department')
-                                        <td><span class="badge bg-danger">Department</span></td>
-                                        @elseif ($grievance->assignee == 'administration')
-                                        <td><span class="badge bg-warning">Department</span></td>
-                                        @else
-                                        <td><span class="badge bg-success">Both</span></td>
-                                        @endif
-                                        <td>@formatDate($grievance->created_at)</td>
+                                        <td>{{ $termination->name }}</td>
+                                        <td>{{ $termination->employee->name ?? 'N/A' }}</td>
+                                        <td>{{ $termination->department->name ?? 'N/A' }}</td>
+                                        <td>@formatDate($termination->created_at)</td>
                                         <td class="table-action d-flex">
-                                            <a href="{{route('grievances.update', $grievance->id)}}"
+                                            <a href="{{route('terminations.update', $termination->id)}}"
                                                 class="action-ico btn-sm text-primary mx-1">
                                                 <i class="fa fa-edit"></i>
                                             </a>
-                                            <div wire:click="deleteData({{ $grievance->id }})" data-bs-toggle="modal"
+                                            <div wire:click="deleteData({{ $termination->id }})" data-bs-toggle="modal"
                                                 data-bs-target="#delete_modal"
                                                 class="action-ico text-primary btn-outline-success mx-1">
                                                 <i class="las la-trash-alt text-danger font-16"></i>
@@ -132,7 +126,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No Grievances recorded yet ...</td>
+                                        <td colspan="6" class="text-center">No terminations recorded yet ...</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -141,7 +135,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $grievances->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $terminations->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                             </div>
                         </div>
@@ -158,7 +152,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <h6 class="modal-title m-0" id="deleteModalTitle">
-                        Delete Existing Grievance
+                        Delete Existing termination
                     </h6>
                     <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()"
                         aria-label="Close"></button>

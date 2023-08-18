@@ -2,61 +2,74 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\ExitInterviews;
 
+use App\Models\HumanResource\Performance\ExitInterview;
+use App\Models\User;
 use Livewire\Component;
-use Livewire\WithPagination;
+
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Grievance;
-use App\Models\HumanResource\GrievanceType;
+use App\Models\HumanResource\Settings\Department;
 
 class Edit extends Component
 {
-    use WithPagination;
     use WithFileUploads;
 
-    public $grievance_type_id;
+    public $department_id;
 
-    public $addressee;
+    public $employee_id;
 
     public $file_upload;
 
-    public $description;
+    public $departments;
 
-    public $grievanceTypes;
+    public $employees;
+
+    public $exitInterview;
 
     protected $rules = [
-        'grievance_type_id' => 'required',
-        'addressee' => 'required',
+        'department_id' => 'nullable',
+        'employee_id' => 'nullable',
         'file_upload' => 'file|nullable',
-        'description' => 'nullable'
     ];
 
-    public function mount(Grievance $grievance)
+    public function mount(ExitInterview $exitInterview)
     {
-        $this->grievance_type_id = $grievance->grievance_type_id;
-        $this->addressee = $grievance->addressee;
-        $this->description = $grievance->comment;
-        $this->grievanceTypes = GrievanceType::all();
+        $this->departments = Department::all();
+        $this->employees = User::all();
+        $this->exitInterview = $exitInterview;
+        $this->department_id = $exitInterview->department_id;
+        $this->employee_id = $exitInterview->employee_id;
     }
 
 
-    public function store()
+    public function download()
     {
+        $file = $this->exitInterview->getFirstMedia();
+        return response()->download(
+            $file->getPath(),
+            "{$file->file_name}"
+        );
+    }
+
+
+    public function update()
+    {
+
         $this->validate();
 
-        $grievance = Grievance::create([
-               'grievance_type_id' => $this->grievance_type_id,
-               'subject' => 'Subject',
-               'addressee' => $this->addressee,
-               'comment' => $this->description
-           ]);
+        $this->exitInterview->update([
+                 'department_id' => $this->department_id,
+                 'employee_id' => $this->employee_id,
+            ]);
+        if($this->file_upload) {
+            $this->exitInterview->getFirstMedia()->delete();
+            $this->exitInterview->addMedia($this->file_upload)->toMediaCollection();
+        }
 
-        $grievance->addMedia($this->file_upload)->toMediaCollection();
-
-        return redirect()->to(route('grievances'));
+        return redirect()->to(route('exit-interviews'));
     }
 
     public function render()
     {
-        return view('livewire.human-resource.grievances.create');
+        return view('livewire.human-resource.performance.exit-interviews.edit');
     }
 }

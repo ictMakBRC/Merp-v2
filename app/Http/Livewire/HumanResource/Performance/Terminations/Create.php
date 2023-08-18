@@ -2,38 +2,37 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Terminations;
 
+use App\Models\HumanResource\Performance\Termination;
+use App\Models\User;
 use Livewire\Component;
-use Illuminate\Support\Str;
-use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Grievance;
-use App\Models\HumanResource\GrievanceType;
+use App\Models\HumanResource\Settings\Department;
 
 class Create extends Component
 {
-    use WithPagination;
     use WithFileUploads;
 
-    public $grievance_type_id;
+    public $department_id;
 
-    public $addressee;
+    public $employee_id;
 
     public $file_upload;
 
-    public $description;
+    public $departments;
 
-    public $grievanceTypes;
+    public $employees;
 
     protected $rules = [
-        'grievance_type_id' => 'required',
-        'addressee' => 'required',
+        'department_id' => 'nullable',
+        'employee_id' => 'nullable',
+        'reason' => 'required',
         'file_upload' => 'file|nullable',
-        'description' => 'nullable'
     ];
 
     public function mount()
     {
-        $this->grievanceTypes = GrievanceType::all();
+        $this->departments = Department::all();
+        $this->employees = User::all();
     }
 
 
@@ -41,20 +40,19 @@ class Create extends Component
     {
         $this->validate();
 
-        $grievance = Grievance::create([
-               'grievance_type_id' => $this->grievance_type_id,
-               'subject' => 'Subject',
-               'addressee' => $this->addressee,
-               'comment' => $this->description
+        $termination = Termination::create([
+                'department_id' => $this->department_id,
+                'employee_id' => $this->employee_id,
+                'reason' => $this->description
            ]);
 
-        $grievance->addMedia($this->file_upload)->toMediaCollection();
+        $termination->addMedia($this->file_upload)->toMediaCollection();
 
-        return redirect()->to(route('grievances'));
+        return redirect()->to(route('terminations'));
     }
 
     public function render()
     {
-        return view('livewire.human-resource.grievances.create');
+        return view('livewire.human-resource.performance.terminations.create');
     }
 }

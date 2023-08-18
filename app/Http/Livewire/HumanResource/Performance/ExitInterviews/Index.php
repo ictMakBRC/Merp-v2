@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\ExitInterviews;
 
-use App\Models\HumanResource\Grievance;
+use App\Models\HumanResource\EmployeeData\Performance\ExitInterview\ExitInterview as ExitInterviewExitInterview;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\Designation;
+use App\Models\HumanResource\Performance\Warning;
+use App\Models\HumanResource\Performance\ExitInterview;
 
 class Index extends Component
 {
@@ -17,7 +18,7 @@ class Index extends Component
 
     public $to_date;
 
-    public $designationIds;
+    public $exitInterviewIds;
 
     public $perPage = 10;
 
@@ -35,7 +36,7 @@ class Index extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $selectedGrievance;
+    public $selectedExitInterview;
 
     public $filter = false;
 
@@ -67,49 +68,49 @@ class Index extends Component
 
     public function export()
     {
-        if (count($this->DesignationIds) > 0) {
-            // return (new DesignationsExport($this->DesignationIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+        if (count($this->exitInterviewIds) > 0) {
+            // return (new DesignationsExport($this->exitInterviewIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEventBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! Not Found!',
-                'text' => 'No Designations selected for export!',
+                'text' => 'No Warnings selected for export!',
             ]);
         }
     }
 
-    public function filterGrievances()
+    public function filterExitInterviews()
     {
-        $designations = Grievance::search($this->search)
+        $exitInterviews = ExitInterview::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
             });
 
-        $this->designationIds = $designations->pluck('id')->toArray();
+        $this->exitInterviewIds = $exitInterviews->pluck('id')->toArray();
 
-        return $designations;
+        return $exitInterviews;
     }
 
-    public function deleteData($grievanceId)
+    public function deleteData($exitInterviewId)
     {
-        $this->selectedGrievance = $grievanceId;
+        $this->selectedExitInterview = $exitInterviewId;
     }
 
     public function delete()
     {
-        $grievance = Grievance::findOrFail($this->selectedGrievance);
-        $grievance->delete();
+        $exitInterview = ExitInterview::findOrFail($this->selectedExitInterview);
+        $exitInterview->delete();
 
-        return redirect()->to(route('grievances'));
+        return redirect()->to(route('exit-interviews'));
     }
 
     public function render()
     {
-        $data['grievances'] = $this->filterGrievances()
+        $data['exitInterviews'] = $this->filterExitInterviews()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.grievances.index', $data)->layout('layouts.app');
+        return view('livewire.human-resource.performance.exit-interviews.index', $data)->layout('layouts.app');
     }
 }

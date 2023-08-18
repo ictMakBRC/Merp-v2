@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\HumanResource\Performance\Terminations;
 
 use App\Models\HumanResource\Grievance;
+use App\Models\HumanResource\Performance\Termination;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Designation;
@@ -17,7 +18,7 @@ class Index extends Component
 
     public $to_date;
 
-    public $designationIds;
+    public $terminationIds;
 
     public $perPage = 10;
 
@@ -67,29 +68,29 @@ class Index extends Component
 
     public function export()
     {
-        if (count($this->DesignationIds) > 0) {
-            // return (new DesignationsExport($this->DesignationIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+        if (count($this->terminationIds) > 0) {
+            // return (new DesignationsExport($this->terminationIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEventBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! Not Found!',
-                'text' => 'No Designations selected for export!',
+                'text' => 'No Terminations selected for export!',
             ]);
         }
     }
 
-    public function filterGrievances()
+    public function filterTerminations()
     {
-        $designations = Grievance::search($this->search)
+        $terminations = Termination::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
             });
 
-        $this->designationIds = $designations->pluck('id')->toArray();
+        $this->terminationIds = $terminations->pluck('id')->toArray();
 
-        return $designations;
+        return $terminations;
     }
 
     public function deleteData($grievanceId)
@@ -107,9 +108,9 @@ class Index extends Component
 
     public function render()
     {
-        $data['grievances'] = $this->filterGrievances()
+        $data['terminations'] = $this->filterTerminations()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.grievances.index', $data)->layout('layouts.app');
+        return view('livewire.human-resource.performance.terminations.index', $data)->layout('layouts.app');
     }
 }
