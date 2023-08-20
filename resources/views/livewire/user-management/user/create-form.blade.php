@@ -15,7 +15,6 @@
             </div>
 
             <div class="mb-3 col-md-4">
-
                 <label for="name" class="form-label required">{{ __('public.name') }} </label>
                 <input type="text" id="name" class="form-control" wire:model.defer="name">
                 @error('name')

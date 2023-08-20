@@ -2,13 +2,12 @@
 
 namespace App\Models\HumanResource\Settings;
 
-use App\Models\User;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AssetsManagement\Asset;
-use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
@@ -26,59 +25,39 @@ class Department extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-    protected $fillable =['asst_supervisor','supervisor','name','created_by','is_active'];
-    /**
-     * The attributes that are not mass assignable.
-     *
-     * @var string[]
-     */
-    protected $guarded = ['id'];
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
+    protected $guarded =['id'];
+   
+    protected $parentColumn = 'parent_department';
 
     public function parent()
     {
-        return $this->belongsTo(Department::class, 'parent_department', 'id');
+        return $this->belongsTo(Department::class,$this->parentColumn);
     }
 
-    public function child()
+    public function children()
     {
-        return $this->hasMany(Department::class, 'parent_department', 'id');
+        return $this->hasMany(Department::class, $this->parentColumn);
     }
+
+    public function allChildren()
+    {
+        return $this->children()->with('allChildren');
+    }
+
     public function supervisor()
     {
-        return $this->hasOne(Employee::class,'id', 'supervisor');
+        return $this->hasOne(Employee::class,'supervisor','id');
     }
 
     public function ast_supervisor()
     {
-        return $this->hasOne(Employee::class, 'id', 'asst_supervisor');
+        return $this->hasOne(Employee::class,'asst_supervisor','id');
     }
 
     public function assets()
     {
         return $this->hasMany(Asset::class);
     }
-
-    // protected $parentColumn = 'parent_id';
-
-    // public function parent()
-    // {
-    //     return $this->belongsTo(Test::class,$this->parentColumn);
-    // }
-
-    // public function children()
-    // {
-    //     return $this->hasMany(Test::class, $this->parentColumn);
-    // }
-
-    // public function allChildren()
-    // {
-    //     return $this->children()->with('allChildren');
-    // }
 
     public static function boot()
     {
