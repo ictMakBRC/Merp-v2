@@ -15,14 +15,14 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('category');
+            $table->string('category')->nullable();
             $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('name',100);
             $table->string('email',100)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->timestamp('password_updated_at')->default(now());
-           
+
             $table->boolean('information_share_consent')->default(0);
             $table->string('avatar')->nullable();
             $table->string('signature')->nullable();
