@@ -2,8 +2,8 @@
 
 namespace App\Models\Grants;
 
+use App\Traits\DocumentableTrait;
 use Spatie\Activitylog\LogOptions;
-use App\Models\Grants\GrantDocument;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
@@ -11,9 +11,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class GrantProfile extends Model
+class Grant extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory,LogsActivity, DocumentableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -48,8 +48,4 @@ class GrantProfile extends Model
         }
     }
 
-    public function documents()
-    {
-        return $this->hasMany(GrantDocument::class,'grant_profile_id','id');
-    }
 }

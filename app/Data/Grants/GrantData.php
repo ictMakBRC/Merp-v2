@@ -4,7 +4,7 @@ namespace App\Data\Grants;
 
 use Spatie\LaravelData\Data;
 
-class GrantProfileData extends Data
+class GrantData extends Data
 {
   public ?string $grant_code;
   public ?string $grant_name;
@@ -20,7 +20,7 @@ class GrantProfileData extends Data
   public ?string $award_status;
 
   //GRANT PROFILE DOCUMENTS
-  public ?int $grant_profile_id;
+  public ?int $grant_id;
   public ?string $document_category;
   public ?bool $expires;
   public ?string $document_name;
@@ -32,8 +32,8 @@ class GrantProfileData extends Data
   public function rules(): array
   {
     return [
-      'grant_code' => 'required|string|unique:grant_profiles',
-      'grant_name' => 'required|string|unique:grant_profiles',
+      'grant_code' => 'required|string|unique:grants',
+      'grant_name' => 'required|string|unique:grants',
       'grant_type' => 'required|string',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
@@ -51,7 +51,7 @@ class GrantProfileData extends Data
   public function grantProfileDocumentRules(): array
   {
     return [
-      'grant_profile_id' => 'required|integer',
+      'grant_id' => 'required|integer',
       'document_name' => 'required|integer',
       'document' => 'required|string',
       'description' => 'required|string',
@@ -69,6 +69,6 @@ class GrantProfileData extends Data
   public function resetGrantDocumentInputs(): array
   {
     $allKeys = array_keys($this->grantProfileDocumentRules());
-    return array_values(array_diff($allKeys,['grant_profile_id']));
+    return array_values(array_diff($allKeys,['grant_id']));
   }
 }

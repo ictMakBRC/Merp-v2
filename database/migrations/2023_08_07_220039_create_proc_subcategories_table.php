@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('procurement_subcategories', function (Blueprint $table) {
+        Schema::create('proc_subcategories', function (Blueprint $table) {
             $table->id();
             $table->string('category');
             $table->string('code');

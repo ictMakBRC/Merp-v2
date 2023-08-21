@@ -3,29 +3,54 @@
 namespace App\Http\Livewire\Grants\Projects;
 
 use Livewire\Component;
+use Livewire\WithPagination;
+use App\Models\Grants\Project\Project;
 
 class ProjectComponent extends Component
 {
-    public $grant_code;
-    public $name;
-    public $project_category;
-    public $project_type;
-    public $grant_profile_id;
-    public $funding_source;
-    public $funding_amount;
-    public $currency;
-    public $start_date;
-    public $end_date;
-    public $pi;
-    public $co_pi;
-    public $project_summary;
-    public $progress_status;
+    use WithPagination;
 
-    public function storeGrantProfile(){
-        
+    //Filters
+
+    public $user_category;
+
+    public $from_date;
+
+    public $to_date;
+
+    public $user_status;
+
+    public $userIds;
+
+    public $perPage = 50;
+
+    public $search = '';
+
+    public $orderBy = 'id';
+
+    public $orderAsc = 0;
+
+    public $createNew = false;
+
+    public $toggleForm = false;
+
+    public $filter = false;
+
+    public function updatedCreateNew()
+    {
+        // $this->reset();
+        $this->toggleForm = !$this->toggleForm;
     }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    
     public function render()
     {
-        return view('livewire.grants.projects.project-component');
+        $data['projects'] = Project::all();
+        return view('livewire.grants.projects.project-component', $data);
     }
 }

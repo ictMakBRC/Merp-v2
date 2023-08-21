@@ -2,17 +2,17 @@
 
 namespace App\Models\Grants\Project;
 
-use App\Models\Grants\GrantProfile;
+use App\Models\Grants\Grant;
+use App\Traits\DocumentableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Grants\Project\ProjectDocument;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, DocumentableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -48,7 +48,7 @@ class Project extends Model
 
     public function grant()
     {
-        return $this->belongsTo(GrantProfile::class,'grant_profile_id','id');
+        return $this->belongsTo(Grant::class,'grant_profile_id','id');
     }
     
     public static function boot()
@@ -61,8 +61,8 @@ class Project extends Model
         }
     }
 
-    public function documents()
-    {
-        return $this->hasMany(ProjectDocument::class,'project_id','id');
-    }
+    // public function documents()
+    // {
+    //     return $this->hasMany(ProjectDocument::class,'project_id','id');
+    // }
 }

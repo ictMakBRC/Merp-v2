@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fms_customer_documents', function (Blueprint $table) {
+        Schema::create('formal_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fms_customer_id')->constrained('fms_customers', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->morphs('documentable');
             $table->string('document_category');
-            $table->boolean('expires')->default(0);
             $table->string('document_name');
             $table->string('document_path');
-            $table->date('expiry_date')->nullable();
             $table->text('description')->nullable();
+            $table->boolean('expires')->default(0);
+            $table->date('expiry_date')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fms_customer_documents');
+        Schema::dropIfExists('formal_documents');
     }
 };

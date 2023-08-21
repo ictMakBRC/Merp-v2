@@ -4,13 +4,14 @@ namespace App\Data\Grants;
 
 use Spatie\LaravelData\Data;
 
-class ProjectProfileData extends Data
+class ProjectData extends Data
 {
   public ?string $project_code;
   public ?string $project_category;
-  public ?string $name;
-  public ?int $grant_profile_id;
   public ?string $project_type;
+  public ?int $associated_institution;
+  public ?string $name;
+  public ?int $grant_id;
   public ?string $funding_source;
   public ?float $funding_amount;
   public ?string $currency;
@@ -46,10 +47,11 @@ class ProjectProfileData extends Data
   {
     return [
       'project_category' => 'required|string',
+      'project_type' => 'required|string',
+      'associated_institution' => 'required|integer',
       'project_code' => 'required|string|unique:projects',
       'name' => 'required|string|unique:projects',
-      'grant_profile_id' => 'nullable|integer',
-      'project_type' => 'required|string',
+      'grant_id' => 'nullable|integer',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency' => 'required|string',

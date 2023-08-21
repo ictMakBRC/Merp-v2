@@ -27,7 +27,7 @@ class ProcurementSubcategory extends Model
 
     public function providers()
     {
-        return $this->belongsToMany(Provider::class,'provider_procurement_subcategory','procurement_subcategory_id','provider_id')
+        return $this->belongsToMany(Provider::class,'provider_subcategory','subcategory_id','provider_id')
         ->withTimestamps();
     }
 
