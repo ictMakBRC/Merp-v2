@@ -7,24 +7,28 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('hr_pf_warnings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id')->nullable()->index('employee_warnings_employee_id_foreign');
-            $table->unsignedBigInteger('department_id')->nullable()->index('employee_warnings_department_id_foreign');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('reason')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->longText('letter');
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('hr_pf_warnings');
+        Schema::dropIfExists('warnings');
     }
 };

@@ -19,7 +19,6 @@ class Warning extends Model implements HasMedia
         'department_id',
         'employee_id',
         'reason',
-        'letter',
         'created_by'
     ];
 

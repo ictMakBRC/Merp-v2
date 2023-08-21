@@ -7,28 +7,31 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('hr_grievances', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('employee_id')->nullable()->index('grievances_employee_id_foreign');
-            $table->unsignedBigInteger('department_id')->nullable()->index('grievances_department_id_foreign');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('grievance_type_id');
             $table->string('subject');
-            $table->string('addressee');
             $table->string('status')->default('pending');
             $table->string('comment')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('hr_grievances');
+        Schema::dropIfExists('grievances');
     }
 };

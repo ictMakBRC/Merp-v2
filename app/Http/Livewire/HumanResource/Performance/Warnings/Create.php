@@ -23,6 +23,8 @@ class Create extends Component
 
     public $employees;
 
+    public $reason;
+
     protected $rules = [
         'department_id' => 'nullable',
         'employee_id' => 'nullable',
@@ -44,7 +46,7 @@ class Create extends Component
         $warning = Warning::create([
                 'department_id' => $this->department_id,
                 'employee_id' => $this->employee_id,
-                'reason' => $this->description
+                'reason' => $this->reason
            ]);
 
         $warning->addMedia($this->file_upload)->toMediaCollection();
