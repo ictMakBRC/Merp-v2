@@ -98,7 +98,6 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Employee Name</th>
-                                        <th>Department</th>
                                         <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
@@ -108,7 +107,6 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $appraisal->employee->name ?? 'N/A' }}</td>
-                                        <td>{{ $appraisal->department->name ?? 'N/A' }}</td>
                                         <td>@formatDate($appraisal->created_at)</td>
                                         <td class="table-action d-flex">
                                             <a href="{{route('appraisals.update', $appraisal->id)}}"

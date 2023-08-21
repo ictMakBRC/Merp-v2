@@ -12,8 +12,6 @@ class Create extends Component
 {
     use WithFileUploads;
 
-    public $department_id;
-
     public $employee_id;
 
     public $start_date;
@@ -22,12 +20,9 @@ class Create extends Component
 
     public $file_upload;
 
-    public $departments;
-
     public $employees;
 
     protected $rules = [
-        'department_id' => 'nullable',
         'employee_id' => 'nullable',
         'start_date' => 'required',
         'end_date' => 'required',
@@ -36,7 +31,6 @@ class Create extends Component
 
     public function mount()
     {
-        $this->departments = Department::all();
         $this->employees = User::all();
     }
 
@@ -46,7 +40,6 @@ class Create extends Component
         $this->validate();
 
         $appraisal = Appraisal::create([
-               'department_id' => $this->department_id,
                'employee_id' => $this->employee_id,
                'start_date' => $this->start_date,
                'end_date' => $this->end_date,

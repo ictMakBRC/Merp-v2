@@ -16,7 +16,6 @@ class Warning extends Model implements HasMedia
     protected $table = 'hr_pf_warnings';
 
     protected $fillable = [
-        'department_id',
         'employee_id',
         'reason',
         'created_by'

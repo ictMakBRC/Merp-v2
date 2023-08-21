@@ -98,7 +98,6 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Employee Name</th>
-                                        <th>Department</th>
                                         <th>Assignee</th>
                                         <th>Created at</th>
                                         <th>Action</th>
@@ -110,7 +109,6 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $termination->name }}</td>
                                         <td>{{ $termination->employee->name ?? 'N/A' }}</td>
-                                        <td>{{ $termination->department->name ?? 'N/A' }}</td>
                                         <td>@formatDate($termination->created_at)</td>
                                         <td class="table-action d-flex">
                                             <a href="{{route('terminations.update', $termination->id)}}"

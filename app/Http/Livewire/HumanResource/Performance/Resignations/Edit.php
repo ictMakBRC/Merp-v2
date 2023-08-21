@@ -15,8 +15,6 @@ class Edit extends Component
 {
     use WithFileUploads;
 
-    public $department_id;
-
     public $employee_id;
 
     public $file_upload;
@@ -25,14 +23,11 @@ class Edit extends Component
 
     public $comment;
 
-    public $departments;
-
     public $employees;
 
     public $resignation;
 
     protected $rules = [
-        'department_id' => 'nullable',
         'employee_id' => 'nullable',
         'comment' => 'nullable',
         'hand_over_date' => 'required',
@@ -41,10 +36,8 @@ class Edit extends Component
 
     public function mount(Resignation $resignation)
     {
-        $this->departments = Department::all();
         $this->employees = User::all();
         $this->resignation = $resignation;
-        $this->department_id = $resignation->department_id;
         $this->hand_over_date = $resignation->hand_over_date;
         $this->comment = $resignation->comment;
     }

@@ -98,7 +98,6 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Employee Name</th>
-                                        <th>Department</th>
                                         <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
@@ -109,7 +108,6 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $warning->name }}</td>
                                         <td>{{ $warning->employee->name ?? 'N/A' }}</td>
-                                        <td>{{ $warning->department->name ?? 'N/A' }}</td>
                                         <td>@formatDate($warning->created_at)</td>
                                         <td class="table-action d-flex">
                                             <a href="{{route('warnings.update', $warning->id)}}"

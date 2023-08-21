@@ -15,9 +15,9 @@ class Termination extends Model implements HasMedia
     protected $table = 'hr_pf_terminations';
 
     protected $fillable = [
-        'department_id',
         'employee_id',
         'reason',
+        'letter',
         'termination_date'
     ];
 

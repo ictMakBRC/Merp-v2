@@ -12,31 +12,28 @@ class Create extends Component
 {
     use WithFileUploads;
 
-    public $department_id;
-
     public $employee_id;
 
     public $file_upload;
-
-    public $departments;
 
     public $termination_date;
 
     public $reason;
 
+    public $letter;
+
     public $employees;
 
     protected $rules = [
-        'department_id' => 'nullable',
         'employee_id' => 'nullable',
         'reason' => 'required',
+        'letter' => 'required',
         'termination_date' => 'required',
         'file_upload' => 'file|nullable',
     ];
 
     public function mount()
     {
-        $this->departments = Department::all();
         $this->employees = User::all();
     }
 
@@ -46,9 +43,9 @@ class Create extends Component
         $this->validate();
 
         $termination = Termination::create([
-                'department_id' => $this->department_id,
                 'employee_id' => $this->employee_id,
                 'termination_date' => $this->termination_date,
+                'letter' => $this->letter,
                 'reason' => $this->reason
            ]);
 

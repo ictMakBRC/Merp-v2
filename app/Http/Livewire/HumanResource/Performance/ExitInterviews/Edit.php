@@ -13,30 +13,23 @@ class Edit extends Component
 {
     use WithFileUploads;
 
-    public $department_id;
-
     public $employee_id;
 
     public $file_upload;
-
-    public $departments;
 
     public $employees;
 
     public $exitInterview;
 
     protected $rules = [
-        'department_id' => 'nullable',
         'employee_id' => 'nullable',
         'file_upload' => 'file|nullable',
     ];
 
     public function mount(ExitInterview $exitInterview)
     {
-        $this->departments = Department::all();
         $this->employees = User::all();
         $this->exitInterview = $exitInterview;
-        $this->department_id = $exitInterview->department_id;
         $this->employee_id = $exitInterview->employee_id;
     }
 

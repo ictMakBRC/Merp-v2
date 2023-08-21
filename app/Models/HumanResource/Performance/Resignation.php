@@ -15,7 +15,6 @@ class Resignation extends Model implements HasMedia
     protected $table = 'hr_pf_resignations';
 
     protected $fillable = [
-        'department_id',
         'employee_id',
         'comment',
         'hand_over_date'

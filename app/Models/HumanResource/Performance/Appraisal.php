@@ -16,7 +16,6 @@ class Appraisal extends Model implements HasMedia
     protected $table = 'hr_pf_appraisals';
 
     protected $fillable = [
-        'department_id',
         'employee_id',
         'start_date',
         'end_date'

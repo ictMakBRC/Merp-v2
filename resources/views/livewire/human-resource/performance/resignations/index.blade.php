@@ -98,7 +98,6 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Employee Name</th>
-                                        <th>Department</th>
                                         <th>Created at</th>
                                         <th>Action</th>
                                     </tr>

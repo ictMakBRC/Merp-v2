@@ -15,7 +15,6 @@ class ExitInterview extends Model implements HasMedia
     protected $table = 'hr_pf_exit_interviews';
 
     protected $fillable = [
-        'department_id',
         'employer_id'
     ];
 
