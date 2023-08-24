@@ -2,6 +2,7 @@
 
 namespace App\Models\HumanResource\EmployeeData\LeaveRequest;
 
+use App\Models\User;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -46,9 +47,12 @@ class LeaveRequest extends Model
         return $this->belongsTo(Employee::class, 'accepted_by', 'id');
     }
 
-    public function delegatedto()
+    /**
+     * Different leave delegations
+     */
+    public function delegations()
     {
-        return $this->belongsTo(Employee::class, 'delegated_to', 'id');
+        return $this->hasMany(LeaveDelegation::class);
     }
 
     public function scopeLeaveRequestCheck($query)
@@ -65,4 +69,27 @@ class LeaveRequest extends Model
             });
         }
     }
+
+    /**
+    * Search the appraisal by department
+    */
+    public static function search($search)
+    {
+        return
+         static::query();
+    }
+
+    /**
+     * Delegate the user to take on users roles
+     * @param  $delegateeId
+     */
+    public function delegateAnotherEmployee($delegateeId, $comment = '')
+    {
+        $this->delegations()->create([
+            'delegated_role_to' => $delegateeId,
+            'comment' => $comment
+        ]);
+        return $this;
+    }
+
 }

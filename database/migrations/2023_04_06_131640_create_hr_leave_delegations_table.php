@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,8 +12,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('leave_balances', function (Blueprint $table) {
+        Schema::create('hr_leave_delegations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('leave_id');
+            $table->unsignedBigInteger('delegated_role_to')->comment('User/Staff  Id');
+            $table->enum('status', [APPROVED, PENDING, DECLINED])->default(PENDING);
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }

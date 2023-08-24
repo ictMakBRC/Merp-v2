@@ -30,6 +30,8 @@ use App\Http\Livewire\HumanResource\Performance\Terminations\Edit as EditTermina
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Index as ExitInterviews;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Create as RegisterExitInterview;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Edit as EditExitInterview;
+use App\Http\Livewire\HumanResource\Leave\NewRequest as NewLeaveRequest;
+use App\Http\Livewire\HumanResource\Leave\Requests as LeaveRequests;
 
 Route::group(['prefix' => 'human-resource'], function () {
     Route::get('dashboard', HumanResourceMainDashboardComponent::class)->name('human-resource-dashboard');
@@ -45,11 +47,14 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('leaves-types', LeaveTypesComponent::class)->name('human-resource-leave-types');
 
     });
-    Route::group(['prefix' => 'employees'], function () {
 
+    Route::group(['prefix' => 'employees'], function () {
         Route::get('new-info', EmployeeDataComponent::class)->name('human-resource-capture-new-info');
         Route::get('list', EmployeesListComponent::class)->name('human-resource-employees-list');
-
+    });
+    Route::group(['prefix' => 'leave'], function () {
+        Route::get('new-request', NewLeaveRequest::class)->name('leave.new-request');
+        Route::get('requests', LeaveRequests::class)->name('leave.requests');
     });
 
     Route::group(['prefix' => 'grievances'], function () {
