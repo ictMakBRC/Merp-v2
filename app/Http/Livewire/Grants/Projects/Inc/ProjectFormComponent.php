@@ -3,10 +3,12 @@
 namespace App\Http\Livewire\Grants\Projects\Inc;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 use App\Data\Grants\ProjectData;
+use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
 use App\Services\Grants\ProjectService;
+use App\Models\HumanResource\Settings\Designation;
+use App\Models\HumanResource\EmployeeData\Employee;
 
 class ProjectFormComponent extends Component
 {
@@ -134,6 +136,7 @@ class ProjectFormComponent extends Component
 
     public function render()
     {
-        return view('livewire.grants.projects.inc.project-form-component');
+        $data['employees'] = Employee::where('is_active',true)->get();
+        return view('livewire.grants.projects.inc.project-form-component',$data);
     }
 }
