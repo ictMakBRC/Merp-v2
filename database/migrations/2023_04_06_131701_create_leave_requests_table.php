@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -16,7 +15,7 @@ return new class extends Migration
         Schema::create('leave_requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('leave_id')->nullable()->constrained('leaves', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('leave_id')->nullable()->constrained('hr_leave_types', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->date('start_date');
             $table->date('end_date');
             $table->integer('length')->nullable();
@@ -31,7 +30,7 @@ return new class extends Migration
             $table->foreignId('approved_by')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('accepted_by')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
-    
+
             $table->timestamps();
         });
     }

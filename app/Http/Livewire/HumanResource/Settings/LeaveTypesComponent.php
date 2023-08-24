@@ -4,10 +4,10 @@ namespace App\Http\Livewire\HumanResource\Settings;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\Leave;
+use App\Models\HumanResource\Settings\LeaveType;
 
-class LeavesComponent extends Component
-{ 
+class LeaveTypesComponent extends Component
+{
     use WithPagination;
 
     //Filters
@@ -37,8 +37,12 @@ class LeavesComponent extends Component
 
     public $edit_id;
 
-    public  $notice_days, $details, $payment_type;
-    public $given_to, $is_payable, $carriable;
+    public $notice_days;
+    public $details;
+    public $payment_type;
+    public $given_to;
+    public $is_payable;
+    public $carriable;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -77,7 +81,7 @@ class LeavesComponent extends Component
     public function storeLeave()
     {
         $this->validate([
-            'name' => 'required|string|unique:leaves',
+            'name' => 'required|string|unique:hr_leave_types',
             'is_active' => 'required|numeric',
             'duration' => 'nullable|numeric',
             'is_payable' => 'required|string',
@@ -89,7 +93,7 @@ class LeavesComponent extends Component
 
         ]);
 
-        $leave = new Leave();
+        $leave = new LeaveType();
         $leave->name = $this->name;
         $leave->is_active = $this->is_active;
         $leave->duration = $this->duration;
@@ -104,8 +108,8 @@ class LeavesComponent extends Component
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['is_payable' => 'success',  'message' => 'Leave created successfully!']);
     }
-    
-    public function editData(Leave $leave)
+
+    public function editData(LeaveType $leave)
     {
         $this->edit_id = $leave->id;
         $this->name = $leave->name;
@@ -136,7 +140,7 @@ class LeavesComponent extends Component
     public function updateLeave()
     {
         $this->validate([
-            'name' => 'required|unique:Leaves,name,'.$this->edit_id.'',
+            'name' => 'required|unique:hr_leave_types,name,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
             'duration' => 'nullable|numeric',
             'is_payable' => 'required|string',
@@ -147,7 +151,7 @@ class LeavesComponent extends Component
             'payment_type' => 'required|string',
         ]);
 
-        $leave = Leave::find($this->edit_id);
+        $leave = LeaveType::find($this->edit_id);
         $leave->name = $this->name;
         $leave->is_active = $this->is_active;
         $leave->duration = $this->duration;
@@ -186,7 +190,7 @@ class LeavesComponent extends Component
 
     public function filterLeaves()
     {
-        $leaves = Leave::search($this->search)
+        $leaves = LeaveType::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -203,6 +207,6 @@ class LeavesComponent extends Component
         $data['leaves'] = $this->filterLeaves()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.settings.leaves-component',$data)->layout('layouts.app');
+        return view('livewire.human-resource.settings.leaves-component', $data)->layout('layouts.app');
     }
 }

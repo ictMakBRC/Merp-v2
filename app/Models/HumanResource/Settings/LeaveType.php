@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Leave extends Model
+class LeaveType extends Model
 {
     use HasFactory,LogsActivity;
+
+    protected $table = 'hr_leave_types';
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -29,9 +31,9 @@ class Leave extends Model
     public static function search($search)
     {
         return empty($search) ? static::query()
-            : static::query()           
+            : static::query()
                 ->where('name', 'like', '%'.$search.'%')
-                ->orWhere('payment_type', 'like', '%'.$search.'%');               
+                ->orWhere('payment_type', 'like', '%'.$search.'%');
     }
 
     public static function boot()

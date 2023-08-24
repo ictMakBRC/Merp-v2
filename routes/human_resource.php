@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\HumanResource\Settings\LeavesComponent;
+use App\Http\Livewire\HumanResource\Settings\LeaveTypesComponent;
 use App\Http\Livewire\HumanResource\Settings\OfficesComponent;
 use App\Http\Livewire\HumanResource\Settings\HolidaysComponent;
 use App\Http\Livewire\HumanResource\Settings\StationsComponent;
@@ -42,7 +42,7 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('designations', DesignationsComponent::class)->name('human-resource-designations');
         Route::get('holidays', HolidaysComponent::class)->name('human-resource-holidays');
         Route::get('offices', OfficesComponent::class)->name('human-resource-offices');
-        Route::get('leaves', LeavesComponent::class)->name('human-resource-leaves');
+        Route::get('leaves-types', LeaveTypesComponent::class)->name('human-resource-leave-types');
 
     });
     Route::group(['prefix' => 'employees'], function () {
