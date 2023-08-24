@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\HumanResource\EmployeeData\Employee;
 use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
@@ -73,7 +75,18 @@ class User extends Authenticatable
             });
         }
     }
+    /**
+     * User as an employee
+     */
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'user_id');
+    }
 
+    /**
+     * Search query
+     * @param String $search
+     */
     public static function search($search)
     {
         return empty($search) ? static::query()

@@ -19,7 +19,7 @@
                                             style="width: 100%;">
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" wire:model="leave_type_id">
-                                                    <option value="" disabled>Select ...</option>
+                                                    <option value="">Select ...</option>
                                                     @foreach ($leaveTypes as $leaveType)
                                                     <option value="{{$leaveType->id}}" selected="">
                                                         {{$leaveType->name}}</option>
@@ -38,7 +38,7 @@
                                             style="width: 100%;">
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" wire:model="employee_id">
-                                                    <option value="" disabled>Select ...</option>
+                                                    <option value="">Select ...</option>
                                                     @foreach ($employees as $employee)
                                                     <option value="{{$employee->id}}" selected="">
                                                         {{$employee->name}}</option>
@@ -86,7 +86,7 @@
                                             style="width: 100%;">
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" wire:model="delegatee_id">
-                                                    <option value="" disabled>Select ...</option>
+                                                    <option value="">Select ...</option>
                                                     @foreach ($employees as $employee)
                                                     <option value="{{$employee->id}}" selected="">
                                                         {{$employee->name}}</option>
@@ -100,12 +100,14 @@
                                     </div>
 
                                     <div class="mb-3 col-md-10">
-                                        <label for="reason" class="form-label">Any comment to the delegatee?</label>
-                                        <textarea type="text" id="reason" rows="4" class="form-control"
-                                            wire:model.defer="reason" placeholder="eg I will be offline for a bit.">
+                                        <label for="delegatee_comment" class="form-label">Any comment to the
+                                            delegatee?</label>
+                                        <textarea type="text" id="delegatee_comment" rows="4" class="form-control"
+                                            wire:model.defer="delegatee_comment"
+                                            placeholder="eg I will be offline for a bit.">
                                         </textarea>
 
-                                        @error('reason')
+                                        @error('delegatee_comment')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>

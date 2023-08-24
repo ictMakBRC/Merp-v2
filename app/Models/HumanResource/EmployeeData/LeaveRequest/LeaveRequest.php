@@ -13,6 +13,8 @@ class LeaveRequest extends Model
 {
     use HasFactory,LogsActivity;
 
+    protected $table = 'hr_leave_requests';
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

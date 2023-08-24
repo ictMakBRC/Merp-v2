@@ -3,6 +3,7 @@
 namespace App\Models\HumanResource\EmployeeData;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Services\GeneratorService;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
@@ -12,11 +13,15 @@ use App\Models\HumanResource\Settings\Station;
 use App\Models\HumanResource\Settings\Department;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\HumanResource\Settings\Designation;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Database\Factories\HumanResource\EmployeeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employee extends Model
 {
     use HasFactory,LogsActivity;
+
+    protected $guarded = [];
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -29,8 +34,6 @@ class Employee extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-
-    protected $guarded = [];
 
     public function designation()
     {
@@ -46,10 +49,10 @@ class Employee extends Model
     {
         return $this->belongsTo(Station::class, 'station_id', 'id');
     }
-    
+
     public function projects()
     {
-        return $this->belongsToMany(Project::class,'employee_project','employee_id','project_id')
+        return $this->belongsToMany(Project::class, 'employee_project', 'employee_id', 'project_id')
         ->using(EmployeeProject::class) // Use the pivot model
         ->withPivot(['designation_id', 'contract_summary','start_date','end_date','fte','gross_salary','contract_file_path','status']) // Include the additional attributes
         ->withTimestamps();
@@ -58,13 +61,13 @@ class Employee extends Model
     //principal investigator
     public function projectPi()
     {
-        return $this->hasMany(Project::class,'pi','id');
+        return $this->hasMany(Project::class, 'pi', 'id');
     }
 
     //co principal investigator
     public function projectCoPi()
     {
-        return $this->hasMany(Project::class,'co_pi','id');
+        return $this->hasMany(Project::class, 'co_pi', 'id');
     }
 
     protected function fullName(): Attribute
@@ -78,7 +81,6 @@ class Employee extends Model
     {
         return Attribute::make(
             get: fn () => Carbon::createFromFormat('Y-m-d', $this->birth_date)->diffInYears(Carbon::today()),
-
         );
     }
 
@@ -101,8 +103,24 @@ class Employee extends Model
     public static function search($search)
     {
         return empty($search) ? static::query()
-            : static::query()           
+            : static::query()
                 ->where('surname', 'like', '%'.$search.'%')
-                ->orWhere('first_name', 'like', '%'.$search.'%');               
+                ->orWhere('first_name', 'like', '%'.$search.'%');
+    }
+
+    /**
+    * User as an employee
+    */
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
+
+    /**
+ * Create a new factory instance for the model.
+ */
+    protected static function newFactory(): Factory
+    {
+        return EmployeeFactory::new();
     }
 }

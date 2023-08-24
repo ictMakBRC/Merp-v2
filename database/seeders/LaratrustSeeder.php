@@ -51,11 +51,11 @@ class LaratrustSeeder extends Seeder
                             'target_module' => $module,
                             'operation' => $operation,
                         ])->id;
-    
+
                         $this->command->info('Creating Permission -->'.$permission);
                     }
                 }
-              
+
             }
 
             // Attach all permissions to the role
@@ -74,7 +74,14 @@ class LaratrustSeeder extends Seeder
                     'is_admin' => true,
                     'remember_token' => Str::random(10),
                 ]);
+
+                //attach the role
                 $user->attachRole($role);
+
+                //register the employee
+                $user->employee()->create([
+
+                ]);
             }
         }
 
@@ -92,20 +99,20 @@ class LaratrustSeeder extends Seeder
                 // Create a new role
                 foreach ($user_group_roles as $user_group_role => $perms) {
 
-                $role = \App\Models\Role::firstOrCreate([
-                    'name' => $user_group_role,
-                    'display_name' => ucwords(str_replace('_', ' ', $user_group_role)),
-                    'description' => ucwords(str_replace('_', ' ', $user_group_role)),
-                    'user_group' => $user_group,
-                ]);
+                    $role = \App\Models\Role::firstOrCreate([
+                        'name' => $user_group_role,
+                        'display_name' => ucwords(str_replace('_', ' ', $user_group_role)),
+                        'description' => ucwords(str_replace('_', ' ', $user_group_role)),
+                        'user_group' => $user_group,
+                    ]);
 
-                $this->command->info('Creating Default Role '.strtoupper($user_group_role));
-                $default_role_permissions = \App\Models\Permission::whereIn('name', $perms)->get()->pluck('id')->toArray();
+                    $this->command->info('Creating Default Role '.strtoupper($user_group_role));
+                    $default_role_permissions = \App\Models\Permission::whereIn('name', $perms)->get()->pluck('id')->toArray();
 
-                $role->permissions()->sync($default_role_permissions);
-                $this->command->info('Assigned defaulted permissions to '.strtoupper($user_group_role));
-            }
-   
+                    $role->permissions()->sync($default_role_permissions);
+                    $this->command->info('Assigned defaulted permissions to '.strtoupper($user_group_role));
+                }
+
             }
         }
     }
