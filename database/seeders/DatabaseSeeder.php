@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
 
         if (env('LARATRUST_SEED', false)) {
             $this->call(LaratrustSeeder::class);
-        }
 
+        }
         $this->withProgressBar(20, fn () => Employee::factory()->count(20)
         ->sequence(
             fn ($sequence) => [ 'designation_id' => Designation::factory(), 'station_id' => Station::factory(),'department_id' => Department::factory()]

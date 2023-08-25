@@ -78,10 +78,6 @@ class LaratrustSeeder extends Seeder
                 //attach the role
                 $user->attachRole($role);
 
-                //register the employee
-                $user->employee()->create([
-
-                ]);
             }
         }
 
