@@ -41,7 +41,7 @@
                                                     <option value="">Select ...</option>
                                                     @foreach ($employees as $employee)
                                                     <option value="{{$employee->id}}" selected="">
-                                                        {{$employee->name}}</option>
+                                                        {{$employee->full_name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -89,7 +89,7 @@
                                                     <option value="">Select ...</option>
                                                     @foreach ($employees as $employee)
                                                     <option value="{{$employee->id}}" selected="">
-                                                        {{$employee->name}}</option>
+                                                        {{$employee->full_name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

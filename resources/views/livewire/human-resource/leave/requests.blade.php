@@ -100,8 +100,12 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
+                                        <th>Leave Type</th>
                                         <th>Employee Name</th>
-                                        <th>Created at</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Length</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -109,11 +113,23 @@
                                     @forelse ($leaves as $key => $leave)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $leave->employee->name ?? 'N/A' }}</td>
-                                        <td>@formatDate($leave->created_at)</td>
+                                        <td>{{ $leave->leaveType->name ?? 'N/A' }}</td>
+                                        <td>{{ $leave->employee->full_name ?? 'N/A' }}</td>
+                                        <td>@formatDate($leave->start_date)</td>
+                                        <td>@formatDate($leave->end_date)</td>
+                                        <td>{{\Carbon\Carbon::parse($leave->end_date)->diffInDays(\Carbon\Carbon::parse($leave->start_date))}}days
+                                        </td>
+                                        <td>
+                                            @if ($leave->status == DECLINED)
+                                            <span class="badge bg-danger">Declined</span>
+                                            @elseif ($leave->status == PENDING)
+                                            <span class="badge bg-warning">Pending</span>
+                                            @else
+                                            <span class="badge bg-primary">{{APPROVED}}</span>
+                                            @endif
+                                        </td>
                                         <td class="table-action d-flex">
-                                            <a href="{{route('leaves.update', $leave->id)}}"
-                                                class="action-ico btn-sm text-primary mx-1">
+                                            <a href="" class="action-ico btn-sm text-primary mx-1">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <div wire:click="deleteData({{ $leave->id }})" data-bs-toggle="modal"

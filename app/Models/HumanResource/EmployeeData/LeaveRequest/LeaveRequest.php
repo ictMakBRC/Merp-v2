@@ -7,6 +7,8 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\HumanResource\Settings\LeaveType;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LeaveRequest extends Model
@@ -34,9 +36,9 @@ class LeaveRequest extends Model
         return $this->belongsTo(Employee::class, 'employee_id', 'id');
     }
 
-    public function leave()
+    public function leaveType()
     {
-        return $this->belongsTo(Leave::class, 'leave_id', 'id');
+        return $this->belongsTo(LeaveType::class, 'leave_type_id', 'id');
     }
 
     public function approver()
@@ -54,7 +56,7 @@ class LeaveRequest extends Model
      */
     public function delegations()
     {
-        return $this->hasMany(LeaveDelegation::class);
+        return $this->hasMany(LeaveDelegation::class, 'leave_request_id');
     }
 
     public function scopeLeaveRequestCheck($query)

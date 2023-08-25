@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('hr_leave_delegations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('leave_id');
+            $table->unsignedBigInteger('leave_request_id');
             $table->unsignedBigInteger('delegated_role_to')->comment('User/Staff  Id');
             $table->enum('status', [APPROVED, PENDING, DECLINED])->default(PENDING);
             $table->string('comment')->nullable();
