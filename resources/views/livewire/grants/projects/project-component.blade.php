@@ -23,7 +23,7 @@
                 </div>
                 <div class="card-body">
                     <livewire:grants.projects.inc.project-form-component />
-
+                    <hr>
                     @include('livewire.grants.projects.inc.project-list-table')
 
                 </div> <!-- end card body-->

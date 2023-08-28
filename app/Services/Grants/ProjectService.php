@@ -2,10 +2,12 @@
 
 namespace App\Services\Grants;
 
-use App\Models\Grants\Project\Project;
 use App\Data\Grants\ProjectData;
+use App\Models\Grants\Project\Project;
 use App\Models\Grants\Project\ProjectDocument;
 use App\Models\HumanResource\EmployeeData\Employee;
+
+
 
 class ProjectService
 {
@@ -75,7 +77,7 @@ class ProjectService
     }
 
     //ATTACH EMPLOYEE
-    public function attachEmployee(ProjectData $projectDocumentDTO):void
+    public function attachEmployee(ProjectData $projectDocumentDTO):Employee
     {
         $employee = Employee::findOrFail($projectDocumentDTO->employee_id);
         
@@ -90,7 +92,7 @@ class ProjectService
             'status' => $projectDocumentDTO->status,
         ]);
 
-        // return $projectEmployee;
+        return $employee;
     }
   
 }

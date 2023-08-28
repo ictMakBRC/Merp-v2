@@ -24,6 +24,8 @@ class FormalDocument extends Model
         // Chain fluent methods for configuration options
     }
 
+    protected $guarded = [];
+
     public function documentable()
     {
         return $this->morphTo();

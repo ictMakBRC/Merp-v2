@@ -62,9 +62,11 @@ class ProjectFormComponent extends Component
 
     public function storeProject()
     {
+       
         $projectDTO = new ProjectData();
+       
         $this->validate($projectDTO->rules());
-
+        // dd('YES');
         DB::transaction(function (){
 
             $projectDTO = ProjectData::from([
@@ -73,7 +75,7 @@ class ProjectFormComponent extends Component
                 'associated_institution' => $this->associated_institution,
                 'project_code' => $this->project_code,
                 'name' => $this->name,
-                'grant_id' => $this->grant_id??null,
+                // 'grant_id' => $this->grant_id??null,
                 'funding_source' => $this->funding_source,
                 'funding_amount' => $this->funding_amount,
                 'currency' => $this->currency,
@@ -85,13 +87,15 @@ class ProjectFormComponent extends Component
                 'progress_status' => $this->progress_status,
                 ]
             );
-  
-            $projectService = new ProjectService();
 
+            $projectService = new ProjectService();
             $project = $projectService->createProject($projectDTO);
+
+            $this->emit('projectCreated', [
+                'projectId' => $project->id,
+            ]);
    
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Project/study details created successfully']);
-
             $this->reset($projectDTO->resetInputs());
 
         });

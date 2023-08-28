@@ -2,16 +2,17 @@
 
 namespace App\Models\Procurement\Settings;
 
+use App\Traits\DocumentableTrait;
+use App\Services\GeneratorService;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Procurement\Settings\ProviderDocument;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Provider extends Model
 {
-    use HasFactory , LogsActivity;
+    use HasFactory , LogsActivity, DocumentableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -38,12 +39,18 @@ class Provider extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
+                $model->provider_code = GeneratorService::providerNo();
             });
         }
     }
 
-    public function documentss()
+    public static function search($search)
     {
-        return $this->hasMany(ProviderDocument::class,'provider_id','id');
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('name', 'like', '%'.$search.'%')
+            ->orWhere('phone_number', 'like', '%'.$search.'%')
+            ->orWhere('provider_type', 'like', '%'.$search.'%')
+            ->orWhere('country', 'like', '%'.$search.'%');
     }
 }

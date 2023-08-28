@@ -4,7 +4,7 @@ namespace App\Data\Procurement\Settings;
 
 use Spatie\LaravelData\Data;
 
-class ProcurementProviderData extends Data
+class ProviderData extends Data
 {
   public ?string $name;
   public ?string $provider_type;
@@ -27,8 +27,6 @@ class ProcurementProviderData extends Data
   public ?string $tin;
   public ?float $tax_withholding_rate;
   public ?string $preferred_currency;
-  // public ?float $delivery_performance;
-  // public ?float $quality_ratings;
   public ?string $notes;
   public ?bool $is_active;
   
@@ -57,8 +55,8 @@ class ProcurementProviderData extends Data
         'contact_person_phone' => 'required|string',
         'contact_person_email' => 'required|email:filter|max:255|unique:providers',
         'website' => 'nullable|url',
-        'country' => 'nullable|string',
-        'payment_terms' => 'nullable|string',
+        'country' => 'required|string',
+        'payment_terms' => 'required|string',
         'payment_method' => 'required|string',
         'bank_name' => 'required|string',
         'branch' => 'required|string',
@@ -67,8 +65,6 @@ class ProcurementProviderData extends Data
         'tin' => 'required|string',
         'tax_withholding_rate' => 'nullable|numeric|min:0|max:100',
         'preferred_currency' => 'required|string',
-        // 'delivery_performance' => 'nullable|numeric|min:0|max:5',
-        // 'quality_ratings' => 'nullable|numeric|min:0|max:5',
         'notes' => 'nullable|string',
         'is_active' => 'boolean',
       ];

@@ -51,7 +51,7 @@ class ProjectData extends Data
       'associated_institution' => 'required|integer',
       'project_code' => 'required|string|unique:projects',
       'name' => 'required|string|unique:projects',
-      'grant_id' => 'nullable|integer',
+      // 'grant_id' => 'nullable|integer',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency' => 'required|string',
@@ -71,41 +71,22 @@ class ProjectData extends Data
       'project_id' => 'required|integer',
       'employee_id' => 'required|integer',
       'designation_id' => 'required|integer',
-      'contract_summary' => 'required|numeric',
-      'start_date' => 'required|date',
-      'end_date' => 'required|date|after:start_date',
+      'contract_summary' => 'required|string',
+      'contract_start_date' => 'required|date',
+      'contract_end_date' => 'required|date|after:contract_start_date',
       'fte' => 'nullable|numeric',
       'contract_file' => 'nullable|mimes:pdf|max:10000',
       'status' => 'required|string',
     ];
   }
 
-  // Validation rules for the properties
-  public function projectDocumentRules(): array
-  {
-    return [
-      'project_id' => 'required|integer',
-      'document_category' => 'required|string',
-      'expires' => 'required|boolean',
-      'document_name' => 'required|string',
-      'document' => 'required|string',
-      'expiry_date' => 'required_if:expires,true|date|after:today',
-      'description' => 'nullable|string',
-    ];
-  }
+
 
   // Validation rules for the properties
   public function resetInputs(): array
   {
     $allKeys = array_keys($this->rules());
     return array_values($allKeys);
-  }
-
-  // Validation rules for the properties
-  public function resetProjectDocumentInputs(): array
-  {
-    $allKeys = array_keys($this->projectDocumentRules());
-    return array_values(array_diff($allKeys,['project_id']));
   }
 
   // Validation rules for the properties

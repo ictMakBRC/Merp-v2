@@ -11,16 +11,13 @@ class ProjectComponent extends Component
     use WithPagination;
 
     //Filters
-
+    public $project_id;
+    public $projectIds;
     public $user_category;
 
     public $from_date;
 
     public $to_date;
-
-    public $user_status;
-
-    public $userIds;
 
     public $perPage = 50;
 
@@ -36,6 +33,15 @@ class ProjectComponent extends Component
 
     public $filter = false;
 
+    protected $listeners = [
+        'projectCreated',
+    ];
+
+    public function projectCreated($details)
+    {
+        $this->project_id = $details['projectId'];
+    }
+
     public function updatedCreateNew()
     {
         // $this->reset();
@@ -48,9 +54,25 @@ class ProjectComponent extends Component
     }
 
     
+    public function filterProjects()
+    {
+        $projects = Project::search($this->search)->with('principalInvestigator')
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            }, function ($query) {
+                return $query;
+            });
+
+        $this->projectIds = $projects->pluck('id')->toArray();
+
+        return $projects;
+    }
+
     public function render()
     {
-        $data['projects'] = Project::all();
+        $data['projects'] = $this->filterProjects()
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
         return view('livewire.grants.projects.project-component', $data);
     }
 }

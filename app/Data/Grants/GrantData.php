@@ -37,7 +37,7 @@ class GrantData extends Data
       'grant_type' => 'required|string',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
-      'currency' => 'nullable|string',
+      'currency' => 'required|string',
       'start_date' => 'nullable|date',
       'end_date' => 'nullable|date|after:start_date',
       'proposal_submission_date' => 'required|date',
@@ -47,28 +47,11 @@ class GrantData extends Data
     ];
   }
 
-  // Validation rules for the properties
-  public function grantProfileDocumentRules(): array
-  {
-    return [
-      'grant_id' => 'required|integer',
-      'document_name' => 'required|integer',
-      'document' => 'required|string',
-      'description' => 'required|string',
-    ];
-  }
 
   // Validation rules for the properties
   public function resetInputs(): array
   {
     $allKeys = array_keys($this->rules());
     return array_values($allKeys);
-  }
-
-  // Validation rules for the properties
-  public function resetGrantDocumentInputs(): array
-  {
-    $allKeys = array_keys($this->grantProfileDocumentRules());
-    return array_values(array_diff($allKeys,['grant_id']));
   }
 }

@@ -27,13 +27,12 @@ class ProjectDocumentsComponent extends Component
     public $loadingInfo='';
 
     protected $listeners = [
-        'switchProject' => 'setProjectId',
+        'projectCreated' => 'setProjectId',
     ];
 
     public function setProjectId($details)
     {
         $this->project_id = $details['projectId'];
-        $this->loadingInfo = $details['info'];
     }
 
     public function storeDocument()
@@ -51,13 +50,29 @@ class ProjectDocumentsComponent extends Component
         $this->validate($formalDocumentDTO->rules());
 
         DB::transaction(function (){
+            $project = Project::findOrFail($this->project_id);
 
+            if ($this->document != null) {
+                $this->validate([
+                    'document' => ['mimes:pdf', 'max:10000'],
+                ]);
+    
+                $documentName = date('YmdHis').$project->project_code.' '.$this->document_category.'.'.$this->document->extension();
+                $this->document_path = $this->document->storeAs('project_documents/', $documentName);
+            } else {
+                $this->document_path = null;
+            }
             $formalDocumentDTO = FormalDocumentData::from([
-                
+                'document_category'=>$this->document_category,
+                'expires'=>$this->expires,
+                'expiry_date'=>$this->expiry_date,
+                'document_name'=>$this->document_name,
+                'document_path'=>$this->document_path,
+                'description'=>$this->description,
+
                 ]
             );
   
-            $project = Project::findOrFail($this->project_id);
             $formalDocumentService = new FormalDocumentService();
             $document = $formalDocumentService->createFormalDocument($project,$formalDocumentDTO);
    

@@ -3,12 +3,11 @@
 namespace App\Services\Procurement\Settings;
 
 use App\Models\Procurement\Settings\Provider;
-use App\Models\Procurement\Settings\ProviderDocument;
-use App\Data\Procurement\Settings\ProcurementProviderData;
+use App\Data\Procurement\Settings\ProviderData;
 
-class ProcurementProviderService
+class ProviderService
 {
-    public function createProvider(ProcurementProviderData $procurementProviderDTO):Provider
+    public function createProvider(ProviderData $procurementProviderDTO):Provider
     {
         $procurementProvider = new Provider();
         $this->fillProviderFromDTO($procurementProvider, $procurementProviderDTO);
@@ -17,7 +16,7 @@ class ProcurementProviderService
         return $procurementProvider;
     }
 
-    public function updateProvider(Provider $procurementProvider, ProcurementProviderData $procurementProviderDTO):Provider
+    public function updateProvider(Provider $procurementProvider, ProviderData $procurementProviderDTO):Provider
     {
         $this->fillProviderFromDTO($procurementProvider, $procurementProviderDTO);
         $procurementProvider->save();
@@ -25,7 +24,7 @@ class ProcurementProviderService
         return $procurementProvider;
     }
 
-    private function fillProviderFromDTO(Provider $procurementProvider, ProcurementProviderData $procurementProviderDTO)
+    private function fillProviderFromDTO(Provider $procurementProvider, ProviderData $procurementProviderDTO)
     {
         $procurementProvider->name = $procurementProviderDTO-> name;
         $procurementProvider->provider_type = $procurementProviderDTO->provider_type;
@@ -48,38 +47,9 @@ class ProcurementProviderService
         $procurementProvider->tin = $procurementProviderDTO->tin;
         $procurementProvider->tax_withholding_rate = $procurementProviderDTO->tax_withholding_rate;
         $procurementProvider->preferred_currency = $procurementProviderDTO->preferred_currency;
-        // $procurementProvider->delivery_performance = $procurementProviderDTO->delivery_performance;
-        // $procurementProvider->quality_ratings = $procurementProviderDTO->quality_ratings;
         $procurementProvider->notes = $procurementProviderDTO->notes;
         $procurementProvider->is_active = $procurementProviderDTO->is_active;    
     }
 
-   //PROVIDER DOCUMENTS
-   public function createProviderDocument(ProcurementProviderData $providerDocumentDTO):ProviderDocument
-   {
-       $providerDocument = new ProviderDocument();
-       $this->fillProviderDocumentFromDTO($providerDocument, $providerDocumentDTO);
-       $providerDocument->save();
 
-       return $providerDocument;
-   }
-
-   public function updateProviderDocument(ProviderDocument $providerDocument, ProcurementProviderData $providerDocumentDTO):ProviderDocument
-   {
-       $this->fillProviderDocumentFromDTO($providerDocument, $providerDocumentDTO);
-       $providerDocument->save();
-
-       return $providerDocument;
-   }
-
-   private function fillProviderDocumentFromDTO(ProviderDocument $providerDocument, ProcurementProviderData $providerDocumentDTO)
-   {
-        $providerDocument->provider_id = $providerDocumentDTO->provider_id;
-        $providerDocument->document_category = $providerDocumentDTO->document_category;
-        $providerDocument->expires = $providerDocumentDTO->expires;
-        $providerDocument->expiry_date = $providerDocumentDTO->expiry_date;
-        $providerDocument->document_name = $providerDocumentDTO->document_name;
-        $providerDocument->document_path = $providerDocumentDTO->document_path;
-        $providerDocument->description = $providerDocumentDTO->description;
-   }
 }

@@ -8,6 +8,8 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\HumanResource\Settings\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
@@ -34,14 +36,20 @@ class Project extends Model
         ->withTimestamps();
     }
 
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class,'department_project','project_id','department_id')
+        ->withTimestamps();
+    }
+
     //principal investigator
-    public function pi()
+    public function principalInvestigator()
     {
         return $this->belongsTo(Employee::class,'pi','id');
     }
 
     //co principal investigator
-    public function coPi()
+    public function coInvestigator()
     {
         return $this->belongsTo(Employee::class,'co_pi','id');
     }
@@ -61,8 +69,13 @@ class Project extends Model
         }
     }
 
-    // public function documents()
-    // {
-    //     return $this->hasMany(ProjectDocument::class,'project_id','id');
-    // }
+    
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('project_code', 'like', '%'.$search.'%')
+            ->orWhere('project_category', 'like', '%'.$search.'%')
+            ->orWhere('project_type', 'like', '%'.$search.'%');
+    }
 }

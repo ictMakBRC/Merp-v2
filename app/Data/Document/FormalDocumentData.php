@@ -22,8 +22,8 @@ class FormalDocumentData extends Data
         'document_category' => 'required|string',
         'expires' => 'required|boolean',
         'document_name' => 'required|string',
-        'document' => 'required|string',
-        'expiry_date' => 'required_if:expires,true|date|after:today',
+        'document' => 'required|mimes:pdf|max:10000',
+        'expiry_date' => 'nullable|required_if:expires,true|date|after:today',
         'description' => 'nullable|string',
     ];
   }

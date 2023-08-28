@@ -28,14 +28,14 @@ class Grant extends Model
     }
 
     //principal investigator
-    public function pi()
+    public function principalInvestigator()
     {
         return $this->belongsTo(Employee::class,'pi','id');
     }
 
     public function project()
     {
-        return $this->hasOne(Project::class,'grant_profile_id','id');
+        return $this->hasOne(Project::class,'grant_id','id');
     }
     
     public static function boot()
@@ -46,6 +46,15 @@ class Grant extends Model
                 $model->created_by = auth()->id();
             });
         }
+    }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('grant_code', 'like', '%'.$search.'%')
+            ->orWhere('grant_name', 'like', '%'.$search.'%')
+            ->orWhere('grant_type', 'like', '%'.$search.'%');
     }
 
 }
