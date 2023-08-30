@@ -129,7 +129,8 @@
                                             @endif
                                         </td>
                                         <td class="table-action d-flex">
-                                            <a href="" class="action-ico btn-sm text-primary mx-1">
+                                            <a href="{{route('leaves.edit-request', $leave->id)}}"
+                                                class="action-ico btn-sm text-primary mx-1">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <div wire:click="deleteData({{ $leave->id }})" data-bs-toggle="modal"
