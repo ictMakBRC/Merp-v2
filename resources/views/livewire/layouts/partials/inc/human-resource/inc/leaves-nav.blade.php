@@ -10,7 +10,7 @@
             </li>
             <!--end nav-item-->
             <li class="nav-item">
-                <a href="analytics-reports.html" class="nav-link ">My Delegations</a>
+                <a href="{{route('leave.requests.delegations')}}" class="nav-link ">My Delegations</a>
             </li>
 
             <li class="nav-item">

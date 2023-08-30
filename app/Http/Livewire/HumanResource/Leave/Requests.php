@@ -79,6 +79,7 @@ class Requests extends Component
     public function filterleaves()
     {
         $leaves = LeaveRequest::search($this->search)
+            ->where('employee_id', auth()->user()->employee?->id)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

@@ -2,6 +2,7 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
+use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveDelegation;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Services\GeneratorService;
@@ -114,6 +115,14 @@ class Employee extends Model
     public function user()
     {
         return $this->hasOne(User::class);
+    }
+
+    /**
+    * Employee delegations
+    */
+    public function delegations()
+    {
+        return $this->hasMany(LeaveDelegation::class, 'delegated_role_to');
     }
 
     /**

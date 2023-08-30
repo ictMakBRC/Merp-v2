@@ -110,6 +110,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Employee Name</th>
+                                    <th>Employee Email</th>
                                     <th>Status</th>
                                     <th>Comment</th>
                                     <th>Action</th>
@@ -120,6 +121,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $delegation->employee->full_name ?? 'N/A' }}</td>
+                                    <td>{{ $delegation->employee->user->email ?? 'N/A' }}</td>
                                     <td>
                                         @if ( $delegation->status == DECLINED)
                                         <span class="badge bg-danger">Declined</span>

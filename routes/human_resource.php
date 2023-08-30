@@ -32,6 +32,7 @@ use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Create as Registe
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Edit as EditExitInterview;
 use App\Http\Livewire\HumanResource\Leave\NewRequest as NewLeaveRequest;
 use App\Http\Livewire\HumanResource\Leave\EditRequest as EditLeaveRequest;
+use App\Http\Livewire\HumanResource\Leave\LeaveDelegations;
 use App\Http\Livewire\HumanResource\Leave\Requests as LeaveRequests;
 
 Route::group(['prefix' => 'human-resource'], function () {
@@ -57,6 +58,7 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('new-request/new', NewLeaveRequest::class)->name('leave.new-request');
         Route::get('requests/{leaveRequest}/update', EditLeaveRequest::class)->name('leaves.edit-request');
         Route::get('requests', LeaveRequests::class)->name('leave.requests');
+        Route::get('requests/delegations', LeaveDelegations::class)->name('leave.requests.delegations');
     });
 
     Route::group(['prefix' => 'grievances'], function () {
