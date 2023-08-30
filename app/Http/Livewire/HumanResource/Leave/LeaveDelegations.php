@@ -44,7 +44,7 @@ class LeaveDelegations extends Component
      */
     public function declineDelegation()
     {
-        $this->selectedDelegation->accept($this->delegatee_comment);
+        $this->selectedDelegation->decline($this->delegatee_comment);
 
         $this->dispatchBrowserEvent('close-modal');
         $this->reset(['delegatee_comment']);
