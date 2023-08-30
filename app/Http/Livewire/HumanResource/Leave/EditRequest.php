@@ -113,9 +113,10 @@ class EditRequest extends Component
     public function saveDelegate()
     {
         $this->validate([
-            'delegatee_id' => 'required',
+            'delegatee_id' => "required|unique:hr_leave_delegations,delegated_role_to,".$this->currentDelegation->id.'',
             'delegatee_comment' => 'nullable'
-        ]);
+        ], ['delegatee_id.unique' => 'This employee has already been delegated']);
+
         if($this->createNew == true) {
             //delegate another user to perform duties on your behalf
             $this->leaveRequest->delegateAnotherEmployee($this->delegatee_id, $this->delegatee_comment);
