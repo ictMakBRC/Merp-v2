@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Finance\Settings;
+namespace App\Models\Finance\Invoice;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FinancialYear extends Model
+class FmsInvoice extends Model
 {
     use HasFactory;
 }

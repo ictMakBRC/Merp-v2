@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Finance\Accounting;
+namespace App\Models\Finance\Budget;
 
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
@@ -17,19 +17,21 @@ class FmsBudgetLine extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Ledger Accounts')
+            ->useLogName('Budget Lines')
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
     protected $fillable = [
-        'account_id',
-        'department_id',
-        'project_id',
-        'opening_balance',
-        'current_balance',
-        'as_of',
+        'name',
+        'type',
+        'fms_budget_id',
+        'chat_of_account',
+        'allocated_amount',
+        'primary_balance',
+        'description',
+        'amount_held',
         'created_by',  
         'updated_by', 
         'is_active',
@@ -55,8 +57,7 @@ class FmsBudgetLine extends Model
         return empty($search) ? static::query()
         : static::query()
             ->where('name', 'like', '%'.$search.'%')
-            ->where('account_number', 'like', '%'.$search.'%')
-            ->orWhere('code', 'like', '%'.$search.'%');
+            ->where('type', 'like', '%'.$search.'%');
     }
 
 }

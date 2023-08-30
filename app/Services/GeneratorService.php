@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Finance\Budget\FmsBudget;
 use Illuminate\Support\Str;
 use App\Models\HumanResource\EmployeeData\Employee;
 
@@ -27,6 +28,30 @@ class GeneratorService
         }
 
         return $emp_number;
+    }
+
+    public static function budgetIdentifier()
+    {
+        $identifier = '';
+        $yearStart = date('y');
+        $characters = 'ABCDEFGHJKLMNOPQRSTUVWXYZ';
+        $l = $characters[rand(0, strlen($characters) - 2)];
+        $latestIdentifier = FmsBudget::select('code')->orderBy('id', 'desc')->first();
+
+        if ($latestIdentifier) {
+            $numberSplit = explode('-', $latestIdentifier->identifier);
+            $numberYear = (int) filter_var($numberSplit[0], FILTER_SANITIZE_NUMBER_INT);
+
+            if ($numberYear == $yearStart) {
+                $identifier = $numberSplit[0].'-'.str_pad(((int) filter_var($numberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 4, '0', STR_PAD_LEFT).$l;
+            } else {
+                $identifier = 'FMB'.$yearStart.'-0001'.$l;
+            }
+        } else {
+            $identifier = 'FMB'.$yearStart.'-0001'.$l;
+        }
+
+        return $identifier;
     }
 
 

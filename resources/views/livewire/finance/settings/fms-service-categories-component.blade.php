@@ -11,7 +11,7 @@
                                         Service categories (<span class="text-danger fw-bold">{{ $categories->total() }}</span>)
                                         {{-- @include('livewire.layouts.partials.inc.filter-toggle') --}}
                                     @else
-                                        Edit category
+                                        Edit service
                                     @endif
 
                                 </h5>
@@ -103,19 +103,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $key => $category)
+                                    @foreach ($categories as $key => $service)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $category->name }}</td>
-                                            <td>{{ $category->description ?? 'N/A' }}</td>
-                                            @if ($category->is_active == 0)
+                                            <td>{{ $service->name }}</td>
+                                            <td>{{ $service->description ?? 'N/A' }}</td>
+                                            @if ($service->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
-                                            <td>{{ date('d-m-Y', strtotime($category->created_at)) }}</td>
+                                            <td>{{ date('d-m-Y', strtotime($service->created_at)) }}</td>
                                             <td class="table-action">
-                                                <button wire:click="editData({{ $category->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                <button wire:click="editData({{ $service->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>

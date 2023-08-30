@@ -2,6 +2,8 @@
 
 namespace App\Models\Finance\Accounting;
 
+use App\Models\Grants\Project\Project;
+use App\Models\HumanResource\Settings\Department;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -25,13 +27,12 @@ class FmsLedgerAccount extends Model
     }
     protected $fillable = [
         'name',
-        'code',
+        'descriptions',
         'account_number',
-        'project_code',
         'department_id',
         'project_id',
-        'opening_balance',
-        'current_balance',
+        'primary_balance',
+        'bank_balance',
         'as_of',
         'created_by',  
         'updated_by', 
@@ -39,6 +40,15 @@ class FmsLedgerAccount extends Model
      
     ];
 
+    public function project()
+    {
+       return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    public function department()
+    {
+       return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
       
     public static function boot()
     {
