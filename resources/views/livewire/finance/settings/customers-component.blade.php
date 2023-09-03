@@ -99,11 +99,11 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Detail Type</th>
-                                        <th>Tax Rate</th>
-                                        <th>Balance</th>
-                                        <th>Bank Balance</th>
+                                        <th>Origin</th>
+                                        <th>Address</th>
+                                        <th>Email</th>
+                                        <th>Contact</th>
+                                        <th>Company</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -112,11 +112,11 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $customer->name }}</td>
-                                            <td>{{ $customer->type->name??'N/A' }}</td>
-                                            <td>{{ $customer->subType->name??'N/A' }}</td>
-                                            <td>{{ $customer->type_id }}</td>
-                                            <td>{{ $customer->primary_balance }}</td>
-                                            <td>{{ $customer->bank_balance }}</td>
+                                            <td>{{ $customer->nationality??'N/A' }}</td>
+                                            <td>{{ $customer->address??'N/A' }}</td>
+                                            <td>{{ $customer->email }}</td>
+                                            <td>{{ $customer->contact }}</td>
+                                            <td>{{ $customer->company_name }}</td>
                                             <td class="table-action">                                                  
                                                     {{-- @livewire('fms.partials.status-component', ['model' => $customer, 'field' => 'is_active'], key($customer->id)) --}}
                                                     <div class="btn-group btn-sm">
@@ -131,7 +131,7 @@
                                                             
                                                         </div>
                                                         </div>
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" wire:click="editdata({{ $customer->id }})" class="btn btn-outline-secondary">
+                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" wire:click="editData({{ $customer->id }})" class="btn btn-outline-secondary">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
                                                     </div>

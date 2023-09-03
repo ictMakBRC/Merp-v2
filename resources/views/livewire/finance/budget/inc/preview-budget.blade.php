@@ -48,13 +48,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php $number = 1;@endphp
                                         @foreach ($budget_lines->where('chat_of_account',$income->id) as $key => $budget)
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $number }}</td>
                                                 <td>{{ $budget->name }}</td>
                                                 <td>@moneyFormat($budget->allocated_amount)</td>
                                                 <td>{{ $budget->description }}</td>                                               
                                             </tr>
+                                            @php $number++;@endphp
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -82,13 +84,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php $number = 1;@endphp
                                         @foreach ($budget_lines->where('chat_of_account',$expense->id) as $key => $budget)
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $number }}</td>
                                                 <td>{{ $budget->name }}</td>
                                                 <td>@moneyFormat($budget->allocated_amount)</td>
                                                 <td>{{ $budget->description }}</td>
                                             </tr>
+                                            @php $number++;@endphp
                                         @endforeach
                                     </tbody>
                                 </table>

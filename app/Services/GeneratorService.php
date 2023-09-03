@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Finance\Budget\FmsBudget;
+use App\Models\Finance\Invoice\FmsInvoice;
 use Illuminate\Support\Str;
 use App\Models\HumanResource\EmployeeData\Employee;
 
@@ -52,6 +53,43 @@ class GeneratorService
         }
 
         return $identifier;
+    }
+
+    public static function getInvNumber()
+    {
+        $identifier = '';
+        $yearStart = date('y');
+        $characters = 'ABCDEFGHJKLMNOPQRSTUVWXYZ';
+        $l = $characters[rand(0, strlen($characters) - 2)];
+        $latestIdentifier = FmsInvoice::select('invoice_no')->orderBy('id', 'desc')->first();
+
+        if ($latestIdentifier) {
+            $numberSplit = explode('-', $latestIdentifier->identifier);
+            $numberYear = (int) filter_var($numberSplit[0], FILTER_SANITIZE_NUMBER_INT);
+
+            if ($numberYear == $yearStart) {
+                $identifier = $numberSplit[0].'-'.str_pad(((int) filter_var($numberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 4, '0', STR_PAD_LEFT).$l;
+            } else {
+                $identifier = 'BRC-INV'.$yearStart.'-0001'.$l;
+            }
+        } else {
+            $identifier = 'BRC-INV'.$yearStart.'-0001'.$l;
+        }
+
+        return $identifier;
+    }
+
+    public static function getNumber($length)
+    {
+        $characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return str_shuffle($randomString);
+        return $randomString;
     }
 
 

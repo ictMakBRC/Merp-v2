@@ -29,6 +29,9 @@
                     </ul>
                 </div>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('finance-invoices') }}">{{ __('Invoices') }}</a>
+            </li>
             <!--end nav-->      <!--end nav-item-->
             <li class="nav-item">
                 <a class="nav-link" href="#ledger" data-bs-toggle="collapse" role="button" aria-expanded="false"
