@@ -8,7 +8,8 @@
         </style>
     @endpush
     <div class="card p-2">
-        <div class="card-header">
+        <div class="card-header">            
+            @include('livewire.partials.brc-header')
             <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
                 <thead class="table-light">
                     <tr>
@@ -72,27 +73,28 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php $number = 1; @endphp
                         @foreach ($budget_lines->where('chat_of_account',$income->id) as $key => $budget)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $number}}</td>
                                 <td>{{ $budget->name }}</td>
                                 <td>@moneyFormat($budget->allocated_amount)</td>
                                 <td>{{ $budget->description }}</td>
                                 <td class="table-action">                                                  
-                                        {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
                                        
-                                            <a   wire:click="confirmDelete('{{ $budget->id }}')" class="text-danger">
+                                            <a href="javascript:void(0)"  wire:click="confirmDelete('{{ $budget->id }}')" class="text-danger">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         
                                 </td>
-                            </tr>
+                            </tr>                                       
+                            @php $number++; @endphp
                         @endforeach
                     </tbody>
                 </table>
                 <h5 class="text-end">Total: <span>@moneyFormat($budget_lines->where('chat_of_account',$income->id)->sum('allocated_amount'))</span></h5>
             </div> <!-- end preview-->
-            @endif
+            @endif 
         @endforeach        
         <h4 class="text-center">Total Revenue: <span>@moneyFormat($budget_lines->where('type','Revenue')->sum('allocated_amount'))</span></h4>
     </div>
@@ -137,21 +139,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php $number = 1;@endphp
                         @foreach ($budget_lines->where('chat_of_account',$expense->id) as $key => $budget)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $number }}</td>
                                 <td>{{ $budget->name }}</td>
                                 <td>@moneyFormat($budget->allocated_amount)</td>
                                 <td>{{ $budget->description }}</td>
                                 <td class="table-action">                                                  
-                                        {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
-                                       
-                                            <a  href="{{URL::signedRoute('finance-budget_lines',$budget->id)}}" class="text-danger">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
+                                    <a href="javascript:void(0)"  wire:click="confirmDelete('{{ $budget->id }}')" class="text-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                         
                                 </td>
-                            </tr>
+                            </tr>                                      
+                            @php $number++;@endphp
                         @endforeach
                     </tbody>
                 </table>

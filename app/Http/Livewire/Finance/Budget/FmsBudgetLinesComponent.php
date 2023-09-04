@@ -76,7 +76,7 @@ class FmsBudgetLinesComponent extends Component
         $this->budgetToDelete = $budgetId;
     }
 
-    public function deleteBudget()
+    public function deleteRecord()
     {
         
         FmsBudgetLine::find($this->budgetToDelete)->delete();

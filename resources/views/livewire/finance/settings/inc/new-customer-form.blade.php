@@ -112,28 +112,22 @@
                 @enderror
             </div>
             
-            
-            <div class="mb-3 col-md-3">
-                <label for="opening_balance" class="form-label">Currency</label>
-                <input type="text" id="opening_balance" class="form-control text-uppercase"
-                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='opening_balance'>
-                @error('opening_balance')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="mb-3 col-md-3">
-                <label for="opening_balance" class="form-label required">Opening Balance</label>
-                <input type="number" step='any' id="opening_balance" class="form-control" wire:model.defer='opening_balance'>
-                @error('opening_balance')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="mb-3 col-md-3">
+                        
+            <div class="mb-3 col">
                 <label for="opening_balance" class="form-label required">As of</label>
                 <input type="date" id="as_of" class="form-control" wire:model.defer='as_of'>
                 @error('as_of')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col">
+                <label for="is_active" class="form-label required">{{ __('public.status') }}</label>
+                <select class="form-select select2" id="is_active" wire:model.defer="is_active">
+                    <option selected value="">Select</option>
+                    <option value='1'>Active</option>
+                    <option value='0'>Inactive</option>
+                </select>
+                @error('is_active')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
