@@ -13,7 +13,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="#item" data-bs-toggle="collapse" role="button" aria-expanded="false"
                     aria-controls="item">
-                    Item
+                    Items management
                 </a>
                 <div class="collapse " id="item">
                     <ul class="nav flex-column">

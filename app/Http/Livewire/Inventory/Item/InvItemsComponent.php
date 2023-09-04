@@ -11,22 +11,31 @@ use Livewire\WithPagination;
 class InvItemsComponent extends Component
 {
     use WithPagination;
+    public $from_date;
+
+    public $to_date;
+
+    public $customerIds;
 
     public $perPage = 10;
 
     public $search = '';
 
-    public $orderBy = 'name';
+    public $orderBy = 'id';
 
-    public $orderAsc = true;
-
-    public $user_id;
-
-    public $edit_id;
-
-    public $is_active;
+    public $orderAsc = 0;
 
     public $delete_id;
+
+    public $edit_id;
+    
+    protected $paginationTheme = 'bootstrap';
+
+    public $createNew = false;
+
+    public $toggleForm = false;
+
+    public $filter = false;
 
     public $name;
     public $category_id;
@@ -38,11 +47,8 @@ class InvItemsComponent extends Component
     public $description;
     public $date_added;
     public $expires;
+    public $is_active=1;
     public $item_code;
-    public $toggleForm;
-    public $createNew;
-
-    protected $paginationTheme = 'bootstrap';
 
     public function updatingSearch()
     {
@@ -56,7 +62,7 @@ class InvItemsComponent extends Component
             'sku' => 'required|unique:inv_items,sku',
             'category_id' => 'required',
             'cost_price' => 'required|numeric',
-            'inv_uom_id' => 'required',
+            'uom_id' => 'required',
             'max_qty' => 'required|numeric',
             'min_qty' => 'required|numeric',
             'item_code' => 'required|unique:inv_items,item_code',
@@ -73,7 +79,7 @@ class InvItemsComponent extends Component
             'sku' => 'required|unique:inv_items,sku',
             'category_id' => 'required',
             'cost_price' => 'required|numeric',
-            'inv_uom_id' => 'required',
+            'uom_id' => 'required',
             'max_qty' => 'required|numeric',
             'min_qty' => 'required|numeric',
             'item_code' => 'required|unique:inv_items,item_code',
@@ -145,7 +151,7 @@ class InvItemsComponent extends Component
             'name' => 'required|unique:inv_items,sku,' . $this->edit_id . '',
             'category_id' => 'required',
             'cost_price' => 'required|numeric',
-            'inv_uom_id' => 'required',
+            'uom_id' => 'required',
             'max_qty' => 'required|numeric',
             'min_qty' => 'required|numeric',
             'item_code' => 'required|unique:inv_items,item_code,' . $this->edit_id . '',
