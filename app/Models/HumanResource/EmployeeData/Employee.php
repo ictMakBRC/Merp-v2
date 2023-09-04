@@ -46,6 +46,26 @@ class Employee extends Model
     {
         return $this->belongsTo(Station::class, 'station_id', 'id');
     }
+    
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class,'employee_project','employee_id','project_id')
+        ->using(EmployeeProject::class) // Use the pivot model
+        ->withPivot(['designation_id', 'contract_summary','start_date','end_date','fte','gross_salary','contract_file_path','status']) // Include the additional attributes
+        ->withTimestamps();
+    }
+
+    //principal investigator
+    public function projectPi()
+    {
+        return $this->hasMany(Project::class,'pi','id');
+    }
+
+    //co principal investigator
+    public function projectCoPi()
+    {
+        return $this->hasMany(Project::class,'co_pi','id');
+    }
 
     protected function fullName(): Attribute
     {

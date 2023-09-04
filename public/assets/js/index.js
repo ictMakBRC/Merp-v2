@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
 	//TOASTS AND SWEET ALERTS
 	window.addEventListener('alert', event => {
 
@@ -40,12 +40,12 @@ $(function() {
 
 	window.addEventListener('swal:confirm', event => {
 		swal({
-				title: event.detail.message,
-				text: event.detail.text,
-				icon: event.detail.type,
-				buttons: true,
-				dangerMode: true,
-			})
+			title: event.detail.message,
+			text: event.detail.text,
+			icon: event.detail.type,
+			buttons: true,
+			dangerMode: true,
+		})
 			.then((willDelete) => {
 				if (willDelete) {
 					window.livewire.emit('remove');
@@ -79,6 +79,28 @@ $(function() {
 		});
 	}
 
+
+
 });
 
 
+function formatAmount(input) {
+	var value = input.value.replace(/,/g, ''); // Remove existing commas
+
+	// Remove non-numeric and non-decimal characters
+	value = value.replace(/[^0-9.]/g, '');
+
+	// Ensure there's only one decimal point
+	var parts = value.split('.');
+	if (parts.length > 2) {
+		value = parts[0] + '.' + parts.slice(1).join('');
+	}
+
+	var formattedValue = addCommasToNumber(value);
+
+	input.value = formattedValue;
+}
+
+function addCommasToNumber(value) {
+	return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}

@@ -26,6 +26,16 @@
                         </li>
                         <!--end nav-item-->
 
+                        <!--end nav-item-->
+                        <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Grants & Projects"
+                            data-bs-trigger="hover">
+                            <a href="#grantsManagement" id="grantsManagement-tab" class="nav-link">
+                                <i class="ti ti-subtask menu-icon"></i>
+                            </a>
+                            <!--end nav-link-->
+                        </li>
+                        <!--end nav-item-->
+
                         <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Finance"
                             data-bs-trigger="hover">
                             <a href="#financeManagement" id="financeManagement-tab" class="nav-link">
@@ -110,7 +120,8 @@
             <!--end topbar-left-->
             <!--end logo-->
             <div class="menu-body navbar-vertical tab-content" data-simplebar>
-                <div id="home" class="main-icon-menu-pane tab-pane" role="tabpanel" aria-labelledby="dasboard-tab">
+                <div id="home" class="main-icon-menu-pane tab-pane" role="tabpanel"
+                    aria-labelledby="dasboard-tab">
                     <div class="title-box">
                         <h6 class="menu-title">Home</h6>
                     </div>
@@ -127,6 +138,10 @@
                 <!--start human-resource -->
                 <livewire:layouts.partials.inc.human-resource.human-resource-navigation-component />
                 <!--end human-resource -->
+
+                <!--start grants and projects -->
+                <livewire:layouts.partials.inc.grants.grants-navigation-component />
+                <!--end grants and projects -->
 
                 <!--start finance -->
                 <livewire:layouts.partials.inc.finance.finance-navigation-component />
