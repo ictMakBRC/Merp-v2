@@ -8,7 +8,7 @@ use App\Models\Inventory\Settings\InvUnitOfMeasure;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class InvItemComponent extends Component
+class InvItemsComponent extends Component
 {
     use WithPagination;
 
@@ -214,7 +214,7 @@ class InvItemComponent extends Component
 
     public function render()
     {
-        $data['items'] = InvItem::search($this->search)->with('parentcategory')
+        $data['items'] = InvItem::search($this->search)->with(['category', 'uomm'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
 

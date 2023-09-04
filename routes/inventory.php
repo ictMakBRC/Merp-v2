@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Livewire\Inventory\Dashboard\InventoryMainDashboardComponent;
+use App\Http\Livewire\Inventory\Item\InvItemsComponent;
 use App\Http\Livewire\Inventory\Settings\InvCategoriesComponent;
 use App\Http\Livewire\Inventory\Settings\InvStorageSectionsComponent;
 use App\Http\Livewire\Inventory\Settings\InvStorageSubSectionsComponent;
@@ -17,5 +18,9 @@ Route::group(['prefix' => 'inventory'], function () {
         Route::get('stores/sections', InvStorageSectionsComponent::class)->name('inventory-sections');
         Route::get('stores/sections/bins', InvStorageSubSectionsComponent::class)->name('inventory-storage_bins');
         Route::get('unit_of_measures', InvUnitOfMeasuresComponent::class)->name('inventory-unit_of_measures');
+    });
+    Route::group(['prefix' => 'manage'], function () {
+
+        Route::get('items', InvItemsComponent::class)->name('inventory-items');
     });
 });
