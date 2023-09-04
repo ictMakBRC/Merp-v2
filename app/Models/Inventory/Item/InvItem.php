@@ -32,7 +32,7 @@ class InvItem extends Model
   
     public function category()
     {
-        return $this->belongsTo(InvCategory::class, 'inv_subunit_id', 'id');
+        return $this->belongsTo(InvCategory::class, 'category_id', 'id');
     }
 
 

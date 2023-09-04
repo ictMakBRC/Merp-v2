@@ -10,7 +10,25 @@
                 <a class="nav-link" href="{{ route('inventory-dashboard') }}">{{ __('public.dashboard') }}</a>
             </li>
             <!--end nav-item-->
+            <li class="nav-item">
+                <a class="nav-link" href="#item" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                    aria-controls="item">
+                    Items management
+                </a>
+                <div class="collapse " id="item">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a href="{{ route('inventory-items') }}" class="nav-link ">Items List</a>
+                        </li>
+                        <!--end nav-item-->
 
+                        <li class="nav-item">
+                            <a href="analytics-reports.html" class="nav-link ">Department Items</a>
+                        </li>
+                        <!--end nav-item-->
+                    </ul>
+                </div>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="#sidebarAnalytics" data-bs-toggle="collapse" role="button"
                     aria-expanded="false" aria-controls="sidebarAnalytics">
@@ -19,14 +37,14 @@
                 <div class="collapse " id="sidebarAnalytics">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="{{route('inventory-stores')}}" class="nav-link ">Stores</a>
-                        </li> 
+                            <a href="{{ route('inventory-stores') }}" class="nav-link ">Stores</a>
+                        </li>
                         <!--end nav-item-->
                         <li class="nav-item">
                             <a href="{{ route('inventory-sections') }}" class="nav-link ">Storage Sections</a>
                         </li>
-                         <!--end nav-item-->
-                         <li class="nav-item">
+                        <!--end nav-item-->
+                        <li class="nav-item">
                             <a href="{{ route('inventory-storage_bins') }}" class="nav-link ">Storage Bins</a>
                         </li>
                         <!--end nav-item-->

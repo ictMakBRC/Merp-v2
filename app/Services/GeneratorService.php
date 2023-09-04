@@ -55,6 +55,7 @@ class GeneratorService
         return $identifier;
     }
 
+
     public static function getInvNumber()
     {
         $identifier = '';
