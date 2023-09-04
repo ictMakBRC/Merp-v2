@@ -54,5 +54,18 @@ class GeneratorService
         return $identifier;
     }
 
+    public static function getNumber($length)
+    {
+        $characters = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return str_shuffle($randomString);
+        return $randomString;
+    }
+
 
 }

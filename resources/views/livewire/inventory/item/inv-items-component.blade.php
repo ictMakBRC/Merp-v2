@@ -99,11 +99,11 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Detail Type</th>
-                                        <th>Tax Rate</th>
-                                        <th>Balance</th>
-                                        <th>Bank Balance</th>
+                                        <th>SKU</th>
+                                        <th>Category</th>
+                                        <th>UOM</th>
+                                        <th>Code</th>
+                                        <th>Cost Price</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -112,30 +112,15 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $item->name }}</td>
-                                            <td>{{ $item->type->name??'N/A' }}</td>
-                                            <td>{{ $item->subType->name??'N/A' }}</td>
-                                            <td>{{ $item->type_id }}</td>
-                                            <td>{{ $item->primary_balance }}</td>
-                                            <td>{{ $item->bank_balance }}</td>
+                                            <td>{{ $item->sku??'N/A' }}</td>
+                                            <td>{{ $item->category->name??'N/A' }}</td>
+                                            <td>{{ $item->uom->name??'N/A' }}</td>
+                                            <td>{{ $item->item_code }}</td>
+                                            <td>{{ $item->cost_price }}</td>
                                             <td class="table-action">                                                  
-                                                    {{-- @livewire('fms.partials.status-component', ['model' => $item, 'field' => 'is_active'], key($item->id)) --}}
-                                                    <div class="btn-group btn-sm">
-                                                        <div class="btn-group dropstart" role="group">
-                                                          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <span class="visually-hidden">Toggle Dropstart</span>
-                                                            <i class="mdi mdi-chevron-left"></i>
-                                                          </button>
-                                                          <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#">item History</a>
-                                                            <a class="dropdown-item" href="#">Run Report</a>
-                                                            
-                                                        </div>
-                                                        </div>
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" wire:click="editdata({{ $item->id }})" class="btn btn-outline-secondary">
-                                                            <i class="fa fa-edit"></i>
-                                                        </button>
-                                                    </div>
-                                                    
+                                                   
+                                                <button class="btn btn btn-sm btn-outline-success" wire:click="editData({{ $item->id }})" data-bs-toggle="tooltip" data-bs-placement="right" title="{{__('public.edit')}}" data-bs-trigger="hover">
+                                                    <i class="ti ti-edit fs-18"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach

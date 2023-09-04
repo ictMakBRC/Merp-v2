@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Inventory\Item;
 use App\Models\Inventory\Item\InvItem;
 use App\Models\Inventory\Settings\InvCategory;
 use App\Models\Inventory\Settings\InvUnitOfMeasure;
+use App\Services\GeneratorService;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -65,14 +66,12 @@ class InvItemsComponent extends Component
             'uom_id' => 'required',
             'max_qty' => 'required|numeric',
             'min_qty' => 'required|numeric',
-            'item_code' => 'required|unique:inv_items,item_code',
             'description' => 'required',
-            'date_added' => 'required',
 
         ]);
     }
 
-    public function storeData()
+    public function storeItem()
     {
         $this->validate([
             'name' => 'required|unique:inv_items,name',
@@ -82,9 +81,7 @@ class InvItemsComponent extends Component
             'uom_id' => 'required',
             'max_qty' => 'required|numeric',
             'min_qty' => 'required|numeric',
-            'item_code' => 'required|unique:inv_items,item_code',
             'description' => 'required',
-            'date_added' => 'required',
             'is_active' => 'required',
         ]);
 
@@ -97,10 +94,9 @@ class InvItemsComponent extends Component
         $item->min_qty = $this->min_qty;
         $item->sku = $this->sku;
         $item->description = $this->description;
-        $item->date_added = $this->date_added;
         $item->is_active = $this->is_active;
         $item->expires = $this->expires;
-        $item->item_code = $this->item_code;
+        $item->item_code = GeneratorService::getNumber(12);
         $item->save();
 
         $this->resetInputs();
@@ -108,7 +104,7 @@ class InvItemsComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'value created successfully!']);
     }
 
-    public function editdata($id)
+    public function editData($id)
     {
         $item = InvItem::where('id', $id)->first();
         $this->name = $item->name;
@@ -120,7 +116,7 @@ class InvItemsComponent extends Component
         $this->sku = $item->sku;
         $this->description = $item->description;
         $this->is_active = $item->is_active;
-        $this->expires = $this->expires != '' ? $this->expires : 'Off';
+        $this->expires = $item->expires;
         $this->item_code = $item->item_code;
         $this->edit_id = $item->id;
         $this->createNew = true;
@@ -142,9 +138,11 @@ class InvItemsComponent extends Component
             'expires',
             'item_code',
         ]);
+        $this->createNew = false;
+        $this->toggleForm = false;
     }
 
-    public function updateData()
+    public function updateItem()
     {
         $this->validate([
             'name' => 'required|unique:inv_items,name,' . $this->edit_id . '',
@@ -154,9 +152,7 @@ class InvItemsComponent extends Component
             'uom_id' => 'required',
             'max_qty' => 'required|numeric',
             'min_qty' => 'required|numeric',
-            'item_code' => 'required|unique:inv_items,item_code,' . $this->edit_id . '',
             'description' => 'required',
-            'date_added' => 'required',
         ]);
 
         $item = InvItem::find($this->edit_id);
@@ -169,7 +165,7 @@ class InvItemsComponent extends Component
         $item->min_qty = $this->min_qty;
         $item->sku = $this->sku;
         $item->description = $this->description;
-        $item->expires = $this->expires != '' ? $this->expires : 'Off';
+        $item->expires = $this->expires != '' ? $this->expires : 'No';
         $item->update();
         $this->createNew = false;
         $this->toggleForm = false;
@@ -220,7 +216,7 @@ class InvItemsComponent extends Component
 
     public function render()
     {
-        $data['items'] = InvItem::search($this->search)->with(['category', 'uomm'])
+        $data['items'] = InvItem::search($this->search)->with(['category', 'uom'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
 
