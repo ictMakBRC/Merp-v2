@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::dropIfExists('fms_customers');
         Schema::create('fms_customers', function (Blueprint $table) {
             $table->id();
-            $table->string('account_number')->unique();
             $table->string('name');
             $table->string('nationality')->nullable();           
             $table->string('address')->nullable();
@@ -25,7 +24,7 @@ return new class extends Migration
             $table->string('fax')->nullable();
             $table->string('alt_contact')->nullable();
             $table->string('website')->nullable();
-            $table->foreignId('currency')->nullable()->constrained('fms_currencies', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('currency_id')->nullable()->constrained('fms_currencies', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->tinyText('billing_address')->nullable();
             $table->string('billing_city')->nullable();
             $table->string('billing_state')->nullable();
