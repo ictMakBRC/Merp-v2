@@ -118,6 +118,25 @@ class Employee extends Model
     }
 
     /**
+    * User as an employee
+    */
+    public function supervisor()
+    {
+        return $this->hasOne(User::class, 'reporting_to');
+    }
+
+    /**
+     * Check if the employee is on leave or not
+     */
+    public function isOnLeave()
+    {
+        if($this->leaves->where('status', 'approved')->first()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
     * Employee delegations
     */
     public function delegations()

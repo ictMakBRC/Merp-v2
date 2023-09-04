@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->longText('reason')->nullable();
             $table->enum('status', [APPROVED, PENDING, DECLINED])->default(PENDING);
             $table->string('confirmation')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
