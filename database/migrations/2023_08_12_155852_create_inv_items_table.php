@@ -15,16 +15,20 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('sku')->unique();
-            $table->unsignedBigInteger('category_id')->nullable()->constrained('inv_categories','id')->onUpdate('cascade')->onDelete('restrict');
-            $table->unsignedBigInteger('uom_id')->nullable()->index('inv_unit_of_measures', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('uom_id');
             $table->double('cost_price', 16, 2)->default(0.00);
             $table->double('max_qty', 8, 2)->default(0.00);
             $table->double('min_qty', 8, 2)->default(0.00);
             $table->string('description')->nullable();
             $table->string('expires')->default('No');
-            $table->string('item_code')->nullable()->unique(); 
-            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->string('item_code')->nullable()->unique();
             $table->boolean('is_active')->default(True);
+            $table->unsignedBigInteger('created_by');
+
+            $table->foreign('created_by')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('RESTRICT');
+            $table->foreign('uom_id')->references('id')->on('inv_categories')->onDelete('RESTRICT')->onUpdate('CASCADE');
+            $table->foreign('category_id')->references('id')->on('inv_categories')->onUpdate('CASCADE')->onDelete('RESTRICT');
             $table->timestamps();
         });
     }
