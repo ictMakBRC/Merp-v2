@@ -3,7 +3,11 @@
 use App\Http\Livewire\Finance\Accounting\ChartOfAccountsComponent;
 use App\Http\Livewire\Finance\Budget\FmsBudgetLinesComponent;
 use App\Http\Livewire\Finance\Budget\FmsBudgetsComponent;
+use App\Http\Livewire\Finance\Budget\FmsViewBudgetComponent;
 use App\Http\Livewire\Finance\Dashboard\FinanceMainDashboardComponent;
+use App\Http\Livewire\Finance\Invoice\FmsInvoiceItemsComponent;
+use App\Http\Livewire\Finance\Invoice\FmsInvoiceListsComponent;
+use App\Http\Livewire\Finance\Invoice\FmsViewInvoiceComponent;
 use App\Http\Livewire\Finance\Ledger\FmsLedgerAccountsComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsTypesComponent;
@@ -21,6 +25,10 @@ Route::group(['prefix' => 'finance'], function () {
         Route::get('ledger/accounts', FmsLedgerAccountsComponent::class)->name('finance-ledger_accounts');
         Route::get('budgets', FmsBudgetsComponent::class)->name('finance-budgets');
         Route::get('budgets/lines/{budget}', FmsBudgetLinesComponent::class)->name('finance-budget_lines');
+        Route::get('budgets/view/{budget}', FmsViewBudgetComponent::class)->name('finance-budget_view');
+        Route::get('invoices', FmsInvoiceListsComponent::class)->name('finance-invoices');
+        Route::get('invoice/items/{inv_no}', FmsInvoiceItemsComponent::class)->name('finance-invoice_items');
+        Route::get('invoice/view/{inv_no}', FmsViewInvoiceComponent::class)->name('finance-invoice_view');
         
     });
     Route::group(['prefix' => 'settings'], function () {

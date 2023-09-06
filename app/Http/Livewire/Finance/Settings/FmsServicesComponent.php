@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Finance\Settings\FmsService;
 use App\Models\Finance\Settings\FmsServiceCategory;
+use App\Services\GeneratorService;
 
 class FmsServicesComponent extends Component
 {
@@ -70,6 +71,7 @@ class FmsServicesComponent extends Component
                 'name' => 'required|string',
                 'is_active' => 'required|integer',
                 'description' => 'nullable|string',
+                'sku'=>'required',
             ]);
         }
     
@@ -79,17 +81,17 @@ class FmsServicesComponent extends Component
                 'name' => 'required|string|unique:fms_services',
                 'is_active' => 'required|numeric',
                 'description' => 'nullable|string',
-                'sku',
-                'code',
-                'rate',
-                'is_taxable',
-                'tax_rate',
-                'is_purchased',
-                'supplier_id',
-                'cost_price',
-                'sale_price',
-                'currency_id',
-                'category_id',
+                'sku'=>'required',
+                // 'code'=>'required',
+                'rate'=>'nullable',
+                'is_taxable'=>'required',
+                'tax_rate'=>'nullable',
+                'is_purchased'=>'required',
+                'supplier_id'=>'nullable',
+                'cost_price'=>'nullable',
+                'sale_price'=>'required',
+                'currency_id'=>'required',
+                'category_id'=>'required',
     
             ]);
     
@@ -97,13 +99,13 @@ class FmsServicesComponent extends Component
             $service->name = $this->name;
             $service->is_active = $this->is_active; 
             $service->sku =  $this->sku;
-            $service->code =  $this->code;
-            $service->rate =  $this->rate;
+            $service->code =  GeneratorService::getNumber(10);
+            $service->rate =  $this->rate??0;
             $service->is_taxable =  $this->is_taxable;
-            $service->tax_rate =  $this->tax_rate;
+            $service->tax_rate =  $this->tax_rate??0;
             $service->is_purchased =  $this->is_purchased;
             $service->supplier_id =  $this->supplier_id;
-            $service->cost_price =  $this->cost_price;
+            $service->cost_price =  $this->cost_price??0;
             $service->sale_price =  $this->sale_price;
             $service->currency_id =  $this->currency_id;
             $service->category_id =  $this->category_id;
@@ -167,9 +169,21 @@ class FmsServicesComponent extends Component
         public function updateFmsService()
         {
             $this->validate([
-                'name' => 'required|unique:fms_services,name,'.$this->edit_id.'',
+                'name' => 'required|unique:fms_services,name,'.$this->edit_id.'',                
                 'is_active' => 'required|numeric',
                 'description' => 'nullable|string',
+                'sku'=>'required',
+                // 'code'=>'required',
+                'rate'=>'nullable',
+                'is_taxable'=>'required',
+                'tax_rate'=>'nullable',
+                'is_purchased'=>'required',
+                'supplier_id'=>'nullable',
+                'cost_price'=>'nullable',
+                'sale_price'=>'required',
+                'currency_id'=>'required',
+                'category_id'=>'required',
+                
             ]);
     
             $service = FmsService::find($this->edit_id);
