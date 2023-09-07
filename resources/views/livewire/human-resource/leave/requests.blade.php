@@ -142,7 +142,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No leaves recorded yet ...</td>
+                                        <td colspan="8" class="text-center">No leaves recorded yet ...</td>
                                     </tr>
                                     @endforelse
                                 </tbody>

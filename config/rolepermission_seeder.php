@@ -142,8 +142,8 @@ return [
                 'Delete'=> [
                     'archive_leave_request',
                     'decline_leave_request',
-                    'force_delete_leave_grievance_request',
-                    'decline_leave_grievance_request',
+                    'force_delete_leave_request',
+                    'decline_leave_request',
                     'decline_department_leave_request',
                     'force_delete_leave_request'
                 ],

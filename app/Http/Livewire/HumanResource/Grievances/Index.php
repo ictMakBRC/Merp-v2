@@ -6,11 +6,13 @@ use App\Models\HumanResource\Grievance;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Designation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Index extends Component
 {
 
     use WithPagination;
+    use AuthorizesRequests;
 
     //Filters
     public $from_date;
@@ -107,6 +109,8 @@ class Index extends Component
 
     public function render()
     {
+        $this->authorize('viewAny', Grievance::class);
+
         $data['grievances'] = $this->filterGrievances()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
