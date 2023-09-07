@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Models\Grants;
+namespace App\Models\Documents;
 
 use Spatie\Activitylog\LogOptions;
-use App\Models\Grants\GrantDocument;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class GrantProfile extends Model
+class FormalDocument extends Model
 {
     use HasFactory,LogsActivity;
 
@@ -20,24 +17,20 @@ class GrantProfile extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Users')
-            ->dontLogIfAttributesChangedOnly(['updated_at', 'password'])
+            ->useLogName('Formal Documents')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
 
-    //principal investigator
-    public function pi()
-    {
-        return $this->belongsTo(Employee::class,'pi','id');
-    }
+    protected $guarded = [];
 
-    public function project()
+    public function documentable()
     {
-        return $this->hasOne(Project::class,'grant_profile_id','id');
+        return $this->morphTo();
     }
-    
+      
     public static function boot()
     {
         parent::boot();
@@ -48,8 +41,14 @@ class GrantProfile extends Model
         }
     }
 
-    public function documents()
+    public static function search($search)
     {
-        return $this->hasMany(GrantDocument::class,'grant_profile_id','id');
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('document_category', 'like', '%'.$search.'%')
+            ->orWhere('description', 'like', '%'.$search.'%')
+            ->orWhere('document_name', 'like', '%'.$search.'%')
+            ->orWhere('expiry_date', 'like', '%'.$search.'%');
     }
 }
+

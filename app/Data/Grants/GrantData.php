@@ -4,7 +4,7 @@ namespace App\Data\Grants;
 
 use Spatie\LaravelData\Data;
 
-class GrantProfileData extends Data
+class GrantData extends Data
 {
   public ?string $grant_code;
   public ?string $grant_name;
@@ -20,7 +20,7 @@ class GrantProfileData extends Data
   public ?string $award_status;
 
   //GRANT PROFILE DOCUMENTS
-  public ?int $grant_profile_id;
+  public ?int $grant_id;
   public ?string $document_category;
   public ?bool $expires;
   public ?string $document_name;
@@ -32,12 +32,12 @@ class GrantProfileData extends Data
   public function rules(): array
   {
     return [
-      'grant_code' => 'required|string|unique:grant_profiles',
-      'grant_name' => 'required|string|unique:grant_profiles',
+      'grant_code' => 'required|string|unique:grants',
+      'grant_name' => 'required|string|unique:grants',
       'grant_type' => 'required|string',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
-      'currency' => 'nullable|string',
+      'currency' => 'required|string',
       'start_date' => 'nullable|date',
       'end_date' => 'nullable|date|after:start_date',
       'proposal_submission_date' => 'required|date',
@@ -47,28 +47,11 @@ class GrantProfileData extends Data
     ];
   }
 
-  // Validation rules for the properties
-  public function grantProfileDocumentRules(): array
-  {
-    return [
-      'grant_profile_id' => 'required|integer',
-      'document_name' => 'required|integer',
-      'document' => 'required|string',
-      'description' => 'required|string',
-    ];
-  }
 
   // Validation rules for the properties
   public function resetInputs(): array
   {
     $allKeys = array_keys($this->rules());
     return array_values($allKeys);
-  }
-
-  // Validation rules for the properties
-  public function resetGrantDocumentInputs(): array
-  {
-    $allKeys = array_keys($this->grantProfileDocumentRules());
-    return array_values(array_diff($allKeys,['grant_profile_id']));
   }
 }

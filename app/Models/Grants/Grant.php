@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Models\Procurement\Settings;
+namespace App\Models\Grants;
 
+use App\Traits\DocumentableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Procurement\Settings\Provider;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ProviderDocument extends Model
+class Grant extends Model
 {
-    use HasFactory , LogsActivity;
+    use HasFactory,LogsActivity, DocumentableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -25,6 +27,17 @@ class ProviderDocument extends Model
         // Chain fluent methods for configuration options
     }
 
+    //principal investigator
+    public function principalInvestigator()
+    {
+        return $this->belongsTo(Employee::class,'pi','id');
+    }
+
+    public function project()
+    {
+        return $this->hasOne(Project::class,'grant_id','id');
+    }
+    
     public static function boot()
     {
         parent::boot();
@@ -35,8 +48,13 @@ class ProviderDocument extends Model
         }
     }
 
-    public function provider()
+    public static function search($search)
     {
-        return $this->belongsTo(Provider::class,'provider_id','id');
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('grant_code', 'like', '%'.$search.'%')
+            ->orWhere('grant_name', 'like', '%'.$search.'%')
+            ->orWhere('grant_type', 'like', '%'.$search.'%');
     }
+
 }
