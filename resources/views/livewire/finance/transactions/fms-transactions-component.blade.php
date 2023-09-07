@@ -8,25 +8,21 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        budgets (<span class="text-danger fw-bold">{{ $budgets->total() }}</span>)
+                                        Transactions (<span class="text-danger fw-bold">{{ $transactions->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
-                                        Edit Customer
+                                        Edit Transaction
                                     @endif
 
                                 </h5>
-                                @include('livewire.layouts.partials.inc.create-resource-alpine')
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    @include('livewire.finance.budget.inc.new-budget-form')
-                </div>
-                <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter budgets</h6>
+                            <h6>Filter transactions</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>
@@ -98,50 +94,29 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Name</th>
-                                        <th>fiscal_year</th>
-                                        <th>Department/Project</th>
-                                        <th>Revenue</th>
-                                        <th>Expenditure</th>
+                                        <th>Trx No.</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Type</th>
                                         <th>Currency</th>
-                                        <th>status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($budgets as $key => $budget)
+                                    @foreach ($transactions as $key => $transaction)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $budget->name }}</td>
-                                            <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
-                                            <td>{{ $budget->project->name??$budget->department->name??'N/A' }}</td>
-                                            <td>{{ $budget->esitmated_income }}</td>
-                                            <td>{{ $budget->estimated_expenditure }}</td>
-                                            <td>{{ $budget->currency->code??'N/A' }}</td>
-                                            @if ($budget->is_active == 0)
-                                                <td><span class="badge bg-danger">Suspended</span></td>
-                                            @else
-                                                <td><span class="badge bg-success">Active</span></td>
-                                            @endif
+                                            <td>{{ $transaction->trx_no??'' }}</td>
+                                            <td>{{ $transaction->trx_date??'N/A' }}</td>
+                                            <td>{{ $transaction->total_amount }}</td>
+                                            <td>{{ $transaction->trx_type }}</td>
+                                            <td>{{ $transaction->currency->code??'UGX' }}</td>
                                             <td class="table-action">                                                  
-                                                    {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
-                                                    <div class="btn-group btn-sm">
-                                                        <div class="btn-group dropstart" role="group">
-                                                          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <span class="visually-hidden">Toggle Dropstart</span>
-                                                            <i class="mdi mdi-chevron-left"></i>
-                                                          </button>
-                                                          <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#">Account History</a>
-                                                            <a class="dropdown-item" href="#">Run Report</a>
-                                                            
-                                                        </div>
-                                                        </div>
-                                                        <a  href="{{URL::signedRoute('finance-budget_lines',$budget->code)}}" class="btn btn-outline-secondary">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                    
+                                               
+                                                <a  href="{{URL::signedRoute('finance-main_transaction_view',$transaction->id)}}" class="btn btn-sm btn-outline-secondary">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                   
                                             </td>
                                         </tr>
                                     @endforeach
@@ -151,7 +126,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $budgets->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $transactions->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                             </div>
                         </div>

@@ -39,6 +39,9 @@ class FmsInvoiceListsComponent extends Component
     public $filter = false;
 
     public $invoice_no;
+    
+    public $billed_project;
+    public $billed_department;
     public $invoice_type = 'External';
     public $invoice_date;
     public $total_amount;
@@ -54,6 +57,7 @@ class FmsInvoiceListsComponent extends Component
     public $created_by;
     public $updated_by;
     public $status;
+    public $entry_type='Department';
     public $reminder_sent_at;
 
     public function updatedCreateNew()
@@ -71,7 +75,7 @@ class FmsInvoiceListsComponent extends Component
     {
         return [
             'invoice_date' => 'required',
-            'invoice_from' => 'required',
+            'entry_type' => 'required',
             'department_id' => 'nullable',
             'project_id' => 'nullable',
             'customer_id' => 'nullable',
@@ -91,20 +95,39 @@ class FmsInvoiceListsComponent extends Component
     {
         $this->validate($this->validateInputs());
 
-        $record = null;
-        if ($this->invoice_type =='External'){
+        if ($this->entry_type == 'Project'){
             $this->validate([               
-                'project_id' => 'nullable|integer',    
-                'customer_id' => 'required|integer',    
+                'project_id' => 'required|integer',    
             ]);
             $this->department_id = null;
-        }elseif($this->invoice_type =='Internal'){
+        }elseif($this->entry_type == 'Department'){
             $this->validate([               
                 'department_id' => 'required|integer',    
             ]);
             $this->project_id = null;
+        }
+
+        if ($this->invoice_type =='External'){
+            $this->validate([               
+                'billed_project' => 'nullable|integer',    
+                'customer_id' => 'required|integer',    
+            ]);
+            $this->billed_department = null;            
+            if($this->project_id == $this->billed_project && $this->billed_project !=null){
+                $this->dispatchBrowserEvent('swal:modal', [
+                    'type' => 'warning',
+                    'message' => 'Oops! invalid data!',
+                    'text' => 'The billing project can not be the same as the paying department!',
+                ]);
+                return false;
+            }
+        }elseif($this->invoice_type =='Internal'){
+            $this->validate([               
+                'billed_department' => 'required|integer',    
+            ]);
+            $this->billed_project = null;
             $this->customer_id = null;
-            if($this->department_id == $this->invoice_from){
+            if($this->department_id == $this->billed_department){
                 $this->dispatchBrowserEvent('swal:modal', [
                     'type' => 'warning',
                     'message' => 'Oops! invalid data!',
@@ -118,7 +141,8 @@ class FmsInvoiceListsComponent extends Component
         $invoice = new FmsInvoice();
         $invoice->invoice_no = GeneratorService::getInvNumber();
         $invoice->invoice_date = $this->invoice_date;
-        $invoice->invoice_from = $this->invoice_from;
+        $invoice->billed_department = $this->billed_department;
+        $invoice->billed_project = $this->billed_project;
         $invoice->department_id = $this->department_id;
         $invoice->project_id = $this->project_id;
         $invoice->customer_id = $this->customer_id;

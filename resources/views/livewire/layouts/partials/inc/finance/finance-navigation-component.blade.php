@@ -66,16 +66,31 @@
                     <ul class="nav flex-column">
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a href="{{route('finance-budgets')}}" class="nav-link ">All Budgets</a>
+                            <a href="{{route('finance-budgets')}}" class="nav-link ">Dpt. Budgets</a>
                         </li>
                         <li class="nav-item">
-                            <a href="analytics-reports.html" class="nav-link ">Deparment Budget</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="analytics-reports.html" class="nav-link ">Org. Main Budget</a>
+                            <a href="{{route('finance-main_budget')}}" class="nav-link ">Org Main Budgets</a>
                         </li>
                     </ul>
-
+                    <!--end nav-->
+                </div>
+                <!--end sidebarAnalytics-->
+            </li>
+            <li class="nav-item {{ request()->segment(3) == 'transctions' ? 'menuitem-active' : '' }}">
+                <a class="nav-link" href="#transctions" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                    aria-controls="transctions">
+                    Transactions
+                </a>
+                <div class="collapse " id="transctions">
+                    <ul class="nav flex-column">
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a href="{{route('finance-transactions','departments')}}" class="nav-link ">Department</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('finance-transactions','projects')}}" class="nav-link ">Projects</a>
+                        </li>
+                    </ul>
                     <!--end nav-->
                 </div>
                 <!--end sidebarAnalytics-->
@@ -110,6 +125,10 @@
                         <!--end nav-item-->
                         <li class="nav-item">
                             <a href="{{ route('finance-services') }}" class="nav-link ">Services</a>
+                        </li>
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a href="{{ route('finance-years') }}" class="nav-link ">Years</a>
                         </li>
                     </ul>
                     <!--end nav-->

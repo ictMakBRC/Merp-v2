@@ -17,6 +17,7 @@ class FmsBudgetLinesComponent extends Component
     public $chat_of_account;
     public $allocated_amount;
     public $primary_balance;
+    public $quantity;
     public $description;
     public $amount_held;
     public $created_by;
@@ -34,15 +35,18 @@ class FmsBudgetLinesComponent extends Component
     {
         $this->validate([
             'name' => 'required',
+            'quantity' => 'required',
             'allocated_amount' => 'required',            
             'description' =>'required',
         ]);
         $budgetName = $this->name[$id];
         $budgetAmount = $this->allocated_amount[$id];
         $description = $this->description[$id];
+        $quantity = $this->quantity[$id];
 
         $budgetLine = new FmsBudgetLine();
         $budgetLine->name = $budgetName;
+        $budgetLine->quantity = $quantity;
         $budgetLine->type = $this->type;
         $budgetLine->fms_budget_id = $this->budgetData->id;
         $budgetLine->chat_of_account = $id;
@@ -67,6 +71,7 @@ class FmsBudgetLinesComponent extends Component
             'amount_held',
             'created_by',  
             'updated_by', 
+            'quantity', 
             'is_active',
           ]);
     }
@@ -74,6 +79,20 @@ class FmsBudgetLinesComponent extends Component
     {
         $this->confirmingDelete = true;
         $this->budgetToDelete = $budgetId;
+    }
+
+    public function saveBudget()
+    {
+       $budgetData = FmsBudget::where('code', $this->budgetCode)->first();
+       if($budgetData){
+       $totalExpense = FmsBudgetLine::where(['fms_budget_id'=> $budgetData->id,'type'=> 'Expense'])->sum('allocated_amount');
+       $totalIncome = FmsBudgetLine::where(['fms_budget_id'=> $budgetData->id,'type'=> 'Revenue'])->sum('allocated_amount');
+       $budgetData->estimated_expenditure = $totalExpense;
+       $budgetData->esitmated_income = $totalIncome;
+       $budgetData->status = 'Saved';
+       $budgetData->update();
+       $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget saved successfully!']);
+    }
     }
 
     public function deleteRecord()

@@ -15,13 +15,9 @@
                                     @endif
 
                                 </h5>
-                                @include('livewire.layouts.partials.inc.create-resource-alpine')
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    @include('livewire.finance.budget.inc.new-budget-form')
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
@@ -100,11 +96,9 @@
                                         <th>No.</th>
                                         <th>Name</th>
                                         <th>fiscal_year</th>
-                                        <th>Department/Project</th>
                                         <th>Revenue</th>
                                         <th>Expenditure</th>
                                         <th>Currency</th>
-                                        <th>status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -112,36 +106,17 @@
                                     @foreach ($budgets as $key => $budget)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $budget->name }}</td>
+                                            <td>MAK BRC BUDGET{{ $budget->fiscalYear->name??'' }}</td>
                                             <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
-                                            <td>{{ $budget->project->name??$budget->department->name??'N/A' }}</td>
-                                            <td>{{ $budget->esitmated_income }}</td>
-                                            <td>{{ $budget->estimated_expenditure }}</td>
-                                            <td>{{ $budget->currency->code??'N/A' }}</td>
-                                            @if ($budget->is_active == 0)
-                                                <td><span class="badge bg-danger">Suspended</span></td>
-                                            @else
-                                                <td><span class="badge bg-success">Active</span></td>
-                                            @endif
+                                            <td>{{ $budget->total_income }}</td>
+                                            <td>{{ $budget->total_expenses }}</td>
+                                            <td>{{ $budget->currency->code??'UGX' }}</td>
                                             <td class="table-action">                                                  
-                                                    {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
-                                                    <div class="btn-group btn-sm">
-                                                        <div class="btn-group dropstart" role="group">
-                                                          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <span class="visually-hidden">Toggle Dropstart</span>
-                                                            <i class="mdi mdi-chevron-left"></i>
-                                                          </button>
-                                                          <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#">Account History</a>
-                                                            <a class="dropdown-item" href="#">Run Report</a>
-                                                            
-                                                        </div>
-                                                        </div>
-                                                        <a  href="{{URL::signedRoute('finance-budget_lines',$budget->code)}}" class="btn btn-outline-secondary">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                    
+                                               
+                                                <a  href="{{URL::signedRoute('finance-main_budget_view',$budget->fiscalYear)}}" class="btn btn-sm btn-outline-secondary">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                   
                                             </td>
                                         </tr>
                                     @endforeach

@@ -1,5 +1,5 @@
 <div>
-    <div class="row" x-data="{ filter_data: @entangle('filter'),create_new: @entangle('createNew') }">
+    <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header pt-0">
@@ -8,25 +8,22 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        budgets (<span class="text-danger fw-bold">{{ $budgets->total() }}</span>)
-                                        @include('livewire.layouts.partials.inc.filter-toggle')
+                                        Finacial Years(<span class="text-danger fw-bold">{{ $financialYears->total() }}</span>)
+                                        {{-- @include('livewire.layouts.partials.inc.filter-toggle') --}}
                                     @else
-                                        Edit Customer
+                                        Edit year
                                     @endif
 
                                 </h5>
-                                @include('livewire.layouts.partials.inc.create-resource-alpine')
+                                @include('livewire.layouts.partials.inc.create-resource')
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    @include('livewire.finance.budget.inc.new-budget-form')
-                </div>
-                <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter budgets</h6>
+                            <h6>Filter Years</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>
@@ -95,53 +92,33 @@
 
                         <div class="table-responsive">
                             <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
-                                <thead class="table-light">
+                                <thead>
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>fiscal_year</th>
-                                        <th>Department/Project</th>
-                                        <th>Revenue</th>
-                                        <th>Expenditure</th>
-                                        <th>Currency</th>
-                                        <th>status</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($budgets as $key => $budget)
+                                    @foreach ($financialYears as $key => $year)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $budget->name }}</td>
-                                            <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
-                                            <td>{{ $budget->project->name??$budget->department->name??'N/A' }}</td>
-                                            <td>{{ $budget->esitmated_income }}</td>
-                                            <td>{{ $budget->estimated_expenditure }}</td>
-                                            <td>{{ $budget->currency->code??'N/A' }}</td>
-                                            @if ($budget->is_active == 0)
+                                            <td>{{ $year->name }}</td>
+                                            <td>{{ $year->start_date ?? 'N/A' }}</td>
+                                            <td>{{ $year->end_date ?? 'N/A' }}</td>
+                                            @if ($year->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
-                                            <td class="table-action">                                                  
-                                                    {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
-                                                    <div class="btn-group btn-sm">
-                                                        <div class="btn-group dropstart" role="group">
-                                                          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <span class="visually-hidden">Toggle Dropstart</span>
-                                                            <i class="mdi mdi-chevron-left"></i>
-                                                          </button>
-                                                          <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#">Account History</a>
-                                                            <a class="dropdown-item" href="#">Run Report</a>
-                                                            
-                                                        </div>
-                                                        </div>
-                                                        <a  href="{{URL::signedRoute('finance-budget_lines',$budget->code)}}" class="btn btn-outline-secondary">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                    </div>
-                                                    
+                                            <td>{{ date('d-m-Y', strtotime($year->created_at)) }}</td>
+                                            <td class="table-action">
+                                                <button wire:click="editData({{ $year->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                    <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -151,7 +128,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $budgets->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $financialYears->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -161,19 +138,17 @@
         </div><!-- end col-->
     </div>
 
-   
-
-@push('scripts')
-   <script>
-       window.addEventListener('close-modal', event => {
-           $('#updateCreateModal').modal('hide');
-           $('#delete_modal').modal('hide');
-           $('#show-delete-confirmation-modal').modal('hide');
-       });
-       window.addEventListener('delete-modal', event => {
-           $('#delete_modal').modal('show');
-       });
-   </script>
-@endpush
+    @include('livewire.finance.settings.inc.new-financial-year-form')
+    @push('scripts')
+            <script>
+                window.addEventListener('close-modal', event => {
+                    $('#updateCreateModal').modal('hide');
+                    $('#delete_modal').modal('hide');
+                    $('#show-delete-confirmation-modal').modal('hide');
+                });
+                window.addEventListener('delete-modal', event => {
+                    $('#delete_modal').modal('show');
+                });
+            </script>
+    @endpush
 </div>
-

@@ -4,9 +4,11 @@ namespace App\Http\Livewire\Finance\Settings;
 
 use App\Models\Finance\Settings\FmsCurrency;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class FmsCurrencyComponent extends Component
 {
+    use WithPagination;
     public $from_date;
 
     public $to_date;
