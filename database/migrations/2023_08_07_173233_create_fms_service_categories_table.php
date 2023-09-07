@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('fms_currencies');
-        Schema::create('fms_currencies', function (Blueprint $table) {
+        Schema::create('fms_service_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('code')->unique();
-            $table->string('country')->nullable();
-            $table->boolean('system_default')->default(false);
-            $table->float('exchange_rate')->default(1);
+            $table->tinyText('description')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->boolean('is_active')->default(True);
             $table->timestamps();
         });
-
     }
 
     /**
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fms_currencies');
+        Schema::dropIfExists('fms_service_categories');
     }
 };
