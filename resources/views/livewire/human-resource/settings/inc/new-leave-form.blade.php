@@ -39,7 +39,7 @@
                                     <option value='No'>No</option>
                                     <option value='Yes'>Yes</option>
                                 </select>
-                                @error('carriable')
+                                @error('carry_forward')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
