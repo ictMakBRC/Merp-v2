@@ -17,8 +17,8 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ $model ? route(" user-{$type}s.update", $model->id) :
-                        route("user-{$type}s.store") }}">
+                    <form method="POST" action="{{ $model ? route('user-'.$type.'s.update', $model->id) :
+                        route('user-'.$type.'s.store') }}">
                         @csrf
                         @if ($model)
                         @method('PUT')
@@ -87,7 +87,7 @@
                                                             @php
                                                             $alternative_operation_names = ['Create' => 'Add New',
                                                             'Read' => 'View', 'Update' => 'Modify', 'Delete' =>
-                                                            'Remove'];
+                                                            'Remove','Restore' => 'Restore'];
                                                             @endphp
                                                             <h6 class="mb-1 font-weight-bold">
 

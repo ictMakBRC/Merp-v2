@@ -14,7 +14,7 @@
                                     {{ __('user-mgt.roles') }}
                                 </h5>
                                 <div class="ms-auto">
-                                    <a type="button" href="#" class="btn btn-success mb-2 me-1" data-bs-toggle="modal"
+                                    <a type="button" href="#" class="btn btn-primary mb-2 me-1" data-bs-toggle="modal"
                                         data-bs-target="#addRole"><i class="ti ti-plus"></i>{{ __('public.new') }}</a>
                                 </div>
                             </div>
@@ -44,44 +44,44 @@
                                     <td> {{ $role->name }}</td>
                                     <td> {{ $role->user_group }}</td>
                                     <td>{{ $role->permissions_count }}</td>
-                                    <td class="text-end">
-                                        {{-- <div class="d-flex"> --}}
+                                    <td class="text-end d-flex">
+                                        <div class="d-flex">
                                             @if (\Laratrust\Helper::roleIsEditable($role))
                                             <a href="{{ route('user-roles.edit', $role->id) }}"
-                                                title="{{__('public.edit')}}" class="btn btn-sm btn-outline-success">
+                                                title="{{__('public.edit')}}" class="btn btn-sm btn-outline-primary">
                                                 <i class="ti ti-edit"></i></a>
                                             @else
                                             <a href="{{ route('user-roles.show', $role->id) }}"
                                                 title="{{__('public.view')}}" class="btn btn-sm btn-outline-info">
                                                 <i class="ti ti-eye"></i></a>
                                             @endif
+                                        </div>
 
-                                            <form action="{{ route('user-roles.destroy', $role->id) }}" method="POST"
-                                                title="{{__('public.delete')}}">
-                                                @method('DELETE')
-                                                @csrf
-                                                @if (\Laratrust\Helper::roleIsDeletable($role))
-                                                <a href="#"
-                                                    onclick="event.preventDefault(); this.closest('form').submit();"
-                                                    class="btn btn-sm btn-outline-danger">
-                                                    <i class="ti ti-trash"></i></a>
-                                                @else
-                                                {{-- <i class="uil-padlock"></i> --}}
-                                                @endif
-                                            </form>
-                                            {{--
-                                        </div> --}}
+                                        <form action="{{ route('user-roles.destroy', $role->id) }}" method="POST"
+                                            title="{{__('public.delete')}}">
+                                            @method('DELETE')
+                                            @csrf
+                                            @if (\Laratrust\Helper::roleIsDeletable($role))
+                                            <a href="#" onclick="event.preventDefault(); this.closest('form').submit();"
+                                                class="btn btn-sm btn-outline-danger">
+                                                <i class="ti ti-trash"></i></a>
+                                            @else
+                                            {{-- <i class="uil-padlock"></i> --}}
+                                            @endif
+                                        </form>
+                                        {{--
+                    </div> --}}
 
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div> <!-- end preview-->
+                    </td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                    </table>
+                </div> <!-- end preview-->
 
-                </div> <!-- end card body-->
-            </div> <!-- end card -->
-        </div><!-- end col-->
+            </div> <!-- end card body-->
+        </div> <!-- end card -->
+    </div><!-- end col-->
     </div>
     <!-- end row-->
     {{-- @include('livewire.user-management.access.createRoleModal') --}}
