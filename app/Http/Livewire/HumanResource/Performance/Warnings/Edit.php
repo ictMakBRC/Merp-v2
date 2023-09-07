@@ -25,6 +25,8 @@ class Edit extends Component
 
     public $warning;
 
+    public $letter;
+
     protected $rules = [
         'employee_id' => 'nullable',
         'reason' => 'required',
@@ -37,6 +39,7 @@ class Edit extends Component
         $this->warning = $warning;
         $this->employee_id = $warning->employee_id;
         $this->reason = $warning->reason;
+        $this->letter = $warning->letter;
     }
 
 
@@ -46,7 +49,8 @@ class Edit extends Component
 
         $this->warning->update([
                  'employee_id' => $this->employee_id,
-                 'reason' => $this->description
+                 'reason' => $this->description,
+                 'letter' => $this->letter
             ]);
 
         $this->warning->addMedia($this->file_upload)->toMediaCollection();

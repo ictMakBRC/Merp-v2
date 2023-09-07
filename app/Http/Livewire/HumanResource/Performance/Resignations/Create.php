@@ -24,9 +24,12 @@ class Create extends Component
 
     public $employees;
 
+    public $letter;
+
     protected $rules = [
         'employee_id' => 'nullable',
         'comment' => 'nullable',
+        'letter' => 'required',
         'hand_over_date' => 'required',
         'file_upload' => 'file|nullable',
     ];

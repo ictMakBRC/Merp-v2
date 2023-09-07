@@ -18,6 +18,7 @@ class Warning extends Model implements HasMedia
     protected $fillable = [
         'employee_id',
         'reason',
+        'letter',
         'created_by'
     ];
 
