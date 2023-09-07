@@ -35,7 +35,8 @@ class FmsBudgetLine extends Model
         'created_by',  
         'updated_by', 
         'is_active',
-        'budget_year',     
+        'budget_year',  
+        'quantity',   
     ];
 
       
