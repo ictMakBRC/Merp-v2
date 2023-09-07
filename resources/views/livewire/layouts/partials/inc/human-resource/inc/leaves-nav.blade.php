@@ -6,15 +6,15 @@
     <div class="collapse " id="employeeLeaveMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="#" class="nav-link ">Requests</a>
+                <a href="{{route('leave.requests')}}" class="nav-link ">My Requests</a>
             </li>
             <!--end nav-item-->
             <li class="nav-item">
-                <a href="analytics-reports.html" class="nav-link ">My Delegations</a>
+                <a href="{{route('leave.requests.delegations')}}" class="nav-link ">My Delegations</a>
             </li>
 
             <li class="nav-item">
-                <a href="analytics-reports.html" class="nav-link ">Departmental Requests</a>
+                <a href="{{route('leave.requests.departmental')}}" class="nav-link ">Departmental Requests</a>
             </li>
             <!--end nav-item-->
         </ul>
