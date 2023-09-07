@@ -43,6 +43,7 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Name</th>
+                                            <th>Quantity</th>
                                             <th>Ammount ({{ $budget_data->currency->code??'N/A' }})</th>
                                             <th>Description</th>
                                         </tr>
@@ -53,6 +54,7 @@
                                             <tr>
                                                 <td>{{ $number }}</td>
                                                 <td>{{ $budget->name }}</td>
+                                                <td>{{ $budget->quantity??1 }}</td>
                                                 <td>@moneyFormat($budget->allocated_amount)</td>
                                                 <td>{{ $budget->description }}</td>                                               
                                             </tr>
@@ -79,6 +81,7 @@
                                         <tr>
                                             <th>No.</th>
                                             <th>Name</th>
+                                            <th>Quantity</th>
                                             <th>Ammount({{ $budget_data->currency->code??'N/A' }})</th>
                                             <th>Description</th>
                                         </tr>
@@ -89,6 +92,7 @@
                                             <tr>
                                                 <td>{{ $number }}</td>
                                                 <td>{{ $budget->name }}</td>
+                                                <td>{{ $budget->quantity??1 }}</td>
                                                 <td>@moneyFormat($budget->allocated_amount)</td>
                                                 <td>{{ $budget->description }}</td>
                                             </tr>

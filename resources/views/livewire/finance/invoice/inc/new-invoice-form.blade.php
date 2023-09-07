@@ -1,7 +1,8 @@
 <div x-cloak x-show="create_new">
     <form  @if ($toggleForm) wire:submit.prevent="updateInvoice" @else wire:submit.prevent="storeInvoice" @endif >             
 
-        <div class="row">    
+        <div class="row"> 
+            @include('livewire.partials.project-department-toggle')            
             <div class="mb-3 col-2">
                 <label for="invoice_type" class="form-label required">Invoice Type</label>
                 <select id="invoice_type" class="form-control form-select" name="invoice_type" required wire:model="invoice_type">
@@ -10,18 +11,6 @@
                     <option value="Internal">Internal</option>
                 </select>
                 @error('invoice_type')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>    
-            <div class="mb-3 col-md-3">
-                <label for="name" class="form-label required">Invoice From</label>
-                <select  id="invoice_from" wire:model='invoice_from' class="form-control form-select">
-                    <option value="">Select</option>
-                    @foreach ($departments as $department)
-                        <option value="{{$department->id}}">{{$department->name}}</option>
-                    @endforeach
-                </select>
-                @error('invoice_from')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div> 
@@ -42,13 +31,13 @@
             </div>
             <div class="mb-3 col-md-3">
                 <label for="name" class="form-label required">Project</label>
-                <select  id="project_id" wire:model='project_id' class="form-control form-select">
+                <select  id="billed_project" wire:model='billed_project' class="form-control form-select">
                     <option value="">Select</option>
                     @foreach ($projects as $project)
                         <option value="{{$project->id}}">{{$project->name}}</option>
                     @endforeach
                 </select>
-                @error('project_id')
+                @error('billed_project')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
@@ -56,13 +45,13 @@
 
             <div class="mb-3 col-md-3">
                 <label for="name" class="form-label required">Invoice To</label>
-                <select  id="department_id" wire:model='department_id' class="form-control form-select">
+                <select  id="billed_department" wire:model='billed_department' class="form-control form-select">
                     <option value="">Select</option>
                     @foreach ($departments as $department)
                         <option value="{{$department->id}}">{{$department->name}}</option>
                     @endforeach
                 </select>
-                @error('department_id')
+                @error('billed_department')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div> 

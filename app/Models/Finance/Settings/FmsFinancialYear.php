@@ -42,10 +42,7 @@ class FmsFinancialYear extends Model
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
             });  
-            self::updating(function ($model) {
-                $model->updated_by = auth()->id();
-            });
-
+         
         }
     }
 

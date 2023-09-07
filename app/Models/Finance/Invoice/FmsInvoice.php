@@ -91,5 +91,7 @@ class FmsInvoice extends Model
         'updated_by',
         'status',
         'reminder_sent_at',
+        'billed_project',
+        'billed_department'
     ];
 }

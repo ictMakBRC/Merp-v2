@@ -79,7 +79,7 @@ class LeavesComponent extends Component
         $this->validate([
             'name' => 'required|string|unique:leaves',
             'is_active' => 'required|numeric',
-            'duration' => 'nullable|numeric',
+            'duration' => 'required',
             'is_payable' => 'required|string',
             'carriable' => 'required|string',
             'given_to' => 'required|string',
