@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('grievance_type_id');
             $table->string('subject');
+            $table->string('addressee');
             $table->string('status')->default('pending');
             $table->string('comment')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');

@@ -24,7 +24,7 @@
                                         <label class="mb-3 required">Grievance Type</label>
                                         <div class="" style="width: 100%;">
                                             <select class="form-select" wire:model="grievance_type_id">
-                                                <option value="" disabled="">Select ...</option>
+                                                <option value="">Select ...</option>
                                                 @foreach ($grievanceTypes as $grievanceType)
                                                 <option value="{{$grievanceType->id}}" selected="">
                                                     {{$grievanceType->name}}</option>
@@ -42,7 +42,7 @@
                                             style="width: 100%;">
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" wire:model="addressee">
-                                                    <option value="" disabled>Select ...</option>
+                                                    <option value="">Select ...</option>
                                                     <option value="administration" selected="">Administration</option>
                                                     <option value="department">Department</option>
                                                     <option value="both">Both</option>

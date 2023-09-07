@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Appraisals;
 
-use App\Models\HumanResource\Grievance;
-use App\Models\HumanResource\Performance\Appraisal;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\HumanResource\Grievance;
+use App\Models\HumanResource\Performance\Appraisal;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Index extends Component
 {
 
     use WithPagination;
+    use AuthorizesRequests;
 
     //Filters
     public $from_date;
@@ -107,6 +109,7 @@ class Index extends Component
 
     public function render()
     {
+        $this->authorize('viewany', Appraisal::class);
         $data['appraisals'] = $this->filterAppraisals()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);

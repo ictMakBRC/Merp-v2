@@ -7,10 +7,12 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Performance\Termination;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Edit extends Component
 {
     use WithFileUploads;
+    use AuthorizesRequests;
 
     public $employee_id;
 
@@ -73,6 +75,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('update', Termination::class);
         return view('livewire.human-resource.performance.terminations.edit');
     }
 }
