@@ -2,16 +2,18 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Warnings;
 
-use App\Models\HumanResource\Performance\Warning;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use App\Models\HumanResource\Performance\Warning;
 use App\Models\HumanResource\Settings\Department;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Create extends Component
 {
     use WithFileUploads;
+    use AuthorizesRequests;
 
     public $employee_id;
 
@@ -49,6 +51,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create', Warning::class);
         return view('livewire.human-resource.performance.warnings.create');
     }
 }

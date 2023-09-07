@@ -11,10 +11,12 @@ use App\Models\HumanResource\Grievance;
 use App\Models\HumanResource\GrievanceType;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Performance\Appraisal;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Edit extends Component
 {
     use WithFileUploads;
+    use AuthorizesRequests;
 
     public $department_id;
 
@@ -70,6 +72,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('update', Appraisal::class);
         return view('livewire.human-resource.performance.appraisals.edit');
     }
 }

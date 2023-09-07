@@ -120,4 +120,13 @@ class User extends Authenticatable
         $this->save();
     }
 
+    /**
+     * Check if the user is administrator
+     */
+    public function isAdministrator(): bool
+    {
+
+        return $this->is_admin;
+    }
+
 }

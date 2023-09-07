@@ -2,16 +2,18 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Warnings;
 
-use App\Models\HumanResource\Performance\Warning;
 use App\Models\User;
 use Livewire\Component;
-
 use Livewire\WithFileUploads;
+
+use App\Models\HumanResource\Performance\Warning;
 use App\Models\HumanResource\Settings\Department;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Edit extends Component
 {
     use WithFileUploads;
+    use AuthorizesRequests;
 
     public $employee_id;
 
@@ -54,6 +56,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('update', Warning::class);
         return view('livewire.human-resource.performance.warnings.edit');
     }
 }
