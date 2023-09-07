@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->float('fte', 12, 2)->nullable();
             $table->float('gross_salary', 12, 2)->nullable();
-            $table->string('contract_file')->nullable();
+            $table->string('contract_file_path')->nullable();
             $table->string('status')->default('Running');
             $table->timestamps();
         });

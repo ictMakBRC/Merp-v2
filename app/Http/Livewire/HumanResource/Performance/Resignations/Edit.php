@@ -10,10 +10,12 @@ use App\Models\HumanResource\Grievance;
 use App\Models\HumanResource\GrievanceType;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Performance\Resignation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Edit extends Component
 {
     use WithFileUploads;
+    use AuthorizesRequests;
 
     public $employee_id;
 
@@ -72,6 +74,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('update', Resignation::class);
         return view('livewire.human-resource.performance.resignations.edit');
     }
 }
