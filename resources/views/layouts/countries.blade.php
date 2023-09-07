@@ -1,5 +1,5 @@
 
-<option value="">country</option>
+
 <option value="Uganda">Uganda</option>
 <option value="Afghanistan">Afghanistan</option>
 <option value="Aland Islands">Aland Islands</option>

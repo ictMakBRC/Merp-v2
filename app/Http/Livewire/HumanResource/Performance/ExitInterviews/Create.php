@@ -2,15 +2,17 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\ExitInterviews;
 
-use App\Models\HumanResource\Performance\ExitInterview;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\Performance\ExitInterview;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Create extends Component
 {
     use WithFileUploads;
+    use AuthorizesRequests;
 
     public $employee_id;
 
@@ -44,6 +46,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create', ExitInterview::class);
         return view('livewire.human-resource.performance.exit-interviews.create');
     }
 }

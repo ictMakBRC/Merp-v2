@@ -7,10 +7,12 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Performance\Resignation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Create extends Component
 {
     use WithFileUploads;
+    use AuthorizesRequests;
 
     public $employee_id;
 
@@ -22,9 +24,12 @@ class Create extends Component
 
     public $employees;
 
+    public $letter;
+
     protected $rules = [
         'employee_id' => 'nullable',
         'comment' => 'nullable',
+        'letter' => 'required',
         'hand_over_date' => 'required',
         'file_upload' => 'file|nullable',
     ];
@@ -52,6 +57,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create', Resignation::class);
         return view('livewire.human-resource.performance.resignations.create');
     }
 }
