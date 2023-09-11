@@ -33,6 +33,8 @@ class Index extends Component
 
     public $description;
 
+    public $addressee;
+
     public $totalMembers;
 
     protected $paginationTheme = 'bootstrap';
