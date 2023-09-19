@@ -6,11 +6,13 @@ use App\Models\HumanResource\Grievance;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Designation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Index extends Component
 {
 
     use WithPagination;
+    use AuthorizesRequests;
 
     //Filters
     public $from_date;
@@ -30,6 +32,8 @@ class Index extends Component
     public $name;
 
     public $description;
+
+    public $addressee;
 
     public $totalMembers;
 
@@ -107,9 +111,12 @@ class Index extends Component
 
     public function render()
     {
+        // $this->authorize('create', Grievance::class);
+
         $data['grievances'] = $this->filterGrievances()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.grievances.index', $data)->layout('layouts.app');
     }
 }

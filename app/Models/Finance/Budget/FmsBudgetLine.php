@@ -2,6 +2,7 @@
 
 namespace App\Models\Finance\Budget;
 
+use App\Models\Finance\Accounting\FmsChartOfAccount;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,14 @@ class FmsBudgetLine extends Model
 {
     use HasFactory,LogsActivity;
 
+    public function chartOfAccount()
+    {
+       return $this->belongsTo(FmsChartOfAccount::class, 'chat_of_account', 'id');
+    }
+    public function budget()
+    {
+       return $this->belongsTo(FmsBudget::class, 'fms_budget_id', 'id');
+    }
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -35,7 +44,8 @@ class FmsBudgetLine extends Model
         'created_by',  
         'updated_by', 
         'is_active',
-        'budget_year',     
+        'budget_year',  
+        'quantity',   
     ];
 
       

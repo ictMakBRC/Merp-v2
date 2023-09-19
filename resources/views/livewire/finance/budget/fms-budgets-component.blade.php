@@ -127,7 +127,7 @@
                                                     {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
                                                     <div class="btn-group btn-sm">
                                                         <div class="btn-group dropstart" role="group">
-                                                          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                                          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <span class="visually-hidden">Toggle Dropstart</span>
                                                             <i class="mdi mdi-chevron-left"></i>
                                                           </button>
@@ -139,7 +139,7 @@
                                                         </div>
                                                         <a  href="{{URL::signedRoute('finance-budget_lines',$budget->code)}}" class="btn btn-outline-secondary">
                                                             <i class="fa fa-edit"></i>
-                                                        </button>
+                                                        </a>
                                                     </div>
                                                     
                                             </td>

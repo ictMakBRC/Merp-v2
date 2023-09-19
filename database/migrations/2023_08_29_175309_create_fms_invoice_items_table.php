@@ -12,7 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('fms_invoice_items', function (Blueprint $table) {
-            $table->id();
+            $table->id();           
+            $table->foreignId('invoice_id')->nullable()->references('id')->on('fms_invoices')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
+            $table->foreignId('item_id')->nullable()->references('id')->on('fms_services')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
+            $table->foreignId('tax_id')->nullable(); 
+            $table->double('quantity'); 
+            $table->double('unit_price',16,2); 
+            $table->double('line_total',16,2); 
+            $table->tinyText('description')->nullable();
+            $table->foreignId('created_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   
+            $table->foreignId('updated_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->timestamps();
         });
     }

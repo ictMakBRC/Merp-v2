@@ -24,7 +24,7 @@
                                         <label class="mb-3 required">Grievance Type</label>
                                         <div class="" style="width: 100%;">
                                             <select class="form-select" wire:model="grievance_type_id">
-                                                <option value="" disabled="">Select ...</option>
+                                                <option value="">Select ...</option>
                                                 @foreach ($grievanceTypes as $grievanceType)
                                                 <option value="{{$grievanceType->id}}" selected="">
                                                     {{$grievanceType->name}}</option>
@@ -42,7 +42,7 @@
                                             style="width: 100%;">
                                             <div class="" style="width: 100%;">
                                                 <select class="form-select" wire:model="addressee">
-                                                    <option value="" disabled>Select ...</option>
+                                                    <option value="">Select ...</option>
                                                     <option value="administration" selected="">Administration</option>
                                                     <option value="department">Department</option>
                                                     <option value="both">Both</option>
@@ -72,6 +72,19 @@
                                         @error('description')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
+                                    </div>
+
+                                    <div class="tab-pane active show" id="step4" role="tabpanel"
+                                        aria-labelledby="#step4-tab">
+                                        <h4 class="card-title mt-3">Anonymous Submission</h4>
+                                        <div class="form-check my-2">
+                                            <input class="form-check-input" wire:model="isAnonymous" type="checkbox"
+                                                value="" id="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                No one will be able to identify you, nor will anyone be able to
+                                                determine which department you work for.
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
