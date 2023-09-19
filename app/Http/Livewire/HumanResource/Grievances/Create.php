@@ -24,11 +24,14 @@ class Create extends Component
 
     public $grievanceTypes;
 
+    public $isAnonymous = false;
+
     protected $rules = [
         'grievance_type_id' => 'required',
         'addressee' => 'required',
         'file_upload' => 'file|nullable',
-        'description' => 'nullable'
+        'description' => 'nullable',
+        'isAnonymous' => 'nullable'
     ];
 
     public function mount()
@@ -41,8 +44,11 @@ class Create extends Component
     {
         $this->validate();
 
+        $user = auth()->user();
+
         $grievance = Grievance::create([
                'grievance_type_id' => $this->grievance_type_id,
+               'employee_id' => $this->isAnonymous == false ? $user->employee->id : null,
                'subject' => 'Subject',
                'addressee' => $this->addressee,
                'comment' => $this->description

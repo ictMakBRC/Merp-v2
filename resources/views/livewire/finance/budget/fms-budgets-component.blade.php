@@ -115,8 +115,8 @@
                                             <td>{{ $budget->name }}</td>
                                             <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
                                             <td>{{ $budget->project->name??$budget->department->name??'N/A' }}</td>
-                                            <td>{{ $budget->esitmated_income }}</td>
-                                            <td>{{ $budget->estimated_expenditure }}</td>
+                                            <td>@moneyFormat($budget->esitmated_income)</td>
+                                            <td>@moneyFormat($budget->estimated_expenditure)</td>
                                             <td>{{ $budget->currency->code??'N/A' }}</td>
                                             @if ($budget->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
@@ -125,22 +125,13 @@
                                             @endif
                                             <td class="table-action">                                                  
                                                     {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
-                                                    <div class="btn-group btn-sm">
-                                                        <div class="btn-group dropstart" role="group">
-                                                          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <span class="visually-hidden">Toggle Dropstart</span>
-                                                            <i class="mdi mdi-chevron-left"></i>
-                                                          </button>
-                                                          <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#">Account History</a>
-                                                            <a class="dropdown-item" href="#">Run Report</a>
-                                                            
-                                                        </div>
-                                                        </div>
-                                                        <a  href="{{URL::signedRoute('finance-budget_lines',$budget->code)}}" class="btn btn-outline-secondary">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                    </div>
+                                                
+                                                    <a  href="{{URL::signedRoute('finance-budget_lines',$budget->code)}}" class="btn btn-sm btn-outline-secondary">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a  href="{{URL::signedRoute('finance-budget_view',$budget->code)}}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
                                                     
                                             </td>
                                         </tr>

@@ -33,6 +33,8 @@ class Index extends Component
 
     public $description;
 
+    public $addressee;
+
     public $totalMembers;
 
     protected $paginationTheme = 'bootstrap';
@@ -109,11 +111,12 @@ class Index extends Component
 
     public function render()
     {
-        $this->authorize('viewAny', Grievance::class);
+        // $this->authorize('create', Grievance::class);
 
         $data['grievances'] = $this->filterGrievances()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.grievances.index', $data)->layout('layouts.app');
     }
 }

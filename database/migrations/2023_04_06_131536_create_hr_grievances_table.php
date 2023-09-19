@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('addressee');
             $table->string('status')->default('pending');
             $table->string('comment')->nullable();
+            $table->timestamp('acknowledged_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->softDeletes();
             $table->timestamps();
