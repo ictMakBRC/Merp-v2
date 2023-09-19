@@ -4,9 +4,9 @@
             <div class="modal-header">
                 <h6 class="modal-title m-0" id="updateCreateModalTitle">
                     @if (!$toggleForm)
-                        New category
+                        New Account
                     @else
-                        Edit category
+                        Edit Account
                     @endif
                 </h6>
                 <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()" aria-label="Close"></button>
@@ -33,18 +33,18 @@
                             @enderror
                         </div>
                         <div class="mb-3 col-2">
-                            <label for="primary_balance" class="form-label required">Primary Balance</label>
-                            <input type="text" id="primary_balance" oninput="formatAmount(this)" class="form-control"  name="primary_balance" required
-                                wire:model.defer="primary_balance">
-                            @error('primary_balance')
+                            <label for="opening_balance" class="form-label required">Primary Balance</label>
+                            <input type="text" id="opening_balance" oninput="formatAmount(this)" class="form-control"  name="opening_balance" required
+                                wire:model.defer="opening_balance">
+                            @error('opening_balance')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mb-3 col-2">
-                            <label for="bank_balance" class="form-label required">Bank Balance</label>
-                            <input type="text" id="bank_balance" oninput="formatAmount(this)" class="form-control" name="bank_balance" required
-                                wire:model.defer="bank_balance">
-                            @error('bank_balance')
+                            <label for="account_type" class="form-label required">Account Type</label>
+                            <input type="text" id="account_type" oninput="formatAmount(this)" class="form-control" name="account_type" required
+                                wire:model.defer="account_type">
+                            @error('account_type')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>

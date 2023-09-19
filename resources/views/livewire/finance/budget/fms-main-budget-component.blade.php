@@ -1,53 +1,181 @@
 <div>
-   
+    <style>
+        .num {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            font-size: 14px;
+            padding: 1px 2px;
+            text-align: right;
+            float: right;
+            right: 0;
+        }
+    </style>
     @include('livewire.partials.brc-header')
     <h3 class="text-center">BUDGET</h3>
     <div class="table-responsive">
         <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
-            <thead class="table-light">
-                <tr>
-                    <th>No.</th>
-                    <th>Department/Project</th>
-                    <th>fiscal_year</th>
-                    <th>Revenue</th>
-                    <th>Expenditure</th>
-                    <th>Currency</th>
-                    <th>status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
             <tbody>
-                @foreach ($budgets as $key => $budget)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $budget->project->name??$budget->department->name??'N/A' }}</td>
-                        <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
-                        <td>{{ $budget->esitmated_income }}</td>
-                        <td>{{ $budget->estimated_expenditure }}</td>
-                        <td>{{ $budget->currency->code??'N/A' }}</td>
-                        @if ($budget->is_active == 0)
-                            <td><span class="badge bg-danger">Suspended</span></td>
-                        @else
-                            <td><span class="badge bg-success">Active</span></td>
-                        @endif
-                        <td class="table-action">                                                  
-                            <a data-bs-toggle="modal" data-bs-target="#viewBudgetModal" href="javascript:void(0)" wire:click="viewDptBudget({{$budget->id}})" class="btn btn-sm btn-outline-secondary">
-                                <i class="fa fa-eye"></i>
-                            </a>                                
-                        </td>
-                    </tr>
-                @endforeach
+                @php
+                    $totalRevenue = 0;
+                @endphp
+                <tr>
+                    <td>
+
+                        <div class="accordion accordion-flush" id="accordionRevenue">
+                            @foreach ($main_budgets as $chartAccountId => $chartAccountData)
+                                @if ($chartAccountData['type'] === 'Revenue')
+                                    <div class="card">
+                                        <a class=" collapsed" type="button" data-bs-toggle="collapse"  wire:click="getDepartMentBudgets({{ $chartAccountData['chartOfAccount']['id'] }})"
+                                            data-bs-target="#coa_{{ $chartAccountData['chartOfAccount']['id'] }}"
+                                            aria-expanded="false" aria-controls="flush-collapseOne">
+                                            <div class="card-header" role="tab" id="questionOne">
+                                                <h5 class="accordion-header card-title" id="flush-headingOne">
+                                                    {{ $chartAccountData['chartOfAccount']['name'] }}
+                                                    <span class="num">@moneyFormat( $chartAccountData['amount'] )</span>
+                                                </h5>
+                                            </div>
+                                        </a>
+                                        <div wire:ignore.self  id="coa_{{ $chartAccountData['chartOfAccount']['id'] }}"
+                                            class="accordion-collapse collapse card-bodyg"
+                                            aria-labelledby="flush-headingOne" data-bs-parent="#accordionRevenue">
+                                            <div class="accordion-body ml-4">
+                                                @if ($departMentBudgets||$projecttBudgets)                                                
+                                                <div class="table-responsive-sm pt-2">
+                                                    <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>No.</th>
+                                                                <th>Department</th>
+                                                                <th class="text-end">Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @php $number = 1; @endphp
+                                                            @foreach ($departMentBudgets as $dptBudget)
+                                                                <tr>
+                                                                    <td>{{ $number }}</td>
+                                                                    <td>{{ $dptBudget['department'] }}</td>
+                                                                    <td class="text-end">@moneyFormat( $dptBudget['amount'])</td>
+                                                                    
+                                                                </tr>
+                                                                @php $number++; @endphp
+                                                            @endforeach
+                                                            @foreach ($projecttBudgets as $projectBudget)
+                                                                <tr>
+                                                                    <td>{{ $number }}</td>
+                                                                    <td>{{ $projectBudget['project'] }}</td>
+                                                                    <td class="float-end">@moneyFormat( $projectBudget['project_amount'])</td>
+                                                                    
+                                                                </tr>
+                                                                @php $number++; @endphp
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>                                                   
+                                                </div> <!-- end preview-->
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @php
+                                    $totalRevenue += $chartAccountData['amount'];
+                                @endphp
+                                @endif
+                            @endforeach
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <h4 class="text-end">Total Revenue: @moneyFormat(  $totalRevenue )</<i class="fa fa-html5" aria-hidden="true"></i></h4>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div> <!-- end preview-->
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="btn-group float-end">
-                {{ $budgets->links('vendor.pagination.bootstrap-5') }}
-            </div>
-        </div>
-    </div>
-   @if ($budget_data!=null)       
-    @include('livewire.finance.budget.inc.preview-budget')
-   @endif
+
+    <div class="table-responsive">
+        <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
+            <tbody>
+                @php
+                    $totalExpenses = 0;
+                @endphp
+                <tr>
+                    <td>
+
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            @foreach ($main_budgets as $chartAccountId => $chartAccountData)
+                                @if ($chartAccountData['type'] === 'Expense')
+                                    <div class="card">
+
+                                        <a class="collapsed" type="button" data-bs-toggle="collapse" wire:click="getDepartMentBudgets({{ $chartAccountData['chartOfAccount']['id'] }})"
+                                            data-bs-target="#coa_{{ $chartAccountData['chartOfAccount']['id'] }}"
+                                            aria-expanded="false" aria-controls="flush-collapseOne">
+                                            <div class="card-header" role="tab" id="questionOne">
+                                                <h5 class="accordion-header card-title" id="flush-headingOne">
+                                                    {{ $chartAccountData['chartOfAccount']['name'] }}
+                                                    <span class="num">@moneyFormat( $chartAccountData['amount'] )</span>
+                                                </h5>
+                                            </div>
+                                        </a>
+                                        <div wire:ignore.self id="coa_{{ $chartAccountData['chartOfAccount']['id'] }}"
+                                            class="accordion-collapse collapse card-bodyg"
+                                            aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body ml-4">
+                                                @if ($departMentBudgets||$projecttBudgets)                                                
+                                                <div class="table-responsive-sm pt-2">
+                                                    <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>No.</th>
+                                                                <th>Department</th>
+                                                                <th class="text-end">Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @php $number = 1; @endphp
+                                                            @foreach ($departMentBudgets as $dptBudget)
+                                                                <tr>
+                                                                    <td>{{ $number }}</td>
+                                                                    <td>{{ $dptBudget['department'] }}</td>
+                                                                    <td class="text-end">@moneyFormat( $dptBudget['amount'])</td>
+                                                                    
+                                                                </tr>
+                                                                @php $number++; @endphp
+                                                            @endforeach
+                                                            @foreach ($projecttBudgets as $projectBudget)
+                                                                <tr>
+                                                                    <td>{{ $number }}</td>
+                                                                    <td>{{ $projectBudget['project'] }}</td>
+                                                                    <td class="float-end">@moneyFormat( $projectBudget['project_amount'])</td>
+                                                                    
+                                                                </tr>
+                                                                @php $number++; @endphp
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>                                                   
+                                                </div> <!-- end preview-->
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @php
+                                        $totalExpenses += $chartAccountData['amount'];
+                                    @endphp
+                                @endif
+                            @endforeach
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> <h4 class="text-end">Total Expenses: @moneyFormat( $totalExpenses )</h4></td>
+                </tr>
+            </tbody>
+        </table>
+    </div> <!-- end preview-->
+   
+
+    @if ($budget_data != null)
+        @include('livewire.finance.budget.inc.preview-budget')
+    @endif
 </div>
