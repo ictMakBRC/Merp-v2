@@ -19,12 +19,13 @@ return new class extends Migration
         Schema::create('fms_ledger_accounts', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->foreignId('parent_id')->nullable();
+            $table->foreignId('parent_id')->nullable();            
+            $table->foreignId('account_type')->nullable()->references('id')->on('fms_chart_of_accounts_types')->onDelete('restrict')->onUpdate('cascade');
             $table->string('account_number')->unique();
             $table->foreignId('department_id')->nullable()->constrained('departments','id')->onUpdate('cascade')->onDelete('restrict');  
             $table->foreignId('project_id')->nullable()->constrained('projects','id')->onUpdate('cascade')->onDelete('restrict');   
-            $table->double('primary_balance',16,2)->default(0.00);
-            $table->double('bank_balance',16,2)->default(0.00);
+            $table->double('opening_balance',16,2)->default(0.00);
+            $table->double('current_balance',16,2)->default(0.00);
             $table->double('amount_held',16,2)->default(0.00);
             $table->date('as_of');
             $table->foreignId('created_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   

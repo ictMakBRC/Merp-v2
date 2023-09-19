@@ -17,7 +17,7 @@ return new class extends Migration
         //     $table->string('code')->unique();            
         //     $table->string('account_number')->unique();
         //     $table->foreignId('ledger_account')->nullable()->constrained('fms_ledger_accounts','id')->onUpdate('cascade')->onDelete('restrict');
-        //     $table->foreignId('chat_of_account')->nullable()->references('id')->on('fms_chart_of_accounts')->onDelete('restrict')->onUpdate('cascade');
+        //     $table->foreignId('account_type')->nullable()->references('id')->on('fms_chart_of_accounts_types')->onDelete('restrict')->onUpdate('cascade');
         //     $table->double('opening_balance',16,2);
         //     $table->double('current_balance',16,2);
         //     $table->date('as_of');
