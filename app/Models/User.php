@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Models\HumanResource\EmployeeData\Employee;
 use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
@@ -73,7 +75,18 @@ class User extends Authenticatable
             });
         }
     }
+    /**
+     * User as an employee
+     */
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
 
+    /**
+     * Search query
+     * @param String $search
+     */
     public static function search($search)
     {
         return empty($search) ? static::query()
@@ -105,6 +118,15 @@ class User extends Authenticatable
         $this->two_factor_code = null;
         $this->two_factor_expires_at = null;
         $this->save();
+    }
+
+    /**
+     * Check if the user is administrator
+     */
+    public function isAdministrator(): bool
+    {
+
+        return $this->is_admin;
     }
 
 }

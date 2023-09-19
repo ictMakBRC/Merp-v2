@@ -8551,3 +8551,14 @@ ul.steppedprogress li:first-child:after {
 	font-weight: bold;
 	color: red;
 }
+
+.scrollable-div {
+  /* Set a fixed height for the div */
+  height: 300px; /* Adjust this value according to your needs */
+
+  /* Enable vertical scrolling */
+  overflow-y: auto; /* Use "scroll" if you always want the scrollbar to be visible */
+
+  /* Optional: Add some padding to prevent content from sticking to the edges */
+  padding: 10px;
+}

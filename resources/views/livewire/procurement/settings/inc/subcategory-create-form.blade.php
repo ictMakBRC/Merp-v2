@@ -1,4 +1,4 @@
-<div>
+<div x-cloak x-show="create_new">
     <form wire:submit.prevent="storeSubcategory">
         <div class="row">
             <div class="mb-3 col-md-3">
@@ -40,4 +40,5 @@
             <x-button type="submit" class="btn btn-success">{{ __('public.save') }}</x-button>
         </div>
     </form>
+    <hr>
 </div>

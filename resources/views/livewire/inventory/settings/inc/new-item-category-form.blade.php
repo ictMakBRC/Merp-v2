@@ -10,10 +10,10 @@
                     @endif
                 </h6>
                 <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()" aria-label="Close"></button>
-            </div><!--end modal-header-->     
-            
-            <form  @if ($toggleForm) wire:submit.prevent="updateInvCategory" @else wire:submit.prevent="storeInvCategory" @endif >             
-                <div class="modal-body">
+            </div><!--end modal-header-->
+
+            <div class="modal-body">
+            <form  @if ($toggleForm) wire:submit.prevent="updateInvCategory" @else wire:submit.prevent="storeInvCategory" @endif >
                     <div class="row">
                         <div class="mb-3 col-md-12">
                             <label for="name" class="form-label required">Name</label>
@@ -43,15 +43,15 @@
                             @enderror
                         </div>
                     </div>
-                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" wire:click="close()" >{{ __('public.close') }}</button>
-                    @if($toggleForm) 
+                    @if($toggleForm)
                     <x-button type="submit"  class="btn-success btn-sm">{{ __('public.update') }}</x-button>
-                     @else 
+                     @else
                      <x-button type="submit"  class="btn-success btn-sm">{{ __('public.save') }}</x-button>
                      @endif
                 </div><!--end modal-footer-->
+              </div>
             </form>
         </div><!--end modal-content-->
     </div><!--end modal-dialog-->

@@ -24,7 +24,7 @@
                             @enderror
                         </div>
                         <div class="mb-3 col-md-9">
-                            <label for="parent_id" class="form-label">Parent Department</label>
+                            <label for="parent_id" class="form-label">Parent Category</label>
                             <select class="form-select selectr" id="parent_id" wire:model.defer="parent_id">
                                 <option selected value="">None</option>
                                 @foreach ($categories as $key => $category)
