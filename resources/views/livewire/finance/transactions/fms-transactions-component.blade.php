@@ -113,7 +113,7 @@
                                             <td>{{ $transaction->currency->code??'UGX' }}</td>
                                             <td class="table-action">                                                  
                                                
-                                                <a  href="{{URL::signedRoute('finance-main_transaction_view',$transaction->id)}}" class="btn btn-sm btn-outline-secondary">
+                                                <a  href="{{URL('finance-main_transaction_view',$transaction->id)}}" class="btn btn-sm btn-outline-secondary">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
                                                    
