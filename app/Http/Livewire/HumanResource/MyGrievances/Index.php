@@ -170,6 +170,7 @@ class Index extends Component
     {
         $user = auth()->user();
         $grievances = Grievance::search($this->search)
+       ->where('employee_id', '!=', null)
        ->where('employee_id', $user->employee?->id);
 
 

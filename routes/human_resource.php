@@ -16,6 +16,7 @@ use App\Http\Livewire\HumanResource\MyGrievances\Index as MyGrievances;
 use App\Http\Livewire\HumanResource\GrievanceTypes\Index as GrievanceTypes;
 use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
 use App\Http\Livewire\HumanResource\Grievances\Edit as EditGrievance;
+use App\Http\Livewire\HumanResource\Grievances\Show as ViewGrievance;
 use App\Http\Livewire\HumanResource\Leave\DepartmentalRequests;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Index as Appraisals;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Create as RegisterAppraisal;
@@ -68,7 +69,8 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('/', Grievances::class)->name('grievances');
         Route::get('/my', MyGrievances::class)->name('my-grievances');
         Route::get('create', RegisterGrievance::class)->name('grievances.create');
-        Route::get('/{grievance}', EditGrievance::class)->name('grievances.update');
+        Route::get('/{grievance}/edit', EditGrievance::class)->name('grievances.update');
+        Route::get('/{grievance}', ViewGrievance::class)->name('grievances.show');
     });
 
     //performances
