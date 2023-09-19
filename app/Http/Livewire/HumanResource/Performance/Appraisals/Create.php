@@ -7,14 +7,13 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Performance\Appraisal;
+use App\Models\HumanResource\Settings\Configuration;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Create extends Component
 {
     use WithFileUploads;
     use AuthorizesRequests;
-
-    public $employee_id;
 
     public $start_date;
 
@@ -25,7 +24,6 @@ class Create extends Component
     public $employees;
 
     protected $rules = [
-        'employee_id' => 'nullable',
         'start_date' => 'required',
         'end_date' => 'required',
         'file_upload' => 'file|nullable',
@@ -42,7 +40,7 @@ class Create extends Component
         $this->validate();
 
         $appraisal = Appraisal::create([
-               'employee_id' => $this->employee_id,
+               'employee_id' => auth()->user()->employee->id,
                'start_date' => $this->start_date,
                'end_date' => $this->end_date,
            ]);
@@ -52,9 +50,16 @@ class Create extends Component
         return redirect()->to(route('appraisals'));
     }
 
+    public function download()
+    {
+        $appraisal = Configuration::where('key', 'appraisal_letter')->first();
+        $mediaItem =  $appraisal->getFirstMedia();
+        return response()->download($mediaItem->getPath(), $mediaItem->file_name);
+    }
+
     public function render()
     {
-        $this->authorize('create', Appraisal::class);
+        // $this->authorize('create', Appraisal::class);
         return view('livewire.human-resource.performance.appraisals.create');
     }
 }

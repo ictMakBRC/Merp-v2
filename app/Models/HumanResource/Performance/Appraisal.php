@@ -2,10 +2,12 @@
 
 namespace App\Models\HumanResource\Performance;
 
+use App\Models\Comment;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Appraisal extends Model implements HasMedia
@@ -32,6 +34,14 @@ class Appraisal extends Model implements HasMedia
         //         $model->updated_by = auth()->id();
         //     });
         // }
+    }
+
+    /**
+    * Comments under this grievance
+    */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     /**

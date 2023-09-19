@@ -13,21 +13,17 @@
                 <div class="collapse " id="appraisalsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
+                            <a class="nav-link" href="{{route('my.appraisals')}}">My Appraisals</a>
+                        </li>
+                        <!--end nav-item-->
+                        <li class="nav-item">
                             <a class="nav-link" href="{{route('appraisals.create')}}">New </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('appraisals')}}">All Appraisals</a>
                         </li>
                         <!--end nav-item-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-appointments.html">Download Template</a>
-                        </li>
-                        <!--end nav-item-->
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-appointments.html">Upload New Template</a>
-                        </li>
-                        <!--end nav-item-->
                     </ul>
                     <!--end nav-->
                 </div>
