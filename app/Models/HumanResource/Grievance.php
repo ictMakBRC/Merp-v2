@@ -2,11 +2,14 @@
 
 namespace App\Models\HumanResource;
 
+use App\Models\Comment;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\HumanResource\EmployeeData\Employee;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Grievance extends Model implements HasMedia
 {
@@ -21,6 +24,7 @@ class Grievance extends Model implements HasMedia
         'subject',
         'addressee',
         'description',
+        'acknowledged_at',
         'comment',
         'status',
         'created_by'
@@ -34,7 +38,7 @@ class Grievance extends Model implements HasMedia
      */
     public function employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_id', 'id');
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
     /**
      * Get the Employee that created this grievance
@@ -43,6 +47,14 @@ class Grievance extends Model implements HasMedia
     public function type()
     {
         return $this->belongsTo(GrievanceType::class, 'grievance_type_id');
+    }
+
+    /**
+     * Comments under this grievance
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     /**
