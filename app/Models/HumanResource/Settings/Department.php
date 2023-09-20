@@ -5,6 +5,7 @@ namespace App\Models\HumanResource\Settings;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AssetsManagement\Asset;
+use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\HumanResource\EmployeeData\Employee;
@@ -57,6 +58,12 @@ class Department extends Model
     public function assets()
     {
         return $this->hasMany(Asset::class);
+    }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class,'department_project','department_id','project_id')
+        ->withTimestamps();
     }
 
     public static function boot()

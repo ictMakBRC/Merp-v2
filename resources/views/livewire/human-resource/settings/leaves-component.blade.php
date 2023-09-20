@@ -8,10 +8,10 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        Leaves (<span class="text-danger fw-bold">{{ $leaves->total() }}</span>)
-                                        @include('livewire.layouts.partials.inc.filter-toggle')
+                                    Leaves (<span class="text-danger fw-bold">{{ $leaves->total() }}</span>)
+                                    @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
-                                        Edit leave
+                                    Edit leave
                                     @endif
 
                                 </h5>
@@ -37,14 +37,12 @@
                         </div>
                         <div class="row mb-0">
                             <div class="mt-4 col-md-1">
-                                <a type="button" class="btn btn-outline-success me-2"
-                                    wire:click="export()">Export</a>
+                                <a type="button" class="btn btn-outline-primary me-2" wire:click="export()">Export</a>
                             </div>
 
                             <div class="mb-3 col-md-2">
                                 <label for="from_date" class="form-label">From Date</label>
-                                <input id="from_date" type="date" class="form-control"
-                                    wire:model.lazy="from_date">
+                                <input id="from_date" type="date" class="form-control" wire:model.lazy="from_date">
                             </div>
 
                             <div class="mb-3 col-md-2">
@@ -84,8 +82,8 @@
 
                             <div class="mb-3 col-md-3">
                                 <label for="search" class="form-label">Search</label>
-                                <input id="search" type="text" class="form-control"
-                                    wire:model.debounce.300ms="search" placeholder="search">
+                                <input id="search" type="text" class="form-control" wire:model.debounce.300ms="search"
+                                    placeholder="search">
                             </div>
                             <hr>
                         </div>
@@ -107,24 +105,26 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($leaves as $key => $leave)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $leave->name }}</td>
-                                            <td>{{ $leave->duration ?? 'N/A' }}</td>
-                                            <td>{{ $leave->notice_days??'N/A' }}</td>
-                                            <td>{{ $leave->is_payable }}</td>
-                                            <td>{{ $leave->given_to??'N/A' }}</td>
-                                            <td>{{ $leave->carriable??'N/A' }}</td>
-                                            @if ($leave->is_active == 0)
-                                                <td><span class="badge bg-danger">Suspended</span></td>
-                                            @else
-                                                <td><span class="badge bg-success">Active</span></td>
-                                            @endif
-                                            <td class="table-action">
-                                                <button wire:click="editData({{ $leave->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
-                                                    <i class="fa fa-edit"></i></button>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $leave->name }}</td>
+                                        <td>{{ $leave->duration ?? 'N/A' }}</td>
+                                        <td>{{ $leave->notice_days??'N/A' }}</td>
+                                        <td>{{ $leave->is_payable }}</td>
+                                        <td>{{ $leave->given_to??'N/A' }}</td>
+                                        <td>{{ $leave->carriable??'N/A' }}</td>
+                                        @if ($leave->is_active == 0)
+                                        <td><span class="badge bg-danger">Suspended</span></td>
+                                        @else
+                                        <td><span class="badge bg-primary">Active</span></td>
+                                        @endif
+                                        <td class="table-action">
+                                            <button wire:click="editData({{ $leave->id }})" data-bs-toggle="modal"
+                                                data-bs-target="#updateCreateModal"
+                                                class="action-ico btn-sm btn btn-outline-primary mx-1">
+                                                <i class="fa fa-edit"></i></button>
+                                        </td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -144,8 +144,8 @@
 
     @include('livewire.human-resource.settings.inc.new-leave-form')
     @push('scripts')
-            <script>
-                window.addEventListener('close-modal', event => {
+    <script>
+        window.addEventListener('close-modal', event => {
                     $('#updateCreateModal').modal('hide');
                     $('#delete_modal').modal('hide');
                     $('#show-delete-confirmation-modal').modal('hide');
@@ -153,6 +153,6 @@
                 window.addEventListener('delete-modal', event => {
                     $('#delete_modal').modal('show');
                 });
-            </script>
+    </script>
     @endpush
 </div>
