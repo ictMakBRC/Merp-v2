@@ -2,10 +2,12 @@
 
 namespace App\Models\HumanResource\Performance;
 
+use App\Models\Comment;
+use Illuminate\Support\Auth;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Warning extends Model implements HasMedia
@@ -17,7 +19,7 @@ class Warning extends Model implements HasMedia
 
     protected $fillable = [
         'employee_id',
-        'reason',
+        'subject',
         'letter',
         'created_by'
     ];
@@ -28,11 +30,19 @@ class Warning extends Model implements HasMedia
     public static function boot()
     {
         parent::boot();
-        if (Auth::check()) {
+        if (\Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
             });
         }
+    }
+
+    /**
+     * Comments under this grievance
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     /**
