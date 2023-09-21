@@ -1,7 +1,7 @@
 <div wire:ignore.self class="modal fade" id="updateCreateModal" tabindex="-1" role="dialog" aria-labelledby="updateCreateModalTitle" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-success">
+            <div class="modal-header">
                 <h6 class="modal-title m-0" id="updateCreateModalTitle">
                     @if (!$toggleForm)
                         New category
@@ -24,7 +24,7 @@
                             @enderror
                         </div>
                         <div class="mb-3 col-md-9">
-                            <label for="parent_id" class="form-label">Parent Department</label>
+                            <label for="parent_id" class="form-label">Parent Category</label>
                             <select class="form-select selectr" id="parent_id" wire:model.defer="parent_id">
                                 <option selected value="">None</option>
                                 @foreach ($categories as $key => $category)

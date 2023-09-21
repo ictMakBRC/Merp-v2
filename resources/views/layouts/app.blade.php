@@ -18,8 +18,8 @@
     <link href="{{ asset('assets/libs/mobius1-selectr/selectr.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Include Select2 library and CSS -->
 
-     <!-- iziToast CSS -->
-     <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
+    <!-- iziToast CSS -->
+    <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
 
 
     @stack('css')
@@ -62,39 +62,35 @@
     <script src="{{ asset('assets/libs/izitoast/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert/sweetalert.min.js') }}"></script>
     <!-- App js -->
-    <script src="{{ asset('assets/js/app.js') }}"></script>   
+    <script src="{{ asset('assets/js/app.js') }}"></script>
     <script src="{{ asset('assets/libs/mobius1-selectr/selectr.min.js') }}"></script>
-    <script src="{{ asset('assets/js/index.js') }}"></script>  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.js"></script>  
-    
-    <script>
-        window.addEventListener('livewire:load', () => {
-            initializeSelectr();
-        });
-    
-        window.addEventListener('livewire:update', () => {
-            const selectrElements = document.querySelectorAll('.selectr-container');
-            selectrElements.forEach((element) => {
-                const selectrInstance = element.selectr;
-                selectrInstance.destroy(); // destroy the previous instances of Selectr
-            });
-    
-            initializeSelectr();
-        });
-    
-        function initializeSelectr() {
-            const selectrElements = document.querySelectorAll('.selectr');
-            selectrElements.forEach((element) => {
-                new Selectr(element, {
-                    searchable: true, 
-                    width: '200px',
-                });
-            });
-        }
-    </script>
+    <script src="{{ asset('assets/js/index.js') }}"></script>
+
     @livewireScripts
 
     @stack('scripts')
+    <script>
+        function formatAmount(input) {
+            var value = input.value.replace(/,/g, ''); // Remove existing commas
+
+            // Remove non-numeric and non-decimal characters
+            value = value.replace(/[^0-9.]/g, '');
+
+            // Ensure there's only one decimal point
+            var parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+
+            var formattedValue = addCommasToNumber(value);
+
+            input.value = formattedValue;
+        }
+
+        function addCommasToNumber(value) {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+    </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 </body>

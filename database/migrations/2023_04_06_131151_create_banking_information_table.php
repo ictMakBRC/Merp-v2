@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('banking_information', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('bank_name');
             $table->string('branch')->nullable();
             $table->string('account_name');

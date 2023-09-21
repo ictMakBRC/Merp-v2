@@ -23,10 +23,7 @@
                 <label for="currency" class="form-label required">Currency</label>
                 <select class="form-select select2" id="currency" wire:model.defer="currency">
                     <option selected value="">Select</option>
-                    <option value="UGX">UGX</option>
-                    <option value="USD">USD</option>
-                    <option value="GBP">GBP</option>
-                    <option value="EUR">EUR</option>
+                    @include('layouts.currencies')
                 </select>
                 @error('currency')
                     <div class="text-danger text-small">{{ $message }}</div>
@@ -34,16 +31,16 @@
             </div>
 
             <div class="mb-3 col-md-2">
-                <label for="date7" class="form-label required">From</label>
-                <input type="date" id="date1" class="form-control" wire:model.defer="start_date">
+                <label for="end_date" class="form-label required">From</label>
+                <input type="date" id="end_date" class="form-control" wire:model.defer="start_date">
                 @error('start_date')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3 col-md-2">
-                <label for="date8" class="form-label required">To</label>
-                <input type="date" id="date2" class="form-control" wire:model.defer="end_date">
+                <label for="end_date" class="form-label required">To</label>
+                <input type="date" id="end_date" class="form-control" wire:model.defer="end_date">
                 @error('end_date')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror

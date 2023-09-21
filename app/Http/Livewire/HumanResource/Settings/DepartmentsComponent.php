@@ -100,11 +100,11 @@ class DepartmentsComponent extends Component
         $department->name = $this->name;
         $department->is_active = $this->is_active;
         $department->description = $this->description;
-        $department->supervisor = $this->supervisor;
-        $department->asst_supervisor = $this->asst_supervisor;
+        $department->supervisor = $this->supervisor??null;
+        $department->asst_supervisor = $this->asst_supervisor??null;
         $department->type = $this->type;
         $department->prefix = $this->prefix;
-        $department->parent_department = $this->parent_department;
+        $department->parent_department = $this->parent_department??null;
         $department->save();
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
