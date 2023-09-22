@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->longText('experiences')->nullable();
             $table->longText('improvements')->nullable();
             $table->boolean('can_recommend_us')->default(true);
-            $table->boolean('reason_for_recommendation')->nullable();
+            $table->longText('reason_for_recommendation')->nullable();
             $table->timestamp('acknowledged_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
