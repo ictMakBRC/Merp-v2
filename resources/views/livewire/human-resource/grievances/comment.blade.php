@@ -57,8 +57,10 @@
                         <!--end row-->
                         <p>{{$reply->content}}
                         </p>
-                        <btn class="text-primary me-2"><i class="fas fa-pen me-1"></i>Edit</btn>
-                        <btn class="text-danger "><i class="fas fa-trash me-1"></i>Delete</btn>
+                        <btn wire:click="editReply({{$reply->id}})" class="text-primary me-2"><i
+                                class="fas fa-pen me-1"></i>Edit</btn>
+                        <btn class="text-danger" data-bs-toggle="modal" wire:click="selectReply({{$reply->id}})"
+                            data-bs-target="#delete_reply_modal"><i class="fas fa-trash me-1"></i>Delete</btn>
                     </div>
                 </div>
                 <!--end col-->
@@ -68,7 +70,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card-body mt-1">
-                        <form wire:submit.prevent="addReply({{$comment->id}})">
+                        <form wire:submit.prevent="submitReply({{$comment->id}})">
                             <div class="form-group mb-3">
                                 <textarea class="form-control" wire:model="reply" rows="5" id="leave_comment"
                                     placeholder="Reply"></textarea>
@@ -87,4 +89,47 @@
             <!--end row-->
         </li>
     </ul>
+    <div wire:ignore.self class="modal fade" id="delete_reply_modal" tabindex="-1" role="dialog"
+        aria-labelledby="replyModalTitle" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h6 class="modal-title m-0" id="replyModalTitle">
+                        Confirm Deletion
+                    </h6>
+                    <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()"
+                        aria-label="Close"></button>
+                </div>
+                <!--end modal-header-->
+                <div class="modal-body">
+                    <div class="row">
+                        Are you sure you want to delete this reply?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-bs-dismiss="modal" wire:click="close()">{{
+                        __('public.close') }}</button>
+
+                    <x-button type="click" wire:click="deleteReply" class="btn-danger btn-sm">Confirm
+                    </x-button>
+
+                </div>
+                <!--end modal-footer-->
+            </div>
+            <!--end modal-content-->
+        </div>
+        <!--end modal-dialog-->
+    </div>
 </li>
+
+
+@push('scripts')
+<script>
+    window.addEventListener('close-modal', event => {
+                $('#delete_reply_modal').modal('hide');
+            });
+            window.addEventListener('delete-modal', event => {
+                $('#delete_reply_modal').modal('show');
+            });
+</script>
+@endpush
