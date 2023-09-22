@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Str;
 use App\Models\Procurement\Settings\Provider;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Settings\ProcurementSubcategory;
 
 class GeneratorService
@@ -104,6 +105,29 @@ class GeneratorService
                 return $categoryCode . '/' . str_pad(1, 3, '0', STR_PAD_LEFT);
             }
         }
+    }
+
+    public static function procurementRequestRef()
+    {
+        $requestRef = '';
+        $yearStart = date('y');
+        $latestRef = ProcurementRequest::select('reference_no')->orderBy('id', 'desc')->first();;
+        $randomAlphabet = ucfirst(Str::random(1));
+
+        if ($latestRef) {
+            $latestRefSplit = explode('-', $latestRef->reference_no);
+            $refYear = (int) filter_var($latestRefSplit[0], FILTER_SANITIZE_NUMBER_INT);
+
+            if ($refYear == $yearStart) {
+                $requestRef = $latestRefSplit[0].'-'.str_pad(((int) filter_var($latestRefSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT).$randomAlphabet;
+            } else {
+                $requestRef = $yearStart.'PROC'.'-001'.$randomAlphabet;
+            }
+        } else {
+            $requestRef = $yearStart.'PROC'.'-001'.$randomAlphabet;
+        }
+
+        return $requestRef;
     }
 
 

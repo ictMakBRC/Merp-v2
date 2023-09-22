@@ -7,14 +7,15 @@ use App\Traits\DocumentableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
 {
-    use HasFactory, LogsActivity, DocumentableTrait;
+    use HasFactory, LogsActivity, DocumentableTrait, ProcurementRequestableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {

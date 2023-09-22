@@ -2,6 +2,7 @@
 
 namespace App\Models\HumanResource\Settings;
 
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AssetsManagement\Asset;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory,LogsActivity, ProcurementRequestableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
