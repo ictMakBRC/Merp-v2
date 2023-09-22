@@ -15,7 +15,14 @@ return new class extends Migration {
         Schema::create('hr_pf_exit_interviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->longText('interview');
+            $table->longText('reason_for_exit');
+            $table->longText('factors_for_exit')->nullable();
+            $table->longText('processes_procedures_systems_for_exit')->nullable();
+            $table->longText('experiences')->nullable();
+            $table->longText('improvements')->nullable();
+            $table->boolean('can_recommend_us')->default(true);
+            $table->longText('reason_for_recommendation')->nullable();
+            $table->timestamp('acknowledged_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });

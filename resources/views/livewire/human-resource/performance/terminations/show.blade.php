@@ -1,6 +1,6 @@
 <div>
-    @include('livewire.human-resource.grievances.breadcrumps', [
-    'heading' => 'Edit',
+    @include('livewire.human-resource.performance.terminations.breadcrumps', [
+    'heading' => '',
     ])
     <div class="container-fluid">
         <div class="row">
@@ -12,9 +12,9 @@
                                 <div class="media">
 
                                     <div class="media-body align-self-center">
-                                        <h4 class="mt-0">{{$grievance->type->name}}</h4>
+                                        <h4 class="mt-0">{{$termination->reason}}</h4>
                                         <p class="mb-0 text-muted">
-                                            {{$grievance->comment}}
+                                            {{$termination->letter}}
                                         </p>
                                     </div>
                                 </div>
@@ -22,16 +22,13 @@
                             <!--end col-->
                             <div class="col-lg-5 ms-auto">
                                 <dl class="row mb-0">
-                                    <dt class="col-sm-3">Addressee:</dt>
-                                    <dd class="col-sm-9">Rosa Dodson
-                                    </dd>
                                     <dt class="col-sm-4">Submission Date:</dt>
                                     <dd class="col-sm-8">
-                                        @formatDate($grievance->created_at)
+                                        @formatDate($termination->created_at)
                                     </dd>
                                     <dt class="col-sm-4">Is Acknowledged:</dt>
                                     <dd class="col-sm-8">
-                                        @if($grievance->acknowledged_at != null)
+                                        @if($termination->acknowledged_at != null)
                                         <span>Yes</span>
                                         @else
                                         <span>No</span>
@@ -53,10 +50,10 @@
         <!--end row-->
         <div class="row">
             <div class="col-lg-6">
-                @include('livewire.human-resource.grievances.attachments')
+                @include('livewire.human-resource.performance.terminations.attachments')
             </div>
             <!--end col-->
-            @if($grievance->acknowledged_at == null)
+            @if($termination->acknowledged_at == null)
             <div class="col-lg-6">
                 <div class="card">
                     <!--end card-header-->
@@ -86,7 +83,7 @@
             </div>
             @endif
 
-            @include('livewire.human-resource.grievances.comments')
+            @include('livewire.human-resource.performance.terminations.comments')
 
         </div>
         <!--end row-->
@@ -94,6 +91,6 @@
     </div>
 
     <!-- confirm acknowledgement modal -->
-    @include('livewire.human-resource.grievances.acknowledgement-modal')
+    @include('livewire.human-resource.performance.terminations.acknowledgement-modal')
     <!--end modal-->
 </div>

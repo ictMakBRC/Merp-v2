@@ -25,6 +25,7 @@ use App\Http\Livewire\HumanResource\Grievances\Create as RegisterGrievance;
 use App\Http\Livewire\HumanResource\GrievanceTypes\Index as GrievanceTypes;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Index as Warnings;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Edit as EditWarning;
+use App\Http\Livewire\HumanResource\Performance\Warnings\Show as ShowWarning;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Index as Appraisals;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Edit as EditAppraisal;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Show as ShowAppraisal;
@@ -33,10 +34,13 @@ use App\Http\Livewire\HumanResource\Performance\Resignations\Index as Resignatio
 use App\Http\Livewire\HumanResource\Performance\Terminations\Index as Terminations;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Create as RegisterWarning;
 use App\Http\Livewire\HumanResource\Performance\Resignations\Edit as EditResignation;
+use App\Http\Livewire\HumanResource\Performance\Resignations\Show as ShowResignation;
 use App\Http\Livewire\HumanResource\Performance\Terminations\Edit as EditTermination;
+use App\Http\Livewire\HumanResource\Performance\Terminations\Show as ShowTermination;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Create as RegisterAppraisal;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Index as ExitInterviews;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Edit as EditExitInterview;
+use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Show as ShowExitInterview;
 use App\Http\Livewire\HumanResource\Performance\Resignations\Create as RegisterResignation;
 use App\Http\Livewire\HumanResource\Performance\Terminations\Create as RegisterTermination;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Create as RegisterExitInterview;
@@ -91,28 +95,32 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::group(['prefix' => 'warnings'], function () {
             Route::get('/', Warnings::class)->name('warnings');
             Route::get('create', RegisterWarning::class)->name('warnings.create');
-            Route::get('/{warning}', EditWarning::class)->name('warnings.update');
+            Route::get('/update/{warning}', EditWarning::class)->name('warnings.update');
+            Route::get('/{warning}', ShowWarning::class)->name('warnings.show');
         });
 
         //Terminations
         Route::group(['prefix' => 'terminations'], function () {
             Route::get('/', Terminations::class)->name('terminations');
             Route::get('create', RegisterTermination::class)->name('terminations.create');
-            Route::get('/{termination}', EditTermination::class)->name('terminations.update');
+            Route::get('/update/{termination}', EditTermination::class)->name('terminations.update');
+            Route::get('/{termination}', ShowTermination::class)->name('terminations.show');
         });
 
         //Resignations
         Route::group(['prefix' => 'resignations'], function () {
             Route::get('/', Resignations::class)->name('resignations');
             Route::get('create', RegisterResignation::class)->name('resignations.create');
-            Route::get('/{resignation}', EditResignation::class)->name('resignations.update');
+            Route::get('/update/{resignation}', EditResignation::class)->name('resignations.update');
+            Route::get('/{resignation}', ShowResignation::class)->name('resignations.show');
         });
 
         //ExitInterviews
         Route::group(['prefix' => 'exit-interviews'], function () {
             Route::get('/', ExitInterviews::class)->name('exit-interviews');
             Route::get('create', RegisterExitInterview::class)->name('exit-interviews.create');
-            Route::get('/{exitInterview}', EditExitInterview::class)->name('exit-interviews.update');
+            Route::get('/update/{exitInterview}', EditExitInterview::class)->name('exit-interviews.update');
+            Route::get('/{exitInterview}', ShowExitInterview::class)->name('exit-interviews.show');
         });
     });
 
