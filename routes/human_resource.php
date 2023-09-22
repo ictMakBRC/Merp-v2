@@ -40,6 +40,7 @@ use App\Http\Livewire\HumanResource\Performance\Terminations\Show as ShowTermina
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Create as RegisterAppraisal;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Index as ExitInterviews;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Edit as EditExitInterview;
+use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Show as ShowExitInterview;
 use App\Http\Livewire\HumanResource\Performance\Resignations\Create as RegisterResignation;
 use App\Http\Livewire\HumanResource\Performance\Terminations\Create as RegisterTermination;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Create as RegisterExitInterview;
@@ -118,7 +119,8 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::group(['prefix' => 'exit-interviews'], function () {
             Route::get('/', ExitInterviews::class)->name('exit-interviews');
             Route::get('create', RegisterExitInterview::class)->name('exit-interviews.create');
-            Route::get('/{exitInterview}', EditExitInterview::class)->name('exit-interviews.update');
+            Route::get('/update/{exitInterview}', EditExitInterview::class)->name('exit-interviews.update');
+            Route::get('/{exitInterview}', ShowExitInterview::class)->name('exit-interviews.show');
         });
     });
 

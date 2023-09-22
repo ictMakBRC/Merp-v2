@@ -37,13 +37,7 @@ class Warning extends Model implements HasMedia
         }
     }
 
-    /**
-     * Comments under this grievance
-     */
-    public function comments(): MorphMany
-    {
-        return $this->morphMany(Comment::class, 'commentable');
-    }
+
 
     /**
      * Search the appraisal by department
