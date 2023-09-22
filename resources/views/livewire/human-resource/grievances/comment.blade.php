@@ -1,5 +1,5 @@
 <li>
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-auto">
             <img src="{{asset('assets/images/users/user-vector.png')}}" alt="profile-user"
                 class="rounded-circle me-2 thumb-sm">
@@ -9,11 +9,12 @@
             <div class="comment-body ms-n2 bg-light-alt p-3">
                 <div class="row">
                     <div class="col">
-                        <p class="text-dark fw-semibold mb-2">Martin Luther</p>
+                        <p class="text-dark fw-semibold mb-2">{{$comment->owner?->full_name}}</p>
                     </div>
                     <!--end col-->
                     <div class="col-auto">
-                        <span class="text-muted"><i class="far fa-clock me-1"></i>30 min ago</span>
+                        <span class="text-muted"><i
+                                class="far fa-clock me-1"></i>{{$comment->created_at->diffForHumans()}}</span>
                     </div>
                     <!--end col-->
                 </div>
@@ -21,6 +22,8 @@
                 <p>
                     {{$comment->content}}
                 </p>
+                <btn class="text-primary me-2"><i class="fas fa-pen me-1"></i>Edit</btn>
+                <btn class="text-danger me-2"><i class="fas fa-trash me-1"></i>Delete</btn>
                 <a wire:click.defer="toggleReplyButton({{$comment->id}})" class="text-primary"><i
                         class="fas fa-reply me-1"></i>Reply</a>
             </div>
@@ -42,7 +45,7 @@
                     <div class="comment-body ms-n2 bg-light-alt p-3">
                         <div class="row">
                             <div class="col">
-                                <p class="text-dark fw-semibold mb-2">{{auth()->user()->full_name}}</p>
+                                <p class="text-dark fw-semibold mb-2">{{$comment->owner->full_name?? 'Anonymous'}}</p>
                             </div>
                             <!--end col-->
                             <div class="col-auto">
@@ -54,6 +57,8 @@
                         <!--end row-->
                         <p>{{$reply->content}}
                         </p>
+                        <btn class="text-primary me-2"><i class="fas fa-pen me-1"></i>Edit</btn>
+                        <btn class="text-danger "><i class="fas fa-trash me-1"></i>Delete</btn>
                     </div>
                 </div>
                 <!--end col-->
@@ -62,7 +67,7 @@
             @if($shouldShowReply == true)
             <div class="row">
                 <div class="col-12">
-                    <div class="card-body pt-0">
+                    <div class="card-body mt-1">
                         <form wire:submit.prevent="addReply({{$comment->id}})">
                             <div class="form-group mb-3">
                                 <textarea class="form-control" wire:model="reply" rows="5" id="leave_comment"

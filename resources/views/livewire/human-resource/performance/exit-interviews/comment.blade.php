@@ -9,11 +9,12 @@
             <div class="comment-body ms-n2 bg-light-alt p-3">
                 <div class="row">
                     <div class="col">
-                        <p class="text-dark fw-semibold mb-2">Martin Luther</p>
+                        <p class="text-dark fw-semibold mb-2">{{$comment->owner->full_name}}</p>
                     </div>
                     <!--end col-->
                     <div class="col-auto">
-                        <span class="text-muted"><i class="far fa-clock me-1"></i>30 min ago</span>
+                        <span class="text-muted"><i
+                                class="far fa-clock me-1"></i>{{$comment->created_at->diffForHumans()}}</span>
                     </div>
                     <!--end col-->
                 </div>
@@ -42,7 +43,7 @@
                     <div class="comment-body ms-n2 bg-light-alt p-3">
                         <div class="row">
                             <div class="col">
-                                <p class="text-dark fw-semibold mb-2">{{auth()->user()->full_name}}</p>
+                                <p class="text-dark fw-semibold mb-2">{{$comment->owner->full_name}}</p>
                             </div>
                             <!--end col-->
                             <div class="col-auto">
@@ -52,7 +53,8 @@
                             <!--end col-->
                         </div>
                         <!--end row-->
-                        <p>{{$reply->content}}
+                        <p>
+                            {{$reply->content}}
                         </p>
                     </div>
                 </div>
