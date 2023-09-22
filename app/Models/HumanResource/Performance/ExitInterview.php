@@ -14,9 +14,9 @@ class ExitInterview extends Model implements HasMedia
 
     protected $table = 'hr_pf_exit_interviews';
 
-    protected $fillable = [
-        'employer_id'
-    ];
+    protected $guarded = [];
+
+    protected $cast = ['can_recommend_us' => 'bool'];
 
     /**
      * Search the appraisal by department
