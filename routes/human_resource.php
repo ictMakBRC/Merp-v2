@@ -15,6 +15,7 @@ use App\Http\Livewire\HumanResource\Grievances\Index as Grievances;
 use App\Http\Livewire\HumanResource\MyGrievances\Index as MyGrievances;
 use App\Http\Livewire\HumanResource\GrievanceTypes\Index as GrievanceTypes;
 use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
+use App\Http\Livewire\HumanResource\EmployeeData\EmployeeDetailsComponent;
 use App\Http\Livewire\HumanResource\Grievances\Edit as EditGrievance;
 use App\Http\Livewire\HumanResource\Grievances\Show as ViewGrievance;
 use App\Http\Livewire\HumanResource\Leave\DepartmentalRequests;
@@ -56,6 +57,7 @@ Route::group(['prefix' => 'human-resource'], function () {
     Route::group(['prefix' => 'employees'], function () {
         Route::get('new-info', EmployeeDataComponent::class)->name('human-resource-capture-new-info');
         Route::get('list', EmployeesListComponent::class)->name('human-resource-employees-list');
+        Route::get('{id}/details', EmployeeDetailsComponent::class)->name('employee-details');
     });
     Route::group(['prefix' => 'leave'], function () {
         Route::get('new-request/new', NewLeaveRequest::class)->name('leave.new-request');
