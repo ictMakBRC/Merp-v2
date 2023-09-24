@@ -97,6 +97,7 @@
                                 <thead>
                                     <tr>
                                         <th>No.</th>
+                                        <th>Employee Name</th>
                                         <th>From</th>
                                         <th>To</th>
                                         <th>Created at</th>
@@ -107,6 +108,7 @@
                                     @forelse ($appraisals as $key => $appraisal)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
+                                        <td>{{$appraisal->owner->full_name}}</td>
                                         <td>@formatDate($appraisal->start_date)</td>
                                         <td>@formatDate($appraisal->end_date)</td>
                                         <td>@formatDate($appraisal->created_at)</td>

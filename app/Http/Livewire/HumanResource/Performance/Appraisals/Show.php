@@ -35,7 +35,7 @@ class Show extends Component
     {
         $this->validate();
 
-        return DB::transaction(function () {
+
             $this->appraisal->update([
                 'acknowledged_at' => now()
             ]);
@@ -45,11 +45,11 @@ class Show extends Component
                     'user_id' => auth()->id(),
                 ]);
             }
-
-            $this->appraisal->fresh();
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Acknowledgement  submitted!']);
+            $this->dispatchBrowserEvent('refresh-page');
 
             return redirect()->back();
-        });
+
     }
 
     public function download()

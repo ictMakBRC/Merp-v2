@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Grievances;
+namespace App\Http\Livewire\Comments;
 
 use App\Models\Comment as GComment;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
-class Comment extends Component
+class Show extends Component
 {
     public $comment;
 
@@ -14,9 +14,11 @@ class Comment extends Component
 
     public $reply;
 
-    public $currentReply;
+    public $currentReply = null;
 
     public $shouldShowReply = false;
+
+    public $shouldShowComment = false;
 
     public $shouldUpdate = false;
 
@@ -28,28 +30,6 @@ class Comment extends Component
     {
         $this->comment = $comment;
     }
-
-    public function store()
-    {
-        $this->validate();
-
-        return DB::transaction(function () {
-            $this->grievance->update([
-                'acknowledged_at' => now()
-            ]);
-            if($this->additional_comment != null) {
-                $this->grievance->comments()->create([
-                    'content' => $this->additional_comment,
-                    'user_id' => auth()->id(),
-                ]);
-            }
-
-            $this->grievance->fresh();
-
-            return redirect()->back();
-        });
-    }
-
 
     public function toggleReplyButton($currentReply)
     {
@@ -63,6 +43,11 @@ class Comment extends Component
         $this->shouldUpdate = true;
         $this->reply = $reply->content;
         $this->currentReply = $reply;
+    }
+
+    public function selectComment()
+    {
+        $this->emitUp('commentSelected', $this->comment->id);
     }
 
     public function selectReply(GComment $reply)
@@ -79,11 +64,22 @@ class Comment extends Component
 
     }
 
+    public function close()
+    {
+        $this->dispatchBrowserEvent('close-modal');
+    }
+    public function deleteComment()
+    {
+        $this->comment->delete();
+        $this->dispatchBrowserEvent('close-modal');
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Reply  deleted!']);
+        $this->dispatchBrowserEvent('refresh-page');
+    }
+
     public function submitReply($commentId)
     {
         $this->validate(['reply' => 'required']);
 
-        return DB::transaction(function () use ($commentId) {
             $comment = GComment::find($commentId);
 
             if($this->shouldUpdate == true) {
@@ -107,12 +103,14 @@ class Comment extends Component
                 $this->shouldShowReply = false;
             }
 
+            $this->dispatchBrowserEvent('refresh-page');
+
             return redirect()->back();
-        });
+
     }
 
     public function render()
     {
-        return view('livewire.human-resource.grievances.comment');
+        return view('livewire.comments.show');
     }
 }

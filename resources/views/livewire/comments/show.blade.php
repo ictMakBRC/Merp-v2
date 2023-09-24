@@ -22,8 +22,9 @@
                 <p>
                     {{$comment->content}}
                 </p>
-                <btn class="text-primary me-2"><i class="fas fa-pen me-1"></i>Edit</btn>
-                <btn class="text-danger me-2"><i class="fas fa-trash me-1"></i>Delete</btn>
+                <btn wire:click="selectComment" class="text-primary me-2"><i class="fas fa-pen me-1"></i>Edit</btn>
+                <btn class="text-danger me-2" data-bs-toggle="modal" data-bs-target="#delete_comment_modal"><i
+                        class="fas fa-trash me-1"></i>Delete</btn>
                 <a wire:click.defer="toggleReplyButton({{$comment->id}})" class="text-primary"><i
                         class="fas fa-reply me-1"></i>Reply</a>
             </div>
@@ -45,7 +46,8 @@
                     <div class="comment-body ms-n2 bg-light-alt p-3">
                         <div class="row">
                             <div class="col">
-                                <p class="text-dark fw-semibold mb-2">{{$comment->owner->full_name?? 'Anonymous'}}</p>
+                                <p class="text-dark fw-semibold mb-2">{{$comment->owner->full_name?? 'Anonymous'}}
+                                </p>
                             </div>
                             <!--end col-->
                             <div class="col-auto">
@@ -72,7 +74,7 @@
                     <div class="card-body mt-1">
                         <form wire:submit.prevent="submitReply({{$comment->id}})">
                             <div class="form-group mb-3">
-                                <textarea class="form-control" wire:model="reply" rows="5" id="leave_comment"
+                                <textarea class="form-control" wire:model.defer="reply" rows="5" id="leave_comment"
                                     placeholder="Reply"></textarea>
                             </div>
                             <div class="row">
@@ -89,6 +91,8 @@
             <!--end row-->
         </li>
     </ul>
+
+    {{-- delete reply modal --}}
     <div wire:ignore.self class="modal fade" id="delete_reply_modal" tabindex="-1" role="dialog"
         aria-labelledby="replyModalTitle" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -120,16 +124,52 @@
         </div>
         <!--end modal-dialog-->
     </div>
-</li>
+
+    {{-- delete comment odal --}}
+    <div wire:ignore.self class="modal fade" id="delete_comment_modal" tabindex="-1" role="dialog"
+        aria-labelledby="modalTitle" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h6 class="modal-title m-0" id="modalTitle">
+                        Confirm Deletion
+                    </h6>
+                    <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()"
+                        aria-label="Close"></button>
+                </div>
+                <!--end modal-header-->
+                <div class="modal-body">
+                    <div class="row">
+                        Are you sure you want to delete this reply?
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-bs-dismiss="modal" wire:click="close()">{{
+                        __('public.close') }}</button>
+
+                    <x-button type="click" wire:click="deleteComment" class="btn-danger btn-sm">Confirm
+                    </x-button>
+
+                </div>
+                <!--end modal-footer-->
+            </div>
+            <!--end modal-content-->
+        </div>
+        <!--end modal-dialog-->
+    </div>
 
 
-@push('scripts')
-<script>
-    window.addEventListener('close-modal', event => {
+    @push('scripts')
+    <script>
+        window.addEventListener('refresh-page', event => {
+            window.location.reload(true);
+        });
+        window.addEventListener('close-modal', event => {
                 $('#delete_reply_modal').modal('hide');
             });
             window.addEventListener('delete-modal', event => {
                 $('#delete_reply_modal').modal('show');
             });
-</script>
-@endpush
+    </script>
+    @endpush
+</li>
