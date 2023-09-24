@@ -3,6 +3,7 @@
 namespace App\Models\HumanResource\Performance;
 
 use App\Models\Comment;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +21,8 @@ class Appraisal extends Model implements HasMedia
     protected $fillable = [
         'employee_id',
         'start_date',
-        'end_date'
+        'end_date',
+        'acknowledged_at'
     ];
 
     /**
@@ -42,6 +44,13 @@ class Appraisal extends Model implements HasMedia
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+    /**
+    * Comments under this grievance
+    */
+    public function owner()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 
     /**

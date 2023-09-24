@@ -13,7 +13,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="mb-3 col-md-12">
-                        <label for="description" class="form-label">Additional Comment</label>
+                        <label for="description" class="form-label">Additional Comment(Optional)</label>
                         <textarea type="text" id="additional_comment" rows="4" class="form-control"
                             wire:model.defer="additional_comment" placeholder="This is noted">
                     </textarea>

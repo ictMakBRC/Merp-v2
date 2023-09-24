@@ -159,7 +159,7 @@
 
         <!--end row-->
         <div class="row">
-            @include('livewire.human-resource.performance.exit-interviews.comments')
+            @livewire('comments.index', ['commentable' => $exitInterview])
         </div>
         <!--end row-->
 

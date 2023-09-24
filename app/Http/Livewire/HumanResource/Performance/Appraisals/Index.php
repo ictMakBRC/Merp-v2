@@ -109,6 +109,7 @@ class Index extends Component
 
     public function render()
     {
+        isLinkActive(['appraisals.show'], 'active');
         // $this->authorize('viewany', Appraisal::class);
         $data['appraisals'] = $this->filterAppraisals()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
