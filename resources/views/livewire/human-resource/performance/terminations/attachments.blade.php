@@ -16,7 +16,7 @@
                 <div class="" style="padding: 0px;">
                     <div class="activity">
                         <div class="activity-info">
-                            <div class="activity-info-text">
+                            <div class="activity-info-text d-flex">
                                 @forelse ($termination->media as $media)
                                 <div class="file-box-content mt-4">
                                     <div class="file-box">

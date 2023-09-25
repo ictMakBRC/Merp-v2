@@ -6,7 +6,6 @@ use App\Models\Comment;
 use App\Models\HumanResource\Performance\Resignation;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-use App\Models\HumanResource\Performance\Termination;
 
 class Show extends Component
 {
@@ -48,6 +47,10 @@ class Show extends Component
             }
 
             $this->resignation->fresh();
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('refresh-page');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Acknowledgement  submitted!']);
+
 
             return redirect()->back();
         });
@@ -78,6 +81,10 @@ class Show extends Component
 
 
             $this->resignation->fresh();
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('refresh-page');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Acknowledgement  submitted!']);
+
 
             return redirect()->back();
         });

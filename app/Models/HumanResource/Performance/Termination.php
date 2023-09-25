@@ -20,7 +20,8 @@ class Termination extends Model implements HasMedia
         'employee_id',
         'reason',
         'letter',
-        'termination_date'
+        'termination_date',
+        'acknowledged_at'
     ];
 
     /**

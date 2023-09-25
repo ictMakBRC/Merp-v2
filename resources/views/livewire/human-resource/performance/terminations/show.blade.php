@@ -83,7 +83,7 @@
             </div>
             @endif
 
-            @include('livewire.human-resource.performance.terminations.comments')
+            @livewire('comments.index', ['commentable' => $termination])
 
         </div>
         <!--end row-->
@@ -93,4 +93,16 @@
     <!-- confirm acknowledgement modal -->
     @include('livewire.human-resource.performance.terminations.acknowledgement-modal')
     <!--end modal-->
+
+    @push('scripts')
+    <script>
+        window.addEventListener('refresh-page', event => {
+            window.location.reload(true);
+        });
+        window.addEventListener('close-modal', event => {
+                $('#acknowledge_modal').modal('hide');
+            });
+
+    </script>
+    @endpush
 </div>

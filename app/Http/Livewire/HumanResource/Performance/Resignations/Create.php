@@ -16,7 +16,7 @@ class Create extends Component
 
     public $employee_id;
 
-    public $file_upload;
+    public $file_uploads;
 
     public $hand_over_date;
 
@@ -31,7 +31,7 @@ class Create extends Component
         'subject' => 'nullable',
         'letter' => 'required',
         'hand_over_date' => 'required',
-        'file_upload' => 'file|nullable',
+        'file_uploads.*' => 'file|nullable',
     ];
 
     public function mount()
@@ -51,8 +51,11 @@ class Create extends Component
                 'hand_over_date' => $this->hand_over_date
            ]);
 
-        $resignation->addMedia($this->file_upload)->toMediaCollection();
-
+        if($this->file_uploads != []) {
+            foreach ($this->file_uploads as $file_upload) {
+                $resignation->addMedia($file_upload)->toMediaCollection();
+            }
+        }
         return redirect()->to(route('resignations'));
     }
 
