@@ -97,9 +97,9 @@
                             
                                 <th>{{$requests->created_at??'N/A'}}</th>
                                 <th>{{$requests->status??'N/A'}}</th>
-                                <td>
+                                <td class="table-action">
                                     
-                                <a href="{{route('documents-request.sign',$requests->request_code)}}" class="text-success" ><i class='mdi mdi-eye font-20'></i></a> 
+                                <a href="{{route('documents-request.sign',$requests->request_code)}}" class="btn btn-sm btn-outline-secondary" ><i class='mdi mdi-eye font-20'></i></a> 
                                                              
                                             
                                 </td>
