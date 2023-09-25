@@ -57,4 +57,10 @@ class OfficialContract extends Model
             });
         }
     }
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()
+                ->where('contact_summary', 'like', '%'.$search.'%');
+    }
 }

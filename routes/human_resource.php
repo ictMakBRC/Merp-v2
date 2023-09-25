@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HumanResource\Payroll\PayrollController;
+use App\Http\Livewire\HumanResource\Contacts\HrOfficialContractsComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\HumanResource\Settings\Performance;
 use App\Http\Livewire\HumanResource\Leave\LeaveDelegations;
@@ -32,6 +34,7 @@ use App\Http\Livewire\HumanResource\Performance\Appraisals\Index as Appraisals;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Edit as EditAppraisal;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Show as ShowAppraisal;
 use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
+use App\Http\Livewire\HumanResource\Payroll\HrGenerateOfficialPayrollComponent;
 use App\Http\Livewire\HumanResource\Performance\Resignations\Index as Resignations;
 use App\Http\Livewire\HumanResource\Performance\Terminations\Index as Terminations;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Create as RegisterWarning;
@@ -129,6 +132,15 @@ Route::group(['prefix' => 'human-resource'], function () {
 
     Route::group(['prefix' => 'grievance-types'], function () {
         Route::get('/', GrievanceTypes::class)->name('grievance-types');
+    });
+
+    Route::group(['prefix' => 'contracts'], function () {
+        Route::get('official', HrOfficialContractsComponent::class)->name('human-resource-official_contracts');
+    });
+
+    Route::group(['prefix' => 'payroll'], function () {
+        Route::get('generate/official', HrGenerateOfficialPayrollComponent::class)->name('human-resource-official_payroll');
+        Route::get('payslip/download/{emp_id}/{month}/{prepared_by}/pdf', [PayrollController::class, 'downloadPayslip'])->name('human-resource.downloadPayslip');
     });
 
 

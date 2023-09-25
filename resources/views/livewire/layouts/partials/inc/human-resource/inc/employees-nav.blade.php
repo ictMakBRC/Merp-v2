@@ -21,7 +21,7 @@
                 <div class="collapse" id="officialContactsSubMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-patients.html">Official Contracts</a>
+                            <a class="nav-link" href="{{ route('human-resource-official_contracts') }}">Official Contracts</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
@@ -41,7 +41,7 @@
                 <div class="collapse" id="payMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-patients.html">Generate Payroll</a>
+                            <a class="nav-link" href="{{ route('human-resource-official_payroll') }}">Generate Payroll</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
