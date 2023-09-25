@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('dm_signature_request_support_docs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('parent_id')->references('id')->on('dm_signature_request_docs')->onDelete('restrict')->onUpdate('cascade');
+            $table->string('title');
+            $table->string('original_file');
+            $table->string('document_code')->unique();
+            $table->foreignId('request_id')->nullable()->references('id')->on('dm_signature_requests')->onDelete('restrict')->onUpdate('cascade');
+            $table->boolean('is_active')->default(1);
+            $table->integer('download_count')->default(0);
+            $table->foreignId('created_by')->nullable()->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
         });
     }

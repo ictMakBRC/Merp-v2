@@ -12,12 +12,12 @@
                 <a class="nav-link" href="{{ route('documents-dashboard') }}">{{ __('public.dashboard') }}</a>
             </li>
             <!--end nav-item-->
-            <li class="nav-item  {{ request()->segment(3) == 'requests' ? 'menuitem-active' : '' }}">
+            <li class="nav-item  {{ request()->segment(2) == 'requests' ? 'menuitem-active' : '' }}">
                 <a class="nav-link" href="#docrequests" data-bs-toggle="collapse" role="button" aria-expanded="false"
                     aria-controls="docrequests">
                     Requests
                 </a>
-                <div class="collapse " id="docrequests">
+                <div class="collapse {{ request()->segment(2) == 'requests' ? 'show' : '' }}" id="docrequests">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a href="{{ route('documents-request.dashboard') }}" class="nav-link ">Dashboard</a>
