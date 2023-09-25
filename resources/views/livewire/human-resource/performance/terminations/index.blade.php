@@ -98,7 +98,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Employee Name</th>
-                                        <th>Assignee</th>
+                                        <th>Termination Date</th>
                                         <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
@@ -107,10 +107,14 @@
                                     @forelse ($terminations as $key => $termination)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $termination->name }}</td>
                                         <td>{{ $termination->employee->name ?? 'N/A' }}</td>
+                                        <td>@formatDate($termination->termination_date)</td>
                                         <td>@formatDate($termination->created_at)</td>
                                         <td class="table-action d-flex">
+                                            <a href="{{route('terminations.show', $termination->id)}}"
+                                                class="action-ico btn-sm text-primary mx-1">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
                                             <a href="{{route('terminations.update', $termination->id)}}"
                                                 class="action-ico btn-sm text-primary mx-1">
                                                 <i class="fa fa-edit"></i>

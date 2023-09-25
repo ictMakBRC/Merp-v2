@@ -3,31 +3,34 @@
         aria-controls="performanceMenu"><i class="ti ti-file-analytics me-2"></i>
         Performance
     </a>
-    <div class="collapse " id="performanceMenu">
+    <div class="collapse {{isLinkActive(['appraisals.show'], 'show')}}" id="performanceMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a href="#appraisalsMenu" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"
                     aria-controls="appraisalsMenu">
                     Appraisals
                 </a>
-                <div class="collapse " id="appraisalsMenu">
+                <div class="collapse {{isLinkActive(['appraisals.show'], 'show')}}" id="appraisalsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('appraisals.create')}}">New </a>
+                            <a class="nav-link" href="{{route('my.appraisals')}}">My Appraisals</a>
+                        </li>
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link {{isLinkActive(['appraisals.show'], 'active')}}"
+                                href="{{route('appraisals.create')}}">
+                                @if(showWhenLinkActive('appraisals.show'))
+                                <span>Show</span>
+                                @else
+                                <span>New</span>
+                                @endif
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('appraisals')}}">All Appraisals</a>
                         </li>
                         <!--end nav-item-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-appointments.html">Download Template</a>
-                        </li>
-                        <!--end nav-item-->
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-appointments.html">Upload New Template</a>
-                        </li>
-                        <!--end nav-item-->
                     </ul>
                     <!--end nav-->
                 </div>

@@ -50,12 +50,11 @@
                                     </div>
 
                                     <div class="mb-3 col-md-12">
-                                        <label for="comment" class="form-label">Comment</label>
-                                        <textarea type="text" id="reason" rows="4" class="form-control"
-                                            wire:model.defer="comment" placeholder="comment">
-                                        </textarea>
+                                        <label for="Subject" class="form-label">Subject/Reason</label>
+                                        <input type="text" id="reason" rows="4" class="form-control"
+                                            wire:model.defer="subject" placeholder="Subject" />
 
-                                        @error('reason')
+                                        @error('subject')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>

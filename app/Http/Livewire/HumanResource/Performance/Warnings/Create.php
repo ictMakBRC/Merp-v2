@@ -21,13 +21,13 @@ class Create extends Component
 
     public $employees;
 
-    public $reason;
+    public $subject;
 
     public $letter;
 
     protected $rules = [
         'employee_id' => 'nullable',
-        'reason' => 'required',
+        'subject' => 'required',
         'letter' => 'required',
         'file_upload' => 'file|nullable',
     ];
@@ -44,7 +44,7 @@ class Create extends Component
 
         $warning = Warning::create([
                 'employee_id' => $this->employee_id,
-                'reason' => $this->reason,
+                'subject' => $this->subject,
                 'letter' => $this->letter
            ]);
 
@@ -55,7 +55,7 @@ class Create extends Component
 
     public function render()
     {
-        $this->authorize('create', Warning::class);
+        // $this->authorize('create', Warning::class);
         return view('livewire.human-resource.performance.warnings.create');
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->date('hand_over_date')->nullable();
             $table->string('letter');
             $table->string('status')->nullable();
-            $table->string('comment')->nullable();
+            $table->timestamp('acknowledged_at')->nullable();
             $table->foreignId('approved_by')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->softDeletes();
