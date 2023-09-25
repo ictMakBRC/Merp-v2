@@ -17,7 +17,7 @@ class Create extends Component
 
     public $employee_id;
 
-    public $file_upload;
+    public $file_uploads;
 
     public $employees;
 
@@ -29,7 +29,7 @@ class Create extends Component
         'employee_id' => 'nullable',
         'subject' => 'required',
         'letter' => 'required',
-        'file_upload' => 'file|nullable',
+        'file_uploads.*' => 'file|nullable',
     ];
 
     public function mount()
@@ -48,7 +48,11 @@ class Create extends Component
                 'letter' => $this->letter
            ]);
 
-        $warning->addMedia($this->file_upload)->toMediaCollection();
+        if($this->file_uploads != []) {
+            foreach ($this->file_uploads as $file_upload) {
+                $warning->addMedia($file_upload)->toMediaCollection();
+            }
+        }
 
         return redirect()->to(route('warnings'));
     }
