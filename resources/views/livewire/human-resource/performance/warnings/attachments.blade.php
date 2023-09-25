@@ -16,9 +16,9 @@
                 <div class="" style="padding: 0px;">
                     <div class="activity">
                         <div class="activity-info">
-                            <div class="activity-info-text">
+                            <div class="activity-info-text d-flex">
                                 @forelse ($warning->media as $media)
-                                <div class="file-box-content mt-4">
+                                <div class="file-box-content  mt-4">
                                     <div class="file-box">
                                         <a href="#" wire:click="download" class="download-icon-link">
                                             <i class="las la-download file-download-icon"></i>
