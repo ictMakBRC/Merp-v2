@@ -24,14 +24,7 @@ use App\Http\Livewire\HumanResource\Leave\EditRequest as EditLeaveRequest;
 use App\Http\Livewire\HumanResource\Grievances\Create as RegisterGrievance;
 use App\Http\Livewire\HumanResource\GrievanceTypes\Index as GrievanceTypes;
 
-use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
 use App\Http\Livewire\HumanResource\EmployeeData\EmployeeDetailsComponent;
-use App\Http\Livewire\HumanResource\Grievances\Edit as EditGrievance;
-use App\Http\Livewire\HumanResource\Grievances\Show as ViewGrievance;
-use App\Http\Livewire\HumanResource\Leave\DepartmentalRequests;
-use App\Http\Livewire\HumanResource\Performance\Appraisals\Index as Appraisals;
-use App\Http\Livewire\HumanResource\Performance\Appraisals\Create as RegisterAppraisal;
-use App\Http\Livewire\HumanResource\Performance\Appraisals\Edit as EditAppraisal;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Index as Warnings;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Edit as EditWarning;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Show as ShowWarning;
