@@ -1,9 +1,15 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Jobs\ProcessDispatchMails;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
+
+function showWhenLinkActive($link)
+{
+    return Route::currentRouteName() == $link;
+}
 
 /**
  * Return all the active links
@@ -13,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 function isLinkActive(array $links, $class = 'active')
 {
     foreach ($links as $link) {
-        if(Request::is($links)) {
+        if(showWhenLinkActive($link)) {
             return $class;
         }
     }

@@ -110,6 +110,10 @@
                                         <td>{{ $warning->employee->name ?? 'N/A' }}</td>
                                         <td>@formatDate($warning->created_at)</td>
                                         <td class="table-action d-flex">
+                                            <a href="{{route('warnings.show', $warning->id)}}"
+                                                class="action-ico btn-sm text-primary mx-1">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
                                             <a href="{{route('warnings.update', $warning->id)}}"
                                                 class="action-ico btn-sm text-primary mx-1">
                                                 <i class="fa fa-edit"></i>

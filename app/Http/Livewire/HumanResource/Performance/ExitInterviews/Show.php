@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Grievances;
+namespace App\Http\Livewire\HumanResource\Performance\ExitInterviews;
 
-use App\Models\Comment as GComment;
+use App\Models\Comment;
+use App\Models\HumanResource\Performance\ExitInterview;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
-use App\Models\HumanResource\Grievance;
 
-class Comment extends Component
+class Show extends Component
 {
-    public $comment;
+    public $exitInterview;
 
     public $additional_comment;
 
@@ -21,31 +21,41 @@ class Comment extends Component
         'additional_comment' => 'nullable'
     ];
 
-    public function mount($comment)
+
+    public function mount(ExitInterview $exitInterview)
     {
-        $this->comment = $comment;
+        $this->exitInterview = $exitInterview;
     }
 
+    public function close()
+    {
+    }
 
     public function store()
     {
         $this->validate();
 
         return DB::transaction(function () {
-            $this->grievance->update([
+            $this->exitInterview->update([
                 'acknowledged_at' => now()
             ]);
             if($this->additional_comment != null) {
-                $this->grievance->comments()->create([
+                $this->exitInterview->comments()->create([
                     'content' => $this->additional_comment,
                     'user_id' => auth()->id(),
                 ]);
             }
 
-            $this->grievance->fresh();
+            $this->exitInterview->fresh();
 
             return redirect()->back();
         });
+    }
+
+    public function download()
+    {
+        $mediaItem =  $this->exitInterview->getFirstMedia();
+        return response()->download($mediaItem->getPath(), $mediaItem->file_name);
     }
 
     public function toggleReplyButton($currentReply)
@@ -59,17 +69,21 @@ class Comment extends Component
         $this->validate(['reply' => 'required']);
 
         return DB::transaction(function () use ($commentId) {
-            $comment = GComment::find($commentId);
+            $comment = Comment::find($commentId);
             $comment->replies()->create([
                 'content' => $this->reply,
                 'user_id' => auth()->id(),
             ]);
+
+
+            $this->exitInterview->fresh();
+
             return redirect()->back();
         });
     }
 
     public function render()
     {
-        return view('livewire.human-resource.grievances.comment');
+        return view('livewire.human-resource.performance.exit-interviews.show');
     }
 }
