@@ -23,6 +23,15 @@ use App\Http\Livewire\HumanResource\Performance\Appraisals\MyAppraisals;
 use App\Http\Livewire\HumanResource\Leave\EditRequest as EditLeaveRequest;
 use App\Http\Livewire\HumanResource\Grievances\Create as RegisterGrievance;
 use App\Http\Livewire\HumanResource\GrievanceTypes\Index as GrievanceTypes;
+
+use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
+use App\Http\Livewire\HumanResource\EmployeeData\EmployeeDetailsComponent;
+use App\Http\Livewire\HumanResource\Grievances\Edit as EditGrievance;
+use App\Http\Livewire\HumanResource\Grievances\Show as ViewGrievance;
+use App\Http\Livewire\HumanResource\Leave\DepartmentalRequests;
+use App\Http\Livewire\HumanResource\Performance\Appraisals\Index as Appraisals;
+use App\Http\Livewire\HumanResource\Performance\Appraisals\Create as RegisterAppraisal;
+use App\Http\Livewire\HumanResource\Performance\Appraisals\Edit as EditAppraisal;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Index as Warnings;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Edit as EditWarning;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Show as ShowWarning;
@@ -64,6 +73,7 @@ Route::group(['prefix' => 'human-resource'], function () {
     Route::group(['prefix' => 'employees'], function () {
         Route::get('new-info', EmployeeDataComponent::class)->name('human-resource-capture-new-info');
         Route::get('list', EmployeesListComponent::class)->name('human-resource-employees-list');
+        Route::get('{id}/details', EmployeeDetailsComponent::class)->name('employee-details');
     });
     Route::group(['prefix' => 'leave'], function () {
         Route::get('new-request/new', NewLeaveRequest::class)->name('leave.new-request');

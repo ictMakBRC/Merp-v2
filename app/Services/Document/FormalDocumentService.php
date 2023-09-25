@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Documents\FormalDocument;
 use App\Data\Document\FormalDocumentData;
 
-
 class FormalDocumentService
 {
 

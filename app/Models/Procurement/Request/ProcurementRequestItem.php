@@ -1,44 +1,41 @@
 <?php
 
-namespace App\Models\Grants;
+namespace App\Models\Procurement\Request;
 
-use App\Traits\DocumentableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\Procurement\Request\ProcurementRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Grant extends Model
+class ProcurementRequestItem extends Model
 {
-    use HasFactory,LogsActivity, DocumentableTrait, ProcurementRequestableTrait;
+    use HasFactory,LogsActivity;
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Users')
+            ->useLogName('Procurement Requests')
             ->dontLogIfAttributesChangedOnly(['updated_at', 'password'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
 
-    //principal investigator
-    public function principalInvestigator()
+    protected $guarded = [
+        'id',
+    ];
+
+ 
+    
+    public function procurementRequest()
     {
-        return $this->belongsTo(Employee::class,'pi','id');
+        return $this->belongsTo(ProcurementRequest::class,'procurement_request_id','id');
     }
 
-    public function project()
-    {
-        return $this->hasOne(Project::class,'grant_id','id');
-    }
-    
     public static function boot()
     {
         parent::boot();
@@ -53,9 +50,6 @@ class Grant extends Model
     {
         return empty($search) ? static::query()
         : static::query()
-            ->where('grant_code', 'like', '%'.$search.'%')
-            ->orWhere('grant_name', 'like', '%'.$search.'%')
-            ->orWhere('grant_type', 'like', '%'.$search.'%');
+            ->where('description', 'like', '%'.$search.'%');
     }
-
 }

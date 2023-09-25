@@ -1,50 +1,54 @@
 <?php
 
-namespace App\Models\Grants;
+namespace App\Models\Procurement\Request;
 
-use App\Traits\DocumentableTrait;
+use App\Services\GeneratorService;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Procurement\Request\ProcurementRequestItem;
+use App\Traits\DocumentableTrait;
 
-class Grant extends Model
+class ProcurementRequest extends Model
 {
-    use HasFactory,LogsActivity, DocumentableTrait, ProcurementRequestableTrait;
+    use HasFactory,LogsActivity,DocumentableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Users')
+            ->useLogName('Procurement Requests')
             ->dontLogIfAttributesChangedOnly(['updated_at', 'password'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
 
-    //principal investigator
-    public function principalInvestigator()
+    protected $guarded = [
+        'id',
+    ];
+
+    public function requestable()
     {
-        return $this->belongsTo(Employee::class,'pi','id');
+        return $this->morphTo();
     }
 
-    public function project()
+
+    public function items()
     {
-        return $this->hasOne(Project::class,'grant_id','id');
+        return $this->hasMany(ProcurementRequestItem::class,'procurement_request_id','id');
     }
-    
+
     public static function boot()
     {
         parent::boot();
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
+                $model->reference_no = GeneratorService::procurementRequestRef();
             });
         }
     }
@@ -53,9 +57,8 @@ class Grant extends Model
     {
         return empty($search) ? static::query()
         : static::query()
-            ->where('grant_code', 'like', '%'.$search.'%')
-            ->orWhere('grant_name', 'like', '%'.$search.'%')
-            ->orWhere('grant_type', 'like', '%'.$search.'%');
+            ->where('name', 'like', '%'.$search.'%')
+            ->orWhere('email', 'like', '%'.$search.'%')
+            ->orWhere('category', 'like', '%'.$search.'%');
     }
-
 }
