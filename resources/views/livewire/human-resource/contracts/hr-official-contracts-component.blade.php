@@ -7,7 +7,12 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                   My official Contracts (<span class="text-danger fw-bold">{{ $contracts->total() }}</span>)
+                                    @if (!$toggleForm)
+                                        Contracts (<span class="text-danger fw-bold">{{ $contracts->total() }}</span>)
+                                        @include('livewire.layouts.partials.inc.filter-toggle')
+                                    @else
+                                        Edit contract
+                                    @endif
 
                                 </h5>
                             </div>
@@ -87,5 +92,16 @@
         </div><!-- end col-->
     </div>
 
-    
+    @push('scripts')
+            <script>
+                window.addEventListener('close-modal', event => {
+                    $('#updateCreateModal').modal('hide');
+                    $('#delete_modal').modal('hide');
+                    $('#show-delete-confirmation-modal').modal('hide');
+                });
+                window.addEventListener('delete-modal', event => {
+                    $('#delete_modal').modal('show');
+                });
+            </script>
+    @endpush
 </div>

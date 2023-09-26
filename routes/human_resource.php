@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HumanResource\Payroll\PayrollController;
+use App\Http\Livewire\HumanResource\Contacts\HrOfficialContractsComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\HumanResource\Settings\Performance;
 use App\Http\Livewire\HumanResource\Leave\LeaveDelegations;
@@ -24,14 +26,7 @@ use App\Http\Livewire\HumanResource\Leave\EditRequest as EditLeaveRequest;
 use App\Http\Livewire\HumanResource\Grievances\Create as RegisterGrievance;
 use App\Http\Livewire\HumanResource\GrievanceTypes\Index as GrievanceTypes;
 
-use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
 use App\Http\Livewire\HumanResource\EmployeeData\EmployeeDetailsComponent;
-use App\Http\Livewire\HumanResource\Grievances\Edit as EditGrievance;
-use App\Http\Livewire\HumanResource\Grievances\Show as ViewGrievance;
-use App\Http\Livewire\HumanResource\Leave\DepartmentalRequests;
-use App\Http\Livewire\HumanResource\Performance\Appraisals\Index as Appraisals;
-use App\Http\Livewire\HumanResource\Performance\Appraisals\Create as RegisterAppraisal;
-use App\Http\Livewire\HumanResource\Performance\Appraisals\Edit as EditAppraisal;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Index as Warnings;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Edit as EditWarning;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Show as ShowWarning;
@@ -39,6 +34,8 @@ use App\Http\Livewire\HumanResource\Performance\Appraisals\Index as Appraisals;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Edit as EditAppraisal;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Show as ShowAppraisal;
 use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
+use App\Http\Livewire\HumanResource\EmployeeData\OfficialContracts\OfficialContractsListComponent;
+use App\Http\Livewire\HumanResource\Payroll\HrGenerateOfficialPayrollComponent;
 use App\Http\Livewire\HumanResource\Performance\Resignations\Index as Resignations;
 use App\Http\Livewire\HumanResource\Performance\Terminations\Index as Terminations;
 use App\Http\Livewire\HumanResource\Performance\Warnings\Create as RegisterWarning;
@@ -136,6 +133,16 @@ Route::group(['prefix' => 'human-resource'], function () {
 
     Route::group(['prefix' => 'grievance-types'], function () {
         Route::get('/', GrievanceTypes::class)->name('grievance-types');
+    });
+
+    Route::group(['prefix' => 'contracts'], function () {
+        Route::get('official', HrOfficialContractsComponent::class)->name('human-resource-official_contracts');
+        Route::get('official/employee', OfficialContractsListComponent::class)->name('human-resource-my_official_contracts');
+    });
+
+    Route::group(['prefix' => 'payroll'], function () {
+        Route::get('generate/official', HrGenerateOfficialPayrollComponent::class)->name('human-resource-official_payroll');
+        Route::get('payslip/download/{emp_id}/{month}/{prepared_by}/pdf', [PayrollController::class, 'downloadPayslip'])->name('human-resource.downloadPayslip');
     });
 
 

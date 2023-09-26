@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\EmployeeData\OfficialContracts;
+namespace App\Http\Livewire\HumanResource\Contracts;
 
+use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
 
-class OfficialContractsListComponent extends Component
+class HrOfficialContractsComponent extends Component
 {
     use WithPagination;
     public $from_date;
 
     public $to_date;
 
-    public $exportIds;
+    public $currencyIds;
 
     public $perPage = 10;
 
@@ -23,7 +23,15 @@ class OfficialContractsListComponent extends Component
 
     public $orderAsc = 0;
 
+    public $name;
+
     public $is_active =1;
+
+    public $system_default=0;
+
+    public $delete_id;
+
+    public $edit_id;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -53,7 +61,7 @@ class OfficialContractsListComponent extends Component
                 return $query;
             });
 
-        $this->exportIds = $currencies->pluck('id')->toArray();
+        $this->currencyIds = $currencies->pluck('id')->toArray();
 
         return $currencies;
     }
@@ -63,6 +71,8 @@ class OfficialContractsListComponent extends Component
         $data['contracts'] = $this->mainQuery()->with('employee')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.employee-data.official-contracts.official-contracts-list-component',$data);
+  
+     
+        return view('livewire.human-resource.contracts.hr-official-contracts-component',$data);
     }
 }

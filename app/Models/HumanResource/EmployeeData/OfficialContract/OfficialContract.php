@@ -2,6 +2,7 @@
 
 namespace App\Models\HumanResource\EmployeeData\OfficialContract;
 
+use App\Models\Finance\Settings\FmsCurrency;
 use Carbon\Carbon;
 use App\Models\Global\Department;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,24 @@ class OfficialContract extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(FmsCurrency::class, 'currency', 'code');
+    }
+
+    public function currencyUpdates()
+    {
+        return $this->currency->currencyUpdates();
+    }
+
+    public function calculateGrossAmountUGX($code)
+    {
+        // Use the latest currency update to convert gross amount to UGX
+        $latestCurrencyUpdate = $this->currencyUpdates()->where('currency_code',$code)->latest()->first();
+        $grossAmountUGX = $this->gross_amount * $latestCurrencyUpdate->exchange_rate??0;
+        return $grossAmountUGX;
     }
 
     protected $guarded = ['id'];
@@ -56,5 +75,11 @@ class OfficialContract extends Model
                 $model->created_by = auth()->id();
             });
         }
+    }
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()
+                ->where('contact_summary', 'like', '%'.$search.'%');
     }
 }
