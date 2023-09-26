@@ -21,7 +21,8 @@ class Warning extends Model implements HasMedia
         'employee_id',
         'subject',
         'letter',
-        'created_by'
+        'created_by',
+        'acknowledged_at'
     ];
 
     /**
@@ -35,6 +36,14 @@ class Warning extends Model implements HasMedia
                 $model->created_by = auth()->id();
             });
         }
+    }
+
+    /**
+    * Comments under this grievance
+    */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
 

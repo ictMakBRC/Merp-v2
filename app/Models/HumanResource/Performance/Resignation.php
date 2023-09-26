@@ -19,7 +19,9 @@ class Resignation extends Model implements HasMedia
     protected $fillable = [
         'employee_id',
         'subject',
-        'hand_over_date'
+        'letter',
+        'hand_over_date',
+        'acknowledged_at'
     ];
 
     /**

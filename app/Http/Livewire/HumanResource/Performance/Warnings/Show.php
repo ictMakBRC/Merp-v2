@@ -47,6 +47,10 @@ class Show extends Component
             }
 
             $this->warning->fresh();
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('refresh-page');
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Acknowledgement  submitted!']);
+
 
             return redirect()->back();
         });

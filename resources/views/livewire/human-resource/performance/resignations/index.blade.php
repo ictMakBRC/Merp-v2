@@ -110,6 +110,10 @@
                                         <td>{{ $resignation->department->name ?? 'N/A' }}</td>
                                         <td>@formatDate($resignation->created_at)</td>
                                         <td class="table-action d-flex">
+                                            <a href="{{route('resignations.show', $resignation->id)}}"
+                                                class="action-ico btn-sm text-primary mx-1">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
                                             <a href="{{route('resignations.update', $resignation->id)}}"
                                                 class="action-ico btn-sm text-primary mx-1">
                                                 <i class="fa fa-edit"></i>

@@ -16,8 +16,8 @@
                 <div class="" style="padding: 0px;">
                     <div class="activity">
                         <div class="activity-info">
-                            <div class="activity-info-text">
-                                @forelse ($termination->media as $media)
+                            <div class="activity-info-text d-flex">
+                                @forelse ($resignation->media as $media)
                                 <div class="file-box-content mt-4">
                                     <div class="file-box">
                                         <a href="#" wire:click="download" class="download-icon-link">
