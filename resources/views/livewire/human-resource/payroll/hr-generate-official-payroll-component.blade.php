@@ -98,19 +98,21 @@
                                 @foreach ($emp_payroll as $key => $employee)
                                     <tr>
                                         @php
-                                            $paye = 30 / 100;
+                                            // $paye = 30 / 100;
                                             $employeeNss = 5 / 100;
                                             $employerNss = 10 / 100;
                                             $salaryUsd = 0;
                                             $salaryUgx = 0;
-                                            if ($employee?->officialContract?->currency == 'USD') {
-                                                $salaryUsd = $employee?->officialContract?->gross_salary ?? '0';
-                                                $salaryUgx = $employee?->officialContract?->gross_salary * $usd_rate;
+                                            $salary = $employee?->officialContract?->gross_salary ?? '0';
+                                            $currency = $employee?->officialContract->currency??'UGX';
+                                            $salaryUgx = exchangeCurrency($currency, $salary);
+                                            if($currency!= 'USD'){                                                
+                                                $salaryUsd = exchangeCurrency('USD', $salaryUgx);
+                                            }else{
+                                                $salaryUsd = $salary;
                                             }
-                                            if ($employee?->officialContract?->currency == 'UGX') {
-                                                $salaryUsd = $employee?->officialContract?->gross_salary / $usd_rate;
-                                                $salaryUgx = $employee?->officialContract?->gross_salary;
-                                            }
+                                            $paye = calculatePAYE($salaryUgx);
+                                         
                                             
                                         @endphp
                                         <td>{{ $key + 1 }}

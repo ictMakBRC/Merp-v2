@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Contacts;
+namespace App\Http\Livewire\HumanResource\Contracts;
 
 use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
 use Livewire\Component;
@@ -73,6 +73,6 @@ class HrOfficialContractsComponent extends Component
             ->paginate($this->perPage);
   
      
-        return view('livewire.human-resource.contacts.hr-official-contracts-component',$data);
+        return view('livewire.human-resource.contracts.hr-official-contracts-component',$data);
     }
 }

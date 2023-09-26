@@ -111,22 +111,24 @@
             @php
                 $salary = 0;
                 $usd_rate = $global->usd_rate;
+                $employee_nssf = 5;
                 if($employee->officialContract){
                   $salary = $employee?->officialContract?->gross_salary;
                 }else{
-                    $salary =  $employee->salary_ugx;
+                    $salary =  $employee->salary_ugx??0;
                 }
-                
+                $currency = $employee?->officialContract->currency??'UGX';
+                $salaryUgx = exchangeCurrency($currency, $salary);                
+                $paye = calculatePAYE($salaryUgx);
             @endphp
             {{$currency}} @moneyFormat($salary)
         </td>
     </tr>
     <tr>
-        <td  class="btopp" colspan="3">  Less: Statutory Remittances PAYE (Flat Rate-{{$global->paye}}%) <br>
+        <td  class="btopp" colspan="3">  Less: Statutory Remittances PAYE (Flat Rate-{{$paye*100}}%) <br>
         </td>
         <td  class="bleft t-right">
             @php
-            $paye =  15/100;
             $paye_deduct = $salary * $paye;
           @endphp
             -{{$currency}} @moneyFormat($paye_deduct)
@@ -134,11 +136,11 @@
     </tr>
     <tr>
         <td  class="btobp" colspan="3">
-            NSSF ({{$global->employee_nssf}}%)
+            NSSF ({{$employee_nssf}}%)
         </td>
         <td  class="bleft t-right">
             @php
-                $nssf =  $global->employee_nssf/100;
+                $nssf =  $employee_nssf/100;
                 $nssf_deduct = $salary * $nssf;
             @endphp
             -{{$currency}} @moneyFormat($nssf_deduct)

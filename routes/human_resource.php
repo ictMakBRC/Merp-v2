@@ -34,6 +34,7 @@ use App\Http\Livewire\HumanResource\Performance\Appraisals\Index as Appraisals;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Edit as EditAppraisal;
 use App\Http\Livewire\HumanResource\Performance\Appraisals\Show as ShowAppraisal;
 use App\Http\Livewire\HumanResource\Dashboard\HumanResourceMainDashboardComponent;
+use App\Http\Livewire\HumanResource\EmployeeData\OfficialContracts\OfficialContractsListComponent;
 use App\Http\Livewire\HumanResource\Payroll\HrGenerateOfficialPayrollComponent;
 use App\Http\Livewire\HumanResource\Performance\Resignations\Index as Resignations;
 use App\Http\Livewire\HumanResource\Performance\Terminations\Index as Terminations;
@@ -136,6 +137,7 @@ Route::group(['prefix' => 'human-resource'], function () {
 
     Route::group(['prefix' => 'contracts'], function () {
         Route::get('official', HrOfficialContractsComponent::class)->name('human-resource-official_contracts');
+        Route::get('official/employee', OfficialContractsListComponent::class)->name('human-resource-my_official_contracts');
     });
 
     Route::group(['prefix' => 'payroll'], function () {
