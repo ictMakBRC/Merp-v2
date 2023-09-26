@@ -80,6 +80,12 @@ class OfficialContract extends Model
     {
         return empty($search) ? static::query()
             : static::query()
-                ->where('contact_summary', 'like', '%'.$search.'%');
+                ->where('contract_summary', 'like', '%'.$search.'%');
+    }
+    public static function searchMyContract($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()->where('employee_id',auth()->user()->employee_id)
+                ->where('contract_summary', 'like', '%'.$search.'%');
     }
 }

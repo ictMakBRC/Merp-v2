@@ -46,7 +46,7 @@ class OfficialContractsListComponent extends Component
 
     public function mainQuery()
     {
-        $currencies = OfficialContract::search($this->search)
+        $currencies = OfficialContract::searchMyContract($this->search)->where('employee_id', auth()->user()->employee_id)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
