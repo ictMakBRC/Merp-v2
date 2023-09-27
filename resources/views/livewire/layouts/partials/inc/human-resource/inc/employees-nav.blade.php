@@ -25,7 +25,7 @@
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-doctors.html">My Contacts</a>
+                            <a class="nav-link" href="{{ route('human-resource-my_official_contracts') }}">My Contracts</a>
                         </li>
                         <!--end nav-item-->
                     </ul>
@@ -34,18 +34,18 @@
             </li>
 
             <li class="nav-item">
-                <a href="#payMenu" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"
-                    aria-controls="payMenu">
+                <a href="#payRoll" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"
+                    aria-controls="payRoll">
                     Payroll
                 </a>
-                <div class="collapse" id="payMenu">
+                <div class="collapse" id="payRoll">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('human-resource-official_payroll') }}">Generate Payroll</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-doctors.html">My Contacts</a>
+                            <a class="nav-link" href="">My Payslips</a>
                         </li>
                         <!--end nav-item-->
                     </ul>
