@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('procurement_subcategories', function (Blueprint $table) {
+        Schema::create('proc_subcategories', function (Blueprint $table) {
             $table->id();
             $table->string('category');
-            $table->string('code');
-            $table->string('name');
+            $table->string('code')->unique();
+            $table->string('name')->unique();
+            $table->boolean('is_active')->default(true);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('procurement_subcategories');
+        Schema::dropIfExists('proc_subcategories');
     }
 };

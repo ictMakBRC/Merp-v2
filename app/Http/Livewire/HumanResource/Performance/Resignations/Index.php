@@ -6,11 +6,13 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Grievance;
 use App\Models\HumanResource\Performance\Resignation;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Index extends Component
 {
 
     use WithPagination;
+    use AuthorizesRequests;
 
     //Filters
     public $from_date;
@@ -106,6 +108,7 @@ class Index extends Component
 
     public function render()
     {
+        $this->authorize('viewany', Resignation::class);
         $data['resignations'] = $this->filterResignations()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);

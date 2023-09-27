@@ -16,8 +16,8 @@ class GrievanceType extends Model
     protected $fillable = ['name', 'slug', 'description'];
 
     /**
- * Create a new factory instance for the model.
- */
+     * Create a new factory instance for the model.
+     */
     protected static function newFactory(): Factory
     {
         return GrievanceTypeFactory::new();

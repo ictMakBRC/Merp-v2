@@ -2,15 +2,20 @@
 
 namespace App\Models\HumanResource\EmployeeData\LeaveRequest;
 
+use App\Models\User;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\HumanResource\Settings\LeaveType;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class LeaveRequest extends Model
 {
     use HasFactory,LogsActivity;
+
+    protected $table = 'hr_leave_requests';
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -31,9 +36,9 @@ class LeaveRequest extends Model
         return $this->belongsTo(Employee::class, 'employee_id', 'id');
     }
 
-    public function leave()
+    public function leaveType()
     {
-        return $this->belongsTo(Leave::class, 'leave_id', 'id');
+        return $this->belongsTo(LeaveType::class, 'leave_type_id', 'id');
     }
 
     public function approver()
@@ -46,9 +51,12 @@ class LeaveRequest extends Model
         return $this->belongsTo(Employee::class, 'accepted_by', 'id');
     }
 
-    public function delegatedto()
+    /**
+     * Different leave delegations
+     */
+    public function delegations()
     {
-        return $this->belongsTo(Employee::class, 'delegated_to', 'id');
+        return $this->hasMany(LeaveDelegation::class, 'leave_request_id');
     }
 
     public function scopeLeaveRequestCheck($query)
@@ -65,4 +73,27 @@ class LeaveRequest extends Model
             });
         }
     }
+
+    /**
+    * Search the appraisal by department
+    */
+    public static function search($search)
+    {
+        return
+         static::query();
+    }
+
+    /**
+     * Delegate the user to take on users roles
+     * @param  $delegateeId
+     */
+    public function delegateAnotherEmployee($delegateeId, $comment = '')
+    {
+        $this->delegations()->create([
+            'delegated_role_to' => $delegateeId,
+            'comment' => $comment
+        ]);
+        return $this;
+    }
+
 }
