@@ -108,7 +108,8 @@
                                     @forelse ($grievances as $key => $grievance)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $grievance->name }}</td>
+                                        <td>{!! $grievance->employee->full_name ?? '<span
+                                                class="badge bg-warning">Anonymous</span>' !!}</td>
                                         <td>{{ $grievance->type->name ?? 'N/A' }}</td>
                                         @if ($grievance->assignee == 'department')
                                         <td><span class="badge bg-danger">Department</span></td>

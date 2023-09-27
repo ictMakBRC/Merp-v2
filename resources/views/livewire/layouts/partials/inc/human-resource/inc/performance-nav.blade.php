@@ -3,31 +3,35 @@
         aria-controls="performanceMenu"><i class="ti ti-file-analytics me-2"></i>
         Performance
     </a>
-    <div class="collapse " id="performanceMenu">
+    <div class="collapse {{isLinkActive(['appraisals.show', 'warnings.show', 'terminations.show','exit-interviews.show', 'resignations.show' ], 'show' )}}"
+        id="performanceMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a href="#appraisalsMenu" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"
                     aria-controls="appraisalsMenu">
                     Appraisals
                 </a>
-                <div class="collapse " id="appraisalsMenu">
+                <div class="collapse {{isLinkActive(['appraisals.show'], 'show')}}" id="appraisalsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('appraisals.create')}}">New </a>
+                            <a class="nav-link" href="{{route('my.appraisals')}}">My Appraisals</a>
+                        </li>
+                        <!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link {{isLinkActive(['appraisals.show'], 'active')}}"
+                                href="{{route('appraisals.create')}}">
+                                @if(showWhenLinkActive('appraisals.show'))
+                                <span>Show</span>
+                                @else
+                                <span>New</span>
+                                @endif
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('appraisals')}}">All Appraisals</a>
                         </li>
                         <!--end nav-item-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-appointments.html">Download Template</a>
-                        </li>
-                        <!--end nav-item-->
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="hospital-all-appointments.html">Upload New Template</a>
-                        </li>
-                        <!--end nav-item-->
                     </ul>
                     <!--end nav-->
                 </div>
@@ -38,10 +42,16 @@
                     aria-controls="warningsMenu">
                     Warning
                 </a>
-                <div class="collapse" id="warningsMenu">
+                <div class="collapse {{isLinkActive(['warnings.show'], 'show')}}" id="warningsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('warnings.create')}}">Create</a>
+                            <a class="nav-link {{isLinkActive(['warnings.show'], 'active')}}"
+                                href="{{route('warnings.create')}}">
+                                @if(showWhenLinkActive('warnings.show'))
+                                <span>Show</span>
+                                @else
+                                <span>New</span>
+                                @endif</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
@@ -59,10 +69,17 @@
                     aria-expanded="false" aria-controls="terminationMenu">
                     Termination
                 </a>
-                <div class="collapse" id="terminationMenu">
+                <div class="collapse {{isLinkActive(['terminations.show'], 'show')}}" id="terminationMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('terminations.create')}}">Create</a>
+                            <a class="nav-link {{isLinkActive(['terminations.show'], 'active')}}"
+                                href="{{route('terminations.create')}}">
+                                @if(showWhenLinkActive('terminations.show'))
+                                <span>Show</span>
+                                @else
+                                <span>New</span>
+                                @endif</a>
+                            </a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
@@ -80,10 +97,16 @@
                     aria-expanded="false" aria-controls="resignationMenu">
                     Resignation
                 </a>
-                <div class="collapse" id="resignationMenu">
+                <div class="collapse {{isLinkActive(['resignations.show'], 'show')}}" id="resignationMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('resignations.create')}}">Create</a>
+                            <a class="nav-link {{isLinkActive(['resignations.show'], 'active')}}"
+                                href="{{route('resignations.create')}}">
+                                @if(showWhenLinkActive('resignations.show'))
+                                <span>Show</span>
+                                @else
+                                <span>New</span>
+                                @endif</a></a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
@@ -102,10 +125,17 @@
                     aria-expanded="false" aria-controls="exitInterviewsMenu">
                     Exit Interviews
                 </a>
-                <div class="collapse" id="exitInterviewsMenu">
+                <div class="collapse {{isLinkActive(['exit-interviews.show'], 'show')}}" id="exitInterviewsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('exit-interviews.create')}}">Create</a>
+                            <a class="nav-link {{isLinkActive(['exit-interviews.show'], 'active')}}"
+                                href="{{route('exit-interviews.create')}}">
+                                @if(showWhenLinkActive('exit-interviews.show'))
+                                <span>Show</span>
+                                @else
+                                <span>New</span>
+                                @endif</a>
+                            </a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">

@@ -2,9 +2,11 @@
 
 namespace App\Models\HumanResource\Performance;
 
+use App\Models\Comment;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Resignation extends Model implements HasMedia
@@ -16,9 +18,19 @@ class Resignation extends Model implements HasMedia
 
     protected $fillable = [
         'employee_id',
-        'comment',
-        'hand_over_date'
+        'subject',
+        'letter',
+        'hand_over_date',
+        'acknowledged_at'
     ];
+
+    /**
+     * Comments under this grievance
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 
     /**
      * Search the appraisal by department

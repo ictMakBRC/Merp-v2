@@ -6,10 +6,13 @@
     <div class="collapse " id="grievancesMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="/human-resource/grievance-types" class="nav-link ">Types</a>
+                <a href="{{route('my-grievances')}}" class="nav-link ">My Grievances</a>
             </li>
             <li class="nav-item">
                 <a href="/human-resource/grievances" class="nav-link ">Grievances</a>
+            </li>
+            <li class="nav-item">
+                <a href="/human-resource/grievance-types" class="nav-link ">Types</a>
             </li>
         </ul>
         <!--end nav-->

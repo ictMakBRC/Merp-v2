@@ -65,7 +65,7 @@ class FmsTransactionsComponent extends Component
 
     public function render()
     {
-        $data['transactions'] = $this->mainQuery()->with(['project', 'department','currency','fiscalYear'])
+        $data['transactions'] = $this->mainQuery()->with(['project', 'department','currency'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         $data['departments'] = Department::all();

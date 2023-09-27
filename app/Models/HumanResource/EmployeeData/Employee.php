@@ -12,6 +12,7 @@ use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Grants\Project\EmployeeProject;
+use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
 use App\Models\HumanResource\Settings\Station;
 use App\Models\HumanResource\Settings\Department;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -85,6 +86,16 @@ class Employee extends Model
         return Attribute::make(
             get: fn () => Carbon::createFromFormat('Y-m-d', $this->birth_date)->diffInYears(Carbon::today()),
         );
+    }
+
+    public function officialContracts()
+    {
+        return $this->hasMany(OfficialContract::class, 'employee_id', 'id');
+    }
+
+    public function officialContract()
+    {
+        return $this->hasOne(OfficialContract::class, 'employee_id', 'id')->where('status','Running');
     }
 
     public static function boot()

@@ -35,7 +35,7 @@ class FmsBudget extends Model
     
     public function budgetLines()
     {
-       return $this->hasMany(budgetLines::class, 'fms_budget_id', 'id');
+       return $this->hasMany(FmsBudgetLine::class, 'fms_budget_id', 'id');
     }
 
     public function department()

@@ -16,11 +16,11 @@ class Create extends Component
 
     public $employee_id;
 
-    public $file_upload;
+    public $file_uploads;
 
     public $hand_over_date;
 
-    public $comment;
+    public $subject;
 
     public $employees;
 
@@ -28,10 +28,10 @@ class Create extends Component
 
     protected $rules = [
         'employee_id' => 'nullable',
-        'comment' => 'nullable',
+        'subject' => 'nullable',
         'letter' => 'required',
         'hand_over_date' => 'required',
-        'file_upload' => 'file|nullable',
+        'file_uploads.*' => 'file|nullable',
     ];
 
     public function mount()
@@ -46,18 +46,22 @@ class Create extends Component
 
         $resignation = Resignation::create([
                 'employee_id' => $this->employee_id,
-                'comment' => $this->comment,
+                'subject' => $this->subject,
+                'letter' => $this->letter,
                 'hand_over_date' => $this->hand_over_date
            ]);
 
-        $resignation->addMedia($this->file_upload)->toMediaCollection();
-
+        if($this->file_uploads != []) {
+            foreach ($this->file_uploads as $file_upload) {
+                $resignation->addMedia($file_upload)->toMediaCollection();
+            }
+        }
         return redirect()->to(route('resignations'));
     }
 
     public function render()
     {
-        $this->authorize('create', Resignation::class);
+        // $this->authorize('create', Resignation::class);
         return view('livewire.human-resource.performance.resignations.create');
     }
 }

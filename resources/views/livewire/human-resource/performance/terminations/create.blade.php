@@ -32,10 +32,10 @@
                                     </div>
 
                                     <div class="mb-3 col-md-5">
-                                        <label for="file" class="form-label">Termination Letter</label>
+                                        <label for="file" class="form-label">Support Files</label>
                                         <input type="file" id="file" class="form-control"
-                                            wire:model.defer="file_upload">
-                                        @error('file_upload')
+                                            wire:model.defer="file_uploads" multiple>
+                                        @error('file_uploads')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>

@@ -73,6 +73,19 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
                                     </div>
+
+                                    <div class="tab-pane active show" id="step4" role="tabpanel"
+                                        aria-labelledby="#step4-tab">
+                                        <h4 class="card-title mt-3">Anonymous Submission</h4>
+                                        <div class="form-check my-2">
+                                            <input class="form-check-input" wire:model="isAnonymous" type="checkbox"
+                                                value="" id="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                No one will be able to identify you, nor will anyone be able to
+                                                determine which department you work for.
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <a href="{{route('grievances')}}" class="btn btn-danger me-2">{{
