@@ -2,6 +2,7 @@
 
 namespace App\Models\HumanResource\Settings;
 
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AssetsManagement\Asset;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory,LogsActivity, ProcurementRequestableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -27,7 +28,7 @@ class Department extends Model
         // Chain fluent methods for configuration options
     }
     protected $guarded =['id'];
-   
+
     protected $parentColumn = 'parent_department';
 
     public function parent()
@@ -79,9 +80,9 @@ class Department extends Model
     public static function search($search)
     {
         return empty($search) ? static::query()
-            : static::query()           
+            : static::query()
                 ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('description', 'like', '%'.$search.'%');
-               
+
     }
 }

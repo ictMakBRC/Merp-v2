@@ -7,13 +7,14 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Grant extends Model
 {
-    use HasFactory,LogsActivity, DocumentableTrait;
+    use HasFactory,LogsActivity, DocumentableTrait, ProcurementRequestableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {

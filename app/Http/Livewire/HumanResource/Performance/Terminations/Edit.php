@@ -75,7 +75,7 @@ class Edit extends Component
 
     public function render()
     {
-        $this->authorize('update', Termination::class);
+        // $this->authorize('update', Termination::class);
         return view('livewire.human-resource.performance.terminations.edit');
     }
 }

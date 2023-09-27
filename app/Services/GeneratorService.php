@@ -7,6 +7,7 @@ use App\Models\Finance\Invoice\FmsInvoice;
 use Illuminate\Support\Str;
 use App\Models\Procurement\Settings\Provider;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Settings\ProcurementSubcategory;
 
 class GeneratorService
@@ -171,5 +172,38 @@ class GeneratorService
         return $randomString;
     }
 
+    //Generate a request code
+    public static function requestCode()
+    {
+      $yearMonth = date('ym');
+      $characters = 'ABCDEFGHJKLMNOPQRSTUVWXYZ123456789';
+      $l = $characters[rand(2, strlen($characters) - 4)];
+      $randomGeneratedNumber = intval('0'.mt_rand(1, 9).mt_rand(0, 9).mt_rand(0, 9).mt_rand(0, 9));
+
+      return 'MERP-RQ/'.$yearMonth.'-'.$randomGeneratedNumber.'-'.$l;
+    }
+
+    public static function procurementRequestRef()
+    {
+        $requestRef = '';
+        $yearStart = date('y');
+        $latestRef = ProcurementRequest::select('reference_no')->orderBy('id', 'desc')->first();;
+        $randomAlphabet = ucfirst(Str::random(1));
+
+        if ($latestRef) {
+            $latestRefSplit = explode('-', $latestRef->reference_no);
+            $refYear = (int) filter_var($latestRefSplit[0], FILTER_SANITIZE_NUMBER_INT);
+
+            if ($refYear == $yearStart) {
+                $requestRef = $latestRefSplit[0].'-'.str_pad(((int) filter_var($latestRefSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT).$randomAlphabet;
+            } else {
+                $requestRef = $yearStart.'PROC'.'-001'.$randomAlphabet;
+            }
+        } else {
+            $requestRef = $yearStart.'PROC'.'-001'.$randomAlphabet;
+        }
+
+        return $requestRef;
+    }
 
 }

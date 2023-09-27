@@ -4,7 +4,7 @@ data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ari
   <div class="modal-content">
     <div class="modal-header">
 
-      <h5 class="modal-title" id="staticBackdropLabel">{{ __('logistics.confirm_action') }}</h5>
+      <h5 class="modal-title" id="staticBackdropLabel">{{ __('Confirm Action') }}</h5>
       <button type="button" class="btn-close" wire:click="close()" data-bs-dismiss="modal"
       aria-hidden="true"></button>
     </div>

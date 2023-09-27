@@ -19,6 +19,9 @@
     <li class="nav-item">
       <a href="{{ route('department-items') }}" class="nav-link ">Department Items</a>
     </li>
+    <li class="nav-item">
+      <a href="{{ route('rejection-reasons') }}" class="nav-link ">Rejection Reasons</a>
+    </li>
   </ul>
 </div>
 </li>

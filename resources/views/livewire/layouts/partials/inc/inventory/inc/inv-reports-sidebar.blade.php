@@ -1,7 +1,7 @@
 <li class="nav-item">
   <a class="nav-link" href="#invReports" data-bs-toggle="collapse" role="button"
   aria-expanded="false" aria-controls="invReports">
-  Reports
+  Inventory Reports
 </a>
 <div class="collapse " id="invReports">
   <ul class="nav flex-column">

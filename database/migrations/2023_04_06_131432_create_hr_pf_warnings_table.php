@@ -15,8 +15,9 @@ return new class extends Migration {
         Schema::create('hr_pf_warnings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->string('reason')->nullable();
+            $table->string('subject')->nullable();
             $table->longText('letter');
+            $table->timestamp('acknowledged_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
