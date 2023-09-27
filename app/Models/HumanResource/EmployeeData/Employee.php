@@ -46,7 +46,7 @@ class Employee extends Model
     {
         return $this->belongsTo(Station::class, 'station_id', 'id');
     }
-    
+
     public function projects()
     {
         return $this->belongsToMany(Project::class,'employee_project','employee_id','project_id')
@@ -101,8 +101,8 @@ class Employee extends Model
     public static function search($search)
     {
         return empty($search) ? static::query()
-            : static::query()           
+            : static::query()
                 ->where('surname', 'like', '%'.$search.'%')
-                ->orWhere('first_name', 'like', '%'.$search.'%');               
+                ->orWhere('first_name', 'like', '%'.$search.'%');
     }
 }
