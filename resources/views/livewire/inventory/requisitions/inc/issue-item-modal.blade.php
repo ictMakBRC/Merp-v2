@@ -7,7 +7,7 @@ aria-labelledby="deptItemupdateCreateModalTitle" data-bs-backdrop="static" data-
         @if (!$toggleForm)
       Issue / Allocate Item
         @else
-        Update Allocation
+      Receive Allocated Item(s)
         @endif
 
       </h6>
@@ -50,18 +50,42 @@ aria-labelledby="deptItemupdateCreateModalTitle" data-bs-backdrop="static" data-
 
           <div class="mb-3 col-md-4">
             <label for="quantity_dispatched" class="form-label required"> Qty Dispatched </label>
+              @if ($toggleForm)
+            <input type="number" class="form-control" wire:model.defer="quantity_dispatched" min='1' readonly>
+            @else
             <input type="number" class="form-control" wire:model.defer="quantity_dispatched" min='1'>
+            @endif
             @error('quantity_dispatched')
             <div class="text-danger text-small">{{ $message }}</div>
             @enderror
           </div>
 
-
-          <div class="mb-3 col-md-6">
-            <label for="dispatch_comment" class="form-label">Comment</label>
-            <textarea  wire:model.defer="dispatch_comment" rows="2" cols="48"></textarea>
+          <div class="mb-3 col-md-4">
+              @if ($toggleForm)
+              <label for="comment" class="form-label">Allocation Comment</label>
+            <textarea  wire:model.defer="comment" rows="3" cols="30" readonly></textarea>
+            @else
+            <label for="comment" class="form-label">Comment</label>
+            <textarea  wire:model.defer="comment" rows="3" cols="48"></textarea>
+            @endif
           </div>
+
+        @if ($toggleForm)
+        <div class="mb-3 col-md-2">
+          <label for="quantity" class="form-label required"> Qty Received </label>
+          <input type="number" class="form-control" wire:model.defer="quantity" min='1'>
+          @error('quantity_dispatched')
+          <div class="text-danger text-small">{{ $message }}</div>
+          @enderror
         </div>
+
+        <div class="mb-3 col-md-6">
+          <label for="reception_comment" class="form-label">Comment</label>
+          <textarea wire:model.defer="reception_comment" rows="3" cols="49"></textarea>
+        </div>
+        @endif
+
+      </div>
         </div>
 
 
@@ -70,7 +94,7 @@ aria-labelledby="deptItemupdateCreateModalTitle" data-bs-backdrop="static" data-
         <div class="modal-footer">
           <button type="button" class="btn btn-danger btn-sm" wire:click="close()" >{{ __('public.close') }}</button>
           @if($toggleForm)
-          <x-button type="submit"  class="btn-success btn-sm">{{ __('public.update') }}</x-button>
+          <x-button type="submit"  class="btn-success btn-sm" wire:click="saveReceiveAllocatedStock"> {{ __('Receive') }}</x-button>
           @else
           <x-button type="submit" wire:click="saveIssueStock" class="btn-success btn-sm">{{ __('Submit') }}</x-button>
           @endif

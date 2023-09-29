@@ -35,6 +35,22 @@
               </div>
 
               <div class="mb-1 col-md-2">
+                <label for="request_status" class="form-label">Status</label>
+                <select wire:model="request_status" class="form-select">
+                  <option value="">View all</option>
+                  <option value=0>Pending HoD Approval</option>
+                  <option value=1>Approved by HoD</option>
+                  <option value=2>Declined by HoD</option>
+                  <option value=3>Approved by Stores</option>
+                  <option value=4>Rejected by Stores</option>
+                  <option value=5>Issued & Dispatched</option>
+                  <option value=6>Received by Dept</option>
+                  <option value=7>Canceled</option>
+                </select>
+
+              </div>
+
+              <div class="mb-1 col-md-2">
                 <label for="department" class="form-label">Deparment / Project</label>
                 <select wire:model="department" class="form-select">
                   <option value="">select</option>
@@ -53,10 +69,25 @@
                   <th>Request Type</th>
                   <th>Item</th>
                   <th>Quantity Requested</th>
+                  <th>Requested By</th>
                   <th>Department</th>
-                  <th>Order Date</th>
-                  <th>Approver</th>
+                  <th>Request Date</th>
+                  <th>Dept. Approver</th>
                   <th>Status</th>
+
+                  @if($request_status == 5)
+                  <th>Issued By</th>
+                  <th>Quantity Issued</th>
+                  <th>Date Issued</th>
+                  @endif
+
+                  @if($request_status == 6)
+                  <th>Received By</th>
+                  <th>Quantity Received</th>
+                  <th>Date Received</th>
+                  <th>Reception Comment</th>
+                  @endif
+
                   <th>Action</th>
                 </tr>
               </thead>
@@ -74,6 +105,7 @@
                   </td>
                   <td>{{ $value->item?->name}}</td>
                   <td>{{ $value->quantity_required}}</td>
+                  <td>{{ $value->orderedBy?->employee?->fullName }}</td>
                   <td>{{ $value->department?->name}}</td>
                   <td>{{ $value->created_at}}</td>
                   <td>{{ $value->approver?->surname }} {{ $value->approver?->first_name }}</td>
@@ -96,6 +128,18 @@
                     <span class="badge bg-danger rounded-pill">Canceled</span>
                     @endif
                   </td>
+                  @if($request_status == 5)
+                  <td>{{ $value->dispatchedBy?->employee?->fullName }}</td>
+                  <td>{{ $value->quantity_dispatched}}</td>
+                  <td>{{ $value->dispatch_date}}</td>
+                  @endif
+
+                  @if($request_status == 6)
+                  <td>{{ $value->receivedBy?->employee?->fullName }}</td>
+                  <td>{{ $value->quantity_received_at_lab}}</td>
+                  <td>{{ $value->date_received}}</td>
+                  <td>{{ $value->reception_comment}}</td>
+                  @endif
 
                   <td class="table-action">
                     @if($value->status == 0) <!--if request is pending approval or rejection by HoD  -->
@@ -126,6 +170,16 @@
                               <button wire:click="issueStock({{ $value->id }})" title="Issue out"
                                 class="action-ico btn-sm btn btn-outline-success mx-1">
                                 <i class="fa fa-share-square"></i></button>
+                                @endif
+
+                              @if($value->status == 5)
+                              <button wire:click="receiveAllocatedStock({{ $value->id }})" title="Receive"
+                                class="action-ico btn-sm btn btn-outline-success mx-1">
+                                <i class="fas fa-flag-checkered"></i></button>
+
+                              <button wire:click="issueStock({{ $value->id }})" title="Decline"
+                                class="action-ico btn-sm btn btn-danger mx-1">
+                                <i class="fas fa-thumbs-down"></i></button>
                                 @endif
 
                                 @if($value->status == 0 && $value->ordered_by == \Auth::user()->id)

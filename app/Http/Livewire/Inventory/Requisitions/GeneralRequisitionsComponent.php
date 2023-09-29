@@ -78,7 +78,11 @@ class GeneralRequisitionsComponent extends Component
 
   public $requested_by;
 
-  public $dispatch_comment;
+  public $request_status;
+
+  public $quantity;
+
+  public $reception_comment;
 
   public $quantity_dispatched;
 
@@ -159,6 +163,8 @@ class GeneralRequisitionsComponent extends Component
     $this->item_id = $request->item->name;
     $this->brand = $request->item->brand;
     $this->order_date = $request->order_date;
+    $this->quantity_dispatched = $this->toggleForm == true ? $request->quantity_dispatched : '';
+    $this->comment = $this->toggleForm == true ? $request->dispatch_comment : '';
 
     $this->issue_id = $id;
 
@@ -180,13 +186,41 @@ class GeneralRequisitionsComponent extends Component
     $request->status = 5;
     $request->dispatched_by = \Auth::user()->id;
     $request->dispatch_date = date('Y-m-d');
-    $request->dispatch_comment = $this->dispatch_comment;
+    $request->dispatch_comment = $this->comment;
     $request->quantity_dispatched = $this->quantity_dispatched;
     $request->update();
 
     $this->close();
     $this->dispatchBrowserEvent('close-modal');
     $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Item issued successfully!']);
+
+  }
+
+  public function receiveAllocatedStock($id)
+  {
+    $this->toggleForm = true;
+    $this->issueStock($id);
+  }
+
+  public function saveReceiveAllocatedStock()
+  {
+
+    $this->validate([
+    'quantity' => 'required|numeric',
+    ]);
+
+    $request = InvDepartmentRequest::find($this->issue_id);
+
+    $request->status = 6;
+    $request->received_by = \Auth::user()->id;
+    $request->date_received = date('Y-m-d');
+    $request->reception_comment = $this->reception_comment;
+    $request->quantity_received_at_lab = $this->quantity;
+    $request->update();
+
+    $this->close();
+    $this->dispatchBrowserEvent('close-modal');
+    $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Item received successfully!']);
 
   }
 
@@ -304,6 +338,12 @@ class GeneralRequisitionsComponent extends Component
     })
     ->when($this->department, function ($query) {
       $query->where('department_id',$this->department);
+    })
+    ->when($this->request_status === '0', function ($query) {
+      $query->where('status',0);
+    })
+    ->when($this->request_status > 0, function ($query) {
+      $query->where('status',$this->request_status);
     })
     ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc');
   }
