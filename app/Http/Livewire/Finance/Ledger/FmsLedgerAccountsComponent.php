@@ -7,6 +7,8 @@ use Livewire\WithPagination;
 use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Settings\FmsChartOfAccountsType;
+use App\Models\Finance\Settings\FmsCurrency;
 
 class FmsLedgerAccountsComponent extends Component
 {
@@ -48,6 +50,7 @@ class FmsLedgerAccountsComponent extends Component
     public $account_type;
     public $as_of;
     public $is_active;
+    public $currency_id;
     public $entry_type ='Department';
 
     public function updatedCreateNew()
@@ -73,6 +76,7 @@ class FmsLedgerAccountsComponent extends Component
             'current_balance',
             'as_of',
             'is_active',
+            'currency_id',
         ]);
     }
 
@@ -84,6 +88,7 @@ class FmsLedgerAccountsComponent extends Component
             'account_number' => 'required|unique:fms_ledger_accounts',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
+            'currency_id' => 'required|integer',
             'opening_balance' => 'required|numeric',
             'current_balance' => 'required|numeric',
             'as_of' => 'required|date',
@@ -121,8 +126,8 @@ class FmsLedgerAccountsComponent extends Component
             'department_id' => 'nullable|integer',
             'account_type' => 'required|integer',
             'project_id' => 'nullable|integer',
+            'currency_id' => 'required|integer',
             'opening_balance' => 'required',
-            'current_balance' => 'required',
             'as_of' => 'required|date',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
@@ -161,10 +166,11 @@ class FmsLedgerAccountsComponent extends Component
         $account->is_active = $this->is_active;
         $account->account_number = $this->account_number;
         $account->department_id = $this->department_id;
+        $account->currency_id = $this->currency_id;
         $account->project_id = $this->project_id;
         $account->account_type = $this->account_type;
         $account->opening_balance = $opening_balance;
-        $account->current_balance = $current_balance;
+        $account->current_balance = $opening_balance;
         $account->as_of = $this->as_of;
         $account->is_active = $this->is_active;
         $account->description = $this->description;
@@ -220,6 +226,7 @@ class FmsLedgerAccountsComponent extends Component
         $this->account_number = $account->account_number;
         $this->department_id = $account->department_id;
         $this->project_id = $account->project_id;
+        $this->currency_id = $account->currency_id;
         $this->opening_balance = $account->opening_balance;
         $this->current_balance = $account->current_balance;
         $this->as_of = $account->as_of;
@@ -243,7 +250,7 @@ class FmsLedgerAccountsComponent extends Component
 
     public function filterAccount()
     {
-        $accountSubType = FmsLedgerAccount::search($this->search)->with(['project', 'department'])
+        $accountSubType = FmsLedgerAccount::search($this->search)->with(['project', 'department','currency'])
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -258,7 +265,9 @@ class FmsLedgerAccountsComponent extends Component
     public function render()
     {
         $data['departments'] = Department::where('is_active', 1)->get();
+        $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['projects'] = Project::get();
+        $data['types'] = FmsChartOfAccountsType::get();
         $data['accounts'] = $this->filterAccount()->where('is_active', 1)->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         return view('livewire.finance.ledger.fms-ledger-accounts-component', $data);

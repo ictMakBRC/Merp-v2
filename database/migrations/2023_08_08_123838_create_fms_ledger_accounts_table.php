@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->foreignId('parent_id')->nullable();            
             $table->foreignId('account_type')->nullable()->references('id')->on('fms_chart_of_accounts_types')->onDelete('restrict')->onUpdate('cascade');
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->onDelete('restrict')->onUpdate('cascade');
             $table->string('account_number')->unique();
             $table->foreignId('department_id')->nullable()->constrained('departments','id')->onUpdate('cascade')->onDelete('restrict');  
             $table->foreignId('project_id')->nullable()->constrained('projects','id')->onUpdate('cascade')->onDelete('restrict');   
