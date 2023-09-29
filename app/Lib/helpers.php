@@ -104,6 +104,19 @@ if (!function_exists('exchangeCurrency')) {
     }
 }
 
+if (!function_exists('exchangeMoney')) {
+    function exchangeMoney($amount = 1, $rate = 1)
+    {
+        
+        if ($rate) {
+            $convertedAmount = $amount * $rate;
+            return $convertedAmount;
+        }
+
+    }
+
+}
+
 // helpers.php
 
 if (!function_exists('calculatePAYE')) {

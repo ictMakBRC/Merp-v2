@@ -105,7 +105,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($financialYears as $key => $year)
-                                        <tr>
+                                        <tr @if ($year->is_budget_year == 1) class="text-success" @endif>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $year->name }}</td>
                                             <td>{{ $year->start_date ?? 'N/A' }}</td>
@@ -119,6 +119,12 @@
                                             <td class="table-action">
                                                 <button wire:click="editData({{ $year->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
+                                                    @if ($year->is_budget_year == 1) 
+                                                    <button type="button" class="btn btn-soft-primary btn-icon-circle btn-icon-circle-sm me-2 position-relative">
+                                                        <i class="mdi mdi-bell font-16"></i>
+                                                        <span class="badge badge-dot online d-flex align-items-center position-absolute end-0 top-50"></span>
+                                                    </button>
+                                                    @endif
                                             </td>
                                         </tr>
                                     @endforeach
