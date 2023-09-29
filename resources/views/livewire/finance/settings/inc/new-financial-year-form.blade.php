@@ -15,7 +15,7 @@
             <form  @if ($toggleForm) wire:submit.prevent="updateFmsfinancialYear" @else wire:submit.prevent="storeFmsfinancialYear" @endif >             
                 <div class="modal-body">
                     <div class="row">
-                        <div class="mb-3 col-md-12">
+                        <div class="mb-3 col-md-8">
                             <label for="name" class="form-label required">Name</label>
                             <input type="text" id="name" class="form-control" name="name" required
                                 wire:model.defer="name">
@@ -50,8 +50,18 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="mb-3 col-md-4">
+                            <label for="is_active" class="form-label required">Budget Year</label>
+                            <select class="form-select select2" id="is_budget_year" wire:model="is_budget_year">
+                                <option selected value="">Select</option>
+                                <option value='1'>Active</option>
+                                <option value='0'>Inactive</option>
+                            </select>
+                            @error('is_budget_year')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
                         
-                       
                     </div>
                 </div>
                 <div class="modal-footer">

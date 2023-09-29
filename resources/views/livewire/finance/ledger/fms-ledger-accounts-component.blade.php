@@ -99,7 +99,7 @@
                                         <th>Acct No.</th>
                                         <th>Department/Project</th>
                                         <th>Primary Balance</th>
-                                        <th>Bank Balance</th>
+                                        <th>Current Balance</th>
                                         <th>status</th>
                                         <th>Action</th>
                                     </tr>
@@ -111,8 +111,8 @@
                                             <td>{{ $account->name }}</td>
                                             <td>{{ $account->account_number??'N/A' }}</td>
                                             <td>{{ $account->project->name??$account->department->name??'N/A' }}</td>
-                                            <td>{{ $account->primary_balance }}</td>
-                                            <td>{{ $account->bank_balance }}</td>
+                                            <td>{{ $account->currency->code??''  }} @moneyFormat($account->opening_balance)</td>
+                                            <td>{{ $account->currency->code??''  }} @moneyFormat($account->current_balance)</td>
                                             @if ($account->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
