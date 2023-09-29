@@ -70,10 +70,17 @@ class GeneralRequisitionsComponent extends Component
 
   public $reject_id;
 
+  public $issue_id;
+
   public $orders;
 
   public $stock_balance;
 
+  public $requested_by;
+
+  public $dispatch_comment;
+
+  public $quantity_dispatched;
 
   public function mount()
   {
@@ -81,10 +88,19 @@ class GeneralRequisitionsComponent extends Component
     $this->orders = collect([]);
   }
 
-  public function approveRequest($id)
+  public function HodApproveRequest($id)
   {
     $request = InvDepartmentRequest::findOrFail($id);
     $request->status = 1;
+    $request->update();
+
+    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Reqquest successfully approved!']);
+  }
+
+  public function storeApproveRequest($id)
+  {
+    $request = InvDepartmentRequest::findOrFail($id);
+    $request->status = 3;
     $request->update();
 
     $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Reqquest successfully approved!']);
@@ -127,6 +143,51 @@ class GeneralRequisitionsComponent extends Component
 
     $this->dispatchBrowserEvent(['close-modal']);
     $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Reqquest successfully canceled!']);
+  }
+
+  public function issueStock($id)
+  {
+
+    $request = InvDepartmentRequest::findOrFail($id);
+
+    $this->item_id = $request->item_id;
+    $this->ordered_by = $request->ordered_by;
+    $this->email = $request->email;
+    $this->quantity_required = $request->quantity_required;
+    $this->request_code = $request->request_code;
+    $this->department_id = $request->department->name;
+    $this->item_id = $request->item->name;
+    $this->brand = $request->item->brand;
+    $this->order_date = $request->order_date;
+
+    $this->issue_id = $id;
+
+    //get stock balance
+    $this->stock_balance = InvDepartmentItem::where('inv_item_id',$request->item_id)
+    ->value('qty_left');
+
+    $this->dispatchBrowserEvent(['issue-item-modal']);
+  }
+
+  public function saveIssueStock()
+  {
+    $this->validate([
+    'quantity_dispatched' => 'required|numeric',
+    ]);
+
+    $request = InvDepartmentRequest::find($this->issue_id);
+
+    $request->status = 5;
+    $request->dispatched_by = \Auth::user()->id;
+    $request->dispatch_date = date('Y-m-d');
+    $request->dispatch_comment = $this->dispatch_comment;
+    $request->quantity_dispatched = $this->quantity_dispatched;
+    $request->update();
+
+    $this->close();
+    $this->dispatchBrowserEvent('close-modal');
+    $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Item issued successfully!']);
+
   }
 
   public function editData($id)
@@ -221,7 +282,6 @@ class GeneralRequisitionsComponent extends Component
 
     $this->brand = InvDepartmentItem::where('inv_item_id',$this->item_id)
     ->value('brand');
-
   }
 
   public function updatedDepartmentId()
@@ -235,16 +295,24 @@ class GeneralRequisitionsComponent extends Component
   public function mainQuery()
   {
     return InvDepartmentRequest::search($this->search)
+    ->when(\Auth::user()->category == 'System-Admin', function ($query) {
+      $query->whereIn('status',[1,3,5,6]);
+      // $query->where('department_id',\Auth::user()->$employee->department);
+    })
+    ->when(\Auth::user()->category == 'Deparment-staff', function ($query) {
+      $query->where('department_id',\Auth::user()->$employee->department);
+    })
     ->when($this->department, function ($query) {
       $query->where('department_id',$this->department);
     })
     ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc');
-
   }
 
   public function render()
   {
-    $data['requests'] = $this->mainQuery()->paginate($this->perPage);
+    $data['requests'] = $this->mainQuery()
+    ->paginate($this->perPage);
+
     $data['departments'] = Department::orderBy('name', 'asc')->get();
 
     return view('livewire.inventory.requisitions.general-requisitions-component',$data);

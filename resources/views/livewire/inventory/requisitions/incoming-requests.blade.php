@@ -1,5 +1,6 @@
 <div>
-  {{-- Stop trying to control. --}}
+  {{-- In work, do what you enjoy. --}}
+
   <div class="row">
     <div class="col-12">
       <div class="card">
@@ -9,7 +10,7 @@
             <div class="col-sm-12 mt-3">
               <div class="d-sm-flex align-items-center">
                 <h5 class="mb-2 mb-sm-0">
-                  General Requests
+                  Incoming Requests
                 </h5>
                 <!-- @include('livewire.layouts.partials.inc.create-resource') -->
 
@@ -98,12 +99,13 @@
                   </td>
 
                   <td class="table-action">
-                    @if($value->status == 0) <!--if request is pending approval or rejection by HoD  -->
+
+                    @if($value->status == 0)
                     <button wire:click="editData({{ $value->id }})"  title="Update"
                       class="action-ico btn-sm btn btn-outline-success mx-1">
                       <i class="fa fa-edit"></i></button>
 
-                      <button wire:click="HodApproveRequest({{ $value->id }})" title="Approve"
+                      <button wire:click="approveRequest({{ $value->id }})" title="Approve"
                         class="action-ico btn-sm btn btn-outline-info mx-1">
                         <i class="fa fa-check-double"></i></button>
 
@@ -112,73 +114,57 @@
                           <i class="fa fa-thumbs-down"></i></button>
                           @endif
 
-                          @if($value->status == 1)
-                          <button wire:click="storeApproveRequest({{ $value->id }})" title="Approve"
-                            class="action-ico btn-sm btn btn-outline-success mx-1">
-                            <i class="fa fa-thumbs-up"></i></button>
+                          @if($value->status == 0 && $value->ordered_by == \Auth::user()->id)
+                          <button wire:click="cancelRequest( {{$value->id}} )" title="Cancel"
+                            class="action-ico btn-sm btn btn-outline-danger mx-1">
+                            <i class="fa fa-ban"></i></button>
+                            @endif
 
-                            <button wire:click="rejectRequest({{ $value->id }})" title="Decline"
-                              class="action-ico btn-sm btn btn-outline-danger mx-1">
-                              <i class="fa fa-thumbs-down"></i></button>
-                              @endif
+                            <!-- <button wire:click="confirmDelete({{ $value->id }})" data-bs-toggle="modal"
+                            data-bs-target="#confirmDelete" title="Delete"
+                            class="action-ico btn-sm btn btn-outline-danger mx-1">
+                            <i class="fa fa-trash"></i></button> -->
+                          </td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div> <!-- end preview-->
+                  <div class="row mt-4">
+                    <div class="col-md-12">
+                      <div class="btn-group float-end">
+                        {{ $requests->links('vendor.livewire.bootstrap') }}
+                      </div>
+                    </div>
+                  </div>
+                </div> <!-- end tab-content-->
+              </div> <!-- end card body-->
+            </div> <!-- end card -->
+          </div><!-- end col-->
+          @include('livewire.inventory.inc.confirm-cancel')
+          @include('livewire.inventory.requisitions.inc.reject-request')
+          @include('livewire.inventory.requisitions.inc.new-general-request-modal')
 
-                              @if($value->status == 3)
-                              <button wire:click="issueStock({{ $value->id }})" title="Issue out"
-                                class="action-ico btn-sm btn btn-outline-success mx-1">
-                                <i class="fa fa-share-square"></i></button>
-                                @endif
+          @push('scripts')
+          <script>
+            window.addEventListener('close-modal', event => {
+              $('#newgeneralRequest').modal('hide');
+              $('#confirmCancel').modal('hide');
+              $('#rejectRequestModal').modal('hide');
+            });
+            window.addEventListener('show-modal', event => {
+              $('#newgeneralRequest').modal('show');
+            });
+            window.addEventListener('new-request-modal', event => {
+              $('#newgeneralRequest').modal('show');
+            });
+            window.addEventListener('reject-request-modal', event => {
+              $('#rejectRequestModal').modal('show');
+            });
+            window.addEventListener('confirm-cancel-modal', event => {
+              $('#confirmCancel').modal('show');
+            });
+          </script>
+          @endpush
 
-                                @if($value->status == 0 && $value->ordered_by == \Auth::user()->id)
-                                <button wire:click="cancelRequest( {{$value->id}} )" title="Cancel"
-                                  class="action-ico btn-sm btn btn-outline-danger mx-1">
-                                  <i class="fa fa-ban"></i></button>
-                                  @endif
-                                </td>
-                              </tr>
-                              @endforeach
-                            </tbody>
-                          </table>
-                        </div> <!-- end preview-->
-                        <div class="row mt-4">
-                          <div class="col-md-12">
-                            <div class="btn-group float-end">
-                              {{ $requests->links('vendor.livewire.bootstrap') }}
-                            </div>
-                          </div>
-                        </div>
-                      </div> <!-- end tab-content-->
-                    </div> <!-- end card body-->
-                  </div> <!-- end card -->
-                </div><!-- end col-->
-
-                @include('livewire.inventory.inc.confirm-cancel')
-                @include('livewire.inventory.requisitions.inc.reject-request')
-                @include('livewire.inventory.requisitions.inc.issue-item-modal')
-                @include('livewire.inventory.requisitions.inc.new-general-request-modal')
-
-                @push('scripts')
-                <script>
-                  window.addEventListener('close-modal', event => {
-                    $('#confirmCancel').modal('hide');
-                    $('#issueItemModal').modal('hide');
-                    $('#newgeneralRequest').modal('hide');
-                    $('#rejectRequestModal').modal('hide');
-                  });
-                  window.addEventListener('show-modal', event => {
-                    $('#newgeneralRequest').modal('show');
-                  });
-                  window.addEventListener('new-request-modal', event => {
-                    $('#newgeneralRequest').modal('show');
-                  });
-                  window.addEventListener('reject-request-modal', event => {
-                    $('#rejectRequestModal').modal('show');
-                  });
-                  window.addEventListener('confirm-cancel-modal', event => {
-                    $('#confirmCancel').modal('show');
-                  });
-                  window.addEventListener('issue-item-modal', event => {
-                    $('#issueItemModal').modal('show');
-                  });
-                </script>
-                @endpush
-              </div>
+        </div>

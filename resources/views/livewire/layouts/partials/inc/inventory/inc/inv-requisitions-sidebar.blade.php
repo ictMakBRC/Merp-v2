@@ -9,7 +9,7 @@
 
   @if(\Auth::user()->category != "Department-staff")
     <li class="nav-item">
-      <a href="#" class="nav-link ">Incoming Requests</a>
+      <a href="{{ route('incoming-requests') }}" class="nav-link ">Incoming Requests</a>
     </li>
 
     <li class="nav-item">

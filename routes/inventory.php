@@ -41,6 +41,7 @@ Route::group(['prefix' => 'inventory'], function () {
   Route::group(['prefix' => 'requisitions'], function () {
     Route::get('forecast', ForecastsComponent::class)->name('forecast');
     Route::get('general-requests', GeneralRequisitionsComponent::class)->name('general-requests');
+    Route::get('incoming-requests', GeneralRequisitionsComponent::class)->name('incoming-requests');
     Route::get('consumption-based', ConsumptionBasedRequisitionsComponent::class)->name('consumption-based');
   });
 

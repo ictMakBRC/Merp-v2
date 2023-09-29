@@ -39,5 +39,4 @@ class InvDepartmentRequest extends Model
       $query->where('name', 'like', '%'.$search.'%');
     });
   }
-
 }
