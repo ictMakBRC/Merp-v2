@@ -57,6 +57,6 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.human-resource.grievances.create');
+        return view('livewire.human-resource.grievances.edit');
     }
 }

@@ -58,6 +58,7 @@ class FmsFinancialYearsComponent extends Component
         $this->validateOnly($fields, [
             'name' => 'required|string',
             'is_active' => 'required|integer',
+            'is_budget_year' => 'required|numeric',
             'end_date' => 'required|date',
             'start_date' => 'required|date',
         ]);
@@ -68,6 +69,7 @@ class FmsFinancialYearsComponent extends Component
         $this->validate([
             'name' => 'required|string|unique:fms_financial_years',
             'is_active' => 'required|integer',
+            'is_budget_year' => 'required|numeric',
             'end_date' => 'required|date',
             'start_date' => 'required|date',
 
@@ -76,10 +78,14 @@ class FmsFinancialYearsComponent extends Component
         $financialYear = new FmsFinancialYear();
         $financialYear->name = $this->name;
         $financialYear->is_active = $this->is_active;
+        $financialYear->is_budget_year = $this->is_budget_year;
         $financialYear->end_date = $this->end_date;
         $financialYear->start_date = $this->start_date;
         $financialYear->is_budget_year = 0;
         $financialYear->save();
+        if($this->is_budget_year ==1){
+            FmsFinancialYear::where('id', '!=', $financialYear->id)->update(['is_budget_year'=>'0']);
+        }
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'financialYear created successfully!']);
@@ -91,6 +97,7 @@ class FmsFinancialYearsComponent extends Component
         $this->name = $financialYear->name;
         $this->end_date = $financialYear->end_date;
         $this->is_active = $financialYear->is_active;
+        $this->is_budget_year = $financialYear->is_budget_year;
         $this->start_date = $financialYear->start_date;
         $this->createNew = true;
         $this->toggleForm = true;
@@ -113,6 +120,7 @@ class FmsFinancialYearsComponent extends Component
         $this->validate([
             'name' => 'required|unique:fms_financial_years,name,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
+            'is_budget_year' => 'required|numeric',
             'end_date' => 'required|date',
             'start_date' => 'required|date',
         ]);
@@ -121,8 +129,12 @@ class FmsFinancialYearsComponent extends Component
         $financialYear->name = $this->name;
         $financialYear->start_date = $this->start_date;
         $financialYear->end_date = $this->end_date;
+        $financialYear->is_budget_year = $this->is_budget_year;
         $financialYear->is_active = $this->is_active;
-        $financialYear->update(); 
+        $financialYear->update();
+        if($this->is_budget_year ==1){
+            FmsFinancialYear::where('id', '!=', $financialYear->id)->update(['is_budget_year'=>'0']);
+        } 
         $this->resetInputs();
         $this->createNew = false;
         $this->toggleForm = false;

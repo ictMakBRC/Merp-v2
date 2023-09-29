@@ -7,6 +7,8 @@ use Livewire\WithPagination;
 use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Settings\FmsChartOfAccountsType;
+use App\Models\Finance\Settings\FmsCurrency;
 
 class FmsLedgerAccountsComponent extends Component
 {
@@ -43,10 +45,12 @@ class FmsLedgerAccountsComponent extends Component
     public $account_number;
     public $department_id;
     public $project_id;
-    public $primary_balance;
-    public $bank_balance;
+    public $opening_balance;
+    public $current_balance;
+    public $account_type;
     public $as_of;
     public $is_active;
+    public $currency_id;
     public $entry_type ='Department';
 
     public function updatedCreateNew()
@@ -68,10 +72,11 @@ class FmsLedgerAccountsComponent extends Component
             'account_number',
             'department_id',
             'project_id',
-            'primary_balance',
-            'bank_balance',
+            'opening_balance',
+            'current_balance',
             'as_of',
             'is_active',
+            'currency_id',
         ]);
     }
 
@@ -83,8 +88,9 @@ class FmsLedgerAccountsComponent extends Component
             'account_number' => 'required|unique:fms_ledger_accounts',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
-            'primary_balance' => 'required|numeric',
-            'bank_balance' => 'required|numeric',
+            'currency_id' => 'required|integer',
+            'opening_balance' => 'required|numeric',
+            'current_balance' => 'required|numeric',
             'as_of' => 'required|date',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
@@ -118,9 +124,10 @@ class FmsLedgerAccountsComponent extends Component
             'is_active' => 'required|numeric',
             'account_number' => 'required|unique:fms_ledger_accounts',
             'department_id' => 'nullable|integer',
+            'account_type' => 'required|integer',
             'project_id' => 'nullable|integer',
-            'primary_balance' => 'required',
-            'bank_balance' => 'required',
+            'currency_id' => 'required|integer',
+            'opening_balance' => 'required',
             'as_of' => 'required|date',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
@@ -151,17 +158,19 @@ class FmsLedgerAccountsComponent extends Component
             return false;
         }
 
-        $primary_balance = (float) str_replace(',', '', $this->primary_balance);
-        $bank_balance = (float) str_replace(',', '', $this->bank_balance);
+        $opening_balance = (float) str_replace(',', '', $this->opening_balance);
+        $current_balance = (float) str_replace(',', '', $this->current_balance);
 
         $account = new FmsLedgerAccount();
         $account->name = $this->name;
         $account->is_active = $this->is_active;
         $account->account_number = $this->account_number;
         $account->department_id = $this->department_id;
+        $account->currency_id = $this->currency_id;
         $account->project_id = $this->project_id;
-        $account->primary_balance = $primary_balance;
-        $account->bank_balance = $bank_balance;
+        $account->account_type = $this->account_type;
+        $account->opening_balance = $opening_balance;
+        $account->current_balance = $opening_balance;
         $account->as_of = $this->as_of;
         $account->is_active = $this->is_active;
         $account->description = $this->description;
@@ -179,8 +188,9 @@ class FmsLedgerAccountsComponent extends Component
             'account_number' => 'required|unique:fms_ledger_accounts,account_number,'.$this->edit_id.'',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
-            'primary_balance' => 'required',
-            'bank_balance' => 'required',
+            'account_type' => 'required|integer',
+            'opening_balance' => 'required',
+            'current_balance' => 'required',
             'as_of' => 'required|date',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
@@ -188,15 +198,17 @@ class FmsLedgerAccountsComponent extends Component
         ]);
 
         
-        $primary_balance = (float) str_replace(',', '', $this->primary_balance);
-        $bank_balance = (float) str_replace(',', '', $this->bank_balance);
+        $opening_balance = (float) str_replace(',', '', $this->opening_balance);
+        $current_balance = (float) str_replace(',', '', $this->current_balance);
 
         $account = FmsLedgerAccount::where('id',$this->edit_id)->first();
         $account->name = $this->name;
         $account->is_active = $this->is_active;
         $account->account_number = $this->account_number;
-        $account->primary_balance = $primary_balance;
-        $account->bank_balance = $bank_balance;
+        $account->opening_balance = $opening_balance;
+        $account->current_balance = $current_balance;
+        $account->account_type = $this->account_type;
+        $this->account_type = $account->account_type;
         $account->as_of = $this->as_of;
         $account->is_active = $this->is_active;
         $account->description = $this->description;
@@ -214,8 +226,9 @@ class FmsLedgerAccountsComponent extends Component
         $this->account_number = $account->account_number;
         $this->department_id = $account->department_id;
         $this->project_id = $account->project_id;
-        $this->primary_balance = $account->primary_balance;
-        $this->bank_balance = $account->bank_balance;
+        $this->currency_id = $account->currency_id;
+        $this->opening_balance = $account->opening_balance;
+        $this->current_balance = $account->current_balance;
         $this->as_of = $account->as_of;
         $this->is_active = $account->is_active;
         $this->description = $account->description;
@@ -237,7 +250,7 @@ class FmsLedgerAccountsComponent extends Component
 
     public function filterAccount()
     {
-        $accountSubType = FmsLedgerAccount::search($this->search)->with(['project', 'department'])
+        $accountSubType = FmsLedgerAccount::search($this->search)->with(['project', 'department','currency'])
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -252,7 +265,9 @@ class FmsLedgerAccountsComponent extends Component
     public function render()
     {
         $data['departments'] = Department::where('is_active', 1)->get();
+        $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['projects'] = Project::get();
+        $data['types'] = FmsChartOfAccountsType::get();
         $data['accounts'] = $this->filterAccount()->where('is_active', 1)->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         return view('livewire.finance.ledger.fms-ledger-accounts-component', $data);

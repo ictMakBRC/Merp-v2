@@ -16,7 +16,7 @@ class Create extends Component
 
     public $employee_id;
 
-    public $file_upload;
+    public $file_uploads;
 
     public $termination_date;
 
@@ -31,7 +31,7 @@ class Create extends Component
         'reason' => 'required',
         'letter' => 'required',
         'termination_date' => 'required',
-        'file_upload' => 'file|nullable',
+        'file_uploads.*' => 'file|nullable',
     ];
 
     public function mount()
@@ -51,14 +51,18 @@ class Create extends Component
                 'reason' => $this->reason
            ]);
 
-        $termination->addMedia($this->file_upload)->toMediaCollection();
+        if($this->file_uploads != []) {
+            foreach ($this->file_uploads as $file_upload) {
+                $termination->addMedia($file_upload)->toMediaCollection();
+            }
+        }
 
         return redirect()->to(route('terminations'));
     }
 
     public function render()
     {
-        $this->authorize('update', Termination::class);
+        // $this->authorize('update', Termination::class);
         return view('livewire.human-resource.performance.terminations.create');
     }
 }

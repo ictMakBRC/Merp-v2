@@ -2,10 +2,12 @@
 
 namespace App\Models\HumanResource\Performance;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Comment;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Termination extends Model implements HasMedia
 {
@@ -18,8 +20,17 @@ class Termination extends Model implements HasMedia
         'employee_id',
         'reason',
         'letter',
-        'termination_date'
+        'termination_date',
+        'acknowledged_at'
     ];
+
+    /**
+     * Comments under this grievance
+     */
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 
     /**
      * Search the appraisal by department

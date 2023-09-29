@@ -4,9 +4,9 @@
             <div class="modal-header">
                 <h6 class="modal-title m-0" id="updateCreateModalTitle">
                     @if (!$toggleForm)
-                        New category
+                        New Account
                     @else
-                        Edit category
+                        Edit Account
                     @endif
                 </h6>
                 <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()" aria-label="Close"></button>
@@ -24,7 +24,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col">
+                        <div class="mb-3 col-3">
                             <label for="account_number" class="form-label required">Acct No.</label>
                             <input type="text" id="account_number" class="form-control" name="account_number" required
                                 wire:model="account_number">
@@ -32,19 +32,35 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-2">
-                            <label for="primary_balance" class="form-label required">Primary Balance</label>
-                            <input type="text" id="primary_balance" oninput="formatAmount(this)" class="form-control"  name="primary_balance" required
-                                wire:model.defer="primary_balance">
-                            @error('primary_balance')
+                        <div class="mb-3 col-3">
+                            <label for="account_type" class="form-label required">Account Currency</label>
+                            <select class="form-select select2" id="currency_id" wire:model.defer="currency_id">
+                                <option  value="">Select</option>
+                                @foreach ($currencies as $currency)
+                                    <option value="{{ $currency->id }}">{{ $currency->name.' '.$currency->code }}</option>
+                                @endforeach
+                            </select>
+                            @error('currency_id')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-2">
-                            <label for="bank_balance" class="form-label required">Bank Balance</label>
-                            <input type="text" id="bank_balance" oninput="formatAmount(this)" class="form-control" name="bank_balance" required
-                                wire:model.defer="bank_balance">
-                            @error('bank_balance')
+                        <div class="mb-3 col-3">
+                            <label for="opening_balance" class="form-label required">Primary Balance</label>
+                            <input type="text" id="opening_balance" oninput="formatAmount(this)" class="form-control"  name="opening_balance" required
+                                wire:model.defer="opening_balance">
+                            @error('opening_balance')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="account_type" class="form-label required">Account Type</label>
+                            <select class="form-select select2" id="account_type" wire:model.defer="account_type">
+                                <option  value="">Select</option>
+                                @foreach ($types as $type)
+                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('account_type')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
@@ -67,7 +83,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-12">
+                        <div class="mb-3 col-md-8">
                             <label for="countryName" class="form-label">Description</label>
                             <textarea  id="description" class="form-control"
                             name="description" wire:model.defer="description"></textarea>

@@ -17,19 +17,19 @@ class Create extends Component
 
     public $employee_id;
 
-    public $file_upload;
+    public $file_uploads;
 
     public $employees;
 
-    public $reason;
+    public $subject;
 
     public $letter;
 
     protected $rules = [
         'employee_id' => 'nullable',
-        'reason' => 'required',
+        'subject' => 'required',
         'letter' => 'required',
-        'file_upload' => 'file|nullable',
+        'file_uploads.*' => 'file|nullable',
     ];
 
     public function mount()
@@ -44,18 +44,22 @@ class Create extends Component
 
         $warning = Warning::create([
                 'employee_id' => $this->employee_id,
-                'reason' => $this->reason,
+                'subject' => $this->subject,
                 'letter' => $this->letter
            ]);
 
-        $warning->addMedia($this->file_upload)->toMediaCollection();
+        if($this->file_uploads != []) {
+            foreach ($this->file_uploads as $file_upload) {
+                $warning->addMedia($file_upload)->toMediaCollection();
+            }
+        }
 
         return redirect()->to(route('warnings'));
     }
 
     public function render()
     {
-        $this->authorize('create', Warning::class);
+        // $this->authorize('create', Warning::class);
         return view('livewire.human-resource.performance.warnings.create');
     }
 }

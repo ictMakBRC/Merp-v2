@@ -2,6 +2,7 @@
 
 namespace App\Models\Finance\Accounting;
 
+use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
 use Spatie\Activitylog\LogOptions;
@@ -31,18 +32,24 @@ class FmsLedgerAccount extends Model
         'account_number',
         'department_id',
         'project_id',
-        'primary_balance',
-        'bank_balance',
+        'opening_balance',
+        'current_balance',
+        'account_type',
         'as_of',
         'created_by',  
         'updated_by', 
         'is_active',
-     
+        'currency_id',
     ];
 
     public function project()
     {
        return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    public function currency()
+    {
+       return $this->belongsTo(FmsCurrency::class, 'currency_id', 'id');
     }
 
     public function department()

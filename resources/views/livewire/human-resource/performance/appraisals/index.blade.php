@@ -98,6 +98,8 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Employee Name</th>
+                                        <th>From</th>
+                                        <th>To</th>
                                         <th>Created at</th>
                                         <th>Action</th>
                                     </tr>
@@ -106,9 +108,15 @@
                                     @forelse ($appraisals as $key => $appraisal)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $appraisal->employee->name ?? 'N/A' }}</td>
+                                        <td>{{$appraisal->owner->full_name}}</td>
+                                        <td>@formatDate($appraisal->start_date)</td>
+                                        <td>@formatDate($appraisal->end_date)</td>
                                         <td>@formatDate($appraisal->created_at)</td>
                                         <td class="table-action d-flex">
+                                            <a href="{{route('appraisals.show', $appraisal->id)}}"
+                                                class="action-ico btn-sm text-primary mx-1">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
                                             <a href="{{route('appraisals.update', $appraisal->id)}}"
                                                 class="action-ico btn-sm text-primary mx-1">
                                                 <i class="fa fa-edit"></i>

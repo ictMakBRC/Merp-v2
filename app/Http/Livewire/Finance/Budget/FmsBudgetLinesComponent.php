@@ -92,6 +92,7 @@ class FmsBudgetLinesComponent extends Component
        $budgetData->status = 'Saved';
        $budgetData->update();
        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget saved successfully!']);
+       return redirect()->signedRoute('finance-budget_view', $this->budgetCode);
     }
     }
 
