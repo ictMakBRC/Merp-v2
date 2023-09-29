@@ -71,7 +71,7 @@ class InvStoresComponent extends Component
     public function storeInvStore()
     {
         $this->validate([
-            'name' => 'required|string|unique:inv_unit_of_measures',
+            'name' => 'required|string|unique:inv_stores',
             'is_active' => 'required|numeric',
             'location' => 'required|string',
             'description' => 'nullable|string',
@@ -115,7 +115,7 @@ class InvStoresComponent extends Component
     public function updateInvStore()
     {
         $this->validate([
-            'name' => 'required|unique:inv_unit_of_measures,name,'.$this->edit_id.'',
+            'name' => 'required|unique:inv_stores,name,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
             'location' => 'required|string',
             'description' => 'nullable|string',
@@ -154,7 +154,7 @@ class InvStoresComponent extends Component
         }
     }
 
-    public function filterstores()
+    public function filterStores()
     {
         $stores = InvStore::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
@@ -170,7 +170,7 @@ class InvStoresComponent extends Component
 
     public function render()
     {
-        $data['stores'] = $this->filterstores()
+        $data['stores'] = $this->filterStores()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
   

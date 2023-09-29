@@ -25,12 +25,12 @@ return [
         'Admin' => [
             'User Management' => [
 
-                'Create'=>[
+                'Create' => [
                     'create_user',
                     'create_role',
                 ],
 
-                'Read'=>[
+                'Read' => [
                     'access_user_management_module',
                     'view_user',
                     'view_role',
@@ -40,7 +40,7 @@ return [
                     'generate_user_management_reports',
                 ],
 
-                'Update'=>[
+                'Update' => [
                     'update_user',
                     'update_role',
                     'update_permission',
@@ -48,29 +48,29 @@ return [
                     'assign_permission',
                 ],
 
-                'Delete'=> [
+                'Delete' => [
                     'delete_user',
                     'delete_role',
                 ],
             ],
             'Human Resource' => [
-                'Create'=> [
+                'Create' => [
                     'create_grievance_type',
                     'create_grievance',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_grievance_types',
                     'view_grievances',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_grievance_type',
                     'update_grievance',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_grievance_type',
                     'restore_grievance',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_grievance_type',
                     'force_delete_grievance_type',
                     'archive_grievance',
@@ -78,35 +78,35 @@ return [
                 ],
             ],
             'Human Resource/Performance' => [
-                'Create'=> [
+                'Create' => [
                     'create_appraisal',
                     'create_warning',
                     'create_exit_interview',
                     'create_termination',
                     'create_resignation',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_appraisals',
                     'view_warnings',
                     'view_exit_interviews',
                     'view_terminations',
                     'view_resignations',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_appraisal',
                     'update_warning',
                     'update_exit_interview',
                     'update_termination',
                     'update_resignation',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_appraisal',
                     'restore_warning',
                     'restore_exit_interview',
                     'restore_termination',
                     'restore_resignation',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_appraisal',
                     'archive_warning',
                     'archive_exit_interview',
@@ -120,56 +120,56 @@ return [
                 ],
             ],
             'Human Resource/Leave Management' => [
-                'Create'=> [
+                'Create' => [
                     'create_leave_request',
                     'create_leave_delegation_request',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_leave_requests',
                     'view_leave_grievances',
                     'view_department_leave_requests',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_leave_request',
                     'approve_leave_request',
                     'update_leave_grievance_request',
                     'approve_leave_grievance_request',
                     'approve_department_leave_request',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_leave_request',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_leave_request',
                     'decline_leave_request',
                     'force_delete_leave_request',
                     'decline_leave_request',
                     'decline_department_leave_request',
-                    'force_delete_leave_request'
+                    'force_delete_leave_request',
                 ],
             ],
             'Human Resource/Employee Management' => [
-                'Create'=> [
+                'Create' => [
                     'register employee',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_employees',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_employee',
                     'activate_employee',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_employee',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_employee',
                     'deactivate_employee',
-                    'force_delete_employee'
+                    'force_delete_employee',
                 ],
             ],
             'Human Resource/Settings' => [
-                'Create'=> [
+                'Create' => [
                     'create_duty_station',
                     'create_department',
                     'create_designation',
@@ -179,7 +179,7 @@ return [
                     'register_currency_&_rate',
                     'create_leave_type',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_duty_stations',
                     'view_departments',
                     'view_designations',
@@ -189,7 +189,7 @@ return [
                     'view_currencies_&_rates',
                     'view_leave_types',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_duty_station',
                     'update_department',
                     'update_designation',
@@ -199,7 +199,7 @@ return [
                     'update_currency_&_rate',
                     'update_leave_type',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_duty_station',
                     'restore_department',
                     'restore_designation',
@@ -209,7 +209,7 @@ return [
                     'restore_currency_&_rate',
                     'restore_leave_type',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_duty_station',
                     'archive_department',
                     'archive_designation',
@@ -228,24 +228,279 @@ return [
                     'force_delete_leave_type',
                 ],
             ],
+            'Document Management' => [
+                'Create' => [
+                    'create_document_category',
+                    'create_folder',
+                    'create_document',
+                    'create_document_request',
+                ],
+
+                'Read' => [
+                    'access_document_management_module',
+                    'access_document_management_settings',
+                    'view_document_category',
+                    'view_folder',
+                    'view_document',
+                    'view_document_request',
+
+                ],
+
+                'Update' => [
+                    'update_document_category',
+                    'update_folder',
+                    'update_document',
+                    'archive_document',
+                    'update_document_request',
+                ],
+
+                'Delete' => [
+                    'delete_document_category',
+                    'delete_folder',
+                    'delete_document',
+                    'delete_document_request',
+                ],
+            ],
+            'Finance Management' => [
+                'Create' => [
+                    'create_budget',
+                    'create_department_budget',
+                    'create_invoice',
+                    'create_department_invoice',
+                    'create_ledger',
+                    'create_transaction',
+                    'create_transfer',
+                    'create_journal_entry',
+                    'create_coa',
+                    'create_cash_flows',
+                    'create_customers',
+                    'create_services',
+                    'create_service_category',
+                ],
+
+                'Read' => [
+                    'access_finance_module',
+                    'access_finance_management_settings',
+                    'access_accounting',
+                    'view_department_budget',
+                    'view_organization_budget',
+                    'view_all_invoices',
+                    'view_department_invoices',
+                    'view_department_ledger',
+                    'view_all_ledger',
+                    'view_department_ledger',
+                    'view_department_transaction',
+                    'view_all_transactions',
+                    'view_transfer',
+                    'view_journal_entry',
+                    'view_coa',
+                    'view_cash_flows',
+                    'view_customers',
+                    'view_services',
+                    'view_years',
+                    'view_currencies',
+                    'view_reports',
+                    'view_advanced_reports',
+                    'view_main_dashboard',
+                    'view_department_dashboard',
+                ],
+
+                'Update' => [
+                    'update_budget',
+                    'approve_budget',
+                    'update_department_budget',
+                    'update_invoice',
+                    'approve_invoice',
+                    'update_department_invoice',
+                    'update_ledger',
+                    'update_transaction',
+                    'approve_transaction',
+                    'update_transfer',
+                    'approve_transfer',
+                    'update_journal_entry',
+                    'update_coa',
+                    'update_cash_flows',
+                    'update_customers',
+                    'update_services',
+                    'update_years',
+                    'update_currencies',
+                    'update_service_category',
+                ],
+
+                'Delete' => [
+                    'delete_service_category',
+                    'delete_budget',
+                    'delete_department_budget',
+                    'delete_invoice',
+                    'delete_department_invoice',
+                    'delete_ledger',
+                    'delete_transaction',
+                    'delete_transfer',
+                    'delete_journal_entry',
+                    'delete_coa',
+                    'delete_cash_flows',
+                    'delete_customers',
+                    'delete_services',
+                    'delete_years',
+                    'delete_currencies',
+                ],
+            ],
         ],
     ],
 
     //Configure Default Roles and Permissions
     'default_roles' => [
-        //TRAINING MANAGEMENT
-        // 'Training Management' =>[
-        //     'Training Coordinator' => [
-        //         'access_training_module',
-        //         'access_workshops_centre',
-        //         'access_technical_support_centre',
-        //         'add_training_partner',
-        //         'view_training',
-        //         'view_trainer',
-        //         'view_nominee',
-        //     ],
-        //  ],
-     ],
-
+        // FINANCE MANAGEMENT
+        'Finance Management' => [
+            'Finance Admin' => [
+                'access_finance_module',
+                'access_finance_management_settings',
+                'access_accounting',
+                'view_department_budget',
+                'view_organization_budget',
+                'view_all_invoices',
+                'view_department_invoices',
+                'view_department_ledger',
+                'view_all_ledger',
+                'view_department_ledger',
+                'view_department_transaction',
+                'view_all_transactions',
+                'view_transfer',
+                'view_journal_entry',
+                'view_coa',
+                'view_cash_flows',
+                'view_customers',
+                'view_services',
+                'view_years',
+                'view_currencies',
+                'view_reports',
+                'view_advanced_reports',
+                'view_main_dashboard',
+                'view_department_dashboard',
+                'create_budget',
+                'create_department_budget',
+                'create_invoice',
+                'create_department_invoice',
+                'create_ledger',
+                'create_transaction',
+                'create_transfer',
+                'create_journal_entry',
+                'create_coa',
+                'create_cash_flows',
+                'create_customers',
+                'create_service_category',
+                'create_services',
+                'update_budget',
+                'approve_budget',
+                'update_department_budget',
+                'update_invoice',
+                'approve_invoice',
+                'update_department_invoice',
+                'update_ledger',
+                'update_transaction',
+                'approve_transaction',
+                'update_transfer',
+                'approve_transfer',
+                'update_journal_entry',
+                'update_coa',
+                'update_cash_flows',
+                'update_customers',
+                'update_services',
+                'update_years',
+                'update_currencies', 'update_budget',
+                'approve_budget',
+                'update_department_budget',
+                'update_invoice',
+                'approve_invoice',
+                'update_department_invoice',
+                'update_ledger',
+                'update_transaction',
+                'approve_transaction',
+                'update_transfer',
+                'approve_transfer',
+                'update_journal_entry',
+                'update_coa',
+                'update_cash_flows',
+                'update_customers',
+                'update_services',
+                'update_years',
+                'update_currencies',
+                'update_service_category', 'delete_service_category',
+                'delete_budget',
+                'delete_department_budget',
+                'delete_invoice',
+                'delete_department_invoice',
+                'delete_ledger',
+                'delete_transaction',
+                'delete_transfer',
+                'delete_journal_entry',
+                'delete_coa',
+                'delete_cash_flows',
+                'delete_customers',
+                'delete_services',
+                'delete_years',
+                'delete_currencies',
+            ],
+            'Department Finance Admin' => [
+                'access_finance_module',
+                'access_accounting',
+                'view_department_budget',
+                'view_department_invoices',
+                'view_department_ledger',
+                'view_department_transaction',
+                'view_customers',
+                'view_services',
+                'view_reports',
+                'view_department_dashboard',
+                'create_department_budget',
+                'create_department_invoice',
+                'create_customers',
+                'create_services',
+                'update_department_budget',
+                'update_customers',
+                'update_services',
+                'update_invoice',
+                'update_department_invoice',
+                'update_customers',
+                'update_services',
+            ],
+        ],
+        // DOCUMENT MANAGEMENT
+        'Document Management' => [
+            'Document Admin' => [
+                'create_document_category',
+                'create_folder',
+                'create_document',
+                'create_document_request',
+                'access_document_management_module',
+                'access_document_management_settings',
+                'view_document_category',
+                'view_folder',
+                'view_document',
+                'view_document_request',
+                'update_document_category',
+                'update_folder',
+                'update_document',
+                'archive_document',
+                'update_document_request',
+                'delete_document_category',
+                'delete_folder',
+                'delete_document',
+                'delete_document_request',
+            ],
+            'Document User' => [
+                'create_document',
+                'create_document_request',
+                'access_document_management_module',
+                'view_folder',
+                'view_document',
+                'view_document_request',
+                'update_document',
+                'archive_document',
+                'update_document_request',
+                'delete_document_request',
+            ],
+        ],
+    ],
 
 ];

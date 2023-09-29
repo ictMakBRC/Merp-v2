@@ -96,7 +96,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Parent</th>
+                                        <th>Parent Category</th>
                                         <th>Description</th>
                                         <th>Status</th>
                                         <th>Action</th>

@@ -2,17 +2,20 @@
 
 namespace App\Models\Grants\Project;
 
-use App\Models\Grants\GrantProfile;
+use App\Models\Grants\Grant;
+use App\Traits\DocumentableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Grants\Project\ProjectDocument;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, DocumentableTrait, ProcurementRequestableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -34,21 +37,27 @@ class Project extends Model
         ->withTimestamps();
     }
 
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class,'department_project','project_id','department_id')
+        ->withTimestamps();
+    }
+
     //principal investigator
-    public function pi()
+    public function principalInvestigator()
     {
         return $this->belongsTo(Employee::class,'pi','id');
     }
 
     //co principal investigator
-    public function coPi()
+    public function coInvestigator()
     {
         return $this->belongsTo(Employee::class,'co_pi','id');
     }
 
     public function grant()
     {
-        return $this->belongsTo(GrantProfile::class,'grant_profile_id','id');
+        return $this->belongsTo(Grant::class,'grant_profile_id','id');
     }
     
     public static function boot()
@@ -61,8 +70,13 @@ class Project extends Model
         }
     }
 
-    public function documents()
+    
+    public static function search($search)
     {
-        return $this->hasMany(ProjectDocument::class,'project_id','id');
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('project_code', 'like', '%'.$search.'%')
+            ->orWhere('project_category', 'like', '%'.$search.'%')
+            ->orWhere('project_type', 'like', '%'.$search.'%');
     }
 }
