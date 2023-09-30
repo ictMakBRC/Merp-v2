@@ -4,18 +4,7 @@
             <div class="row">          
 
                 @include('livewire.partials.project-department-toggle')           
-                <div class="mb-3 col-2">
-                    <label for="fiscal_year" class="form-label required">Fiscal year</label>
-                    <select id="fiscal_year" class="form-control" name="fiscal_year" required wire:model="fiscal_year">
-                        <option value="">Select</option>
-                        @foreach ($years as $fy)
-                            <option value="{{$fy->id}}">{{$fy->name}}</option>
-                        @endforeach
-                    </select>
-                    @error('fiscal_year')
-                        <div class="text-danger text-small">{{ $message }}</div>
-                    @enderror
-                </div>
+             
                 <div class="mb-3 col-2">
                     <label for="from_account" class="form-label required">Ledger</label>
                     <select id="from_account" class="form-control" name="from_account" required wire:model="from_account">
@@ -66,7 +55,7 @@
                     @enderror
                 </div> 
                 <div class="mb-3 col">
-                    <label for="total_amount" class="form-label required">Amount</label>
+                    <label for="total_amount" class="form-label required">Amount({{$budgetLineCur}})</label>
                     <div class="input-group">
                     <input type="text" id="total_amount"  class="form-control" name="total_amount" required
                         wire:model="total_amount">

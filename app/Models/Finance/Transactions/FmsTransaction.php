@@ -2,18 +2,32 @@
 
 namespace App\Models\Finance\Transactions;
 
-use App\Models\Finance\Accounting\FmsLedgerAccount;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FmsTransaction extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Transactions')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');

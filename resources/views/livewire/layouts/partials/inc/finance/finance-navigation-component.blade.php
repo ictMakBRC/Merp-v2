@@ -118,16 +118,41 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_all_transactions']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-transactions', 'all') }}"
-                                            class="nav-link ">All</a>
+                                        <a href="{{ route('finance-transactions', 'all') }}" class="nav-link ">All</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-transfers', 'all') }}"
                                             class="nav-link ">Transfers</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-expenses', 'all') }}"
-                                            class="nav-link ">Expenses</a>
+                                        <a href="{{ route('finance-expenses', 'all') }}" class="nav-link ">Expenses</a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->hasPermission(['view_department_transaction']))
+                                @endif
+                            </ul>
+                            <!--end nav-->
+                        </div>
+                        <!--end sidebarAnalytics-->
+                    </li>
+                @endif
+                @if (Auth::user()->hasPermission(['view_all_transactions']) ||
+                        Auth::user()->hasPermission(['view_department_transaction']))
+                    <li class="nav-item {{ request()->segment(3) == 'requests' ? 'menuitem-active' : '' }}">
+                        <a class="nav-link" href="#payemnt_requets" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="payemnt_requets">
+                            Requests
+                        </a>
+                        <div class="collapse " id="payemnt_requets">
+                            <ul class="nav flex-column">
+                                <!--end nav-item-->
+                                @if (Auth::user()->hasPermission(['view_all_transactions']))
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-requests', 'all') }}" class="nav-link ">All</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-requests', 'incoming') }}"
+                                            class="nav-link ">Incoming</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_department_transaction']))

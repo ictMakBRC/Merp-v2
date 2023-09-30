@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Finance\Invoice;
 
+use Livewire\Component;
+use App\Services\GeneratorService;
+use Illuminate\Support\Facades\DB;
 use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Finance\Invoice\FmsInvoiceItem;
 use App\Models\Finance\Invoice\FmsInvoicePayment;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Transactions\FmsTransaction;
-use App\Services\GeneratorService;
-use Illuminate\Support\Facades\DB;
-use Livewire\Component;
 
 class FmsViewInvoiceComponent extends Component
 {
@@ -44,6 +45,7 @@ class FmsViewInvoiceComponent extends Component
     public $is_active;
     public $is_department;
     public $invoiceData;
+    public $to_account;
 
     public function mount($inv_no)
     {
@@ -57,6 +59,7 @@ class FmsViewInvoiceComponent extends Component
             'payment_amount' => 'required',
             'status' => 'required',
             'description' => 'required',
+            'to_account' => 'required',
         ]);
         DB::transaction(function () use ($id) {
         $payement = new FmsInvoicePayment();
@@ -92,6 +95,7 @@ class FmsViewInvoiceComponent extends Component
                 $trans->trx_date = $this->as_of;
                 $trans->total_amount = $this->payment_amount;
                 // $trans->rate = $this->rate;
+                $trans->to_account = $this->to_account;
                 $trans->department_id =  $this->invoiceData->department_id;
                 $trans->project_id = $this->invoiceData->project_id;
                 $trans->billed_department = $this->invoiceData->billed_department;
@@ -129,7 +133,7 @@ class FmsViewInvoiceComponent extends Component
             'created_by',
             'updated_by',
             'status',
-
+            'to_account',
             'trx_no',
             'trx_ref',
             'trx_date',
@@ -165,9 +169,11 @@ class FmsViewInvoiceComponent extends Component
             $this->balance = $invoiceData->total_paid ?? '0';
             $this->payment_balance = $this->amount - $this->balance;
             // $this->payment_amount = $this->amount - $this->balance;
+            $data['ledgers'] = FmsLedgerAccount::where('department_id', $invoiceData->department_id)->get();
             $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['service'])->get();
         } else {
             $data['items'] = collect([]);
+            $data['ledgers'] = collect([]);
         }
         return view('livewire.finance.invoice.fms-view-invoice-component', $data);
     }
