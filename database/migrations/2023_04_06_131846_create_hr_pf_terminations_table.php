@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('reason')->nullable();
             $table->date('termination_date')->nullable();
             $table->string('letter');
+            $table->timestamp('acknowledged_at')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });

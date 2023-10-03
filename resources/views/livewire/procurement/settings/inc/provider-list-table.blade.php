@@ -20,8 +20,8 @@
                     <tr>
                         <td>{{$key+1}}</td>
                         <td>{{$provider->name}}</td>
-                        <td>{{$provider->phone_number}}</td>
                         <td>{{$provider->provider_type}}</td>
+                        <td>{{$provider->phone_number}}</td>
                         <td>{{$provider->email}}</td>
                         <td>{{$provider->country}}</td>
                         @if ($provider->is_active == 0)

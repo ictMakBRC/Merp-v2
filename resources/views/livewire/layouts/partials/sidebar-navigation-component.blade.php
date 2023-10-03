@@ -47,9 +47,28 @@
 
                         <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right"
                             title="Inventory Management" data-bs-trigger="hover">
-                            <a href="#inventoryManagement" id="inventoryManagement-tab" class="nav-link">
+
+                            @if(\Auth::user()->category == "Department-staff")
+
+                            <!-- <a class="nav-link" data-bs-toggle="modal"
+                              data-bs-target="#selectDepartmentModal">
                                 <i class="fas fa-boxes menu-icon"></i>
+                            </a> -->
+
+                            <a href="#inventoryManagement" id="inventoryManagement-tab" class="nav-link">
+                              <i class="fas fa-boxes menu-icon"></i>
                             </a>
+
+                            @else
+                            <a href="#inventoryManagement" id="inventoryManagement-tab" class="nav-link">
+                              <i class="fas fa-boxes menu-icon"></i>
+                            </a>
+                            <!-- <a href="{{ route('inventory-home') }}" class="nav-link">
+                              <i class="fas fa-boxes menu-icon"></i>
+                            </a> -->
+
+
+                            @endif
                             <!--end nav-link-->
                         </li>
                         <!--end nav-item-->
@@ -172,3 +191,4 @@
         </div><!-- end main-menu-inner-->
     </div>
 </div>
+@include('livewire.layouts.partials.inc.inventory.inc.select-user-department-modal')

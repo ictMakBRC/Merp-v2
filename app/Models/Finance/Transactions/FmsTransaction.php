@@ -2,20 +2,45 @@
 
 namespace App\Models\Finance\Transactions;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FmsTransaction extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logFillable()
+            ->useLogName('Transactions')
+            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+        // Chain fluent methods for configuration options
+    }
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    public function fromAccount()
+    {
+        return $this->belongsTo(FmsLedgerAccount::class, 'from_account', 'id');
+    }
+
+    public function toAccount()
+    {
+        return $this->belongsTo(FmsLedgerAccount::class, 'to_account', 'id');
     }
 
     public function customer()
@@ -65,7 +90,8 @@ class FmsTransaction extends Model
         'customer_id',
         'currency_id',
         'budget_line_id',
-        'account_id',
+        'from_account',
+        'to_account',
         'trx_type',
         'entry_type',
         'status',

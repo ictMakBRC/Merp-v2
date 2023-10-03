@@ -7,14 +7,16 @@ use App\Traits\DocumentableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Project extends Model
 {
-    use HasFactory, LogsActivity, DocumentableTrait;
+    use HasFactory, LogsActivity, DocumentableTrait, ProcurementRequestableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -28,6 +30,10 @@ class Project extends Model
         // Chain fluent methods for configuration options
     }
 
+    public function requests(): MorphMany
+    {
+        return $this->morphMany(Request::class, 'requestable');
+    }
     public function employees()
     {
         return $this->belongsToMany(Employee::class,'employee_project','project_id','employee_id')

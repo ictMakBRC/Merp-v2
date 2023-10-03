@@ -18,6 +18,22 @@
                     <p>Currency:{{ $budget_data->currency->code??'N/A' }}</p>
                 </div>
             </div>
+            <div class="row">
+                @php
+                    $total_revenues = $budget_lines->where('type','Revenue')->sum('allocated_amount');
+                    $total_expenses = $budget_lines->where('type','Expense')->sum('allocated_amount');
+                    $difference = $total_revenues-$total_expenses;
+                @endphp
+                <div class="col-4">
+                    <h5>Revenue: @moneyFormat($total_revenues)</h5>
+                </div>
+                <div class="col-4">
+                    <h5>Expenditure: @moneyFormat($total_expenses)</h5>
+                </div>
+                <div class="col-4">
+                    <h5 @if ($difference<0)class="text-danger" @endif>Difference: @moneyFormat($difference)</h5>
+                </div>
+            </div>
             
             
         </div>

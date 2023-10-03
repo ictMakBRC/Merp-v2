@@ -7,10 +7,15 @@ use App\Http\Livewire\Finance\Budget\FmsMainBudgetComponent;
 use App\Http\Livewire\Finance\Budget\FmsMainBudgetListComponent;
 use App\Http\Livewire\Finance\Budget\FmsViewBudgetComponent;
 use App\Http\Livewire\Finance\Dashboard\FinanceMainDashboardComponent;
+use App\Http\Livewire\Finance\Expense\FmsExpenseComponent;
 use App\Http\Livewire\Finance\Invoice\FmsInvoiceItemsComponent;
 use App\Http\Livewire\Finance\Invoice\FmsInvoiceListsComponent;
 use App\Http\Livewire\Finance\Invoice\FmsViewInvoiceComponent;
 use App\Http\Livewire\Finance\Ledger\FmsLedgerAccountsComponent;
+use App\Http\Livewire\Finance\Requests\FmsInternalTransferRequestsComponent;
+use App\Http\Livewire\Finance\Requests\FmsPaymentPreviewComponent;
+use App\Http\Livewire\Finance\Requests\FmsPaymentRequestDetailsComponent;
+use App\Http\Livewire\Finance\Requests\FmsPaymentRequestsComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsTypesComponent;
 use App\Http\Livewire\Finance\Settings\CustomersComponent;
@@ -19,6 +24,8 @@ use App\Http\Livewire\Finance\Settings\FmsFinancialYearsComponent;
 use App\Http\Livewire\Finance\Settings\FmsServiceCategoriesComponent;
 use App\Http\Livewire\Finance\Settings\FmsServicesComponent;
 use App\Http\Livewire\Finance\Transactions\FmsTransactionsComponent;
+use App\Http\Livewire\Finance\Transfers\FmsTransferComponent;
+use App\Models\Finance\Requests\FmsPaymentRequest;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'finance'], function () {
@@ -36,6 +43,15 @@ Route::group(['prefix' => 'finance'], function () {
         Route::get('invoice/items/{inv_no}', FmsInvoiceItemsComponent::class)->name('finance-invoice_items');
         Route::get('invoice/view/{inv_no}', FmsViewInvoiceComponent::class)->name('finance-invoice_view');
         Route::get('transactions/{type}', FmsTransactionsComponent::class)->name('finance-transactions');
+        Route::get('transfers/{type}', FmsTransferComponent::class)->name('finance-transfers');
+        Route::get('expenses/{type}', FmsExpenseComponent::class)->name('finance-expenses');
+        Route::get('requests/{type}', FmsPaymentRequestsComponent::class)->name('finance-requests');
+        Route::get('requests/details/{code}', FmsPaymentRequestDetailsComponent::class)->name('finance-request_detail');
+        Route::get('requests/preview/{code}', FmsPaymentPreviewComponent::class)->name('finance-request_preview');
+
+        Route::get('requests/internal/{type}', FmsTransferComponent::class)->name('finance-requests_internal');
+        Route::get('requests/internal/details/{code}', FmsInternalTransferRequestsComponent::class)->name('finance-request_detail_internal');
+        Route::get('requests/internal/preview/{code}', FmsPaymentPreviewComponent::class)->name('finance-request_preview_internal');
         
     });
     Route::group(['prefix' => 'settings'], function () {
