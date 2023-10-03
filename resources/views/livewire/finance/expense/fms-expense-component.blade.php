@@ -33,6 +33,25 @@
                             </div>
 
                         </div>
+                        <x-table-utilities>
+                            <div class="mb-1 col">
+                                <label for="orderBy" class="form-label">OrderBy</label>
+                                <select wire:model="orderBy" class="form-select">
+                                    <option type="created_at">Date</option>
+                                    <option type="id">Latest</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-2">
+                                <label for="from_date" class="form-label">From Date</label>
+                                <input id="from_date" type="date" class="form-control"
+                                    wire:model.lazy="from_date">
+                            </div>
+
+                            <div class="mb-3 col-md-2">
+                                <label for="to_date" class="form-label">To Date</label>
+                                <input id="to_date" type="date" class="form-control" wire:model.lazy="to_date">
+                            </div>
+                        </x-table-utilities>
 
                         <div class="table-responsive">
                             <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
@@ -42,8 +61,8 @@
                                         <th>Ref</th>
                                         <th>Date</th>
                                         <th>From Account</th>
-                                        <th>To Account</th>
-                                        <th>Amount</th>
+                                        <th>Trx Amount</th>
+                                        <th>Rate</th>
                                         <th>Currency</th>
                                         <th>status</th>
                                         <th>Action</th>
@@ -57,8 +76,8 @@
                                             <td>{{ $expense->trx_date ?? 'N/A' }}</td>
                                             <td>{{ $expense->project->name ?? ($expense->department->name ?? 'N/A') }}
                                             </td>
-                                            <td>@moneyFormat($expense->esitmated_income)</td>
-                                            <td>@moneyFormat($expense->estimated_expenditure)</td>
+                                            <td>@moneyFormat($expense->total_amount)</td>
+                                            <td>@moneyFormat($expense->rate)</td>
                                             <td>{{ $expense->currency->code ?? 'N/A' }}</td>
                                             @if ($expense->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
@@ -68,14 +87,14 @@
                                             <td class="table-action">
                                                 {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
 
-                                                <a href="{{ URL::signedRoute('finance-expense_lines', $expense->code) }}"
+                                                {{-- <a href="{{ URL::signedRoute('finance-expense_lines', $expense->code) }}"
                                                     class="btn btn-sm btn-outline-secondary">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                                 <a href="{{ URL::signedRoute('finance-expense_view', $expense->code) }}"
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="fa fa-eye"></i>
-                                                </a>
+                                                </a> --}}
 
                                             </td>
                                         </tr>

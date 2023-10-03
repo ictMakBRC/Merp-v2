@@ -1,21 +1,10 @@
 <div x-cloak x-show="create_new">
     <form wire:submit.prevent="storeTransaction" >             
-
+        @include('layouts.messages')
             <div class="row">          
 
                 @include('livewire.partials.project-department-toggle')           
-                <div class="mb-3 col-2">
-                    <label for="fiscal_year" class="form-label required">Fiscal year</label>
-                    <select id="fiscal_year" class="form-control" name="fiscal_year" required wire:model="fiscal_year">
-                        <option value="">Select</option>
-                        @foreach ($years as $fy)
-                            <option value="{{$fy->id}}">{{$fy->name}}</option>
-                        @endforeach
-                    </select>
-                    @error('fiscal_year')
-                        <div class="text-danger text-small">{{ $message }}</div>
-                    @enderror
-                </div>
+             
                 <div class="mb-3 col-2">
                     <label for="from_account" class="form-label required">Ledger</label>
                     <select id="from_account" class="form-control" name="from_account" required wire:model="from_account">
@@ -33,7 +22,7 @@
                     @endif
                 </div>   
                 <div class="mb-3 col-2">
-                    <label for="budget_line_id" class="form-label required">Budget Line</label>
+                    <label for="budget_line_id" class="form-label required">Budget Line to charge</label>
                     <select id="budget_line_id" class="form-control" name="budget_line_id" required wire:model="budget_line_id">
                         <option value="">Select</option>
                         @foreach ($budgetLines as $budgetLine)
@@ -65,8 +54,8 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div> 
-                <div class="mb-3 col">
-                    <label for="total_amount" class="form-label required">Amount</label>
+                <div class="mb-3 col-4">
+                    <label for="total_amount" class="form-label required">Amount({{$budgetLineCur}})</label>
                     <div class="input-group">
                     <input type="text" id="total_amount"  class="form-control" name="total_amount" required
                         wire:model="total_amount">
@@ -76,13 +65,32 @@
                     @error('total_amount')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
-                </div>            
+                </div> 
+
+                <div class="mb-3 col-5">
+                    <label for="total_amount" class="form-label required">Amount in words</label>
+                    <div class="input-group">                    
+                        <input id="amount_in_words" class="form-control" name="amount_in_words" required wire:model.defer="amount_in_words"  type="text">
+                    </div>
+                    @error('amount_in_words')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div> 
                 
-                <div class="mb-3 col-md-4">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea  id="description" class="form-control"
-                    name="description" wire:model.defer="description"></textarea>
-                    @error('description')
+                <div class="mb-3 col-md-6">
+                    <label for="description" class="form-label">Request Description</label>
+                    <input type="text" id="request_description" class="form-control"
+                    name="request_description" wire:model.defer="request_description">
+                    @error('request_description')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>
+                
+                <div class="mb-3 col-md-5">
+                    <label for="notice_text" class="form-label">Special Notices</label>
+                    <textarea  id="notice_text" class="form-control"
+                    name="notice_text" wire:model.defer="notice_text"></textarea>
+                    @error('notice_text')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div>
@@ -102,13 +110,13 @@
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <x-button class="btn btn-success">{{ __('public.save') }}</x-button>
+                        <x-button class="btn btn-success">Proceed</x-button>
                     </div>
             </div>
             @else
             </form>
             <div class="modal-footer">
-                <a class="btn btn-outline-success" wire:click='generateTransaction'>Generate Expense</a>
+                <a class="btn btn-outline-success" wire:click='generateTransaction'>Generate Request</a>
             </div>
             @endif
         </form>

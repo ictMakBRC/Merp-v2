@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Finance\Budget;
 use App\Models\Finance\Accounting\FmsChartOfAccount;
 use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Budget\FmsBudgetLine;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class FmsBudgetLinesComponent extends Component
@@ -36,8 +37,8 @@ class FmsBudgetLinesComponent extends Component
         $this->validate([
             'name' => 'required',
             'quantity' => 'required',
-            'allocated_amount' => 'required',            
-            'description' =>'required',
+            'allocated_amount' => 'required',
+            'description' => 'required',
         ]);
         $budgetName = $this->name[$id];
         $budgetAmount = $this->allocated_amount[$id];
@@ -69,11 +70,11 @@ class FmsBudgetLinesComponent extends Component
             'primary_balance',
             'description',
             'amount_held',
-            'created_by',  
-            'updated_by', 
-            'quantity', 
+            'created_by',
+            'updated_by',
+            'quantity',
             'is_active',
-          ]);
+        ]);
     }
     public function confirmDelete($budgetId)
     {
@@ -83,22 +84,24 @@ class FmsBudgetLinesComponent extends Component
 
     public function saveBudget()
     {
-       $budgetData = FmsBudget::where('code', $this->budgetCode)->first();
-       if($budgetData){
-       $totalExpense = FmsBudgetLine::where(['fms_budget_id'=> $budgetData->id,'type'=> 'Expense'])->sum('allocated_amount');
-       $totalIncome = FmsBudgetLine::where(['fms_budget_id'=> $budgetData->id,'type'=> 'Revenue'])->sum('allocated_amount');
-       $budgetData->estimated_expenditure = $totalExpense;
-       $budgetData->esitmated_income = $totalIncome;
-       $budgetData->status = 'Saved';
-       $budgetData->update();
-       $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget saved successfully!']);
-       return redirect()->signedRoute('finance-budget_view', $this->budgetCode);
-    }
+        DB::transaction(function () {
+            $budgetData = FmsBudget::where('code', $this->budgetCode)->first();
+            if ($budgetData) {
+                $totalExpense = FmsBudgetLine::where(['fms_budget_id' => $budgetData->id, 'type' => 'Expense'])->sum('allocated_amount');
+                $totalIncome = FmsBudgetLine::where(['fms_budget_id' => $budgetData->id, 'type' => 'Revenue'])->sum('allocated_amount');
+                $budgetData->estimated_expenditure = $totalExpense;
+                $budgetData->esitmated_income = $totalIncome;
+                $budgetData->status = 'Saved';
+                $budgetData->update();
+                $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget saved successfully!']);
+                return redirect()->signedRoute('finance-budget_view', $this->budgetCode);
+            }
+        });
     }
 
     public function deleteRecord()
     {
-        
+
         FmsBudgetLine::find($this->budgetToDelete)->delete();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget-line item deleted successfully!']);
         $this->confirmingDelete = false;

@@ -105,9 +105,9 @@
                                             $salaryUgx = 0;
                                             $salary = $employee?->officialContract?->gross_salary ?? '0';
                                             $currency = $employee?->officialContract->currency??'UGX';
-                                            $salaryUgx = exchangeCurrency($currency, $salary);
+                                            $salaryUgx = exchangeCurrency($currency, 'base', $salary);
                                             if($currency!= 'USD'){                                                
-                                                $salaryUsd = exchangeCurrency('USD', $salaryUgx);
+                                                $salaryUsd = exchangeCurrency('USD', 'foreign',  $salaryUgx);
                                             }else{
                                                 $salaryUsd = $salary;
                                             }

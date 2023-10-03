@@ -83,22 +83,61 @@ function globalSendEmail($recipient, $subject, $mailable)
 
 
 if (!function_exists('exchangeCurrency')) {
-    function exchangeCurrency($fromCurrency, $amount = 1)
+    function exchangeCurrency($fromCurrency, $type='base', $amount=1)
     {
         $latestExchangeRate = getLatestExchangeRate($fromCurrency);
         
-        if ($latestExchangeRate) {
-            $convertedAmount = $amount * $latestExchangeRate;
+        if ($latestExchangeRate && $type && $amount) {           
+            if ($type =='foreign') { 
+                if($amount>0||$amount!=''){                    
+                    $convertedAmount = $amount / $latestExchangeRate;
+                } else{                    
+                 $convertedAmount = 0;
+                }              
+            } else {                
+                $convertedAmount = $amount * $latestExchangeRate;
+            }
             return $convertedAmount;
+        }else{
+            return "0";
         }
 
-        throw new \Exception("Exchange rate not found for $fromCurrency");
+        // throw new \Exception("Exchange rate not found for $fromCurrency");
     }
 
     function getLatestExchangeRate($currencyCode)
     {
         // Query the database or fetch exchange rates from an API
         $latestExchangeRate = FmsCurrencyUpdate::where('currency_code',$currencyCode)->latest()->first();
+        
+        return $latestExchangeRate ? $latestExchangeRate->exchange_rate : 0;
+    }
+}
+
+if (!function_exists('exchangeCurrencyId')) {
+    function exchangeCurrencyId($Currency, $exType='base', $exAmount = 1,)
+    {
+        $latestExchangeRate = getExchangeRate($Currency);
+        
+        if ($latestExchangeRate && $exType) {
+            if ($exType =='foreign') {                
+                $convertedAmount = $exAmount / $latestExchangeRate;
+            } else {                
+                $convertedAmount = $exAmount * $latestExchangeRate;
+            }
+            
+            return $convertedAmount;
+        }else{
+            return 0;
+        }
+
+        // throw new \Exception("Exchange rate not found for $fromCurrency");
+    }
+
+    function getExchangeRate($currency_id)
+    {
+        // Query the database or fetch exchange rates from an API
+        $latestExchangeRate = FmsCurrencyUpdate::where('currency_id',$currency_id)->latest()->first();
         
         return $latestExchangeRate ? $latestExchangeRate->exchange_rate : 0;
     }

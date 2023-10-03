@@ -118,7 +118,7 @@
                     $salary =  $employee->salary_ugx??0;
                 }
                 $currency = $employee?->officialContract->currency??'UGX';
-                $salaryUgx = exchangeCurrency($currency, $salary);                
+                $salaryUgx = exchangeCurrency($currency, 'base', $salary);                
                 $paye = calculatePAYE($salaryUgx);
             @endphp
             {{$currency}} @moneyFormat($salary)
