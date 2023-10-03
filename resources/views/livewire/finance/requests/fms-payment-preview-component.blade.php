@@ -93,55 +93,9 @@
             <div class="details">
 
                 <div class="header">
-                    <h6>Details of the Request <span class="text-end float-end text-warning">Balance =
-                            @moneyFormat($amountRemaining)</span></h6>
+                    <h6>Details of the Request</h6>
                 </div>
 
-                <form wire:submit.prevent="saveExpense({{ $request_data->id }})">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <label for="expenditure">Expenditure Name:</label>
-                            <input type="text" class="form-control" id="expenditure" wire:model="expenditure">
-                            @error('expenditure')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-3">
-                            <label for="description">Description:</label>
-                            <input type="text" id="description" required class="form-control"
-                                wire:model="description">
-                            @error('description')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col">
-                            <label for="quantity">Quantity</label>
-                            <input type="number" step='any' required class="form-control" wire:model="quantity">
-                            @error('quantity')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-2">
-                            <label for="unit_cost">Unit Cost ({{ $request_data->currency->code ?? 'N/A' }}):</label>
-                            <input type="number" required class="form-control" wire:model="unit_cost">
-                            @error('unit_cost')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col">
-                            <label for="amount">Total Cost ({{ $request_data->currency->code ?? 'N/A' }}):</label>
-                            <input type="number" readonly max="{{ $amountRemaining }}" required class="form-control"
-                                wire:model="amount">
-                            @error('amount')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-2 pt-3 text-end">
-                            <button class="btn btn-primary" type="submit">Save Item</button>
-                        </div>
-                    </div>
-                </form>
-                <br>
 
                 <table class="b-top-row" style="border-collapse:collapse;" width="100%" cellspacing="0">
                     <tbody>
@@ -206,40 +160,8 @@
             <div class="attachments">
 
                 <div class="header">
-                    <h6>Attachment Summary and References <span class="text-end float-end text-warning">Total =
-                            {{ $attachments->count() }}</span></h6>
+                    <h6>Attachment Summary and References</h6>
                 </div>
-
-                <form wire:submit.prevent="saveAttachment({{ $request_data->id }})">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="name">Attachment Type/Name:</label>
-                            <input type="text" class="form-control" id="expenditure" wire:model="name">
-                            @error('name')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-3">
-                            <label for="v">Reference Number:</label>
-                            <input type="text" id="reference" required class="form-control"
-                                wire:model="reference">
-                            @error('reference')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-3">
-                            <label for="file">File</label>
-                            <input type="file" step='any' id="file_{{ $iteration }}" required class="form-control" wire:model="file">
-                            @error('file')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-2 pt-3 text-end">
-                            <button class="btn btn-primary" type="submit">Add</button>
-                        </div>
-                    </div>
-                </form>
                 <br>
 
                 <table style="border-collapse:collapse;" width="100%" cellspacing="0">
@@ -267,7 +189,6 @@
                                 </td>
                                 <td class="btop" width="66" valign="top">
                                     <a href="javascriprt:void()" wire:click='downloadAttachment({{ $attachment->id }})'> <i class="fa fa-download"></i></a>
-                                    <a href="javascriprt:void()" wire:click='deleteFile({{ $attachment->id }})'> <i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         @empty
@@ -281,51 +202,6 @@
             <hr>
             <div class="authorization">
                 <h4>Authorization: </h4>
-                <form wire:submit.prevent='addSignatory({{ $request_data->id }})'>
-                    <div class=" add-input">
-                        <div class="row">
-                            <div class="col-2 mb-1">
-                                <div class="form-group">
-                                    <label for="title" class="form-label">Level</label>
-                                    <input readonly type="number"class="form-control" id="signatory_level" wire:model.lazy="signatory_level" placeholder="Enter level ">
-                                    @error('signatory_level') <span class="text-danger error">{{ $message }}</span>@enderror
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-1">
-                                <div class="form-group">
-                                    <label for="title" class="form-label">Position/Office
-                                    @if ($position_exists)<small class="text-danger"> This position already exists on this document</small>@endif</label>
-                                    <select name="position" class="form-control form-select" id="position" wire:model.lazy="position">
-                                        <option value="">Select...</option>
-                                        @forelse ($positions as $uposition)
-                                            <option value="{{$uposition->id}}">{{$uposition->name}}</option>
-                                        @empty
-                                            <option value="">No info</option>
-                                        @endforelse
-                                    </select>
-                                    @error('position') <span class="text-danger error">{{ $message }}</span>@enderror
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-1">
-                                <div class="form-group">
-                                    <label for="title" class="form-label">Signatory</label>
-                                    <select name="approver_id" class="form-control form-select" id="approver_id" wire:model.lazy="approver_id">
-                                        <option value="">Select...</option>
-                                        @forelse ($signatories as $user)
-                                            <option value="{{$user->id}}">{{$user->name}}</option>
-                                        @empty
-                                            <option value="">No user</option>
-                                        @endforelse
-                                    </select>
-                                    @error('approver_id') <span class="text-danger error">{{ $message }}</span>@enderror
-                                </div>
-                            </div>
-                            <div class="col-md-2 mt-2">
-                                <button type="submit"  class="btn text-white btn-info float-end">Add</button>
-                            </div>
-                        </div>
-                    </div>
-                </form> 
                 <small><em>
                     For Control Purposes, Request Description has to be retyped here  
                 </em></small>
@@ -374,7 +250,12 @@
                 
                             </td>
                             <td class="btop" width="66" valign="top">
-                                <a href="javascriprt:void()" wire:click='deleteFile({{ $attachment->id }})'> <i class="fa fa-trash"></i></a>
+                               @if ($authorizer->status =='Active')
+                               <a href="javascriprt:void()" wire:click='approve({{ $authorizer->id }})'> <i class="fa fa-check"></i>Approve</a>
+                               @else
+                                   Pending
+                               @endif
+                                
                             </td>
 
                         </tr>
@@ -394,26 +275,5 @@
             </div>
         </div>
         {{-- end of card body --}}
-        <div class="card-footer">
-            @php
-                $num = 4;
-            @endphp
-            @if ($request_data->requestable_type === 'App\Models\Grants\Project\Project') 
-                @php $num = 5;@endphp
-            @elseif ($request_data->requestable_type === 'App\Models\HumanResource\Settings\Department') 
-                @php $num = 4;@endphp
-            @endif
-
-            @if (count($authorizations)<$num)
-               <p class="text-danger">Please make sure you have attached all signatories</p>
-               @endif
-               @if($amountRemaining !=0)
-               <p class="text-danger">Please make sure that the amount requested is equal  to the request details total amount </p>
-                                
-               @endif
-               @if ($amountRemaining ==0 && count($authorizations)>=$num)
-                   <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Request</button>
-               @endif
-        </div>
     </div>
 </div>

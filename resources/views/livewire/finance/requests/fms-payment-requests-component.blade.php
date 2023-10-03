@@ -74,27 +74,26 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $request->trx_ref }}</td>
                                             <td>{{ $request->trx_date ?? 'N/A' }}</td>
-                                            <td>{{ $request->project->name ?? ($request->department->name ?? 'N/A') }}
-                                            </td>
+                                            <td>{{ $request->project->name ?? ($request->department->name ?? 'N/A') }}</td>
                                             <td>@moneyFormat($request->total_amount)</td>
                                             <td>@moneyFormat($request->rate)</td>
                                             <td>{{ $request->currency->code ?? 'N/A' }}</td>
-                                            @if ($request->is_active == 0)
-                                                <td><span class="badge bg-danger">Suspended</span></td>
-                                            @else
-                                                <td><span class="badge bg-success">Active</span></td>
-                                            @endif
+                                            <td><span class="badge bg-success">{{ $request->status }}</span></td>
                                             <td class="table-action">
                                                 {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
-
-                                                {{-- <a href="{{ URL::signedRoute('finance-request_lines', $request->code) }}"
+                                                @if ($request->status =='Pending' || $request->status =='Rejected')
+                                                <a href="{{ URL::signedRoute('finance-request_detail', $request->request_code) }}"
                                                     class="btn btn-sm btn-outline-secondary">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <a href="{{ URL::signedRoute('finance-request_view', $request->code) }}"
+                                                    
+                                                @else
+                                                <a href="{{ URL::signedRoute('finance-request_preview', $request->request_code) }}"
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="fa fa-eye"></i>
-                                                </a> --}}
+                                                </a>
+                                                    
+                                                @endif
 
                                             </td>
                                         </tr>

@@ -148,7 +148,10 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_all_transactions']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-requests', 'all') }}" class="nav-link ">All</a>
+                                        <a href="{{ route('finance-requests', 'all') }}" class="nav-link ">Payment Requests</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-requests_internal', 'all') }}" class="nav-link ">Internal Transfer</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-requests', 'incoming') }}"
@@ -179,7 +182,7 @@
                                     <!--end nav-item-->
                                     <li class="nav-item">
                                         <a href="{{ route('finance-chart_of_account_sub_types') }}"
-                                            class="nav-link ">Accout
+                                            class="nav-link ">Account
                                             Subtypes</a>
                                     </li>
                                     <!--end nav-item-->

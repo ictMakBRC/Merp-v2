@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Finance\Invoice\FmsInvoiceItem;
 use App\Models\Finance\Invoice\FmsInvoicePayment;
+use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Transactions\FmsTransaction;
 
@@ -31,7 +32,7 @@ class FmsViewInvoiceComponent extends Component
     public $trx_ref;
     public $trx_date;
     public $total_amount;
-    public $rate;
+    public $rate=1;
     public $department_id;
     public $project_id;
     public $billed_department;
@@ -46,11 +47,31 @@ class FmsViewInvoiceComponent extends Component
     public $is_department;
     public $invoiceData;
     public $to_account;
+    public $ledgerCur;
+    public $ledgerBalance=0;
+    public $ledgerIncome=0;
+    public $baseAmount=0;
 
     public function mount($inv_no)
     {
         $this->invoiceCode = $inv_no;
 
+    }
+    public function updatedToAccount()
+    {
+        $this->ledgerCur = 0;
+        $this->ledgerBalance = 0;
+        $data = FmsLedgerAccount::Where('id', $this->to_account)->with('currency')->first();
+        $this->ledgerBalance = $data->current_balance ?? 0 - $data->amount_held ?? 0;
+        $this->ledgerCur = $data->currency->code ?? '';
+    }
+    public function updatedPaymentAmount()
+    {
+        if($this->payment_amount !='' && $this->rate){            
+            $this->baseAmount = $this->rate * $this->payment_amount;
+        }else{
+            $this->baseAmount =0;
+        }
     }
     public function savePayment($id)
     {
@@ -94,7 +115,7 @@ class FmsViewInvoiceComponent extends Component
                 $trans->trx_ref = $this->trx_ref;
                 $trans->trx_date = $this->as_of;
                 $trans->total_amount = $this->payment_amount;
-                // $trans->rate = $this->rate;
+                $trans->rate = $this->rate;
                 $trans->to_account = $this->to_account;
                 $trans->department_id =  $this->invoiceData->department_id;
                 $trans->project_id = $this->invoiceData->project_id;
@@ -108,6 +129,10 @@ class FmsViewInvoiceComponent extends Component
                     $trans->is_department = false;
                 }
                 $trans->save();
+                $this->ledgerIncome = exchangeCurrency($this->ledgerCur, 'foreign', $this->baseAmount);
+                $ledgerAccount = FmsLedgerAccount::find($this->to_account);
+                $ledgerAccount->current_balance += $this->ledgerIncome;
+                $ledgerAccount->save();
 
             });
         }
@@ -152,6 +177,7 @@ class FmsViewInvoiceComponent extends Component
             'status',
             'description',
             'is_department',
+            'baseAmount',
         ]);
     }
     public function approveInvoice($id)
@@ -168,7 +194,14 @@ class FmsViewInvoiceComponent extends Component
             $this->amount = $invoiceData->total_amount ?? '0';
             $this->balance = $invoiceData->total_paid ?? '0';
             $this->payment_balance = $this->amount - $this->balance;
+            $this->currency_id = $invoiceData->currency_id;
             // $this->payment_amount = $this->amount - $this->balance;
+            $latestRate = FmsCurrencyUpdate::where('currency_id', $invoiceData->currency_id)->latest()->first();
+
+                if ($latestRate) {
+                    $this->rate = $latestRate->exchange_rate;
+                }
+
             $data['ledgers'] = FmsLedgerAccount::where('department_id', $invoiceData->department_id)->get();
             $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['service'])->get();
         } else {

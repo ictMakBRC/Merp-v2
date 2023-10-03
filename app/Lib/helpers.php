@@ -88,14 +88,18 @@ if (!function_exists('exchangeCurrency')) {
         $latestExchangeRate = getLatestExchangeRate($fromCurrency);
         
         if ($latestExchangeRate && $type && $amount) {           
-            if ($type =='foreign') {                
-                $convertedAmount = $amount / $latestExchangeRate;
+            if ($type =='foreign') { 
+                if($amount>0||$amount!=''){                    
+                    $convertedAmount = $amount / $latestExchangeRate;
+                } else{                    
+                 $convertedAmount = 0;
+                }              
             } else {                
                 $convertedAmount = $amount * $latestExchangeRate;
             }
             return $convertedAmount;
         }else{
-            return "Exchange rate not found for $fromCurrency";
+            return "0";
         }
 
         // throw new \Exception("Exchange rate not found for $fromCurrency");

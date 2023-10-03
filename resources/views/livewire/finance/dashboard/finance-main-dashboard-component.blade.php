@@ -1,5 +1,5 @@
 <div>
-        <div class="container-fluid">
+        <div class="container-fluid d-none">
             <!-- Page-Title -->
             <div class="row">
                 <div class="col-sm-12">

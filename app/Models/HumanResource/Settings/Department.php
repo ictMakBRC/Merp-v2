@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Department extends Model
 {
@@ -31,6 +32,10 @@ class Department extends Model
 
     protected $parentColumn = 'parent_department';
 
+    public function requests(): MorphMany
+    {
+        return $this->morphMany(Request::class, 'requestable');
+    }
     public function parent()
     {
         return $this->belongsTo(Department::class,$this->parentColumn);

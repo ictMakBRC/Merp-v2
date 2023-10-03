@@ -2,14 +2,18 @@
 
 namespace App\Models\Finance\Requests;
 
+use App\Models\User;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
-use App\Models\User;
+use App\Models\Finance\Budget\FmsBudgetLine;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class FmsPaymentRequest extends Model
 {
@@ -25,9 +29,18 @@ class FmsPaymentRequest extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+     public function requestable(): MorphTo
+    {
+        return $this->morphTo();
+    }
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    public function budgetLine()
+    {
+        return $this->belongsTo(FmsBudgetLine::class, 'budget_line_id', 'id');
     }
 
     public function fromAccount()
