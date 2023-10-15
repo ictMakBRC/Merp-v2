@@ -78,13 +78,21 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{!! nl2br(e($item->description)) !!}</td>
                                         <td>{{ $item->quantity }}</td>
-                                        <td>{{ $item->estimated_unit_cost }}</td>
-                                        <td>{{ $item->total_cost }}</td>
+                                        <td>@moneyFormat($item->estimated_unit_cost)</td>
+                                        <td>@moneyFormat($item->total_cost)</td>
 
                                         <td>
-                                            <button class="btn btn btn-sm btn-outline-danger" wire:click="deleteItem({{ $item->id }})" data-bs-toggle="tooltip" data-bs-placement="right" title="{{__('public.delete')}}" data-bs-trigger="hover">
-                                    <i class="ti ti-x fs-18"></i></button>
+                                            <button class="btn btn btn-sm btn-outline-danger"
+                                                wire:click="deleteItem({{ $item->id }})" data-bs-toggle="tooltip"
+                                                data-bs-placement="right" title="{{ __('public.delete') }}"
+                                                data-bs-trigger="hover">
+                                                <i class="ti ti-x fs-18"></i></button>
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-end">Total</td>
+                                        <td>@moneyFormat($items->sum('total_cost'))</td>
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -93,16 +101,16 @@
 
                 </div> <!-- end tab-content-->
             @else<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-                <div class="d-flex align-items-center">
-                    <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
-                    </div>
-                    <div class="ms-3">
-                        <h6 class="mb-0 text-warning">{{ __('Items') }}</h6>
-                        <div>{{ __('public.not_found') }}
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-warning">{{ __('Items') }}</h6>
+                            <div>{{ __('public.not_found') }}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>

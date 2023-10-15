@@ -2,6 +2,8 @@
 
 namespace App\Models\Procurement\Request;
 
+use App\Models\User;
+use App\Traits\DocumentableTrait;
 use App\Services\GeneratorService;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Procurement\Request\ProcurementRequestItem;
-use App\Traits\DocumentableTrait;
+use App\Models\Procurement\Request\ProcurementRequestApproval;
 
 class ProcurementRequest extends Model
 {
@@ -40,6 +42,26 @@ class ProcurementRequest extends Model
     public function items()
     {
         return $this->hasMany(ProcurementRequestItem::class,'procurement_request_id','id');
+    }
+
+    public function requester()
+    {
+        return $this->belongsTo(User::class,'created_by','id');
+    }
+
+    public function approvals()
+    {
+        return $this->hasMany(ProcurementRequestApproval::class, 'procurement_request_id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function approvalHistory()
+    {
+        return $this->hasMany(ApprovalHistory::class, 'request_id');
     }
 
     public static function boot()

@@ -18,11 +18,23 @@
                 <div class="collapse " id="procurementRequestsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item mb-2">
-                            <a href="{{route('procurement-request')}}" class="nav-link ">My Requests</a>
+                            <a href="{{route('procurement-request')}}" class="nav-link ">Department Panel</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{route('procurement-supervisor-panel')}}" class="nav-link ">Supervisor Panel</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{route('procurement-finance-panel')}}" class="nav-link ">Finance Panel</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{route('procurement-operations-panel')}}" class="nav-link ">Operations Panel</a>
+                        </li>
+                        <li class="nav-item mb-2">
+                            <a href="{{route('procurement-md-panel')}}" class="nav-link ">MD Panel</a>
                         </li>
   
                         <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">All Requests</a>
+                            <a href="#" class="nav-link ">Procurement Panel</a>
                         </li>
 
                         <li class="nav-item mb-2">

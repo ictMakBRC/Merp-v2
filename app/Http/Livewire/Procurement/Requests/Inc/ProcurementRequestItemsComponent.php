@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Procurement\Requests\Inc;
 
+use App\Models\Procurement\Request\ProcurementRequest;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Models\Procurement\Request\ProcurementRequestItem;
@@ -76,6 +77,9 @@ class ProcurementRequestItemsComponent extends Component
                 ]
             );
 
+            $procurementRequest=ProcurementRequest::findOrFail($this->procurement_request_id);
+            $procurementRequest->increment('contract_value',$this->total_cost);
+
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item created successfully']);
 
             $this->reset([
@@ -92,7 +96,11 @@ class ProcurementRequestItemsComponent extends Component
 
     public function deleteItem(ProcurementRequestItem $procurementRequestItem)
     {
+        DB::transaction(function () use($procurementRequestItem){
         $procurementRequestItem->delete();
+        $procurementRequest = ProcurementRequest::findOrFail($this->procurement_request_id);
+        $procurementRequest->decrement(['contract_value',$procurementRequestItem->total_cost]);
+        });
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item deleted successfully']);
     }
 

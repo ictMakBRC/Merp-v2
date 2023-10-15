@@ -43,7 +43,8 @@
         },
         "files": [
             "app/Lib/constants.php",
-            "app/Lib/helpers.php"
+            "app/Lib/helpers.php",
+            "app/Helpers/helpers.php"
         ]
     },
     "autoload-dev": {

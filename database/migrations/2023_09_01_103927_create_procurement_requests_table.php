@@ -27,13 +27,9 @@ return new class extends Migration
             $table->text('procurement_plan_ref')->nullable();
             $table->text('location_of_delivery');
             $table->date('date_required')->nullable();
-            $table->float('contract_value',12,1)->nullable();
-            // $table->foreignId('project_id')->nullable()->constrained('projects', 'id')->onUpdate('cascade')->onDelete('restrict');
-            // $table->foreignId('department_id')->nullable()->constrained('departments', 'id')->onUpdate('cascade')->onDelete('restrict');
-            
-            $table->foreignId('approving_departmental_head')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('approving_accounting_head')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->float('contract_value',12,2)->default(0);
             $table->string('status')->default('Draft');
+            $table->integer('step_order')->default(0);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
