@@ -154,17 +154,6 @@
                     <!--end nav-->
                 </div><!-- end Dashboards -->
 
-                <!--start human-resource -->
-                <livewire:layouts.partials.inc.human-resource.human-resource-navigation-component />
-                <!--end human-resource -->
-
-                <!--start grants and projects -->
-                <livewire:layouts.partials.inc.grants.grants-navigation-component />
-                <!--end grants and projects -->
-
-                <!--start finance -->
-                <livewire:layouts.partials.inc.finance.finance-navigation-component />
-                <!--end finance -->
 
                 <!--start inventory -->
                 <livewire:layouts.partials.inc.inventory.inventory-navigation-component />
@@ -174,13 +163,7 @@
                 <livewire:layouts.partials.inc.assets.assets-navigation-component />
                 <!--end assets -->
 
-                <!--start procurement -->
-                <livewire:layouts.partials.inc.procurement.procurement-navigation-component />
-                <!--end procurement -->
 
-                <!--start documents -->
-                <livewire:layouts.partials.inc.documents.documents-navigation-component />
-                <!--end documents -->
 
                 <!--start user-management -->
                 @include('livewire.layouts.partials.inc.user-management.user-mgt-nav')

@@ -61,11 +61,10 @@ aria-labelledby="deptItemupdateCreateModalTitle" data-bs-backdrop="static" data-
           </div>
 
           <div class="mb-3 col-md-4">
+            <label for="comment" class="form-label">Comment</label>
               @if ($toggleForm)
-              <label for="comment" class="form-label">Allocation Comment</label>
             <textarea  wire:model.defer="comment" rows="3" cols="30" readonly></textarea>
             @else
-            <label for="comment" class="form-label">Comment</label>
             <textarea  wire:model.defer="comment" rows="3" cols="48"></textarea>
             @endif
           </div>
