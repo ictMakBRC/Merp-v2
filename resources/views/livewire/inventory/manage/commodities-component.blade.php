@@ -93,10 +93,10 @@
                       class="action-ico btn-sm btn btn-outline-success mx-1">
                       <i class="fa fa-edit"></i></button>
 
-                      <button wire:click="confirmDelete({{ $value->id }})" data-bs-toggle="modal"
+                      <!-- <button wire:click="confirmDelete({{ $value->id }})" data-bs-toggle="modal"
                         data-bs-target="#confirmDelete" title="Delete"
                         class="action-ico btn-sm btn btn-outline-danger mx-1">
-                        <i class="fa fa-trash"></i></button>
+                        <i class="fa fa-trash"></i></button> -->
                       </td>
                   </tr>
                   @endforeach

@@ -100,11 +100,11 @@ class ItemsComponent extends Component
             'max_qty' => 'required|numeric',
             'min_qty' => 'required|numeric',
             'item_code' => 'required|unique:inv_items,item_code',
-            'description' => 'required',
+            // 'description' => 'required',
             'date_added' => 'required',
             // 'is_active' => 'required',
         ]);
-
+dd('as');
         $value = new invItems();
         $value->item_name = $this->item_name;
         $value->inv_subunit_id = $this->inv_subunit_id;
