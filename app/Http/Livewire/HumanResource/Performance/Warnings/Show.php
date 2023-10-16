@@ -88,6 +88,7 @@ class Show extends Component
 
     public function render()
     {
+        $this->authorize('view', Warning::class);
         return view('livewire.human-resource.performance.warnings.show');
     }
 }

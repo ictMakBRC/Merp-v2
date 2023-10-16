@@ -92,6 +92,7 @@ class Show extends Component
 
     public function render()
     {
+        $this->authorize('view', Resignation::class);
         return view('livewire.human-resource.performance.resignations.show');
     }
 }

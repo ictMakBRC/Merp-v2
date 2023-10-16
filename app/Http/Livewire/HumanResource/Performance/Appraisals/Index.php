@@ -109,7 +109,7 @@ class Index extends Component
 
     public function render()
     {
-        $this->authorize('viewany', Appraisal::class);
+        $this->authorize('viewAny', Appraisal::class);
         $data['appraisals'] = $this->filterAppraisals()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);

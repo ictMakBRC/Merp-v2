@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\HumanResource\GrievanceTypes;
 
+use App\Models\HumanResource\Grievance;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
@@ -175,6 +176,7 @@ class Index extends Component
 
     public function render()
     {
+        $this->authorize('viewAll', Grievance::class);
         $data['grievanceTypes'] = $this->filterGrievianceTypes()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);

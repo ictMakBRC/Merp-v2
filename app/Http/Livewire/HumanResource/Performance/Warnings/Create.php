@@ -59,7 +59,7 @@ class Create extends Component
 
     public function render()
     {
-        // $this->authorize('create', Warning::class);
+        $this->authorize('create', Warning::class);
         return view('livewire.human-resource.performance.warnings.create');
     }
 }

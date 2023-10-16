@@ -153,6 +153,7 @@ class EditRequest extends Component
      */
     public function render()
     {
+        $this->authorize('update', LeaveRequest::class);
         return view('livewire.human-resource.leave.update-request');
     }
 }
