@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="card-body">
-                @include('livewire.procurement.requests.inc.procurement-requests-list-table')
+                @include('livewire.procurement.requests.operations.inc.procurement-requests-list-table')
             </div> <!-- end card body-->
         </div> <!-- end card -->
     </div><!-- end col-->

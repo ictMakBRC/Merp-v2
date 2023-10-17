@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Procurement\Requests;
+namespace App\Http\Livewire\Procurement\Requests\Finance;
 
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Procurement\Request\ProcurementRequest;
 
-class SupervisorPanelComponent extends Component
+class FinancePanelComponent extends Component
 {
     use WithPagination;
 
@@ -25,10 +25,11 @@ class SupervisorPanelComponent extends Component
     public $filter = false;
 
     public $procurementRequestIds =[];
-    
+
     public function filterProcurementRequests()
     {
         $procurementRequests = ProcurementRequest::search($this->search)
+        ->where('step_order','>=',3)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -45,6 +46,6 @@ class SupervisorPanelComponent extends Component
         $data['procurementRequests'] = $this->filterProcurementRequests()
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        return view('livewire.procurement.requests.supervisor-panel-component',$data);
+        return view('livewire.procurement.requests.finance.finance-panel-component',$data);
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Procurement\Requests;
+namespace App\Http\Livewire\Procurement\Requests\Stores;
 
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Procurement\Request\ProcurementRequest;
 
-class OperationsPanelComponent extends Component
+class StoresPanelComponent extends Component
 {
     use WithPagination;
 
@@ -29,6 +29,7 @@ class OperationsPanelComponent extends Component
     public function filterProcurementRequests()
     {
         $procurementRequests = ProcurementRequest::search($this->search)
+        ->where('step_order','>=',7)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -45,6 +46,8 @@ class OperationsPanelComponent extends Component
         $data['procurementRequests'] = $this->filterProcurementRequests()
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-        return view('livewire.procurement.requests.operations-panel-component',$data);
+
+
+        return view('livewire.procurement.requests.stores.stores-panel-component',$data);
     }
 }

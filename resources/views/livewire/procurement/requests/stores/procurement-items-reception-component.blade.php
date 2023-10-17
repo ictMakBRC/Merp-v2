@@ -40,11 +40,11 @@
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div class="tab-pane p-3 active" id="general-information" role="tabpanel">
-                                @include('livewire.procurement.store.inc.procurement-request-items')
+                                @include('livewire.procurement.requests.stores.inc.procurement-request-items')
                             </div>
 
                             <div class="tab-pane p-3" id="documents" role="tabpanel">
-                                @include('livewire.procurement.store.inc.procurement-request-documents')
+                                @include('livewire.procurement.requests.stores.inc.procurement-request-documents')
                             </div>
                 
                             <div class="tab-pane p-3" id="provider_rating" role="tabpanel">

@@ -34,7 +34,7 @@
                         </li>
   
                         <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">Procurement Panel</a>
+                            <a href="{{route('procurement-office-panel')}}" class="nav-link ">Procurement Panel</a>
                         </li>
 
                         <li class="nav-item mb-2">

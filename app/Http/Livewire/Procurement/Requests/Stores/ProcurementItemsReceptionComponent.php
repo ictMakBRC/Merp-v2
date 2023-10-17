@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Procurement\Store;
+namespace App\Http\Livewire\Procurement\Requests\Stores;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
@@ -113,6 +113,6 @@ class ProcurementItemsReceptionComponent extends Component
     public function render()
     {
         $data['document_categories'] = DmCategory::all();
-        return view('livewire.procurement.store.procurement-items-reception-component',$data);
+        return view('livewire.procurement.requests.stores.procurement-items-reception-component',$data);
     }
 }

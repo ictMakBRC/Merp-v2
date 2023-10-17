@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Livewire\Procurement\Requests;
+namespace App\Http\Livewire\Procurement\Requests\Procurement;
 
-use App\Enums\ProcurementRequestEnum;
 use Response;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use App\Enums\ProcurementRequestEnum;
 use App\Models\Documents\FormalDocument;
 use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Request\ProcurementRequestApproval;
 
-class ProcurementRequestDetailsComponent extends Component
+class ProcurementRequestViewComponent extends Component
 {
-
     public $request_id;
     public $comment;
 
@@ -143,6 +142,6 @@ class ProcurementRequestDetailsComponent extends Component
     public function render()
     {
         $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver')->findOrFail($this->request_id);
-        return view('livewire.procurement.requests.procurement-request-details-component',$data);
+        return view('livewire.procurement.requests.procurement.procurement-request-view-component',$data);
     }
 }

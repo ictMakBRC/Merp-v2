@@ -9,14 +9,13 @@
                             <h5 class="mb-2 mb-sm-0">
                                 {{ __('Procurements Requests') }}
                                 @include('livewire.layouts.partials.inc.filter-toggle-alpine')
-
                             </h5>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                @include('livewire.procurement.requests.inc.procurement-requests-list-table')
+                @include('livewire.procurement.requests.supervisor.inc.procurement-requests-list-table')
             </div> <!-- end card body-->
         </div> <!-- end card -->
     </div><!-- end col-->

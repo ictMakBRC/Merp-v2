@@ -8,6 +8,7 @@ class ProcurementRequestEnum extends Enum
 {
     //Request statuses
     const DRAFT = 'Draft';
+    const SUBMITTED = 'Submitted';
     const PENDING = 'Pending';
     const APPROVED = 'Approved';
     const REJECTED = 'Rejected';
@@ -27,6 +28,7 @@ class ProcurementRequestEnum extends Enum
     {
         return match ($status) {
             ProcurementRequestEnum::DRAFT => 'info',
+            ProcurementRequestEnum::SUBMITTED => 'primary',
             ProcurementRequestEnum::PENDING => 'warning',
             ProcurementRequestEnum::APPROVED => 'success',
             ProcurementRequestEnum::REJECTED => 'danger',
