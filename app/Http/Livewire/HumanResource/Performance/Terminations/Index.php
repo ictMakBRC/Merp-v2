@@ -110,7 +110,7 @@ class Index extends Component
 
     public function render()
     {
-        // $this->authorize('update', Termination::class);
+        $this->authorize('viewAny', Termination::class);
 
         $data['terminations'] = $this->filterTerminations()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')

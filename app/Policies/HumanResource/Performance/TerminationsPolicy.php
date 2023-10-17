@@ -22,7 +22,7 @@ class TerminationsPolicy
      */
     public function view(User $user, Termination $termination): bool
     {
-        return $user->hasPermission('view_terminations');
+        return $user->hasPermission('view_termination');
 
     }
 

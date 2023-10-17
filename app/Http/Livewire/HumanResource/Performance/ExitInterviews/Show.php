@@ -84,6 +84,7 @@ class Show extends Component
 
     public function render()
     {
+        $this->authorize('view', ExitInterview::class);
         return view('livewire.human-resource.performance.exit-interviews.show');
     }
 }

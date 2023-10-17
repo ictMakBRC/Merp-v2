@@ -109,7 +109,7 @@ class Index extends Component
 
     public function render()
     {
-        // $this->authorize('viewany', Warning::class);
+        $this->authorize('viewAny', Warning::class);
         $data['warnings'] = $this->filterWarnings()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);

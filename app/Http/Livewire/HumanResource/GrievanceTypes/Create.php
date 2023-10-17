@@ -31,6 +31,8 @@ class Create extends Component
 
     public function store()
     {
+        $this->authorize('create', GrievanceType::class);
+
         $this->validate();
 
         GrievanceType::create([
@@ -44,6 +46,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create', GrievanceType::class);
         return view('livewire.human-resource.grievance-types.create');
     }
 }
