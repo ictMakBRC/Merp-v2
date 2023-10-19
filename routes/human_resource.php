@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\HumanResource\Settings\Performance;
 use App\Http\Livewire\HumanResource\Leave\LeaveDelegations;
+use App\Http\Livewire\HumanResource\EmployeeData\EditEmployee;
+use App\Http\Livewire\HumanResource\EmployeeData\ShowEmployee;
 use App\Http\Livewire\HumanResource\Settings\OfficesComponent;
 use App\Http\Livewire\HumanResource\Leave\DepartmentalRequests;
 use App\Http\Livewire\HumanResource\Settings\HolidaysComponent;
@@ -64,6 +66,8 @@ Route::group(['prefix' => 'human-resource'], function () {
     Route::group(['prefix' => 'employees'], function () {
         Route::get('new-info', EmployeeDataComponent::class)->name('human-resource-capture-new-info');
         Route::get('list', EmployeesListComponent::class)->name('human-resource-employees-list');
+        Route::get('/{employee}/show', ShowEmployee::class)->name('employees.show');
+        Route::get('/{employee}/edit', EditEmployee::class)->name('employees.edit');
     });
     Route::group(['prefix' => 'leave'], function () {
         Route::get('new-request/new', NewLeaveRequest::class)->name('leave.new-request');
