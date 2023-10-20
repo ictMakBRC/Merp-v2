@@ -13,6 +13,8 @@
                     </strong>{{ $request->procuring_entity_code ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Sector') }}:
                     </strong>{{ $request->procurement_sector ?? 'N/A' }}<br>
+                    <strong class="text-inverse">{{ __('Categorization') }}:
+                    </strong>{{ getProcurementCategorization($request->contract_value)->categorization }}<br>
                 </div>
             </td>
 
@@ -25,9 +27,9 @@
                     <strong class="text-inverse">{{ __('Budget Line') }}:
                     </strong>{{ $request->budget_line ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Sequence No') }}:
-                    </strong>{{ $request->Sequence_number ?? 'N/A' }}<br>
+                    </strong>{{ $request->sequence_number ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Procurement Plan Reference') }}:
-                    </strong>{{ $request->procurement_plam_ref ?? 'N/A' }}
+                    </strong>{{ $request->procurement_plan_ref ?? 'N/A' }}
                 </div>
             </td>
 

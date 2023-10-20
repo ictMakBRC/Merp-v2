@@ -14,12 +14,16 @@ use App\Http\Livewire\Procurement\Requests\Md\MdRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\ProcurementRequestDetailsComponent;
 use App\Http\Livewire\Procurement\Requests\Operations\OperationsPanelComponent;
 use App\Http\Livewire\Procurement\Requests\Operations\OperationsRequestViewComponent;
+use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementBidManagementComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementOfficePanelComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Supervisor\SupervisorPanelComponent;
 use App\Http\Livewire\Procurement\Requests\Stores\ProcurementItemsReceptionComponent;
 use App\Http\Livewire\Procurement\Requests\Stores\StoresRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Supervisor\SupervisorRequestViewComponent;
+use App\Http\Livewire\Procurement\Settings\ProcurementCategorizationComponent;
+use App\Http\Livewire\Procurement\Settings\ProcurementCommitteesComponent;
+use App\Http\Livewire\Procurement\Settings\ProcurementMethodComponent;
 
 Route::group(['prefix' => 'procurement'], function () {
     Route::get('dashboard', ProcurementMainDashboardComponent::class)->name('procurement-dashboard');
@@ -41,13 +45,13 @@ Route::group(['prefix' => 'procurement'], function () {
 
     Route::get('proc-dept', ProcurementOfficePanelComponent::class)->name('procurement-office-panel');
     Route::get('proc-dept/request/{id}/details', ProcurementRequestViewComponent::class)->name('proc-dept-request-details');
+    Route::get('proc-dept/request/{id}/bid-mgt', ProcurementBidManagementComponent::class)->name('proc-dept-bid-mgt');
     
 
     Route::get('stores', StoresPanelComponent::class)->name('procurement-stores-panel');
     Route::get('stores/request/{id}/details', StoresRequestViewComponent::class)->name('stores-procurement-request-details');
     Route::get('stores/request/{id}/items-reception', ProcurementItemsReceptionComponent::class)->name('procurement-items-reception');
     
-
 
     Route::group(['prefix' => 'settings'], function () {
         
@@ -60,5 +64,8 @@ Route::group(['prefix' => 'procurement'], function () {
             Route::get('subcategories', ProcurementSubcategoriesComponent::class)->name('manage-subcategories');
         });
 
+        Route::get('committees', ProcurementCommitteesComponent::class)->name('procurement-committees');
+        Route::get('proc-methods', ProcurementMethodComponent::class)->name('procurement-methods');
+        Route::get('proc-categorizations', ProcurementCategorizationComponent::class)->name('procurement-categorizations');
     });
 });

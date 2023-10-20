@@ -115,11 +115,7 @@ class MdRequestViewComponent extends Component
 
             }
         });
-       
-    }
-
-    public function processBidDocs(ProcurementRequest $procurementRequest){
-        $procurementRequest->update(['status'=>'Bid Docs Processing']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
     }
 
     public function downloadDocument(FormalDocument $formalDocument)

@@ -10,28 +10,13 @@ use App\Enums\ProcurementRequestEnum;
 
         <x-slot:action>
             <div class="row d-flex justify-content-center d-print-none">
-                @if ($request->step_order == 6)
-                    <div class="col-lg-12 col-xl-12 mb-2 ms-auto float-start">
-                        <div class="text-center">
-                            <textarea type="text" id="comment" class="form-control" wire:model.defer="comment" placeholder="Enter comment"></textarea>
-                            @error('comment')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div><!--end col-->
-                @endif
                 <div class="col-lg-12 col-xl-12">
                     <div class="float-end d-print-none mt-2 mt-md-0 mb-2">
 
-                        @if ($request->step_order == 6)
+                        @if ($request->step_order == 6 && $request->status == ProcurementRequestEnum::PENDING)
                             <x-button class="btn btn-de-success btn-sm"
-                                wire:click="approveAndFowardRequest({{ $request->id }},'{{ ProcurementRequestEnum::APPROVED }}')">Approve
-                                & forward to {{ getProcurementRequestStep($request->step_order + 1) }} </x-button>
-                        @endif
-
-                        @if ($request->step_order > 1 && $request->step_order < 6 && $request->status != ProcurementRequestEnum::REJECTED)
-                            <button class="btn btn-de-danger btn-sm"
-                                wire:click="approveAndFowardRequest({{ $request->id }},'{{ ProcurementRequestEnum::REJECTED }}')">Reject</button>
+                                wire:click="acknowledgeRequest({{ $request->id }},'{{ ProcurementRequestEnum::PROCESSING }}')">Acknowledge
+                                & Process</x-button>
                         @endif
 
                         <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>

@@ -115,6 +115,8 @@ class FinanceRequestViewComponent extends Component
 
             }
         });
+
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
        
     }
 

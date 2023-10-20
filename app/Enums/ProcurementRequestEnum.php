@@ -12,6 +12,7 @@ class ProcurementRequestEnum extends Enum
     const PENDING = 'Pending';
     const APPROVED = 'Approved';
     const REJECTED = 'Rejected';
+    const PROCESSING = 'Processing';
     const COMPLETED = 'Completed';
 
     //Request steps
@@ -22,7 +23,7 @@ class ProcurementRequestEnum extends Enum
     const MD_STEP = 'Md';
     const PROCUREMENT_STEP = 'Procurement';
     const STORES_STEP = 'Stores';
-    Const TOTAL_STEPS=7;
+    const TOTAL_STEPS=7;
 
     public static function color($status)
     {
@@ -32,6 +33,7 @@ class ProcurementRequestEnum extends Enum
             ProcurementRequestEnum::PENDING => 'warning',
             ProcurementRequestEnum::APPROVED => 'success',
             ProcurementRequestEnum::REJECTED => 'danger',
+            ProcurementRequestEnum::PROCESSING => 'info',
 
             default => ''
         };

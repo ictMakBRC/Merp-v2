@@ -1,7 +1,6 @@
 <div>
-    <form wire:submit.prevent="storeDocument">
+    <form wire:submit.prevent="storeSupportDocument">
         <div class="row">
-
             <div class="mb-3 col-md-4">
                 <label for="document_category" class="form-label required">{{ __('Document Category') }}</label>
                 <select class="form-select" id="document_category" wire:model.lazy="document_category">

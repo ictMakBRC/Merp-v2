@@ -2,41 +2,34 @@
 
 namespace App\Models\Procurement\Settings;
 
-use App\Traits\DocumentableTrait;
-use App\Services\GeneratorService;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Finance\Settings\FmsCurrency;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Provider extends Model
+class ProcurementCommittee extends Model
 {
-    use HasFactory , LogsActivity, DocumentableTrait;
+    use HasFactory, LogsActivity;
 
+    protected $guarded=['id'];
+   
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Providers')
+            ->useLogName('Procurement Committees')
             ->dontLogIfAttributesChangedOnly(['updated_at', 'password'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
 
-
-    public function procurementSubcategories()
+    public function providers()
     {
-        return $this->belongsToMany(ProcurementSubcategory::class,'provider_subcategory','provider_id','subcategory_id')
+        return $this->belongsToMany(Provider::class,'provider_subcategory','subcategory_id','provider_id')
         ->withTimestamps();
-    }
-
-    public function preferred_currency()
-    {
-        return $this->belongsTo(FmsCurrency::class, 'preferred_currency');
     }
 
     public static function boot()
@@ -45,7 +38,6 @@ class Provider extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
-                $model->provider_code = GeneratorService::providerNo();
             });
         }
     }
@@ -55,8 +47,8 @@ class Provider extends Model
         return empty($search) ? static::query()
         : static::query()
             ->where('name', 'like', '%'.$search.'%')
-            ->orWhere('phone_number', 'like', '%'.$search.'%')
-            ->orWhere('provider_type', 'like', '%'.$search.'%')
-            ->orWhere('country', 'like', '%'.$search.'%');
+            ->orWhere('committee', 'like', '%'.$search.'%')
+            ->orWhere('contact', 'like', '%'.$search.'%')
+            ->orWhere('email', 'like', '%'.$search.'%');
     }
 }

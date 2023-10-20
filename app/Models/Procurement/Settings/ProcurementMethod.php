@@ -1,30 +1,31 @@
 <?php
 
-namespace App\Models\Assets;
+namespace App\Models\Procurement\Settings;
 
-use App\Traits\CurrencyTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class AssetLog extends Model
+class ProcurementMethod extends Model
 {
-    use HasFactory,LogsActivity, CurrencyTrait;
+    use HasFactory, LogsActivity;
+
+    protected $guarded=['id'];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Assets Logs')
-            ->dontLogIfAttributesChangedOnly(['updated_at'])
+            ->useLogName('Procurementt Methods')
+            ->dontLogIfAttributesChangedOnly(['updated_at', 'password'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-    
+
     public static function boot()
     {
         parent::boot();
@@ -33,5 +34,12 @@ class AssetLog extends Model
                 $model->created_by = auth()->id();
             });
         }
+    }
+
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+        : static::query()
+            ->where('method', 'like', '%'.$search.'%');
     }
 }

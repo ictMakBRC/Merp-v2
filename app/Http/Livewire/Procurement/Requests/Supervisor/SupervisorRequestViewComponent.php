@@ -59,7 +59,7 @@ class SupervisorRequestViewComponent extends Component
                 'text' => 'This operation can no be performed!',
             ]);
         }
-      
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
         // Notify the next approver (e.g., the supervisor)
     }
 

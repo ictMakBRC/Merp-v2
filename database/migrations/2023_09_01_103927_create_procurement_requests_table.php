@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('procuring_entity_code')->nullable();
             $table->text('procurement_sector');
             $table->text('financial_year');
-            $table->text('currency');
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->string('budget_line');
             $table->text('sequence_number')->nullable();
             $table->text('procurement_plan_ref')->nullable();

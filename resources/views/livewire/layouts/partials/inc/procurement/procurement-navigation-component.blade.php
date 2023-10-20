@@ -62,31 +62,15 @@
                         </li>
 
                         <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">Procurement Categorisation</a>
+                            <a href="{{route('procurement-categorizations')}}" class="nav-link ">Procurement Categorization</a>
                         </li>
                         
                         <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">Procurement Methods</a>
+                            <a href="{{route('procurement-methods')}}" class="nav-link ">Procurement Methods</a>
                         </li>
 
                         <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">Procurement Request Sources</a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">Contracts Committee</a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">Evaluation Committee</a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">Negotiation Committee</a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a href="#" class="nav-link ">Contracts Manager</a>
+                            <a href="{{route('procurement-committees')}}" class="nav-link ">Procurement Committees</a>
                         </li>
                        
                     </ul>

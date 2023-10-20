@@ -1,3 +1,6 @@
+<?php
+use App\Enums\ProcurementRequestEnum;
+?>
 <div class="tab-content">
     {{-- @include('livewire.procurement.requests.inc.filter') --}}
 
@@ -34,6 +37,11 @@
                         </td>
                         <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
                         <td>
+                            @if ($procurementRequest->step_order >= 6 && $procurementRequest->status != ProcurementRequestEnum::PENDING)
+                                <a href="{{ route('proc-dept-bid-mgt', $procurementRequest->id) }}"
+                                    class="btn btn btn-sm btn-outline-info action-icon"> <i class="ti ti-edit"></i></a>
+                            @endif
+
                             <a href="{{ route('proc-dept-request-details', $procurementRequest->id) }}"
                                 class="btn btn btn-sm btn-outline-primary action-icon"> <i class="ti ti-eye"></i></a>
                         </td>

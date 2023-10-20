@@ -12,10 +12,11 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Procurement\Request\ProcurementRequestItem;
 use App\Models\Procurement\Request\ProcurementRequestApproval;
+use App\Traits\CurrencyTrait;
 
 class ProcurementRequest extends Model
 {
-    use HasFactory,LogsActivity,DocumentableTrait;
+    use HasFactory,LogsActivity,DocumentableTrait,CurrencyTrait;
 
     public function getActivitylogOptions(): LogOptions
     {

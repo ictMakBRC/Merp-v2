@@ -23,13 +23,13 @@ use App\Enums\ProcurementRequestEnum;
                 <div class="col-lg-12 col-xl-12">
                     <div class="float-end d-print-none mt-2 mt-md-0 mb-2">
 
-                        @if ($request->step_order == 4)
+                        @if ($request->step_order == 4 || ($request->step_order ==4 && $request->status == ProcurementRequestEnum::REJECTED))
                             <x-button class="btn btn-de-success btn-sm"
                                 wire:click="approveAndFowardRequest({{ $request->id }},'{{ ProcurementRequestEnum::APPROVED }}')">Approve
                                 & forward to {{ getProcurementRequestStep($request->step_order + 1) }} </x-button>
                         @endif
 
-                        @if ($request->step_order > 1 && $request->step_order < 6 && $request->status != ProcurementRequestEnum::REJECTED)
+                        @if ($request->step_order ==4 && $request->status != ProcurementRequestEnum::REJECTED)
                             <button class="btn btn-de-danger btn-sm"
                                 wire:click="approveAndFowardRequest({{ $request->id }},'{{ ProcurementRequestEnum::REJECTED }}')">Reject</button>
                         @endif
