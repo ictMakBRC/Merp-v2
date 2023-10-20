@@ -2,12 +2,12 @@
 
 namespace App\Services\Assets;
 
-use App\Models\Assets\AssetsCatalog;
 use App\Data\Assets\AssetCatalogData;
+use App\Models\Assets\AssetsCatalog;
 
 class AssetCatalogService
 {
-    public function createAsset(AssetCatalogData $assetCatalogDTO):AssetsCatalog
+    public function createAsset(AssetCatalogData $assetCatalogDTO): AssetsCatalog
     {
         $assetCatalog = new AssetsCatalog();
         $this->fillAssetFromDTO($assetCatalog, $assetCatalogDTO);
@@ -16,7 +16,7 @@ class AssetCatalogService
         return $assetCatalog;
     }
 
-    public function updateAsset(AssetsCatalog $assetCatalog, AssetCatalogData $assetCatalogDTO):AssetsCatalog
+    public function updateAsset(AssetsCatalog $assetCatalog, AssetCatalogData $assetCatalogDTO): AssetsCatalog
     {
         $this->fillAssetFromDTO($assetCatalog, $assetCatalogDTO);
         $assetCatalog->save();

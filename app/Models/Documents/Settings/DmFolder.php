@@ -2,11 +2,11 @@
 
 namespace App\Models\Documents\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class DmFolder extends Model
 {
@@ -23,6 +23,7 @@ class DmFolder extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     protected $fillable = [
         'name',
         'description',
@@ -32,7 +33,6 @@ class DmFolder extends Model
         'is_active',
     ];
 
-      
     public static function boot()
     {
         parent::boot();
@@ -42,9 +42,10 @@ class DmFolder extends Model
             });
         }
     }
+
     public function parent()
     {
-        return $this->belongsTo(DmFolder::class , 'parent_id', 'id');
+        return $this->belongsTo(DmFolder::class, 'parent_id', 'id');
     }
 
     public static function search($search)

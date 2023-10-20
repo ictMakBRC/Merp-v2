@@ -2,14 +2,12 @@
 
 namespace App\Http\Livewire\HumanResource\EmployeeData;
 
+use App\Models\HumanResource\EmployeeData\Employee;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\EmployeeData\Employee;
 
 class EmployeesListComponent extends Component
 {
-
-    
     use WithPagination;
 
     //Filters
@@ -27,7 +25,6 @@ class EmployeesListComponent extends Component
 
     public $orderAsc = 0;
 
-
     protected $paginationTheme = 'bootstrap';
 
     public $createNew = false;
@@ -35,6 +32,7 @@ class EmployeesListComponent extends Component
     public $filter = false;
 
     public $user_category;
+
     public $user_status;
 
     public function updatedCreateNew()
@@ -82,8 +80,9 @@ class EmployeesListComponent extends Component
     public function render()
     {
         $employees = $this->filterEmployees()
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
-        return view('livewire.human-resource.employee-data.employees-list-component',compact('employees'));
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
+
+        return view('livewire.human-resource.employee-data.employees-list-component', compact('employees'));
     }
 }

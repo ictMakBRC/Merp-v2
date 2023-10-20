@@ -2,13 +2,12 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\ExitInterviews;
 
+use App\Models\HumanResource\Performance\ExitInterview;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Validation\Rule;
-use App\Models\HumanResource\Settings\Department;
-use App\Models\HumanResource\Performance\ExitInterview;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Create extends Component
 {
@@ -43,7 +42,7 @@ class Create extends Component
             'can_recommend_us' => 'required',
             'experiences' => 'nullable',
             'improvements' => 'nullable',
-            'reason_for_recommendation' => [Rule::requiredIf(fn () => $this-> can_recommend_us == 'no')],
+            'reason_for_recommendation' => [Rule::requiredIf(fn () => $this->can_recommend_us == 'no')],
         ];
     }
 
@@ -52,20 +51,19 @@ class Create extends Component
         $this->employees = User::all();
     }
 
-
     public function store()
     {
         $this->validate();
 
         $warning = ExitInterview::create([
-                'employee_id' => auth()->user()->employee->id,
-                'reason_for_exit' => $this->reason_for_exit,
-                'factors_for_exit' => $this->factors_for_exit,
-                'processes_procedures_systems_for_exit' => $this->processes_procedures_systems_for_exit,
-                'can_recommend_us' => $this->can_recommend_us == 'yes' ? true : false,
-                'experiences' => $this->experiences,
-                'reason_for_recommendation' => $this->reason_for_recommendation
-           ]);
+            'employee_id' => auth()->user()->employee->id,
+            'reason_for_exit' => $this->reason_for_exit,
+            'factors_for_exit' => $this->factors_for_exit,
+            'processes_procedures_systems_for_exit' => $this->processes_procedures_systems_for_exit,
+            'can_recommend_us' => $this->can_recommend_us == 'yes' ? true : false,
+            'experiences' => $this->experiences,
+            'reason_for_recommendation' => $this->reason_for_recommendation,
+        ]);
 
         return redirect()->to(route('exit-interviews'));
     }
@@ -73,6 +71,7 @@ class Create extends Component
     public function render()
     {
         $this->authorize('create', ExitInterview::class);
+
         return view('livewire.human-resource.performance.exit-interviews.create');
     }
 }

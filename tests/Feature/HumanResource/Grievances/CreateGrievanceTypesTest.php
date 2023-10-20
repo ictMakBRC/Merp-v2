@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\HumanResource\Grievances;
 
-use Tests\TestCase;
-use App\Models\User;
-use Livewire\Livewire;
-use Illuminate\Support\Str;
-use App\Models\HumanResource\GrievanceType;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Http\Livewire\HumanResource\GrievanceTypes\Create;
+use App\Models\HumanResource\GrievanceType;
+use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Livewire\Livewire;
+use Tests\TestCase;
 
 class CreateGrievanceTypesTest extends TestCase
 {
@@ -24,6 +24,7 @@ class CreateGrievanceTypesTest extends TestCase
 
         $response->assertStatus(200);
     }
+
     public function test_register_grievance_types_screen_can_be_rendered(): void
     {
         $user = User::factory()->create();
@@ -33,7 +34,7 @@ class CreateGrievanceTypesTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_can_store_a_grievance():void
+    public function test_can_store_a_grievance(): void
     {
         $this->actingAs(User::factory()->create());
 
@@ -45,11 +46,12 @@ class CreateGrievanceTypesTest extends TestCase
             ->set('slug', $slug)
             ->call('store');
 
-        $grievanceType =  GrievanceType::where('slug', $slug)->exists();
+        $grievanceType = GrievanceType::where('slug', $slug)->exists();
 
         $this->assertTrue($grievanceType);
     }
-    public function test_name_is_required():void
+
+    public function test_name_is_required(): void
     {
         $this->actingAs(User::factory()->create());
 
@@ -58,7 +60,8 @@ class CreateGrievanceTypesTest extends TestCase
             ->call('store')
             ->assertHasErrors(['name' => 'required']);
     }
-    public function test_slug_is_required():void
+
+    public function test_slug_is_required(): void
     {
         $this->withoutExceptionHandling();
 
@@ -83,5 +86,4 @@ class CreateGrievanceTypesTest extends TestCase
             ->call('store')
             ->assertRedirect(route('grievance-types'));
     }
-
 }

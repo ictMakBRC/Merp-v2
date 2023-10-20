@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Finance\Settings;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Finance\Settings\FmsChartOfAccountsSubType;
 use App\Models\Finance\Settings\FmsChartOfAccountsType;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class ChartOfAccountsSubTypesComponent extends Component
 {
@@ -30,7 +30,7 @@ class ChartOfAccountsSubTypesComponent extends Component
 
     public $type_id;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -174,7 +174,8 @@ class ChartOfAccountsSubTypesComponent extends Component
         $data['accountSubTypes'] = $this->filteraccountSubType()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-            $data['types']=FmsChartOfAccountsType::where('is_active', 1)->get();
-        return view('livewire.finance.settings.chart-of-accounts-sub-types-component',$data);
+        $data['types'] = FmsChartOfAccountsType::where('is_active', 1)->get();
+
+        return view('livewire.finance.settings.chart-of-accounts-sub-types-component', $data);
     }
 }

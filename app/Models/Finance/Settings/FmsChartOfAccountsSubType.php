@@ -2,11 +2,11 @@
 
 namespace App\Models\Finance\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class FmsChartOfAccountsSubType extends Model
 {
@@ -23,19 +23,20 @@ class FmsChartOfAccountsSubType extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     protected $fillable = [
         'name',
         'description',
         'type_id',
         'created_by',
-       'is_active',
+        'is_active',
     ];
 
     public function type()
     {
         return $this->belongsTo(FmsChartOfAccountsType::class, 'type_id', 'id');
     }
-  
+
     public static function boot()
     {
         parent::boot();

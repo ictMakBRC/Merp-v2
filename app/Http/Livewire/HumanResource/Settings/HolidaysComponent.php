@@ -2,14 +2,12 @@
 
 namespace App\Http\Livewire\HumanResource\Settings;
 
+use App\Models\HumanResource\Settings\Holiday;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\Holiday;
 
 class HolidaysComponent extends Component
 {
-   
-   
     use WithPagination;
 
     //Filters
@@ -29,7 +27,7 @@ class HolidaysComponent extends Component
 
     public $title;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $details;
 
@@ -122,7 +120,7 @@ class HolidaysComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['title', 'details', 'start_date', 'end_date', 'holiday_type','is_active']);
+        $this->reset(['title', 'details', 'start_date', 'end_date', 'holiday_type', 'is_active']);
     }
 
     public function updateHoliday()
@@ -190,6 +188,7 @@ class HolidaysComponent extends Component
         $data['holidays'] = $this->filterHolidays()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.settings.holidays-component', $data)->layout('layouts.app');
     }
 }

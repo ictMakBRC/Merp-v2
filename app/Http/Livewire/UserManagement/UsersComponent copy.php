@@ -47,7 +47,9 @@ class UsersComponent extends Component
     public $category;
 
     public $email;
+
     public $signaturePath;
+
     public $signature;
 
     public $role_id;
@@ -108,7 +110,7 @@ class UsersComponent extends Component
                     ->mixedCase()
                     ->numbers()
                     ->symbols()
-                    ->uncompromised(),],
+                    ->uncompromised(), ],
         ]);
 
         $user = new User();
@@ -122,13 +124,13 @@ class UsersComponent extends Component
                 $this->validate([
                     'signature' => ['image', 'mimes:jpg,png', 'max:100'],
                 ]);
-    
+
                 $signatureName = date('YmdHis').$this->name.'.'.$this->signature->extension();
                 $this->signaturePath = $this->signature->storeAs('signatures', $signatureName, 'public');
             } else {
                 $this->signaturePath = null;
             }
-    
+
             $user->signature = $this->signature;
             $user->save();
 
@@ -219,10 +221,10 @@ class UsersComponent extends Component
                     $this->validate([
                         'signature' => ['image', 'mimes:jpg,png', 'max:100'],
                     ]);
-        
+
                     $signatureName = date('YmdHis').$this->name.'.'.$this->signature->extension();
                     $this->signaturePath = $this->signature->storeAs('signatures', $signatureName, 'public');
-        
+
                     if (file_exists(storage_path().$user->signature)) {
                         @unlink(storage_path().$user->signature);
                     }
@@ -230,8 +232,8 @@ class UsersComponent extends Component
                     $this->signaturePath = $user->signature;
                 }
                 $user->signature = $this->signaturePath;
-        
-                $user->update();;
+
+                $user->update();
 
                 $this->resetInputs();
                 $this->createNew = false;
@@ -250,7 +252,7 @@ class UsersComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['edit_id', 'password','category', 'email','is_active', 'generateToken']);
+        $this->reset(['edit_id', 'password', 'category', 'email', 'is_active', 'generateToken']);
     }
 
     public function refresh()
@@ -262,8 +264,6 @@ class UsersComponent extends Component
     {
         $this->token = '';
     }
-
-
 
     public function export()
     {
@@ -305,6 +305,6 @@ class UsersComponent extends Component
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
 
-        return view('livewire.user-management.users-component', compact('users','roles'))->layout('layouts.app');
+        return view('livewire.user-management.users-component', compact('users', 'roles'))->layout('layouts.app');
     }
 }

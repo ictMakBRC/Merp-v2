@@ -2,13 +2,12 @@
 
 namespace App\Http\Livewire\AssetsManagement\Settings;
 
+use App\Models\Assets\Settings\AssetClassification;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Assets\Settings\AssetClassification;
 
 class AssetClassificationComponent extends Component
 {
-   
     use WithPagination;
 
     //Filters
@@ -95,7 +94,7 @@ class AssetClassificationComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['name','description','edit_id']);
+        $this->reset(['name', 'description', 'edit_id']);
     }
 
     public function updateAssetClassification()
@@ -155,6 +154,6 @@ class AssetClassificationComponent extends Component
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
 
-        return view('livewire.assets-management.settings.asset-classification-component',$data)->layout('layouts.app');
+        return view('livewire.assets-management.settings.asset-classification-component', $data)->layout('layouts.app');
     }
 }

@@ -4,12 +4,11 @@ namespace App\Http\Livewire\HumanResource\Leave;
 
 use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveDelegation;
-use Carbon\Carbon;
-use App\Models\User;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use App\Models\HumanResource\Settings\LeaveType;
 use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveRequest;
+use App\Models\HumanResource\Settings\LeaveType;
+use App\Models\User;
+use Carbon\Carbon;
+use Livewire\Component;
 
 class EditRequest extends Component
 {
@@ -58,7 +57,6 @@ class EditRequest extends Component
         $this->reason = $leaveRequest->reason;
     }
 
-
     public function store()
     {
         //validate the requests
@@ -66,13 +64,13 @@ class EditRequest extends Component
 
         //save/persist the data
         $this->leaveRequest->update([
-                'employee_id' => $this->employee_id,
-                'leave_type_id' => $this->leave_type_id,
-                'start_date' => $this->start_date,
-                'end_date' => $this->end_date,
-                'length' => Carbon::parse($this->end_date)->diffInDays(Carbon::parse($this->end_date)),
-                'reason' => $this->reason,
-            ]);
+            'employee_id' => $this->employee_id,
+            'leave_type_id' => $this->leave_type_id,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'length' => Carbon::parse($this->end_date)->diffInDays(Carbon::parse($this->end_date)),
+            'reason' => $this->reason,
+        ]);
 
         //redirect the user
         return redirect()->to(route('leave.requests'));
@@ -113,22 +111,22 @@ class EditRequest extends Component
     public function saveDelegate()
     {
         $this->validate([
-            'delegatee_id' => "required|unique:hr_leave_delegations,delegated_role_to,".$this->currentDelegation->id.'',
-            'delegatee_comment' => 'nullable'
+            'delegatee_id' => 'required|unique:hr_leave_delegations,delegated_role_to,'.$this->currentDelegation->id.'',
+            'delegatee_comment' => 'nullable',
         ], [
-            'delegatee_id.unique' => 'This employee has already been delegated'
+            'delegatee_id.unique' => 'This employee has already been delegated',
         ]);
 
-        if($this->createNew == true) {
+        if ($this->createNew == true) {
             //delegate another user to perform duties on your behalf
             $this->leaveRequest->delegateAnotherEmployee($this->delegatee_id, $this->delegatee_comment);
         } else {
             // dd($this->delegatee_comment);
             //delegate another user to perform duties on your behalf
             $this->currentDelegation->update([
-                    'delegated_role_to' => $this->delegatee_id,
-                    'comment' =>$this->delegatee_comment
-                ]);
+                'delegated_role_to' => $this->delegatee_id,
+                'comment' => $this->delegatee_comment,
+            ]);
         }
 
         $this->dispatchBrowserEvent('close-modal');
@@ -154,6 +152,7 @@ class EditRequest extends Component
     public function render()
     {
         $this->authorize('update', LeaveRequest::class);
+
         return view('livewire.human-resource.leave.update-request');
     }
 }

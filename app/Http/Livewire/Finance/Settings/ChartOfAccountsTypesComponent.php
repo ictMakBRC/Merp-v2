@@ -27,7 +27,7 @@ class ChartOfAccountsTypesComponent extends Component
 
     public $name;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -165,6 +165,7 @@ class ChartOfAccountsTypesComponent extends Component
         $data['accountTypes'] = $this->filterAccountTypes()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.finance.settings.chart-of-accounts-types-component', $data);
     }
 }

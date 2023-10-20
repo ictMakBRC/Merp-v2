@@ -3,8 +3,8 @@
 namespace App\Http\Livewire\HumanResource\Performance\Appraisals;
 
 use App\Models\Comment as GComment;
-use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class Comment extends Component
 {
@@ -17,7 +17,7 @@ class Comment extends Component
     public $shouldShowReply = false;
 
     public $rules = [
-        'additional_comment' => 'nullable'
+        'additional_comment' => 'nullable',
     ];
 
     public function mount($comment)
@@ -25,16 +25,15 @@ class Comment extends Component
         $this->comment = $comment;
     }
 
-
     public function store()
     {
         $this->validate();
 
         return DB::transaction(function () {
             $this->appraisal->update([
-                'acknowledged_at' => now()
+                'acknowledged_at' => now(),
             ]);
-            if($this->additional_comment != null) {
+            if ($this->additional_comment != null) {
                 $this->appraisal->comments()->create([
                     'content' => $this->additional_comment,
                     'user_id' => auth()->id(),
@@ -49,7 +48,8 @@ class Comment extends Component
 
     public function toggleReplyButton($currentReply)
     {
-        $this->shouldShowReply = !$this->shouldShowReply;
+        $this->shouldShowReply = ! $this->shouldShowReply;
+
         return $this->shouldShowReply;
     }
 
@@ -63,6 +63,7 @@ class Comment extends Component
                 'content' => $this->reply,
                 'user_id' => auth()->id(),
             ]);
+
             return redirect()->back();
         });
     }

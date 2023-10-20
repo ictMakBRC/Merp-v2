@@ -4,7 +4,6 @@ namespace App\Policies\HumanResource;
 
 use App\Models\HumanResource\GrievanceType;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class GrievanceTypesPolicy
 {

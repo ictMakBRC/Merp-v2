@@ -2,13 +2,13 @@
 
 namespace App\Models\Finance\Accounting;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Finance\Settings\FmsChartOfAccountsType;
 use App\Models\Finance\Settings\FmsChartOfAccountsSubType;
+use App\Models\Finance\Settings\FmsChartOfAccountsType;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class FmsChartOfAccount extends Model
 {
@@ -25,6 +25,7 @@ class FmsChartOfAccount extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     protected $fillable = [
         'name',
         'code',
@@ -43,12 +44,12 @@ class FmsChartOfAccount extends Model
     {
         return $this->belongsTo(FmsChartOfAccountsType::class, 'account_type', 'id');
     }
+
     public function subType()
     {
         return $this->belongsTo(FmsChartOfAccountsSubType::class, 'sub_account_type', 'id');
     }
 
-  
     public static function boot()
     {
         parent::boot();

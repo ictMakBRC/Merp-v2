@@ -2,12 +2,12 @@
 
 namespace App\Services\HumanResource\EmployeeData;
 
-use App\Models\HumanResource\EmployeeData\EmergencyContact;
 use App\Data\HumanResource\EmployeeData\EmployeeEmergencyContactData;
+use App\Models\HumanResource\EmployeeData\EmergencyContact;
 
 class EmployeeEmergencyContactInformationService
 {
-    public function createContactInformation(EmployeeEmergencyContactData $contactInformationDTO):EmergencyContact
+    public function createContactInformation(EmployeeEmergencyContactData $contactInformationDTO): EmergencyContact
     {
         $contactInformation = new EmergencyContact();
         $this->fillContactInformationFromDTO($contactInformation, $contactInformationDTO);
@@ -16,7 +16,7 @@ class EmployeeEmergencyContactInformationService
         return $contactInformation;
     }
 
-    public function updateContactInformation(EmergencyContact $contactInformation, EmployeeEmergencyContactData $contactInformationDTO):EmergencyContact
+    public function updateContactInformation(EmergencyContact $contactInformation, EmployeeEmergencyContactData $contactInformationDTO): EmergencyContact
     {
         $this->fillContactInformationFromDTO($contactInformation, $contactInformationDTO);
         $contactInformation->save();

@@ -2,14 +2,8 @@
 
 namespace App\Http\Livewire\HumanResource\Leave;
 
-use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveDelegation;
-use Carbon\Carbon;
-use App\Models\User;
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use App\Models\HumanResource\Settings\LeaveType;
-use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveRequest;
 
 class LeaveDelegations extends Component
 {
@@ -59,7 +53,6 @@ class LeaveDelegations extends Component
         $this->reset(['delegatee_comment']);
     }
 
-
     /**
      * Delete the Leave request if its pending
      */
@@ -79,7 +72,7 @@ class LeaveDelegations extends Component
         $user = auth()->user();
 
         return view('livewire.human-resource.leave.delegations.index', [
-            'delegations' => is_null($user->employee ? $user->employee->delegations : null) ? [] : $user->employee->delegations
+            'delegations' => is_null($user->employee ? $user->employee->delegations : null) ? [] : $user->employee->delegations,
         ]);
     }
 }

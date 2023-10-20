@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\HumanResource\Settings;
 
+use App\Models\HumanResource\Settings\CompanyProfile;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Settings\CompanyProfile;
 
 class CompanyProfileComponent extends Component
 {

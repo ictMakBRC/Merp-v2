@@ -2,12 +2,15 @@
 
 namespace App\Services\HumanResource\EmployeeData;
 
-use App\Models\HumanResource\EmployeeData\Employee;
 use App\Data\HumanResource\EmployeeData\GeneralEmployeeData;
+use App\Models\HumanResource\EmployeeData\Employee;
 
 class GeneralEmployeeInformationService
 {
-    public function createEmployee(GeneralEmployeeData $employeeDTO):Employee
+    /**
+     * Save the employee
+     */
+    public function createEmployee(GeneralEmployeeData $employeeDTO): Employee
     {
         $employee = new Employee();
         $this->fillEmployeeFromDTO($employee, $employeeDTO);
@@ -16,7 +19,10 @@ class GeneralEmployeeInformationService
         return $employee;
     }
 
-    public function updateEmployee(Employee $employee, GeneralEmployeeData $employeeDTO):Employee
+    /**
+     * Update an existing employee
+     */
+    public function updateEmployee(Employee $employee, GeneralEmployeeData $employeeDTO): Employee
     {
         $this->fillEmployeeFromDTO($employee, $employeeDTO);
         $employee->save();
@@ -24,6 +30,9 @@ class GeneralEmployeeInformationService
         return $employee;
     }
 
+    /**
+     * Prefill the employee data
+     */
     private function fillEmployeeFromDTO(Employee $employee, GeneralEmployeeData $employeeDTO)
     {
         $employee->entry_type = $employeeDTO->entry_type;

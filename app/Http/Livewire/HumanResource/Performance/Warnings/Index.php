@@ -2,15 +2,13 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Warnings;
 
-use Livewire\Component;
-use Livewire\WithPagination;
-use App\Models\HumanResource\Grievance;
 use App\Models\HumanResource\Performance\Warning;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
-
     use WithPagination;
     use AuthorizesRequests;
 
@@ -40,8 +38,6 @@ class Index extends Component
     public $selectedWarning;
 
     public $filter = false;
-
-
 
     public function updatingSearch()
     {
@@ -113,6 +109,7 @@ class Index extends Component
         $data['warnings'] = $this->filterWarnings()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.performance.warnings.index', $data)->layout('layouts.app');
     }
 }

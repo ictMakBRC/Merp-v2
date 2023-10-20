@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Comments;
 
 use App\Models\Comment as GComment;
 use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 
 class Show extends Component
 {
@@ -23,7 +22,7 @@ class Show extends Component
     public $shouldUpdate = false;
 
     public $rules = [
-        'additional_comment' => 'nullable'
+        'additional_comment' => 'nullable',
     ];
 
     public function mount($comment)
@@ -33,13 +32,14 @@ class Show extends Component
 
     public function toggleReplyButton($currentReply)
     {
-        $this->shouldShowReply = !$this->shouldShowReply;
+        $this->shouldShowReply = ! $this->shouldShowReply;
+
         return $this->shouldShowReply;
     }
 
     public function editReply(GComment $reply)
     {
-        $this->shouldShowReply = !$this->shouldShowReply;
+        $this->shouldShowReply = ! $this->shouldShowReply;
         $this->shouldUpdate = true;
         $this->reply = $reply->content;
         $this->currentReply = $reply;
@@ -68,6 +68,7 @@ class Show extends Component
     {
         $this->dispatchBrowserEvent('close-modal');
     }
+
     public function deleteComment()
     {
         $this->comment->delete();
@@ -80,32 +81,32 @@ class Show extends Component
     {
         $this->validate(['reply' => 'required']);
 
-            $comment = GComment::find($commentId);
+        $comment = GComment::find($commentId);
 
-            if($this->shouldUpdate == true) {
-                $this->currentReply->update([
-                    'content' => $this->reply
-                ]);
-                $this->shouldUpdate = false;
-                $this->reply = '';
-                $this->currentReply = null;
-                $this->comment = $comment;
-                $this->shouldShowReply = false;
-            } else {
-                $comment->replies()->create([
-                    'content' => $this->reply,
-                    'user_id' => auth()->id(),
-                ]);
-                $this->shouldUpdate = false;
-                $this->reply = '';
-                $this->currentReply = null;
-                $this->comment = $comment;
-                $this->shouldShowReply = false;
-            }
+        if ($this->shouldUpdate == true) {
+            $this->currentReply->update([
+                'content' => $this->reply,
+            ]);
+            $this->shouldUpdate = false;
+            $this->reply = '';
+            $this->currentReply = null;
+            $this->comment = $comment;
+            $this->shouldShowReply = false;
+        } else {
+            $comment->replies()->create([
+                'content' => $this->reply,
+                'user_id' => auth()->id(),
+            ]);
+            $this->shouldUpdate = false;
+            $this->reply = '';
+            $this->currentReply = null;
+            $this->comment = $comment;
+            $this->shouldShowReply = false;
+        }
 
-            $this->dispatchBrowserEvent('refresh-page');
+        $this->dispatchBrowserEvent('refresh-page');
 
-            return redirect()->back();
+        return redirect()->back();
 
     }
 

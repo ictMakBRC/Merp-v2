@@ -2,14 +2,13 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\ExitInterviews;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\HumanResource\Performance\ExitInterview;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
-
     use WithPagination;
     use AuthorizesRequests;
 
@@ -39,8 +38,6 @@ class Index extends Component
     public $selectedExitInterview;
 
     public $filter = false;
-
-
 
     public function updatingSearch()
     {
@@ -112,6 +109,7 @@ class Index extends Component
         $data['exitInterviews'] = $this->filterExitInterviews()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.performance.exit-interviews.index', $data)->layout('layouts.app');
     }
 }

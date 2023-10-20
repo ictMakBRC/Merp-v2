@@ -4,14 +4,13 @@ namespace App\Jobs;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ProcessDispatchMails implements ShouldQueue
 {
@@ -39,7 +38,7 @@ class ProcessDispatchMails implements ShouldQueue
             Mail::to($this->notifiable)->send($this->mail);
         } catch (\Throwable $th) {
             //throw $th;
-            Log::error("Send Mail Error: ".$th->getMessage());
+            Log::error('Send Mail Error: '.$th->getMessage());
 
         }
     }

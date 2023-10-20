@@ -25,12 +25,12 @@ return [
         'Admin' => [
             'User Management' => [
 
-                'Create'=>[
+                'Create' => [
                     'create_user',
                     'create_role',
                 ],
 
-                'Read'=>[
+                'Read' => [
                     'access_user_management_module',
                     'view_user',
                     'view_role',
@@ -40,7 +40,7 @@ return [
                     'generate_user_management_reports',
                 ],
 
-                'Update'=>[
+                'Update' => [
                     'update_user',
                     'update_role',
                     'update_permission',
@@ -48,29 +48,29 @@ return [
                     'assign_permission',
                 ],
 
-                'Delete'=> [
+                'Delete' => [
                     'delete_user',
                     'delete_role',
                 ],
             ],
             'Human Resource' => [
-                'Create'=> [
+                'Create' => [
                     'create_grievance_type',
                     'create_grievance',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_grievance_types',
                     'view_grievances',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_grievance_type',
                     'update_grievance',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_grievance_type',
                     'restore_grievance',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_grievance_type',
                     'force_delete_grievance_type',
                     'archive_grievance',
@@ -78,35 +78,35 @@ return [
                 ],
             ],
             'Human Resource/Performance' => [
-                'Create'=> [
+                'Create' => [
                     'create_appraisal',
                     'create_warning',
                     'create_exit_interview',
                     'create_termination',
                     'create_resignation',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_appraisals',
                     'view_warnings',
                     'view_exit_interviews',
                     'view_terminations',
                     'view_resignations',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_appraisal',
                     'update_warning',
                     'update_exit_interview',
                     'update_termination',
                     'update_resignation',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_appraisal',
                     'restore_warning',
                     'restore_exit_interview',
                     'restore_termination',
                     'restore_resignation',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_appraisal',
                     'archive_warning',
                     'archive_exit_interview',
@@ -120,56 +120,56 @@ return [
                 ],
             ],
             'Human Resource/Leave Management' => [
-                'Create'=> [
+                'Create' => [
                     'create_leave_request',
                     'create_leave_delegation_request',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_leave_requests',
                     'view_leave_grievances',
                     'view_department_leave_requests',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_leave_request',
                     'approve_leave_request',
                     'update_leave_grievance_request',
                     'approve_leave_grievance_request',
                     'approve_department_leave_request',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_leave_request',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_leave_request',
                     'decline_leave_request',
                     'force_delete_leave_request',
                     'decline_leave_request',
                     'decline_department_leave_request',
-                    'force_delete_leave_request'
+                    'force_delete_leave_request',
                 ],
             ],
             'Human Resource/Employee Management' => [
-                'Create'=> [
+                'Create' => [
                     'register employee',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_employees',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_employee',
                     'activate_employee',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_employee',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_employee',
                     'deactivate_employee',
-                    'force_delete_employee'
+                    'force_delete_employee',
                 ],
             ],
             'Human Resource/Settings' => [
-                'Create'=> [
+                'Create' => [
                     'create_duty_station',
                     'create_department',
                     'create_designation',
@@ -179,7 +179,7 @@ return [
                     'register_currency_&_rate',
                     'create_leave_type',
                 ],
-                'Read'=> [
+                'Read' => [
                     'view_duty_stations',
                     'view_departments',
                     'view_designations',
@@ -189,7 +189,7 @@ return [
                     'view_currencies_&_rates',
                     'view_leave_types',
                 ],
-                'Update'=> [
+                'Update' => [
                     'update_duty_station',
                     'update_department',
                     'update_designation',
@@ -199,7 +199,7 @@ return [
                     'update_currency_&_rate',
                     'update_leave_type',
                 ],
-                'Restore'=> [
+                'Restore' => [
                     'restore_duty_station',
                     'restore_department',
                     'restore_designation',
@@ -209,7 +209,7 @@ return [
                     'restore_currency_&_rate',
                     'restore_leave_type',
                 ],
-                'Delete'=> [
+                'Delete' => [
                     'archive_duty_station',
                     'archive_department',
                     'archive_designation',
@@ -245,7 +245,6 @@ return [
         //         'view_nominee',
         //     ],
         //  ],
-     ],
-
+    ],
 
 ];

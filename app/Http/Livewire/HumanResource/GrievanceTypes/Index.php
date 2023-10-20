@@ -3,14 +3,13 @@
 namespace App\Http\Livewire\HumanResource\GrievanceTypes;
 
 use App\Models\HumanResource\Grievance;
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Livewire\WithPagination;
 use App\Models\HumanResource\GrievanceType;
+use Illuminate\Support\Str;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
-
     use WithPagination;
 
     //Filters
@@ -29,7 +28,7 @@ class Index extends Component
 
     public $slug;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -54,13 +53,13 @@ class Index extends Component
         $this->validate([
             'name' => 'required',
             'slug' => 'required|unique:hr_grievance_types',
-            'description' => 'nullable'
+            'description' => 'nullable',
         ]);
 
         GrievanceType::create([
             'name' => $this->name,
             'slug' => $this->slug,
-            'description' => $this->description
+            'description' => $this->description,
         ]);
 
         $this->dispatchBrowserEvent('close-modal');
@@ -87,7 +86,6 @@ class Index extends Component
             'description' => 'nullable|string',
         ]);
     }
-
 
     public function editData(GrievanceType $grievanceType)
     {
@@ -123,7 +121,6 @@ class Index extends Component
             'slug' => 'required|unique:hr_grievance_types,name,'.$this->edit_id.'',
             'description' => 'nullable|string',
         ]);
-
 
         $grievanceType = GrievanceType::find($this->edit_id);
 
@@ -180,6 +177,7 @@ class Index extends Component
         $data['grievanceTypes'] = $this->filterGrievianceTypes()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.grievance-types.index', $data)->layout('layouts.app');
     }
 }

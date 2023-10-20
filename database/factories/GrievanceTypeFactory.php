@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\HumanResource\GrievanceType;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\GrievanceType>
@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class GrievanceTypeFactory extends Factory
 {
     /**
-    * @var string
-    */
+     * @var string
+     */
     protected $model = GrievanceType::class;
 
     /**
@@ -27,7 +27,7 @@ class GrievanceTypeFactory extends Factory
         return [
             'name' => $name = $this->faker->unique()->words(3, true),
             'slug' => Str::slug($name),
-             'description' => $this->faker->realText(),
+            'description' => $this->faker->realText(),
         ];
     }
 }

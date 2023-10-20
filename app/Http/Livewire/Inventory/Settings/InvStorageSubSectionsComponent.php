@@ -9,9 +9,8 @@ use Livewire\WithPagination;
 
 class InvStorageSubSectionsComponent extends Component
 {
-   
     use WithPagination;
-    
+
     //Filters
     public $from_date;
 
@@ -29,7 +28,7 @@ class InvStorageSubSectionsComponent extends Component
 
     public $name;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -175,7 +174,8 @@ class InvStorageSubSectionsComponent extends Component
         $data['storageBins'] = $this->filterStorageBins()->with('storageSection')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        $data['sections'] = InvStorageSection::where('is_active',1)->get();
+        $data['sections'] = InvStorageSection::where('is_active', 1)->get();
+
         return view('livewire.inventory.settings.storage-bin-sections-component', $data);
     }
 }

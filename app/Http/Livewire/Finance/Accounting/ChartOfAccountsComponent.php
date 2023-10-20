@@ -2,13 +2,11 @@
 
 namespace App\Http\Livewire\Finance\Accounting;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Finance\Accounting\FmsChartOfAccount;
 use App\Models\Finance\Settings\FmsChartOfAccountsSubType;
 use App\Models\Finance\Settings\FmsChartOfAccountsType;
-use App\Models\Finance\Settings\FmsFmsChartOfAccountType;
-use App\Models\Finance\Settings\FmsFmsChartOfAccountSubType;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class ChartOfAccountsComponent extends Component
 {
@@ -46,12 +44,12 @@ class ChartOfAccountsComponent extends Component
 
     public $edit_id;
 
-
     public $description;
 
     public $is_sub = false;
+
     public $sub_accounts = [];
-    
+
     protected $paginationTheme = 'bootstrap';
 
     public $createNew = false;
@@ -59,6 +57,7 @@ class ChartOfAccountsComponent extends Component
     public $toggleForm = false;
 
     public $filter = false;
+
     public function export()
     {
         // return (new CouriersExport())->download('Couriers.xlsx');
@@ -119,7 +118,7 @@ class ChartOfAccountsComponent extends Component
         $this->code = $account->code;
         $this->account_type = $account->account_type;
         $this->parent_account = $account->parent_account;
-        $this->primary_balance =$account->primary_balance;
+        $this->primary_balance = $account->primary_balance;
         $this->bank_balance = $account->bank_balance;
         $this->as_of = $account->as_of;
         $this->sub_account_type = $account->sub_account_type;
@@ -188,21 +187,22 @@ class ChartOfAccountsComponent extends Component
     {
         $this->resetInputs();
     }
-  
+
     public function render()
     {
         $data['accounts'] = FmsChartOfAccount::search($this->search)
-        ->with(['type', 'subType'])
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
+            ->with(['type', 'subType'])
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
         $data['types'] = FmsChartOfAccountsType::all();
-        
+
         $data['sub_types'] = FmsChartOfAccountsSubType::where('type_id', $this->account_type)->get();
-             
-        if($this->is_sub){
-            $this->sub_accounts = FmsChartOfAccount::where('is_active',1)->with(['type'])
-            ->orderBy('name', 'asc')->get();
+
+        if ($this->is_sub) {
+            $this->sub_accounts = FmsChartOfAccount::where('is_active', 1)->with(['type'])
+                ->orderBy('name', 'asc')->get();
         }
+
         return view('livewire.finance.accounting.fms-chart-of-accounts-component', $data);
     }
 }

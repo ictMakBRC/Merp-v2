@@ -8,9 +8,8 @@ use Livewire\WithPagination;
 
 class DmFoldersComponent extends Component
 {
-    
     use WithPagination;
-        
+
     //Filters
     public $from_date;
 
@@ -30,7 +29,7 @@ class DmFoldersComponent extends Component
 
     public $parent_id;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -83,8 +82,8 @@ class DmFoldersComponent extends Component
         $folder->name = $this->name;
         $folder->is_active = $this->is_active;
         $folder->code = time();
-        if($this->parent_id !=""){            
-        $folder->parent_id = $this->parent_id;
+        if ($this->parent_id != '') {
+            $folder->parent_id = $this->parent_id;
         }
         $folder->description = $this->description;
         $folder->save();
@@ -177,6 +176,7 @@ class DmFoldersComponent extends Component
         $data['folders'] = $this->filterFolders()->with('parent')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.documents.settings.dm-folders-component', $data);
     }
 }

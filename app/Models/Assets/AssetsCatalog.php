@@ -2,12 +2,12 @@
 
 namespace App\Models\Assets;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Assets\Settings\AssetCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class AssetsCatalog extends Model
 {
@@ -25,14 +25,13 @@ class AssetsCatalog extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $table='asset_catalog';
+    protected $table = 'asset_catalog';
 
-    
     public function category()
     {
         return $this->belongsTo(AssetCategory::class, 'asset_categories_id', 'id');
     }
-    
+
     public static function boot()
     {
         parent::boot();
@@ -46,9 +45,9 @@ class AssetsCatalog extends Model
     public static function search($search)
     {
         return empty($search) ? static::query()
-            : static::query()           
+            : static::query()
                 ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('description', 'like', '%'.$search.'%');
-               
+
     }
 }

@@ -2,9 +2,8 @@
 
 namespace App\Http\Livewire\HumanResource\EmployeeData;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\HumanResource\EmployeeData\Employee;
+use Livewire\Component;
 
 class ShowEmployee extends Component
 {

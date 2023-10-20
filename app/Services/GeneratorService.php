@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Str;
 use App\Models\HumanResource\EmployeeData\Employee;
+use Illuminate\Support\Str;
 
 class GeneratorService
 {
@@ -12,7 +12,8 @@ class GeneratorService
         return Str::password(8);
     }
 
-    public static function employeeNo(){
+    public static function employeeNo()
+    {
         $alphabets = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
         $emp_number = '';
         $randomAlphabetIndex = mt_rand(0, strlen($alphabets) - 1);
@@ -28,6 +29,4 @@ class GeneratorService
 
         return $emp_number;
     }
-
-
 }

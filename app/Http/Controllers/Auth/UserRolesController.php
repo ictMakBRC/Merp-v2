@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +24,7 @@ class UserRolesController
     }
 
     public function index()
-    {        
+    {
         $permissions = $this->permissionModel::get()->groupBy('target_module')
             ->map(function ($modules) {
                 return $modules->groupBy('operation')
@@ -119,7 +118,7 @@ class UserRolesController
                         });
                 });
 
-                // return $permissions;
+            // return $permissions;
             return View::make('livewire.user-management.access.editRolePermission', [
                 'model' => $role,
                 'permissions' => $permissions,
@@ -136,6 +135,7 @@ class UserRolesController
 
         if (! Helper::roleIsEditable($role)) {
             Session::flash('laratrust-error', 'The role is not editable');
+
             return redirect()->back();
         }
 

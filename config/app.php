@@ -156,7 +156,7 @@ return [
     */
 
     'providers' => ServiceProvider::defaultProviders()->merge([
-            /*
+        /*
          * Package Service Providers...
          */
         Jenssegers\Agent\AgentServiceProvider::class,
@@ -185,10 +185,10 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-          // 'ExampleClass' => App\Example\ExampleClass::class,
-          'Agent' => Jenssegers\Agent\Facades\Agent::class,
-          'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-          'Image' => Intervention\Image\Facades\Image::class,
+        // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
 ];

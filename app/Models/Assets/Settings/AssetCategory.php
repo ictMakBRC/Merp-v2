@@ -2,12 +2,11 @@
 
 namespace App\Models\Assets\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Assets\Settings\AssetClassification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class AssetCategory extends Model
 {
@@ -45,9 +44,9 @@ class AssetCategory extends Model
     public static function search($search)
     {
         return empty($search) ? static::query()
-            : static::query()           
+            : static::query()
                 ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('description', 'like', '%'.$search.'%');
-               
+
     }
 }

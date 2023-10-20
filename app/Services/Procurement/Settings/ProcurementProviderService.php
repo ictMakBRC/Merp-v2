@@ -2,13 +2,13 @@
 
 namespace App\Services\Procurement\Settings;
 
+use App\Data\Procurement\Settings\ProcurementProviderData;
 use App\Models\Procurement\Settings\Provider;
 use App\Models\Procurement\Settings\ProviderDocument;
-use App\Data\Procurement\Settings\ProcurementProviderData;
 
 class ProcurementProviderService
 {
-    public function createProvider(ProcurementProviderData $procurementProviderDTO):Provider
+    public function createProvider(ProcurementProviderData $procurementProviderDTO): Provider
     {
         $procurementProvider = new Provider();
         $this->fillProviderFromDTO($procurementProvider, $procurementProviderDTO);
@@ -17,7 +17,7 @@ class ProcurementProviderService
         return $procurementProvider;
     }
 
-    public function updateProvider(Provider $procurementProvider, ProcurementProviderData $procurementProviderDTO):Provider
+    public function updateProvider(Provider $procurementProvider, ProcurementProviderData $procurementProviderDTO): Provider
     {
         $this->fillProviderFromDTO($procurementProvider, $procurementProviderDTO);
         $procurementProvider->save();
@@ -27,7 +27,7 @@ class ProcurementProviderService
 
     private function fillProviderFromDTO(Provider $procurementProvider, ProcurementProviderData $procurementProviderDTO)
     {
-        $procurementProvider->name = $procurementProviderDTO-> name;
+        $procurementProvider->name = $procurementProviderDTO->name;
         $procurementProvider->provider_type = $procurementProviderDTO->provider_type;
         $procurementProvider->phone_number = $procurementProviderDTO->phone_number;
         $procurementProvider->alt_phone_number = $procurementProviderDTO->alt_phone_number;
@@ -51,29 +51,29 @@ class ProcurementProviderService
         // $procurementProvider->delivery_performance = $procurementProviderDTO->delivery_performance;
         // $procurementProvider->quality_ratings = $procurementProviderDTO->quality_ratings;
         $procurementProvider->notes = $procurementProviderDTO->notes;
-        $procurementProvider->is_active = $procurementProviderDTO->is_active;    
+        $procurementProvider->is_active = $procurementProviderDTO->is_active;
     }
 
-   //PROVIDER DOCUMENTS
-   public function createProviderDocument(ProcurementProviderData $providerDocumentDTO):ProviderDocument
-   {
-       $providerDocument = new ProviderDocument();
-       $this->fillProviderDocumentFromDTO($providerDocument, $providerDocumentDTO);
-       $providerDocument->save();
+    //PROVIDER DOCUMENTS
+    public function createProviderDocument(ProcurementProviderData $providerDocumentDTO): ProviderDocument
+    {
+        $providerDocument = new ProviderDocument();
+        $this->fillProviderDocumentFromDTO($providerDocument, $providerDocumentDTO);
+        $providerDocument->save();
 
-       return $providerDocument;
-   }
+        return $providerDocument;
+    }
 
-   public function updateProviderDocument(ProviderDocument $providerDocument, ProcurementProviderData $providerDocumentDTO):ProviderDocument
-   {
-       $this->fillProviderDocumentFromDTO($providerDocument, $providerDocumentDTO);
-       $providerDocument->save();
+    public function updateProviderDocument(ProviderDocument $providerDocument, ProcurementProviderData $providerDocumentDTO): ProviderDocument
+    {
+        $this->fillProviderDocumentFromDTO($providerDocument, $providerDocumentDTO);
+        $providerDocument->save();
 
-       return $providerDocument;
-   }
+        return $providerDocument;
+    }
 
-   private function fillProviderDocumentFromDTO(ProviderDocument $providerDocument, ProcurementProviderData $providerDocumentDTO)
-   {
+    private function fillProviderDocumentFromDTO(ProviderDocument $providerDocument, ProcurementProviderData $providerDocumentDTO)
+    {
         $providerDocument->provider_id = $providerDocumentDTO->provider_id;
         $providerDocument->document_category = $providerDocumentDTO->document_category;
         $providerDocument->expires = $providerDocumentDTO->expires;
@@ -81,5 +81,5 @@ class ProcurementProviderService
         $providerDocument->document_name = $providerDocumentDTO->document_name;
         $providerDocument->document_path = $providerDocumentDTO->document_path;
         $providerDocument->description = $providerDocumentDTO->description;
-   }
+    }
 }

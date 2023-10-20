@@ -2,11 +2,11 @@
 
 namespace App\Models\Grants\Project;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ProjectDocument extends Model
 {
@@ -23,7 +23,7 @@ class ProjectDocument extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-    
+
     public static function boot()
     {
         parent::boot();
@@ -36,6 +36,6 @@ class ProjectDocument extends Model
 
     public function project()
     {
-        return $this->belongsTo(Project::class,'project_id','id');
+        return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 }

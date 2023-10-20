@@ -2,14 +2,11 @@
 
 namespace Tests\Feature\HumanResource\Grievances;
 
-use Tests\TestCase;
-use App\Models\User;
-use Livewire\Livewire;
-use Illuminate\Support\Str;
 use App\Models\HumanResource\GrievanceType;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use App\Http\Livewire\HumanResource\GrievanceTypes\Create;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class GrievanceTypesTest extends TestCase
 {

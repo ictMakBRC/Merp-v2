@@ -3,13 +3,13 @@
 namespace App\Models\HumanResource;
 
 use App\Models\Comment;
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\HumanResource\EmployeeData\Employee;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Grievance extends Model implements HasMedia
 {
@@ -27,21 +27,24 @@ class Grievance extends Model implements HasMedia
         'acknowledged_at',
         'comment',
         'status',
-        'created_by'
-     ];
+        'created_by',
+    ];
 
     protected $table = 'hr_grievances';
 
     /**
      * Get the Employee that created this grievance
+     *
      * @return BelongsTo
      */
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
     }
+
     /**
      * Get the Employee that created this grievance
+     *
      * @return BelongsTo
      */
     public function type()

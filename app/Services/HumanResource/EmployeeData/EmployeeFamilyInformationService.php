@@ -2,12 +2,12 @@
 
 namespace App\Services\HumanResource\EmployeeData;
 
-use App\Models\HumanResource\EmployeeData\FamilyBackground;
 use App\Data\HumanResource\EmployeeData\EmployeeFamilyData;
+use App\Models\HumanResource\EmployeeData\FamilyBackground;
 
 class EmployeeFamilyInformationService
 {
-    public function createFamilyInformation(EmployeeFamilyData $familyInformationDTO):FamilyBackground
+    public function createFamilyInformation(EmployeeFamilyData $familyInformationDTO): FamilyBackground
     {
         $familyInformation = new FamilyBackground();
         $this->fillFamilyInformationFromDTO($familyInformation, $familyInformationDTO);
@@ -16,7 +16,7 @@ class EmployeeFamilyInformationService
         return $familyInformation;
     }
 
-    public function updateFamilyInformation(FamilyBackground $familyInformation, EmployeeFamilyData $familyInformationDTO):FamilyBackground
+    public function updateFamilyInformation(FamilyBackground $familyInformation, EmployeeFamilyData $familyInformationDTO): FamilyBackground
     {
         $this->fillFamilyInformationFromDTO($familyInformation, $familyInformationDTO);
         $familyInformation->save();

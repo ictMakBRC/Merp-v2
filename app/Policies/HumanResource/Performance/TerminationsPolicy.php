@@ -4,7 +4,6 @@ namespace App\Policies\HumanResource\Performance;
 
 use App\Models\HumanResource\Performance\Termination;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TerminationsPolicy
 {

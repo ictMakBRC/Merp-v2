@@ -16,4 +16,3 @@ Route::group(['prefix' => 'user-mgt', 'middleware' => ['permission:access_user_m
     Route::get('activityTrail', UserActivityComponent::class)->name('useractivity')->middleware('permission:view_activity_trail');
     Route::get('loginActivity', LoginActivityComponent::class)->name('logs')->middleware('permission:view_login_activity');
 });
-

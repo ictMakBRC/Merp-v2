@@ -6,7 +6,6 @@ use App\Http\Livewire\Inventory\Settings\InvStorageSectionsComponent;
 use App\Http\Livewire\Inventory\Settings\InvStorageSubSectionsComponent;
 use App\Http\Livewire\Inventory\Settings\InvStoresComponent;
 use App\Http\Livewire\Inventory\Settings\InvUnitOfMeasuresComponent;
-use App\Http\Livewire\Inventory\Settings\StoresComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'inventory'], function () {

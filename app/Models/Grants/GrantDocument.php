@@ -2,12 +2,11 @@
 
 namespace App\Models\Grants;
 
-use Spatie\Activitylog\LogOptions;
-use App\Models\Grants\GrantProfile;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class GrantDocument extends Model
 {
@@ -37,6 +36,6 @@ class GrantDocument extends Model
 
     public function grantProfile()
     {
-        return $this->belongsTo(GrantProfile::class,'grant_profile_id','id');
+        return $this->belongsTo(GrantProfile::class, 'grant_profile_id', 'id');
     }
 }

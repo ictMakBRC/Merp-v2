@@ -2,12 +2,11 @@
 
 namespace App\Models\Inventory\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class InvStorageSection extends Model
 {
@@ -24,6 +23,7 @@ class InvStorageSection extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     protected $fillable = [
         'name',
         'description',
@@ -31,12 +31,11 @@ class InvStorageSection extends Model
         'is_active',
     ];
 
-    public  function store()
+    public function store()
     {
         return $this->BelongsTo(InvStore::class, 'store_id', 'id');
     }
 
-      
     public static function boot()
     {
         parent::boot();

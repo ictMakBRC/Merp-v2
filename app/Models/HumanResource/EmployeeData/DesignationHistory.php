@@ -2,16 +2,15 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
 use App\Models\HumanResource\Employee;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\Settings\Station;
+use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Settings\Designation;
+use App\Models\HumanResource\Settings\Station;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class DesignationHistory extends Model
 {
@@ -65,5 +64,4 @@ class DesignationHistory extends Model
     {
         return $this->belongsTo(Designation::class, 'to', 'id');
     }
-
 }

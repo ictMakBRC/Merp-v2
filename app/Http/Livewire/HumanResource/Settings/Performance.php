@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\HumanResource\Settings;
 
+use App\Models\HumanResource\Settings\Configuration;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\DB;
-use App\Models\HumanResource\Settings\Configuration;
 
 class Performance extends Component
 {
@@ -20,7 +20,7 @@ class Performance extends Component
     public function mount()
     {
         $appraisal = Configuration::where('key', 'appraisal_letter')->first();
-        if($appraisal == null) {
+        if ($appraisal == null) {
             $this->showUpload = true;
         } else {
             $this->appraisal_letter_config = $appraisal;
@@ -30,15 +30,15 @@ class Performance extends Component
     public function uploadAppraisalTemplate()
     {
         $this->validate([
-            'appraisal_letter_file' => 'required'
+            'appraisal_letter_file' => 'required',
         ]);
 
         return DB::transaction(function () {
             $configuration = Configuration::firstOrCreate(['key' => 'appraisal_letter'], [
-                "value" => 1
+                'value' => 1,
             ]);
 
-            if($this->appraisal_letter_file) {
+            if ($this->appraisal_letter_file) {
                 $configuration->getFirstMedia()?->delete();
                 $configuration->addMedia($this->appraisal_letter_file)->toMediaCollection();
             }
@@ -53,6 +53,7 @@ class Performance extends Component
     public function download()
     {
         $mediaItem = $this->appraisal_letter_config->getFirstMedia();
+
         return response()->download($mediaItem->getPath(), $mediaItem->file_name);
     }
 

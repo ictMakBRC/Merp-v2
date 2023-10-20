@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('account_number')->unique();
             $table->string('name');
-            $table->string('nationality')->nullable();           
+            $table->string('nationality')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('email')->unique();
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('company_name')->nullable();
             $table->string('payment_terms')->nullable();
             $table->string('payment_methods')->nullable();
-            $table->double('opening_balance',12,2)->default(0);
+            $table->double('opening_balance', 12, 2)->default(0);
             $table->date('as_of')->nullable();
             $table->string('sales_tax_registration')->nullable();
             $table->boolean('is_active')->default(true);

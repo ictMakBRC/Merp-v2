@@ -17,7 +17,7 @@ return new class extends Migration
             $table->tinyText('description')->nullable();
             $table->string('location')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->boolean('is_active')->default(True);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

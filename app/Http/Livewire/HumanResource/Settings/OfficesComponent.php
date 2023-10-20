@@ -2,13 +2,12 @@
 
 namespace App\Http\Livewire\HumanResource\Settings;
 
+use App\Models\HumanResource\Settings\Office;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\Office;
 
 class OfficesComponent extends Component
 {
-    
     use WithPagination;
 
     //Filters
@@ -28,7 +27,7 @@ class OfficesComponent extends Component
 
     public $name;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -166,6 +165,7 @@ class OfficesComponent extends Component
         $data['offices'] = $this->filterOffices()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.human-resource.settings.offices-component',$data)->layout('layouts.app');
+
+        return view('livewire.human-resource.settings.offices-component', $data)->layout('layouts.app');
     }
 }

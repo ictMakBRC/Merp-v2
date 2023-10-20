@@ -2,15 +2,14 @@
 
 namespace App\Http\Livewire\Documents\Settings;
 
+use App\Models\Documents\Settings\DmCategory;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Documents\Settings\DmCategory;
 
 class DmCategoriesComponent extends Component
 {
-    
     use WithPagination;
-        
+
     //Filters
     public $from_date;
 
@@ -30,7 +29,7 @@ class DmCategoriesComponent extends Component
 
     public $parent_id;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -83,8 +82,8 @@ class DmCategoriesComponent extends Component
         $category->name = $this->name;
         $category->is_active = $this->is_active;
         $category->code = time();
-        if($this->parent_id !=""){            
-        $category->parent_id = $this->parent_id;
+        if ($this->parent_id != '') {
+            $category->parent_id = $this->parent_id;
         }
         $category->description = $this->description;
         $category->save();
@@ -177,6 +176,7 @@ class DmCategoriesComponent extends Component
         $data['categories'] = $this->filterCategories()->with('parent')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.documents.settings.dm-categories-component', $data);
     }
 }

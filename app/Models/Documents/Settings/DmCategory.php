@@ -2,11 +2,11 @@
 
 namespace App\Models\Documents\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class DmCategory extends Model
 {
@@ -23,6 +23,7 @@ class DmCategory extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     protected $fillable = [
         'name',
         'description',
@@ -34,9 +35,9 @@ class DmCategory extends Model
 
     public function parent()
     {
-        return $this->belongsTo(DmCategory::class , 'parent_id', 'id');
+        return $this->belongsTo(DmCategory::class, 'parent_id', 'id');
     }
-      
+
     public static function boot()
     {
         parent::boot();
@@ -55,4 +56,3 @@ class DmCategory extends Model
             ->orWhere('description', 'like', '%'.$search.'%');
     }
 }
-

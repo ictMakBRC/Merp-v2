@@ -21,14 +21,14 @@ return new class extends Migration
             $table->string('barcode')->nullable()->unique();
             $table->string('engraved_label')->nullable()->unique();
             $table->string('description')->nullable();
-           
+
             $table->string('acquisition_type')->nullable();
             $table->unsignedBigInteger('project_id')->nullable();
 
             $table->date('procurement_date')->nullable();
             $table->string('procurement_type')->nullable();
             $table->string('invoice_number')->nullable();
-            $table->float('cost',12,2)->nullable();
+            $table->float('cost', 12, 2)->nullable();
             $table->string('currency')->nullable();
             $table->unsignedBigInteger('supplier_id')->nullable();
 

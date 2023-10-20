@@ -4,8 +4,8 @@ namespace App\Http\Livewire\HumanResource\Performance\ExitInterviews;
 
 use App\Models\Comment;
 use App\Models\HumanResource\Performance\ExitInterview;
-use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class Show extends Component
 {
@@ -18,9 +18,8 @@ class Show extends Component
     public $shouldShowReply = false;
 
     public $rules = [
-        'additional_comment' => 'nullable'
+        'additional_comment' => 'nullable',
     ];
-
 
     public function mount(ExitInterview $exitInterview)
     {
@@ -37,9 +36,9 @@ class Show extends Component
 
         return DB::transaction(function () {
             $this->exitInterview->update([
-                'acknowledged_at' => now()
+                'acknowledged_at' => now(),
             ]);
-            if($this->additional_comment != null) {
+            if ($this->additional_comment != null) {
                 $this->exitInterview->comments()->create([
                     'content' => $this->additional_comment,
                     'user_id' => auth()->id(),
@@ -54,13 +53,15 @@ class Show extends Component
 
     public function download()
     {
-        $mediaItem =  $this->exitInterview->getFirstMedia();
+        $mediaItem = $this->exitInterview->getFirstMedia();
+
         return response()->download($mediaItem->getPath(), $mediaItem->file_name);
     }
 
     public function toggleReplyButton($currentReply)
     {
-        $this->shouldShowReply = !$this->shouldShowReply;
+        $this->shouldShowReply = ! $this->shouldShowReply;
+
         return $this->shouldShowReply;
     }
 
@@ -75,7 +76,6 @@ class Show extends Component
                 'user_id' => auth()->id(),
             ]);
 
-
             $this->exitInterview->fresh();
 
             return redirect()->back();
@@ -85,6 +85,7 @@ class Show extends Component
     public function render()
     {
         $this->authorize('view', ExitInterview::class);
+
         return view('livewire.human-resource.performance.exit-interviews.show');
     }
 }

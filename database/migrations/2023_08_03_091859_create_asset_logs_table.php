@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('breakdown_description')->nullable();
             $table->string('action_taken')->nullable();
             $table->string('breakdown_status')->nullable();
-           
+
             $table->unsignedBigInteger('asset_breakdown_id')->nullable();
             $table->string('service_type')->nullable();
             $table->date('date_serviced')->nullable();
@@ -35,14 +35,14 @@ return new class extends Migration
             $table->text('service_recommendations')->nullable();
             $table->string('resolution_status')->nullable();
             $table->string('serviced_by')->nullable();
-            $table->float('cost',12,2)->nullable();
+            $table->float('cost', 12, 2)->nullable();
             $table->string('currency')->nullable();
             $table->date('next_service_date')->nullable();
             $table->foreignId('servicing_recorded_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
-    
+
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
-            
+
         });
     }
 

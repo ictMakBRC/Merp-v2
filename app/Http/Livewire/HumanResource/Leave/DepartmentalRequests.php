@@ -4,12 +4,8 @@ namespace App\Http\Livewire\HumanResource\Leave;
 
 use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveDelegation;
-use Carbon\Carbon;
-use App\Models\User;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use App\Models\HumanResource\Settings\LeaveType;
 use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveRequest;
+use Livewire\Component;
 
 class DepartmentalRequests extends Component
 {
@@ -59,7 +55,6 @@ class DepartmentalRequests extends Component
         $this->reset(['delegatee_comment']);
     }
 
-
     /**
      * Delete the Leave request if its pending
      */
@@ -82,12 +77,12 @@ class DepartmentalRequests extends Component
         $allIds = Employee::where('reporting_to', $user->id)->pluck('id');
 
         $leaveRequests = LeaveRequest::query()
-                                        ->whereIn('employee_id', $allIds)
-                                        ->where('status', PENDING)
-                                        ->get();
+            ->whereIn('employee_id', $allIds)
+            ->where('status', PENDING)
+            ->get();
 
         return view('livewire.human-resource.leave.departmental.index', [
-            'leaveRequests' => $leaveRequests
+            'leaveRequests' => $leaveRequests,
         ]);
     }
 }

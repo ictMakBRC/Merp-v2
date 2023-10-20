@@ -2,15 +2,15 @@
 
 namespace App\Models\HumanResource\EmployeeData\OfficialContract;
 
-use Carbon\Carbon;
 use App\Models\Global\Department;
+use App\Models\HumanResource\EmployeeData\Employee;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\EmployeeData\Employee;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OfficialContract extends Model
 {

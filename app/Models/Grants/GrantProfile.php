@@ -2,14 +2,13 @@
 
 namespace App\Models\Grants;
 
-use Spatie\Activitylog\LogOptions;
-use App\Models\Grants\GrantDocument;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class GrantProfile extends Model
 {
@@ -30,14 +29,14 @@ class GrantProfile extends Model
     //principal investigator
     public function pi()
     {
-        return $this->belongsTo(Employee::class,'pi','id');
+        return $this->belongsTo(Employee::class, 'pi', 'id');
     }
 
     public function project()
     {
-        return $this->hasOne(Project::class,'grant_profile_id','id');
+        return $this->hasOne(Project::class, 'grant_profile_id', 'id');
     }
-    
+
     public static function boot()
     {
         parent::boot();
@@ -50,6 +49,6 @@ class GrantProfile extends Model
 
     public function documents()
     {
-        return $this->hasMany(GrantDocument::class,'grant_profile_id','id');
+        return $this->hasMany(GrantDocument::class, 'grant_profile_id', 'id');
     }
 }

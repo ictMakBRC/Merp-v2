@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\HumanResource\Performance\Warnings;
 
 use App\Models\Comment;
-use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 use App\Models\HumanResource\Performance\Warning;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class Show extends Component
 {
@@ -18,9 +18,8 @@ class Show extends Component
     public $shouldShowReply = false;
 
     public $rules = [
-        'additional_comment' => 'nullable'
+        'additional_comment' => 'nullable',
     ];
-
 
     public function mount(Warning $warning)
     {
@@ -37,9 +36,9 @@ class Show extends Component
 
         return DB::transaction(function () {
             $this->warning->update([
-                'acknowledged_at' => now()
+                'acknowledged_at' => now(),
             ]);
-            if($this->additional_comment != null) {
+            if ($this->additional_comment != null) {
                 $this->warning->comments()->create([
                     'content' => $this->additional_comment,
                     'user_id' => auth()->id(),
@@ -51,20 +50,21 @@ class Show extends Component
             $this->dispatchBrowserEvent('refresh-page');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Acknowledgement  submitted!']);
 
-
             return redirect()->back();
         });
     }
 
     public function download()
     {
-        $mediaItem =  $this->warning->getFirstMedia();
+        $mediaItem = $this->warning->getFirstMedia();
+
         return response()->download($mediaItem->getPath(), $mediaItem->file_name);
     }
 
     public function toggleReplyButton($currentReply)
     {
-        $this->shouldShowReply = !$this->shouldShowReply;
+        $this->shouldShowReply = ! $this->shouldShowReply;
+
         return $this->shouldShowReply;
     }
 
@@ -79,7 +79,6 @@ class Show extends Component
                 'user_id' => auth()->id(),
             ]);
 
-
             $this->grievance->fresh();
 
             return redirect()->back();
@@ -89,6 +88,7 @@ class Show extends Component
     public function render()
     {
         $this->authorize('view', Warning::class);
+
         return view('livewire.human-resource.performance.warnings.show');
     }
 }

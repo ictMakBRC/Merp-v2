@@ -2,16 +2,14 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Appraisals;
 
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Livewire\WithPagination;
-use App\Models\HumanResource\Grievance;
 use App\Models\HumanResource\GrievanceType;
 use App\Models\HumanResource\Performance\Appraisal;
+use Illuminate\Support\Str;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class MyAppraisals extends Component
 {
-
     use WithPagination;
 
     //Filters
@@ -30,7 +28,7 @@ class MyAppraisals extends Component
 
     public $slug;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -55,13 +53,13 @@ class MyAppraisals extends Component
         $this->validate([
             'name' => 'required',
             'slug' => 'required|unique:hr_grievance_types',
-            'description' => 'nullable'
+            'description' => 'nullable',
         ]);
 
         GrievanceType::create([
             'name' => $this->name,
             'slug' => $this->slug,
-            'description' => $this->description
+            'description' => $this->description,
         ]);
 
         $this->dispatchBrowserEvent('close-modal');
@@ -88,7 +86,6 @@ class MyAppraisals extends Component
             'description' => 'nullable|string',
         ]);
     }
-
 
     public function editData(GrievanceType $grievanceType)
     {
@@ -122,7 +119,6 @@ class MyAppraisals extends Component
             'slug' => 'required|unique:hr_grievance_types,name,'.$this->edit_id.'',
             'description' => 'nullable|string',
         ]);
-
 
         $grievanceType = GrievanceType::find($this->edit_id);
 
@@ -169,21 +165,20 @@ class MyAppraisals extends Component
     {
         $user = auth()->user();
         $appraisals = Appraisal::search($this->search)
-       ->where('employee_id', '!=', null)
-       ->where('employee_id', $user->employee?->id);
-
+            ->where('employee_id', '!=', null)
+            ->where('employee_id', $user->employee?->id);
 
         $this->appraisalIds = $appraisals->pluck('id')->toArray();
 
         return $appraisals;
     }
 
-
     public function render()
     {
         $data['appraisals'] = $this->filterMyAppraisals()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.performance.appraisals.my-appraisals', $data)->layout('layouts.app');
     }
 }

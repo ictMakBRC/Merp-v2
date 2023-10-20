@@ -9,7 +9,7 @@ use Livewire\WithPagination;
 class InvStoresComponent extends Component
 {
     use WithPagination;
-    
+
     //Filters
     public $from_date;
 
@@ -27,7 +27,7 @@ class InvStoresComponent extends Component
 
     public $name;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -173,7 +173,7 @@ class InvStoresComponent extends Component
         $data['stores'] = $this->filterstores()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-  
+
         return view('livewire.inventory.settings.stores-component', $data);
     }
 }

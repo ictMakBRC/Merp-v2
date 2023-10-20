@@ -3,12 +3,11 @@
 namespace App\Http\Livewire\HumanResource\Leave;
 
 use App\Models\HumanResource\EmployeeData\Employee;
-use Carbon\Carbon;
-use App\Models\User;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use App\Models\HumanResource\Settings\LeaveType;
 use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveRequest;
+use App\Models\HumanResource\Settings\LeaveType;
+use App\Models\User;
+use Carbon\Carbon;
+use Livewire\Component;
 
 class NewRequest extends Component
 {
@@ -37,7 +36,7 @@ class NewRequest extends Component
         'end_date' => 'required',
         'delegatee_id' => 'required',
         'reason' => 'nullable',
-        'delegatee_comment' => 'nullable'
+        'delegatee_comment' => 'nullable',
     ];
 
     public function mount()
@@ -46,7 +45,6 @@ class NewRequest extends Component
         $this->leaveTypes = LeaveType::all();
     }
 
-
     public function store()
     {
         //validate the requests
@@ -54,13 +52,13 @@ class NewRequest extends Component
 
         //save/persist the data
         $leave = LeaveRequest::create([
-               'employee_id' => $this->employee_id,
-               'leave_type_id' => $this->leave_type_id,
-               'start_date' => $this->start_date,
-               'end_date' => $this->end_date,
-               'length' => Carbon::parse($this->end_date)->diffInDays(Carbon::parse($this->end_date)),
-               'reason' => $this->reason,
-           ]);
+            'employee_id' => $this->employee_id,
+            'leave_type_id' => $this->leave_type_id,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'length' => Carbon::parse($this->end_date)->diffInDays(Carbon::parse($this->end_date)),
+            'reason' => $this->reason,
+        ]);
 
         //delegate another user to perform duties on your behalf
         $leave->delegateAnotherEmployee($this->delegatee_id, $this->delegatee_comment);

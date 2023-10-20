@@ -40,21 +40,20 @@ class WhatAppMessageService
 
     public static function sendWhatsAppMessage($referral_request)
     {
-                 
+
         $twilioSid = 'ACe7b51bc90a1d19a8204b20db248a0274';
         // $twilioToken = config('app.twilio_auth_token');
         $twilioToken = '4d5f47a2d032bf0cf3f36be2ca9b01a9';
         $twilioPhoneNumber = '+256394704689';
         $recipientPhoneNumber = $referral_request['phone'];
-            $url = "https://api.twilio.com/2010-04-01/Accounts/$twilioSid/Messages.json";
+        $url = "https://api.twilio.com/2010-04-01/Accounts/$twilioSid/Messages.json";
 
-            
-            $client = new \GuzzleHttp\Client(['verify' => false]);
-            try {
+        $client = new \GuzzleHttp\Client(['verify' => false]);
+        try {
             $response = $client->request('POST', $url, [
                 'headers' => [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                    'Authorization' => 'Basic ' . base64_encode("$twilioSid:$twilioToken"),
+                    'Authorization' => 'Basic '.base64_encode("$twilioSid:$twilioToken"),
                 ],
                 'form_params' => [
                     'To' => "whatsapp:$recipientPhoneNumber",
@@ -65,6 +64,7 @@ class WhatAppMessageService
             $responseData = json_decode($response->getBody(), true);
             if (isset($responseData['sid'])) {
                 return $responseData;
+
                 return 'Message sent successfully';
             } else {
                 return 'Message not sent, handle the error';
@@ -73,13 +73,12 @@ class WhatAppMessageService
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             return $e->getResponse()->getBody()->getContents();
         }
-            
+
     }
 
     public static function sendWhatsAppMessages($referral_request)
     {
 
-   
         $twilioSid = 'ACe7b51bc90a1d19a8204b20db248a0274';
         // $twilioToken = config('app.twilio_auth_token');
         $twilioToken = '4d5f47a2d032bf0cf3f36be2ca9b01a9';

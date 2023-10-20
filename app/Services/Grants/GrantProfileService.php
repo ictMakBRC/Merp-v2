@@ -2,13 +2,13 @@
 
 namespace App\Services\Grants;
 
-use App\Models\Grants\GrantProfile;
-use App\Models\Grants\GrantDocument;
 use App\Data\Grants\GrantProfileData;
+use App\Models\Grants\GrantDocument;
+use App\Models\Grants\GrantProfile;
 
 class GrantProfileService
 {
-    public function createGrantProfile(GrantProfileData $grantProfileDTO):GrantProfile
+    public function createGrantProfile(GrantProfileData $grantProfileDTO): GrantProfile
     {
         $grantProfile = new GrantProfile();
         $this->fillGrantProfileFromDTO($grantProfile, $grantProfileDTO);
@@ -17,7 +17,7 @@ class GrantProfileService
         return $grantProfile;
     }
 
-    public function updateGrantProfile(GrantProfile $grantProfile, GrantProfileData $grantProfileDTO):GrantProfile
+    public function updateGrantProfile(GrantProfile $grantProfile, GrantProfileData $grantProfileDTO): GrantProfile
     {
         $this->fillGrantProfileFromDTO($grantProfile, $grantProfileDTO);
         $grantProfile->save();
@@ -41,26 +41,26 @@ class GrantProfileService
         $grantProfile->award_status = $grantProfileDTO->award_status;
     }
 
-   //GRANT DOCUMENTS
-   public function createGrantDocument(GrantProfileData $grantDocumentDTO):GrantDocument
-   {
-       $grantDocument = new GrantDocument();
-       $this->fillGrantDocumentFromDTO($grantDocument, $grantDocumentDTO);
-       $grantDocument->save();
+    //GRANT DOCUMENTS
+    public function createGrantDocument(GrantProfileData $grantDocumentDTO): GrantDocument
+    {
+        $grantDocument = new GrantDocument();
+        $this->fillGrantDocumentFromDTO($grantDocument, $grantDocumentDTO);
+        $grantDocument->save();
 
-       return $grantDocument;
-   }
+        return $grantDocument;
+    }
 
-   public function updateGrantDocument(GrantDocument $grantDocument, GrantProfileData $grantDocumentDTO):GrantDocument
-   {
-       $this->fillGrantDocumentFromDTO($grantDocument, $grantDocumentDTO);
-       $grantDocument->save();
+    public function updateGrantDocument(GrantDocument $grantDocument, GrantProfileData $grantDocumentDTO): GrantDocument
+    {
+        $this->fillGrantDocumentFromDTO($grantDocument, $grantDocumentDTO);
+        $grantDocument->save();
 
-       return $grantDocument;
-   }
+        return $grantDocument;
+    }
 
-   private function fillGrantDocumentFromDTO(GrantDocument $grantDocument, GrantProfileData $grantDocumentDTO)
-   {
+    private function fillGrantDocumentFromDTO(GrantDocument $grantDocument, GrantProfileData $grantDocumentDTO)
+    {
         $grantDocument->grant_profile_id = $grantDocumentDTO->grant_profile_id;
         $grantDocument->document_category = $grantDocumentDTO->document_category;
         $grantDocument->expires = $grantDocumentDTO->expires;
@@ -68,5 +68,5 @@ class GrantProfileService
         $grantDocument->document_name = $grantDocumentDTO->document_name;
         $grantDocument->document_path = $grantDocumentDTO->document_path;
         $grantDocument->description = $grantDocumentDTO->description;
-   }
+    }
 }

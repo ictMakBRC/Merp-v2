@@ -2,113 +2,138 @@
 
 namespace App\Http\Livewire\AssetsManagement;
 
-use Livewire\Component;
-use Livewire\WithPagination;
-use Illuminate\Support\Facades\DB;
-use App\Models\Assets\AssetsCatalog;
 use App\Data\Assets\AssetCatalogData;
-use App\Services\Assets\AssetCatalogService;
+use App\Models\Assets\AssetsCatalog;
 use App\Models\Assets\Settings\AssetCategory;
 use App\Models\HumanResource\Settings\Department;
+use App\Services\Assets\AssetCatalogService;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class AssetsComponent extends Component
 {
     use WithPagination;
 
     public $asset_categories_id;
+
     public $asset_name;
+
     public $brand;
+
     public $model;
+
     public $serial_number;
+
     public $barcode;
+
     public $engraved_label;
+
     public $description;
+
     public $acquisition_type;
+
     public $project_id;
+
     public $procurement_date;
+
     public $procurement_type;
+
     public $invoice_number;
+
     public $cost;
+
     public $currency;
+
     public $supplier_id;
+
     public $has_service_contract;
+
     public $service_contract_expiry_date;
+
     public $service_provider;
+
     public $warranty_details;
+
     public $useful_years;
+
     public $depreciation_method;
+
     public $salvage_value;
+
     public $asset_condition;
+
     public $operational_status;
 
-     //Filters
+    //Filters
 
-     public $user_category;
+    public $user_category;
 
-     public $from_date;
- 
-     public $to_date;
- 
-     public $user_status;
- 
-     public $assetIds;
- 
-     public $perPage = 50;
- 
-     public $search = '';
- 
-     public $orderBy = 'id';
- 
-     public $orderAsc = 0;
+    public $from_date;
 
-     protected $paginationTheme = 'bootstrap';
+    public $to_date;
 
-     public $createNew = false;
- 
-     public $toggleForm = false;
- 
-     public $filter = false;
+    public $user_status;
 
-     public $asset;
-     public $asset_id;
+    public $assetIds;
 
-     public function updatedAssetId()
-     {
-         if ($this->asset_id) {
-             $this->emit('logAsset', [
-                 'assetId' => $this->asset_id,
-             ]);
-         }else{
-             $this->emit('logAsset', [
-                 'assetId' => null,
-             ]);
-         }
-     }
+    public $perPage = 50;
 
-     public function updatedCreateNew()
-     {
-         $this->resetInputs();
-         $this->toggleForm = false;
-     }
- 
-     public function updatingSearch()
-     {
-         $this->resetPage();
-     }
- 
-     protected $validationAttributes = [
-         'is_active' => 'status',
-     ];
+    public $search = '';
+
+    public $orderBy = 'id';
+
+    public $orderAsc = 0;
+
+    protected $paginationTheme = 'bootstrap';
+
+    public $createNew = false;
+
+    public $toggleForm = false;
+
+    public $filter = false;
+
+    public $asset;
+
+    public $asset_id;
+
+    public function updatedAssetId()
+    {
+        if ($this->asset_id) {
+            $this->emit('logAsset', [
+                'assetId' => $this->asset_id,
+            ]);
+        } else {
+            $this->emit('logAsset', [
+                'assetId' => null,
+            ]);
+        }
+    }
+
+    public function updatedCreateNew()
+    {
+        $this->resetInputs();
+        $this->toggleForm = false;
+    }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    protected $validationAttributes = [
+        'is_active' => 'status',
+    ];
 
     public function storeAsset()
     {
         $assetCatalogDTO = new AssetCatalogData();
         $this->validate($assetCatalogDTO->rules());
 
-        DB::transaction(function (){
+        DB::transaction(function () {
 
             $assetCatalogDTO = AssetCatalogData::from([
-                'asset_categories_id' => $this-> asset_categories_id,
+                'asset_categories_id' => $this->asset_categories_id,
                 'asset_name' => $this->asset_name,
                 'brand' => $this->brand,
                 'model' => $this->model,
@@ -133,14 +158,14 @@ class AssetsComponent extends Component
                 'salvage_value' => $this->salvage_value,
                 'asset_condition' => $this->asset_condition,
                 'operational_status' => $this->operational_status,
-                
-                ]
+
+            ]
             );
-  
+
             $assetCatalogService = new AssetCatalogService();
 
             $asset = $assetCatalogService->createAsset($assetCatalogDTO);
-   
+
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Asset created and added to catalog successfully']);
 
             $this->reset($assetCatalogDTO->resetInputs());
@@ -176,7 +201,7 @@ class AssetsComponent extends Component
         $this->salvage_value = $assetCatalog->salvage_value;
         $this->asset_condition = $assetCatalog->asset_condition;
         $this->operational_status = $assetCatalog->operational_status;
-       
+
         $this->createNew = true;
         $this->toggleForm = true;
     }
@@ -186,10 +211,10 @@ class AssetsComponent extends Component
         $assetCatalogDTO = new AssetCatalogData();
         $this->validate($assetCatalogDTO->rules());
 
-        DB::transaction(function (){
+        DB::transaction(function () {
 
             $assetCatalogDTO = AssetCatalogData::from([
-                'asset_categories_id' => $this-> asset_categories_id,
+                'asset_categories_id' => $this->asset_categories_id,
                 'asset_name' => $this->asset_name,
                 'brand' => $this->brand,
                 'model' => $this->model,
@@ -214,14 +239,14 @@ class AssetsComponent extends Component
                 'salvage_value' => $this->salvage_value,
                 'asset_condition' => $this->asset_condition,
                 'operational_status' => $this->operational_status,
-                
-                ]
+
+            ]
             );
-  
+
             $assetCatalogService = new AssetCatalogService();
 
-            $asset = $assetCatalogService->updateAsset($this->asset,$assetCatalogDTO);
-   
+            $asset = $assetCatalogService->updateAsset($this->asset, $assetCatalogDTO);
+
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Asset catalogue updated successfully']);
 
             $this->reset($assetCatalogDTO->resetInputs());
@@ -231,11 +256,10 @@ class AssetsComponent extends Component
         });
     }
 
-    
     public function filterAssets()
     {
         $assets = AssetsCatalog::search($this->search)
-            
+
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -255,10 +279,11 @@ class AssetsComponent extends Component
     public function render()
     {
         $data['categories'] = AssetCategory::with('classification')->get();
-        $data['departments'] = Department::where('is_active',true)->get();
+        $data['departments'] = Department::where('is_active', true)->get();
         $data['assets'] = $this->filterAssets()
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
-        return view('livewire.assets-management.assets-component',$data)->layout('layouts.app');
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
+
+        return view('livewire.assets-management.assets-component', $data)->layout('layouts.app');
     }
 }

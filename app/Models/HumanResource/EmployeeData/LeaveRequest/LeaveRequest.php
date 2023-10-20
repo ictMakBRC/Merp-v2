@@ -2,14 +2,14 @@
 
 namespace App\Models\HumanResource\EmployeeData\LeaveRequest;
 
-use App\Models\User;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\Settings\LeaveType;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\HumanResource\Settings\LeaveType;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class LeaveRequest extends Model
 {
@@ -75,25 +75,23 @@ class LeaveRequest extends Model
     }
 
     /**
-    * Search the appraisal by department
-    */
+     * Search the appraisal by department
+     */
     public static function search($search)
     {
-        return
-         static::query();
+        return static::query();
     }
 
     /**
      * Delegate the user to take on users roles
-     * @param  $delegateeId
      */
     public function delegateAnotherEmployee($delegateeId, $comment = '')
     {
         $this->delegations()->create([
             'delegated_role_to' => $delegateeId,
-            'comment' => $comment
+            'comment' => $comment,
         ]);
+
         return $this;
     }
-
 }

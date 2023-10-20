@@ -2,9 +2,8 @@
 
 namespace App\Models\Grants\Project;
 
-
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use App\Models\HumanResource\Settings\Designation;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class EmployeeProject extends Pivot
 {

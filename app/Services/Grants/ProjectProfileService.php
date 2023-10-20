@@ -2,14 +2,14 @@
 
 namespace App\Services\Grants;
 
-use App\Models\Grants\Project\Project;
 use App\Data\Grants\ProjectProfileData;
+use App\Models\Grants\Project\Project;
 use App\Models\Grants\Project\ProjectDocument;
 use App\Models\HumanResource\EmployeeData\Employee;
 
 class ProjectService
 {
-    public function createProject(ProjectProfileData $projectProfileDTO):Project
+    public function createProject(ProjectProfileData $projectProfileDTO): Project
     {
         $projectProfile = new Project();
         $this->fillProjectFromDTO($projectProfile, $projectProfileDTO);
@@ -18,7 +18,7 @@ class ProjectService
         return $projectProfile;
     }
 
-    public function updateProject(Project $projectProfile, ProjectProfileData $projectProfileDTO):Project
+    public function updateProject(Project $projectProfile, ProjectProfileData $projectProfileDTO): Project
     {
         $this->fillProjectFromDTO($projectProfile, $projectProfileDTO);
         $projectProfile->save();
@@ -44,7 +44,7 @@ class ProjectService
     }
 
     //PROJECT DOCUMENTS
-    public function createProjectDocument(ProjectProfileData $projectDocumentDTO):ProjectDocument
+    public function createProjectDocument(ProjectProfileData $projectDocumentDTO): ProjectDocument
     {
         $projectDocument = new ProjectDocument();
         $this->fillProjectDocumentFromDTO($projectDocument, $projectDocumentDTO);
@@ -53,7 +53,7 @@ class ProjectService
         return $projectDocument;
     }
 
-    public function updateProjectDocument(ProjectDocument $projectDocument, ProjectProfileData $projectDocumentDTO):ProjectDocument
+    public function updateProjectDocument(ProjectDocument $projectDocument, ProjectProfileData $projectDocumentDTO): ProjectDocument
     {
         $this->fillProjectDocumentFromDTO($projectDocument, $projectDocumentDTO);
         $projectDocument->save();
@@ -73,10 +73,10 @@ class ProjectService
     }
 
     //ATTACH EMPLOYEE
-    public function attachEmployee(ProjectProfileData $projectDocumentDTO):void
+    public function attachEmployee(ProjectProfileData $projectDocumentDTO): void
     {
         $employee = Employee::findOrFail($projectDocumentDTO->employee_id);
-        
+
         $employee->projects()->attach($projectDocumentDTO->project_id, [
             'designation_id' => $projectDocumentDTO->designation_id,
             'contract_summary' => $projectDocumentDTO->contract_summary,
@@ -90,5 +90,4 @@ class ProjectService
 
         // return $projectEmployee;
     }
-  
 }

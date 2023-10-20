@@ -27,7 +27,7 @@ class InvUnitOfMeasuresComponent extends Component
 
     public $name;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -173,6 +173,7 @@ class InvUnitOfMeasuresComponent extends Component
         $data['uoms'] = $this->filterUoms()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        return view('livewire.inventory.settings.inv-unit-of-measures-component',$data);
+
+        return view('livewire.inventory.settings.inv-unit-of-measures-component', $data);
     }
 }

@@ -7,7 +7,7 @@ use App\Models\HumanResource\EmployeeData\EducationBackground;
 
 class EducationHistoryService
 {
-    public function createEducationHistory(EducationHistoryData $educationHistoryDTO):EducationBackground
+    public function createEducationHistory(EducationHistoryData $educationHistoryDTO): EducationBackground
     {
         $educationBackground = new EducationBackground();
         $this->fillEducationHistoryFromDTO($educationBackground, $educationHistoryDTO);
@@ -16,7 +16,7 @@ class EducationHistoryService
         return $educationBackground;
     }
 
-    public function updateEducationHistory(EducationBackground $educationBackground, EducationHistoryData $educationHistoryDTO):EducationBackground
+    public function updateEducationHistory(EducationBackground $educationBackground, EducationHistoryData $educationHistoryDTO): EducationBackground
     {
         $this->fillEducationHistoryFromDTO($educationBackground, $educationHistoryDTO);
         $educationBackground->save();
@@ -28,10 +28,10 @@ class EducationHistoryService
     {
         $educationBackground->employee_id = $educationHistoryDTO->employee_id;
         $educationBackground->level = $educationHistoryDTO->level;
-        $educationBackground->school =  $educationHistoryDTO->school;
-        $educationBackground->award =  $educationHistoryDTO->award;
+        $educationBackground->school = $educationHistoryDTO->school;
+        $educationBackground->award = $educationHistoryDTO->award;
         $educationBackground->start_date = $educationHistoryDTO->start_date;
-        $educationBackground->end_date =  $educationHistoryDTO->end_date;
+        $educationBackground->end_date = $educationHistoryDTO->end_date;
         $educationBackground->award_document = $educationHistoryDTO->awardFilePath;
     }
 }

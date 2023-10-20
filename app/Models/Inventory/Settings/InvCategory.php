@@ -2,11 +2,11 @@
 
 namespace App\Models\Inventory\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class InvCategory extends Model
 {
@@ -23,6 +23,7 @@ class InvCategory extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+
     protected $fillable = [
         'name',
         'description',
@@ -30,7 +31,6 @@ class InvCategory extends Model
         'is_active',
     ];
 
-      
     public static function boot()
     {
         parent::boot();

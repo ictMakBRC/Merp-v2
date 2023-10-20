@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-12">
             <div x-cloak x-show="create_new">
-                <livewire:human-resource.employee-data.inc.general-information-component />
+                <livewire:human-resource.employee-data.inc.general-information-component :employee="$employee" />
             </div>
             <!--end card-->
         </div>

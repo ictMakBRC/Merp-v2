@@ -3,13 +3,12 @@
 namespace App\Http\Livewire\HumanResource\Settings;
 
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\HumanResource\Settings\Department;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\Department;
 
 class DepartmentsComponent extends Component
 {
-   
     use WithPagination;
 
     //Filters
@@ -38,7 +37,7 @@ class DepartmentsComponent extends Component
     public $delete_id;
 
     public $edit_id;
-    
+
     public $parent_department;
 
     public $type;
@@ -207,8 +206,9 @@ class DepartmentsComponent extends Component
         $data['departments'] = $this->filterDepartments()->With(['parent'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-            $data['parent_departments'] = Department::all();
-            $data['department_heads'] = Employee::where('is_active',1)->get();
-        return view('livewire.human-resource.settings.departments-component',$data)->layout('layouts.app');
+        $data['parent_departments'] = Department::all();
+        $data['department_heads'] = Employee::where('is_active', 1)->get();
+
+        return view('livewire.human-resource.settings.departments-component', $data)->layout('layouts.app');
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\HumanResource\Performance\Appraisals;
 
 use App\Models\Comment;
-use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 use App\Models\HumanResource\Performance\Appraisal;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class Show extends Component
 {
@@ -18,9 +18,8 @@ class Show extends Component
     public $shouldShowReply = false;
 
     public $rules = [
-        'additional_comment' => 'nullable'
+        'additional_comment' => 'nullable',
     ];
-
 
     public function mount(Appraisal $appraisal)
     {
@@ -35,11 +34,10 @@ class Show extends Component
     {
         $this->validate();
 
-
         $this->appraisal->update([
-            'acknowledged_at' => now()
+            'acknowledged_at' => now(),
         ]);
-        if($this->additional_comment != null) {
+        if ($this->additional_comment != null) {
             $this->appraisal->comments()->create([
                 'content' => $this->additional_comment,
                 'user_id' => auth()->id(),
@@ -54,13 +52,15 @@ class Show extends Component
 
     public function download()
     {
-        $mediaItem =  $this->appraisal->getFirstMedia();
+        $mediaItem = $this->appraisal->getFirstMedia();
+
         return response()->download($mediaItem->getPath(), $mediaItem->file_name);
     }
 
     public function toggleReplyButton($currentReply)
     {
-        $this->shouldShowReply = !$this->shouldShowReply;
+        $this->shouldShowReply = ! $this->shouldShowReply;
+
         return $this->shouldShowReply;
     }
 
@@ -75,7 +75,6 @@ class Show extends Component
                 'user_id' => auth()->id(),
             ]);
 
-
             $this->grievance->fresh();
 
             return redirect()->back();
@@ -85,6 +84,7 @@ class Show extends Component
     public function render()
     {
         $this->authorize('view', Appraisal::class);
+
         return view('livewire.human-resource.performance.appraisals.show');
     }
 }

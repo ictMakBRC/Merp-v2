@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\AssetsManagement\AssetsComponent;
+use App\Http\Livewire\AssetsManagement\Dashboard\AssetsMainDashboardComponent;
 use App\Http\Livewire\AssetsManagement\Settings\AssetCategoryComponent;
 use App\Http\Livewire\AssetsManagement\Settings\AssetClassificationComponent;
-use App\Http\Livewire\AssetsManagement\Dashboard\AssetsMainDashboardComponent;
+use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'assets'], function () {
     Route::get('dashboard', AssetsMainDashboardComponent::class)->name('asset-dashboard');

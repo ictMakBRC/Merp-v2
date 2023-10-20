@@ -2,11 +2,11 @@
 
 namespace App\Models\HumanResource\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Holiday extends Model
 {
@@ -25,13 +25,13 @@ class Holiday extends Model
     }
 
     protected $guarded = ['id'];
-    
+
     public static function search($search)
     {
         return empty($search) ? static::query()
-            : static::query()           
+            : static::query()
                 ->where('title', 'like', '%'.$search.'%')
-                ->orWhere('description', 'like', '%'.$search.'%');               
+                ->orWhere('description', 'like', '%'.$search.'%');
     }
 
     public static function boot()

@@ -2,16 +2,14 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Terminations;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\HumanResource\Grievance;
-use App\Models\HumanResource\Settings\Designation;
 use App\Models\HumanResource\Performance\Termination;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
-
     use WithPagination;
     use AuthorizesRequests;
 
@@ -41,8 +39,6 @@ class Index extends Component
     public $selectedGrievance;
 
     public $filter = false;
-
-
 
     public function updatingSearch()
     {
@@ -115,6 +111,7 @@ class Index extends Component
         $data['terminations'] = $this->filterTerminations()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.performance.terminations.index', $data)->layout('layouts.app');
     }
 }

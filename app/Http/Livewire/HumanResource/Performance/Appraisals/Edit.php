@@ -2,16 +2,12 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Appraisals;
 
-use App\Models\User;
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Livewire\WithPagination;
-use Livewire\WithFileUploads;
-use App\Models\HumanResource\Grievance;
-use App\Models\HumanResource\GrievanceType;
-use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Performance\Appraisal;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
@@ -53,17 +49,16 @@ class Edit extends Component
         $this->employees = User::all();
     }
 
-
     public function update()
     {
         $this->validate();
 
         $this->appraisal->update([
-               'department_id' => $this->department_id,
-               'employee_id' => $this->employee_id,
-               'start_date' => $this->start_date,
-               'end_date' => $this->end_date,
-           ]);
+            'department_id' => $this->department_id,
+            'employee_id' => $this->employee_id,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+        ]);
 
         $this->appraisal->addMedia($this->file_upload)->toMediaCollection();
 
@@ -73,6 +68,7 @@ class Edit extends Component
     public function render()
     {
         $this->authorize('update', Appraisal::class);
+
         return view('livewire.human-resource.performance.appraisals.edit');
     }
 }

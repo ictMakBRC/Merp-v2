@@ -4,7 +4,6 @@ namespace App\Policies\HumanResource\EmployeeData\LeaveRequest;
 
 use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveRequest;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class LeaveRequestsPolicy
 {

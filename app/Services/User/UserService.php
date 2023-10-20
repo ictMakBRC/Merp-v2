@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\User;
 
 use App\Data\User\UserData;
@@ -6,7 +7,6 @@ use App\Models\User;
 
 class UserService
 {
-
     public function createUser(UserData $userData): User
     {
         $user = new User([

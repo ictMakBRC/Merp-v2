@@ -2,10 +2,8 @@
 
 namespace App\Http\Livewire\UserManagement;
 
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Intervention\Image\Facades\Image;
 use Livewire\Component;
@@ -30,6 +28,7 @@ class UserProfileComponent extends Component
     public $password_confirmation;
 
     public $edit_id;
+
     public $allow_update = false;
 
     public function updated($fields)
@@ -75,7 +74,7 @@ class UserProfileComponent extends Component
                     $constraint->aspectRatio();
                 });
 
-                $resizedPhoto->save(storage_path('photos/'.$avatarName,'public'));
+                $resizedPhoto->save(storage_path('photos/'.$avatarName, 'public'));
                 $this->avatarPath = 'photos/'.$avatarName;
 
                 if (file_exists(storage_path('app/public/').$user->avatar)) {

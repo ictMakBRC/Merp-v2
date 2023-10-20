@@ -37,8 +37,6 @@ class Requests extends Component
 
     public $filter = false;
 
-
-
     public function updatingSearch()
     {
         $this->resetPage();
@@ -109,6 +107,7 @@ class Requests extends Component
         $data['leaves'] = $this->filterleaves()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.leave.requests', $data)->layout('layouts.app');
     }
 }

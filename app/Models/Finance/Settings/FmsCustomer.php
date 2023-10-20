@@ -2,11 +2,11 @@
 
 namespace App\Models\Finance\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class FmsCustomer extends Model
 {
@@ -24,30 +24,30 @@ class FmsCustomer extends Model
         // Chain fluent methods for configuration options
     }
 
-    protected $fillable = [ 
-    'account_number',
-    'title',
-    'surname',
-    'first_name',
-    'other_name', 
-    'gender', 
-    'nationality',            
-    'address', 
-    'city', 
-    'email', 
-    'alt_email',
-    'contact', 
-    'fax', 
-    'alt_contact', 
-    'website', 
-    'company_name', 
-    'payment_terms', 
-    'payment_methods', 
-    'opening_balance',
-    'sales_tax_registration', 
-    'as_of', 
-    'is_active',
-    'created_by', ];
+    protected $fillable = [
+        'account_number',
+        'title',
+        'surname',
+        'first_name',
+        'other_name',
+        'gender',
+        'nationality',
+        'address',
+        'city',
+        'email',
+        'alt_email',
+        'contact',
+        'fax',
+        'alt_contact',
+        'website',
+        'company_name',
+        'payment_terms',
+        'payment_methods',
+        'opening_balance',
+        'sales_tax_registration',
+        'as_of',
+        'is_active',
+        'created_by', ];
 
     public static function boot()
     {

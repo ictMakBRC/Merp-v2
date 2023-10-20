@@ -2,13 +2,11 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\ExitInterviews;
 
+use App\Models\HumanResource\Performance\ExitInterview;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-
-use App\Models\HumanResource\Settings\Department;
-use App\Models\HumanResource\Performance\ExitInterview;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Edit extends Component
 {
@@ -35,16 +33,15 @@ class Edit extends Component
         $this->employee_id = $exitInterview->employee_id;
     }
 
-
     public function download()
     {
         $file = $this->exitInterview->getFirstMedia();
+
         return response()->download(
             $file->getPath(),
             "{$file->file_name}"
         );
     }
-
 
     public function update()
     {
@@ -52,10 +49,10 @@ class Edit extends Component
         $this->validate();
 
         $this->exitInterview->update([
-                 'department_id' => $this->department_id,
-                 'employee_id' => $this->employee_id,
-            ]);
-        if($this->file_upload) {
+            'department_id' => $this->department_id,
+            'employee_id' => $this->employee_id,
+        ]);
+        if ($this->file_upload) {
             $this->exitInterview->getFirstMedia()?->delete();
             $this->exitInterview->addMedia($this->file_upload)->toMediaCollection();
         }
@@ -66,6 +63,7 @@ class Edit extends Component
     public function render()
     {
         $this->authorize('update', ExitInterview::class);
+
         return view('livewire.human-resource.performance.exit-interviews.edit');
     }
 }

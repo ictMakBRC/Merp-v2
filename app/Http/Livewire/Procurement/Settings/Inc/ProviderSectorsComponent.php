@@ -8,10 +8,12 @@ class ProviderSectorsComponent extends Component
 {
     //Provider Categories
     public $provider_id;
-    public $categories=[];
-   
-    public function storeCategories(){
-        
+
+    public $categories = [];
+
+    public function storeCategories()
+    {
+
     }
 
     public function render()

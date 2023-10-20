@@ -2,10 +2,10 @@
 
 namespace App\Models\HumanResource;
 
-use Illuminate\Database\Eloquent\Model;
 use Database\Factories\GrievanceTypeFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class GrievanceType extends Model
 {
@@ -30,5 +30,4 @@ class GrievanceType extends Model
                 ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('description', 'like', '%'.$search.'%');
     }
-
 }

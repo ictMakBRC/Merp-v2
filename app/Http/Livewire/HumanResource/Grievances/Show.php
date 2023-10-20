@@ -2,18 +2,13 @@
 
 namespace App\Http\Livewire\HumanResource\Grievances;
 
-use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\DB;
 use App\Models\HumanResource\Grievance;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class Show extends Component
 {
     public $grievance;
-
-
-
 
     public function mount(Grievance $grievance)
     {
@@ -26,9 +21,9 @@ class Show extends Component
 
         return DB::transaction(function () {
             $this->grievance->update([
-                'acknowledged_at' => now()
+                'acknowledged_at' => now(),
             ]);
-            if($this->additional_comment != null) {
+            if ($this->additional_comment != null) {
                 $this->grievance->comments()->create([
                     'content' => $this->additional_comment,
                     'user_id' => auth()->id(),
@@ -41,10 +36,10 @@ class Show extends Component
         });
     }
 
-
     public function render()
     {
         $this->authorize('view', Grievance::class);
+
         return view('livewire.human-resource.grievances.show');
     }
 }

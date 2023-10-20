@@ -2,38 +2,38 @@
 
 namespace App\Services\HumanResource\EmployeeData;
 
-use App\Models\HumanResource\EmployeeData\BankingInformation;
 use App\Data\HumanResource\EmployeeData\EmployeeBankingData;
+use App\Models\HumanResource\EmployeeData\BankingInformation;
 
 class EmployeeBankingInformationService
 {
-    public function createBankingInformation(EmployeeBankingData $bankingInformationDTO):BankingInformation
+    public function createBankingInformation(EmployeeBankingData $bankingInformationDTO): BankingInformation
     {
         $bankingInformation = new BankingInformation();
         $this->fillBankingInformationFromDTO($bankingInformation, $bankingInformationDTO);
         $bankingInformation->save();
 
-        if($bankingInformation->is_default){
+        if ($bankingInformation->is_default) {
 
-            BankingInformation::where('employee_id',$bankingInformation->employee_id)
-            ->where('id','!=',$bankingInformation->id)
-            ->update(['is_default'=>false]);
- 
-         }
+            BankingInformation::where('employee_id', $bankingInformation->employee_id)
+                ->where('id', '!=', $bankingInformation->id)
+                ->update(['is_default' => false]);
+
+        }
 
         return $bankingInformation;
     }
 
-    public function updateBankingInformation(BankingInformation $bankingInformation, EmployeeBankingData $bankingInformationDTO):BankingInformation
+    public function updateBankingInformation(BankingInformation $bankingInformation, EmployeeBankingData $bankingInformationDTO): BankingInformation
     {
         $this->fillBankingInformationFromDTO($bankingInformation, $bankingInformationDTO);
         $bankingInformation->save();
 
-        if($bankingInformation->is_default){
-            
-           BankingInformation::where('employee_id',$bankingInformation->employee_id)
-           ->where('id','!=',$bankingInformation->id)
-           ->update(['is_default'=>false]);
+        if ($bankingInformation->is_default) {
+
+            BankingInformation::where('employee_id', $bankingInformation->employee_id)
+                ->where('id', '!=', $bankingInformation->id)
+                ->update(['is_default' => false]);
 
         }
 

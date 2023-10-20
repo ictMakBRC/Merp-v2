@@ -3,14 +3,12 @@
 namespace App\Http\Livewire\HumanResource\Grievances;
 
 use App\Models\HumanResource\Grievance;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\Designation;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Index extends Component
 {
-
     use WithPagination;
     use AuthorizesRequests;
 
@@ -42,8 +40,6 @@ class Index extends Component
     public $selectedGrievance;
 
     public $filter = false;
-
-
 
     public function updatingSearch()
     {

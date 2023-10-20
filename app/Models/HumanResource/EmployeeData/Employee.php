@@ -3,20 +3,20 @@
 namespace App\Models\HumanResource\EmployeeData;
 
 use App\Models\HumanResource\EmployeeData\LeaveRequest\LeaveDelegation;
-use Carbon\Carbon;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\Settings\Designation;
+use App\Models\HumanResource\Settings\Station;
 use App\Models\User;
 use App\Services\GeneratorService;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\HumanResource\Settings\Station;
-use App\Models\HumanResource\Settings\Department;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Models\HumanResource\Settings\Designation;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Carbon\Carbon;
 use Database\Factories\HumanResource\EmployeeFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Employee extends Model
 {
@@ -54,9 +54,9 @@ class Employee extends Model
     public function projects()
     {
         return $this->belongsToMany(Project::class, 'employee_project', 'employee_id', 'project_id')
-        ->using(EmployeeProject::class) // Use the pivot model
-        ->withPivot(['designation_id', 'contract_summary','start_date','end_date','fte','gross_salary','contract_file_path','status']) // Include the additional attributes
-        ->withTimestamps();
+            ->using(EmployeeProject::class) // Use the pivot model
+            ->withPivot(['designation_id', 'contract_summary', 'start_date', 'end_date', 'fte', 'gross_salary', 'contract_file_path', 'status']) // Include the additional attributes
+            ->withTimestamps();
     }
 
     //principal investigator
@@ -78,6 +78,9 @@ class Employee extends Model
         );
     }
 
+    /**
+     * Generate the employees age from date of birth
+     */
     protected function employeeAge(): Attribute
     {
         return Attribute::make(
@@ -91,12 +94,7 @@ class Employee extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
-                $model->age = Carbon::createFromFormat('Y-m-d', $model->birth_date)->diffInYears(Carbon::today());
                 $model->employee_number = GeneratorService::employeeNo();
-            });
-
-            self::updating(function ($model) {
-                $model->age = Carbon::createFromFormat('Y-m-d', $model->birth_date)->diffInYears(Carbon::today());
             });
         }
     }
@@ -110,16 +108,16 @@ class Employee extends Model
     }
 
     /**
-    * User as an employee
-    */
+     * User as an employee
+     */
     public function user()
     {
         return $this->hasOne(User::class);
     }
 
     /**
-    * User as an employee
-    */
+     * User as an employee
+     */
     public function supervisor()
     {
         return $this->hasOne(User::class, 'reporting_to');
@@ -130,23 +128,24 @@ class Employee extends Model
      */
     public function isOnLeave()
     {
-        if($this->leaves->where('status', 'approved')->first()) {
+        if ($this->leaves->where('status', 'approved')->first()) {
             return true;
         }
+
         return false;
     }
 
     /**
-    * Employee delegations
-    */
+     * Employee delegations
+     */
     public function delegations()
     {
         return $this->hasMany(LeaveDelegation::class, 'delegated_role_to');
     }
 
     /**
- * Create a new factory instance for the model.
- */
+     * Create a new factory instance for the model.
+     */
     protected static function newFactory(): Factory
     {
         return EmployeeFactory::new();

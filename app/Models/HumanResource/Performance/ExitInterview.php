@@ -3,11 +3,11 @@
 namespace App\Models\HumanResource\Performance;
 
 use App\Models\Comment;
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class ExitInterview extends Model implements HasMedia
 {
@@ -33,6 +33,6 @@ class ExitInterview extends Model implements HasMedia
      */
     public static function search($search)
     {
-        return  static::query();
+        return static::query();
     }
 }

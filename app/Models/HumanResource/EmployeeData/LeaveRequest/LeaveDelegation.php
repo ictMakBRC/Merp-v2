@@ -11,7 +11,6 @@ class LeaveDelegation extends Model
 
     protected $table = 'hr_leave_delegations';
 
-
     public function leaveRequest()
     {
         return $this->belongsTo(LeaveRequest::class, 'leave_request_id');
@@ -29,7 +28,7 @@ class LeaveDelegation extends Model
     {
         $this->update([
             'status' => APPROVED,
-            'comment' => $comment
+            'comment' => $comment,
         ]);
 
         return $this;
@@ -42,12 +41,10 @@ class LeaveDelegation extends Model
     {
         $this->update([
             'status' => DECLINED,
-            'comment' => $comment
+            'comment' => $comment,
         ]);
+
         return $this;
 
     }
-
-
-
 }

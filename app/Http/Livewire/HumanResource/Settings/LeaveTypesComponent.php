@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\HumanResource\Settings;
 
+use App\Models\HumanResource\Settings\LeaveType;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\HumanResource\Settings\LeaveType;
 
 class LeaveTypesComponent extends Component
 {
@@ -38,10 +38,15 @@ class LeaveTypesComponent extends Component
     public $edit_id;
 
     public $notice_days;
+
     public $details;
+
     public $payment_type;
+
     public $given_to;
+
     public $is_payable;
+
     public $carriable;
 
     protected $paginationTheme = 'bootstrap';
@@ -207,6 +212,7 @@ class LeaveTypesComponent extends Component
         $data['leaves'] = $this->filterLeaves()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+
         return view('livewire.human-resource.settings.leaves-component', $data)->layout('layouts.app');
     }
 }

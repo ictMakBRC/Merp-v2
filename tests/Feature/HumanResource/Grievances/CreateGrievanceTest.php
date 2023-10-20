@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\HumanResource\Grievances;
 
-use Tests\TestCase;
 use App\Models\User;
-use Livewire\Livewire;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class CreateGrievanceTest extends TestCase
 {
@@ -19,6 +18,7 @@ class CreateGrievanceTest extends TestCase
 
         $response->assertStatus(200);
     }
+
     public function test_grievance_can_be_saved(): void
     {
         $user = User::factory()->create();
@@ -29,5 +29,4 @@ class CreateGrievanceTest extends TestCase
 
         $response->assertStatus(200);
     }
-
 }

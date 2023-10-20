@@ -3,9 +3,9 @@
 namespace App\Http\Livewire\HumanResource\Performance\Terminations;
 
 use App\Models\Comment;
-use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 use App\Models\HumanResource\Performance\Termination;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class Show extends Component
 {
@@ -18,9 +18,8 @@ class Show extends Component
     public $shouldShowReply = false;
 
     public $rules = [
-        'additional_comment' => 'nullable'
+        'additional_comment' => 'nullable',
     ];
-
 
     public function mount(Termination $termination)
     {
@@ -37,9 +36,9 @@ class Show extends Component
 
         return DB::transaction(function () {
             $this->termination->update([
-                'acknowledged_at' => now()
+                'acknowledged_at' => now(),
             ]);
-            if($this->additional_comment != null) {
+            if ($this->additional_comment != null) {
                 $this->termination->comments()->create([
                     'content' => $this->additional_comment,
                     'user_id' => auth()->id(),
@@ -50,19 +49,22 @@ class Show extends Component
             $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('refresh-page');
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Acknowledgement  submitted!']);
+
             return redirect()->back();
         });
     }
 
     public function download()
     {
-        $mediaItem =  $this->termination->getFirstMedia();
+        $mediaItem = $this->termination->getFirstMedia();
+
         return response()->download($mediaItem->getPath(), $mediaItem->file_name);
     }
 
     public function toggleReplyButton($currentReply)
     {
-        $this->shouldShowReply = !$this->shouldShowReply;
+        $this->shouldShowReply = ! $this->shouldShowReply;
+
         return $this->shouldShowReply;
     }
 
@@ -77,7 +79,6 @@ class Show extends Component
                 'user_id' => auth()->id(),
             ]);
 
-
             $this->grievance->fresh();
 
             return redirect()->back();
@@ -87,6 +88,7 @@ class Show extends Component
     public function render()
     {
         $this->authorize('view', Termination::class);
+
         return view('livewire.human-resource.performance.terminations.show');
     }
 }

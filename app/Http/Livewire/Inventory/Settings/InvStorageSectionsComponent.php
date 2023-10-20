@@ -2,15 +2,15 @@
 
 namespace App\Http\Livewire\Inventory\Settings;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Inventory\Settings\InvStorageSection;
 use App\Models\Inventory\Settings\InvStore;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class InvStorageSectionsComponent extends Component
 {
     use WithPagination;
-    
+
     //Filters
     public $from_date;
 
@@ -28,7 +28,7 @@ class InvStorageSectionsComponent extends Component
 
     public $name;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -174,7 +174,8 @@ class InvStorageSectionsComponent extends Component
         $data['sections'] = $this->filtersections()->with('store')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        $data['stores'] = InvStore::where('is_active',1)->get();
+        $data['stores'] = InvStore::where('is_active', 1)->get();
+
         return view('livewire.inventory.settings.storage-sections-component', $data);
     }
 }

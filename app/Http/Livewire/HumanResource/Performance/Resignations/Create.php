@@ -2,12 +2,11 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Resignations;
 
+use App\Models\HumanResource\Performance\Resignation;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Settings\Department;
-use App\Models\HumanResource\Performance\Resignation;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Create extends Component
 {
@@ -39,29 +38,30 @@ class Create extends Component
         $this->employees = User::all();
     }
 
-
     public function store()
     {
         $this->validate();
 
         $resignation = Resignation::create([
-                'employee_id' => $this->employee_id,
-                'subject' => $this->subject,
-                'letter' => $this->letter,
-                'hand_over_date' => $this->hand_over_date
-           ]);
+            'employee_id' => $this->employee_id,
+            'subject' => $this->subject,
+            'letter' => $this->letter,
+            'hand_over_date' => $this->hand_over_date,
+        ]);
 
-        if($this->file_uploads != []) {
+        if ($this->file_uploads != []) {
             foreach ($this->file_uploads as $file_upload) {
                 $resignation->addMedia($file_upload)->toMediaCollection();
             }
         }
+
         return redirect()->to(route('resignations'));
     }
 
     public function render()
     {
         $this->authorize('create', Resignation::class);
+
         return view('livewire.human-resource.performance.resignations.create');
     }
 }

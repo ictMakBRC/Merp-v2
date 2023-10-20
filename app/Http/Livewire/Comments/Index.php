@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Comments;
 
 use App\Models\Comment;
 use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 
 class Index extends Component
 {
@@ -21,10 +20,11 @@ class Index extends Component
     protected $listeners = ['commentSelected'];
 
     public $rules = [
-        'additional_comment' => 'required'
+        'additional_comment' => 'required',
     ];
 
-    public function mount($commentable){
+    public function mount($commentable)
+    {
         $this->commentable = $commentable;
         $this->comments = $commentable->comments;
     }
@@ -39,10 +39,10 @@ class Index extends Component
     public function store()
     {
         $this->validate([
-            'additional_comment' => 'required'
+            'additional_comment' => 'required',
         ]);
 
-        if($this->shouldUpdate == false) {
+        if ($this->shouldUpdate == false) {
             $this->commentable->comments()->create([
                 'content' => $this->additional_comment,
                 'user_id' => auth()->id(),
@@ -61,7 +61,6 @@ class Index extends Component
         $this->comments = $this->commentable->comments;
         $this->dispatchBrowserEvent('refresh-page');
     }
-
 
     public function render()
     {

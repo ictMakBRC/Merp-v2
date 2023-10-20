@@ -2,14 +2,12 @@
 
 namespace App\Services\Assets;
 
-use App\Models\Assets\AssetLog;
 use App\Data\Assets\AssetLogData;
-
-
+use App\Models\Assets\AssetLog;
 
 class AssetLogService
 {
-    public function createAssetLog(AssetLogData $assetLogDTO):AssetLog
+    public function createAssetLog(AssetLogData $assetLogDTO): AssetLog
     {
         $assetLog = new AssetLog();
         $this->fillAssetLogFromDTO($assetLog, $assetLogDTO);
@@ -18,7 +16,7 @@ class AssetLogService
         return $assetLog;
     }
 
-    public function updateAssetLog(AssetLog $assetLog, AssetLogData $assetLogDTO):AssetLog
+    public function updateAssetLog(AssetLog $assetLog, AssetLogData $assetLogDTO): AssetLog
     {
         $this->fillAssetLogFromDTO($assetLog, $assetLogDTO);
         $assetLog->save();

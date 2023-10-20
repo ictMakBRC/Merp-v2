@@ -2,12 +2,11 @@
 
 namespace App\Http\Livewire\HumanResource\Performance\Terminations;
 
+use App\Models\HumanResource\Performance\Termination;
 use App\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Settings\Department;
-use App\Models\HumanResource\Performance\Termination;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Create extends Component
 {
@@ -39,19 +38,18 @@ class Create extends Component
         $this->employees = User::all();
     }
 
-
     public function store()
     {
         $this->validate();
 
         $termination = Termination::create([
-                'employee_id' => $this->employee_id,
-                'termination_date' => $this->termination_date,
-                'letter' => $this->letter,
-                'reason' => $this->reason
-           ]);
+            'employee_id' => $this->employee_id,
+            'termination_date' => $this->termination_date,
+            'letter' => $this->letter,
+            'reason' => $this->reason,
+        ]);
 
-        if($this->file_uploads != []) {
+        if ($this->file_uploads != []) {
             foreach ($this->file_uploads as $file_upload) {
                 $termination->addMedia($file_upload)->toMediaCollection();
             }
@@ -63,6 +61,7 @@ class Create extends Component
     public function render()
     {
         $this->authorize('update', Termination::class);
+
         return view('livewire.human-resource.performance.terminations.create');
     }
 }

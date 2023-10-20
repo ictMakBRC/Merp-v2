@@ -14,6 +14,7 @@ class DepartmentFactory extends Factory
      * @var string
      */
     protected $model = Department::class;
+
     /**
      * Define the model's default state.
      *
@@ -23,7 +24,7 @@ class DepartmentFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->words(3, true),
-            'type' => $this->faker->randomElement(["Full Time", "Part Time", "department", "unit", "sub-unit", "laboratory"]),
+            'type' => $this->faker->randomElement(['Full Time', 'Part Time', 'department', 'unit', 'sub-unit', 'laboratory']),
             'description' => $this->faker->realText(),
             'prefix' => 'DPT',
             'created_at' => $this->faker->dateTimeBetween('-1 year', '-6 month'),

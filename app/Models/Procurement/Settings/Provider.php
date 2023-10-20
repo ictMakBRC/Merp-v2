@@ -2,12 +2,11 @@
 
 namespace App\Models\Procurement\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Procurement\Settings\ProviderDocument;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Provider extends Model
 {
@@ -25,11 +24,10 @@ class Provider extends Model
         // Chain fluent methods for configuration options
     }
 
-
     public function procurementSubcategories()
     {
-        return $this->belongsToMany(ProcurementSubcategory::class,'provider_procurement_subcategory','provider_id','procurement_subcategory_id')
-        ->withTimestamps();
+        return $this->belongsToMany(ProcurementSubcategory::class, 'provider_procurement_subcategory', 'provider_id', 'procurement_subcategory_id')
+            ->withTimestamps();
     }
 
     public static function boot()
@@ -44,6 +42,6 @@ class Provider extends Model
 
     public function documentss()
     {
-        return $this->hasMany(ProviderDocument::class,'provider_id','id');
+        return $this->hasMany(ProviderDocument::class, 'provider_id', 'id');
     }
 }

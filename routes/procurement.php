@@ -10,7 +10,7 @@ Route::group(['prefix' => 'procurement'], function () {
     Route::get('dashboard', ProcurementMainDashboardComponent::class)->name('procurement-dashboard');
 
     Route::group(['prefix' => 'settings'], function () {
-        
+
         Route::group(['prefix' => 'providers'], function () {
             Route::get('manage', ProvidersComponent::class)->name('manage-providers');
             Route::get('{id}/profile', ProviderProfileComponent::class)->name('provider-profile');

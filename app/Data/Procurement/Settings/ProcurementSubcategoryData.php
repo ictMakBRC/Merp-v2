@@ -6,25 +6,27 @@ use Spatie\LaravelData\Data;
 
 class ProcurementSubcategoryData extends Data
 {
-  public ?string $category;
-  public ?int $name;
-  public ?string $is_active;
+    public ?string $category;
 
-  // Validation rules for the properties
-  public function rules(): array
-  {
-      return [
-        'category' => 'required|string',
-        'name' => 'required|integer',
-        'is_active' => 'required|boolean',
-      ];
-  }
+    public ?int $name;
 
-  // Validation rules for the properties
-  public function resetInputs(): array
-  {
-    $allKeys = array_keys($this->rules());
-    return array_values($allKeys);
-  }
+    public ?string $is_active;
 
+    // Validation rules for the properties
+    public function rules(): array
+    {
+        return [
+            'category' => 'required|string',
+            'name' => 'required|integer',
+            'is_active' => 'required|boolean',
+        ];
+    }
+
+    // Validation rules for the properties
+    public function resetInputs(): array
+    {
+        $allKeys = array_keys($this->rules());
+
+        return array_values($allKeys);
+    }
 }

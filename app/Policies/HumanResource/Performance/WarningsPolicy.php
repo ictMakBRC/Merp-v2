@@ -4,7 +4,6 @@ namespace App\Policies\HumanResource\Performance;
 
 use App\Models\HumanResource\Performance\Warning;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class WarningsPolicy
 {

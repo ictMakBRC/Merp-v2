@@ -2,12 +2,11 @@
 
 namespace App\Models\Procurement\Settings;
 
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use App\Models\Procurement\Settings\Provider;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ProviderDocument extends Model
 {
@@ -37,6 +36,6 @@ class ProviderDocument extends Model
 
     public function provider()
     {
-        return $this->belongsTo(Provider::class,'provider_id','id');
+        return $this->belongsTo(Provider::class, 'provider_id', 'id');
     }
 }
