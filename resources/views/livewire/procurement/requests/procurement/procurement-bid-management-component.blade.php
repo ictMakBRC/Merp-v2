@@ -56,7 +56,7 @@
                             </div>
                 
                             <div class="tab-pane p-3 @if ($activeTab == 'bid-mgt') active @endif" id="bid-mgt" role="tabpanel">
-                                <livewire:procurement.requests.procurement.inc.cc-decision-component :request_id="$request->id"/>
+                                <livewire:procurement.requests.procurement.inc.request-bidding-component :request_id="$request->id"/>
                             </div>
                 
                             <div class="tab-pane p-3 @if ($activeTab == 'documents') active @endif" id="documents" role="tabpanel">

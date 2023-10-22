@@ -3,16 +3,19 @@
 namespace App\Models\Procurement\Request;
 
 use App\Models\User;
+use App\Traits\CurrencyTrait;
 use App\Traits\DocumentableTrait;
 use App\Services\GeneratorService;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Procurement\Settings\Provider;
+use App\Models\HumanResource\Settings\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Procurement\Request\ProcurementRequestItem;
 use App\Models\Procurement\Request\ProcurementRequestApproval;
-use App\Traits\CurrencyTrait;
+use App\Models\Procurement\Request\ProcurementRequestDecision;
 
 class ProcurementRequest extends Model
 {
@@ -55,14 +58,20 @@ class ProcurementRequest extends Model
         return $this->hasMany(ProcurementRequestApproval::class, 'procurement_request_id');
     }
 
+    public function decisions()
+    {
+        return $this->hasMany(ProcurementRequestDecision::class, 'procurement_request_id');
+    }
+
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id');
     }
 
-    public function approvalHistory()
+    public function providers()
     {
-        return $this->hasMany(ApprovalHistory::class, 'request_id');
+        return $this->belongsToMany(Provider::class,'selected_providers','procurement_request_id','provider_id')
+        ->withTimestamps();
     }
 
     public static function boot()
@@ -80,8 +89,12 @@ class ProcurementRequest extends Model
     {
         return empty($search) ? static::query()
         : static::query()
-            ->where('name', 'like', '%'.$search.'%')
-            ->orWhere('email', 'like', '%'.$search.'%')
-            ->orWhere('category', 'like', '%'.$search.'%');
+            ->where('reference_no', 'like', '%'.$search.'%')
+            ->orWhere('request_type', 'like', '%'.$search.'%')
+            ->orWhere('subject', 'like', '%'.$search.'%')
+            ->orWhere('procurement_sector', 'like', '%'.$search.'%')
+            ->orWhere('status', 'like', '%'.$search.'%')
+            
+            ;
     }
 }

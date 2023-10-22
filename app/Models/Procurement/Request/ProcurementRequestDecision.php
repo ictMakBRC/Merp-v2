@@ -3,12 +3,12 @@
 namespace App\Models\Procurement\Request;
 
 use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Procurement\Request\ProcurementRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class SelectedProvider extends Model
+class ProcurementRequestDecision extends Model
 {
     use HasFactory,LogsActivity;
 
@@ -17,7 +17,7 @@ class SelectedProvider extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Selected Providers')
+            ->useLogName('Procurement Request Decisions')
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -28,22 +28,17 @@ class SelectedProvider extends Model
         'id',
     ];
 
-    public static function boot()
+    public function procurement_requests()
     {
-        parent::boot();
-        if (Auth::check()) {
-            self::creating(function ($model) {
-                $model->created_by = auth()->id();
-            });
-        }
+        return $this->belongsTo(ProcurementRequest::class, 'procurement_request_id');
     }
 
     public static function search($search)
     {
         return empty($search) ? static::query()
         : static::query()
-            ->where('name', 'like', '%'.$search.'%')
-            ->orWhere('email', 'like', '%'.$search.'%')
-            ->orWhere('category', 'like', '%'.$search.'%');
+            ->where('decision_maker', 'like', '%'.$search.'%')
+            ->orWhere('decision', 'like', '%'.$search.'%')
+            ->orWhere('step', 'like', '%'.$search.'%');
     }
 }
