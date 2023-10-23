@@ -144,6 +144,7 @@ class GeneralInformationComponent extends Component
                 ]);
 
                 $cvName = date('YmdHis').$this->surname.'.'.$this->cv->extension();
+
                 $this->cvPath = $this->cv->storeAs('employees/resumes', $cvName);
             } else {
                 $this->cvPath = null;

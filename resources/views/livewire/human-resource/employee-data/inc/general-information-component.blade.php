@@ -13,7 +13,7 @@
                     <option value='Trainee'>Trainee</option>
                 </select>
                 @error('entry_type')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -22,7 +22,7 @@
                 <input type="text" id="nin_number" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='nin_number' size="14">
                 @error('nin_number')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -38,7 +38,7 @@
                     <option value="Prof.">Prof.</option>
                 </select>
                 @error('title')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -47,7 +47,7 @@
                 <input type="text" id="surname" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='surname'>
                 @error('surname')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -56,7 +56,7 @@
                 <input type="text" id="first_name" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='first_name'>
                 @error('first_name')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -65,7 +65,7 @@
                 <input type="text" id="other_name" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='other_name'>
                 @error('other_name')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -78,7 +78,7 @@
                     <option value='Other'>Other</option>
                 </select>
                 @error('gender')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -89,7 +89,7 @@
                     @include('layouts.nationalities')
                 </select>
                 @error('nationality')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -97,7 +97,7 @@
                 <label for="birthday" class="form-label required">Date of Birth</label>
                 <input type="date" id="birthday" class="form-control" wire:model.defer='birth_date'>
                 @error('birth_date')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -106,7 +106,7 @@
                 <input type="text" id="birth_place" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='birth_place'>
                 @error('birth_place')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -115,25 +115,25 @@
                 <input type="text" id="religious_affiliation" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='religious_affiliation'>
                 @error('religious_affiliation')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3 col-md-2">
                 <label for="height" class="form-label">Height</label>
-                <input type="number" id="height" class="form-control" wire:model.defer='height'
-                    placeholder="In cm" step="0.01">
+                <input type="number" id="height" class="form-control" wire:model.defer='height' placeholder="In cm"
+                    step="0.01">
                 @error('height')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3 col-md-2">
                 <label for="weight" class="form-label">Weight</label>
-                <input type="number" id="weight" class="form-control" wire:model.defer='weight'
-                    placeholder="In Kg" step="0.01">
+                <input type="number" id="weight" class="form-control" wire:model.defer='weight' placeholder="In Kg"
+                    step="0.01">
                 @error('weight')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -151,7 +151,7 @@
                     <option value="AB-">AB-</option>
                 </select>
                 @error('blood_type')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -164,7 +164,7 @@
                     <option value='Widowed'>Widowed</option>
                 </select>
                 @error('civil_status')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -173,7 +173,7 @@
                 <input type="text" id="address" class="form-control text-uppercase" wire:model.defer='address'
                     onkeyup="this.value = this.value.toUpperCase();">
                 @error('address')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -181,7 +181,7 @@
                 <label for="email" class="form-label required">Email Address</label>
                 <input type="email" id="email" class="form-control" wire:model.defer='email'>
                 @error('email')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -189,7 +189,7 @@
                 <label for="alt_email" class="form-label">Alternative Email</label>
                 <input type="email" id="alt_email" class="form-control" wire:model.defer='alt_email'>
                 @error('alt_email')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -198,16 +198,15 @@
                 <input type="text" id="contact" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='contact'>
                 @error('contact')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3 col-md-4">
                 <label for="alt_contact" class="form-label">Alternative Contact</label>
-                <input type="text" id="alt_contact" class="form-control text-uppercase"
-                    wire:model.defer='alt_contact'>
+                <input type="text" id="alt_contact" class="form-control text-uppercase" wire:model.defer='alt_contact'>
                 @error('alt_contact')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -216,11 +215,11 @@
                 <select class="form-select select2" id="designation_id" wire:model.lazy='designation_id'>
                     <option selected value="">Select</option>
                     @foreach ($designations as $designation)
-                        <option value='{{ $designation->id }}'>{{ $designation->name }}</option>
+                    <option value='{{ $designation->id }}'>{{ $designation->name }}</option>
                     @endforeach
                 </select>
                 @error('designation_id')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -229,11 +228,11 @@
                 <select class="form-select select2" id="station_id" wire:model.lazy='station_id'>
                     <option selected value="">Select</option>
                     @foreach ($stations as $station)
-                        <option value='{{ $station->id }}'>{{ $station->name }}</option>
+                    <option value='{{ $station->id }}'>{{ $station->name }}</option>
                     @endforeach
                 </select>
                 @error('station_id')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -242,12 +241,12 @@
                 <select class="form-select select2" id="department_id" wire:model.lazy='department_id'>
                     <option selected value="">Select</option>
                     @foreach ($departments as $department)
-                        <option value='{{ $department->id }}'>{{ $department->name . ' (' . $department->type . ')' }}
-                        </option>
+                    <option value='{{ $department->id }}'>{{ $department->name . ' (' . $department->type . ')' }}
+                    </option>
                     @endforeach
                 </select>
                 @error('department_id')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -256,11 +255,11 @@
                 <select class="form-select select2" id="reporting_to" wire:model.defer='reporting_to'>
                     <option selected value="">Select</option>
                     @foreach ($supervisors as $employee)
-                        <option value='{{ $employee->id }}'>{{ $employee->fullName }}</option>
+                    <option value='{{ $employee->id }}'>{{ $employee->fullName }}</option>
                     @endforeach
                 </select>
                 @error('reporting_to')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -271,7 +270,7 @@
                     @include('layouts.employment-types')
                 </select>
                 @error('work_type')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -279,7 +278,7 @@
                 <label for="join_date" class="form-label required">Join Date</label>
                 <input type="date" id="join_date" class="form-control" wire:model.defer='join_date'>
                 @error('join_date')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -287,7 +286,7 @@
                 <label for="tin_number" class="form-label">TIN Number</label>
                 <input type="number" id="tin_number" class="form-control" wire:model.defer='tin_number'>
                 @error('tin_number')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -296,7 +295,7 @@
                 <input type="text" id="nssf_number" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='nssf_number'>
                 @error('nssf_number')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -305,8 +304,11 @@
                 <input type="file" id="cv{{$employee_id}}" class="form-control" wire:model.lazy='cv' accept=".pdf">
                 <div class="text-success text-small" wire:loading wire:target="cv">Uploading cv/resume
                 </div>
+                <div class="text-success text-small">
+                    <a href="{{\Storage::download($employee->cv) }}" class="underline"> Download a cv/resume </a>
+                </div>
                 @error('cv')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -314,10 +316,13 @@
                 <label for="photo{{$employee_id}}" class="form-label">Photo (Passport Size)</label>
                 <input type="file" id="photo{{$employee_id}}" class="form-control" wire:model.lazy='photo'
                     accept=".jpg,.jpeg,.png">
-                    <div class="text-success text-small" wire:loading wire:target="photo">Uploading photo
-                    </div>
+                <div class="text-success text-small" wire:loading wire:target="photo">Uploading photo
+                </div>
+                <div class="text-success text-small">
+                    <a href="{{\Storage::download($employee->cv) }}" class="underline"> Download a Passport photo </a>
+                </div>
                 @error('photo')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -325,10 +330,13 @@
                 <label for="signature{{$employee_id}}" class="form-label">Signature</label>
                 <input type="file" id="signature{{$employee_id}}" class="form-control" wire:model.lazy='signature'
                     accept=".jpg,.jpeg,.png">
-                    <div class="text-success text-small" wire:loading wire:target="signature">Uploading signature
-                    </div>
+                <div class="text-success text-small" wire:loading wire:target="signature">Uploading signature
+                </div>
+                <div class="text-success text-small">
+                    <a href="{{\Storage::download($employee->cv) }}" class="underline"> Download a signature </a>
+                </div>
                 @error('signature')
-                    <div class="text-danger text-small">{{ $message }}</div>
+                <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
         </div>
