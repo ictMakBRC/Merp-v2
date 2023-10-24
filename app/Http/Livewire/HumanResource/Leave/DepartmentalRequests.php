@@ -76,6 +76,7 @@ class DepartmentalRequests extends Component
      */
     public function render()
     {
+        $this->authorize('viewAny', LeaveRequest::class);
         $user = auth()->user();
 
         $allIds = Employee::where('reporting_to', $user->id)->pluck('id');

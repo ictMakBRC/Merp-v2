@@ -36,19 +36,19 @@ class Show extends Component
         $this->validate();
 
 
-            $this->appraisal->update([
-                'acknowledged_at' => now()
+        $this->appraisal->update([
+            'acknowledged_at' => now()
+        ]);
+        if($this->additional_comment != null) {
+            $this->appraisal->comments()->create([
+                'content' => $this->additional_comment,
+                'user_id' => auth()->id(),
             ]);
-            if($this->additional_comment != null) {
-                $this->appraisal->comments()->create([
-                    'content' => $this->additional_comment,
-                    'user_id' => auth()->id(),
-                ]);
-            }
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Acknowledgement  submitted!']);
-            $this->dispatchBrowserEvent('refresh-page');
+        }
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Acknowledgement  submitted!']);
+        $this->dispatchBrowserEvent('refresh-page');
 
-            return redirect()->back();
+        return redirect()->back();
 
     }
 
@@ -84,6 +84,7 @@ class Show extends Component
 
     public function render()
     {
+        $this->authorize('view', Appraisal::class);
         return view('livewire.human-resource.performance.appraisals.show');
     }
 }

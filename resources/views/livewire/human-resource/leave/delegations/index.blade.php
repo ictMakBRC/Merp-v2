@@ -67,7 +67,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">You have not yet delegated anyone yet...</td>
+                                    <td colspan="8" class="text-center">You have not yet delegated anyone yet...</td>
                                 </tr>
                                 @endforelse
                             </tbody>

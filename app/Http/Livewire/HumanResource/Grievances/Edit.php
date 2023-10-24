@@ -57,6 +57,7 @@ class Edit extends Component
 
     public function render()
     {
+        $this->authorize('update', Grievance::class);
         return view('livewire.human-resource.grievances.edit');
     }
 }

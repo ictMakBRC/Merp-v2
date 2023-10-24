@@ -79,7 +79,7 @@ class LeaveDelegations extends Component
         $user = auth()->user();
 
         return view('livewire.human-resource.leave.delegations.index', [
-            'delegations' => is_null($user->employee->delegations) ? [] : $user->employee->delegations
+            'delegations' => is_null($user->employee ? $user->employee->delegations : null) ? [] : $user->employee->delegations
         ]);
     }
 }
