@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Traits\CurrencyTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Grant extends Model
 {
-    use HasFactory,LogsActivity, DocumentableTrait, ProcurementRequestableTrait;
+    use HasFactory,LogsActivity, DocumentableTrait, ProcurementRequestableTrait, CurrencyTrait;
 
     public function getActivitylogOptions(): LogOptions
     {

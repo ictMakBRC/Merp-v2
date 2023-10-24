@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('letter');
             $table->string('status')->nullable();
             $table->timestamp('acknowledged_at')->nullable();
-            $table->foreignId('approved_by')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('approved_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->softDeletes();
             $table->timestamps();

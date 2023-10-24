@@ -21,19 +21,15 @@ return new class extends Migration
             $table->text('procuring_entity_code')->nullable();
             $table->text('procurement_sector');
             $table->text('financial_year');
-            $table->text('currency');
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->string('budget_line');
             $table->text('sequence_number')->nullable();
             $table->text('procurement_plan_ref')->nullable();
             $table->text('location_of_delivery');
             $table->date('date_required')->nullable();
-            $table->float('contract_value',12,1)->nullable();
-            // $table->foreignId('project_id')->nullable()->constrained('projects', 'id')->onUpdate('cascade')->onDelete('restrict');
-            // $table->foreignId('department_id')->nullable()->constrained('departments', 'id')->onUpdate('cascade')->onDelete('restrict');
-            
-            $table->foreignId('approving_departmental_head')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('approving_accounting_head')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->float('contract_value',12,2)->default(0);
             $table->string('status')->default('Draft');
+            $table->integer('step_order')->default(0);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });

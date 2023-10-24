@@ -34,9 +34,7 @@ return new class extends Migration
             $table->string('bank_account');
             $table->string('tin');
             $table->decimal('tax_withholding_rate', 5, 2)->nullable();
-            $table->string('preferred_currency');
-            // $table->decimal('delivery_performance', 5, 2)->nullable();
-            // $table->decimal('quality_ratings', 5, 2)->nullable();
+            $table->foreignId('preferred_currency')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(true);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
