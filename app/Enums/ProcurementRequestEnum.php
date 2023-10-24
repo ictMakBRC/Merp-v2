@@ -15,9 +15,6 @@ class ProcurementRequestEnum extends Enum
     const PROCESSING = 'Processing';
     const COMPLETED = 'Completed';
 
-    const PM_APPROVAL = 'Procurement Method Approved';
-    const ER_APPROVAL = 'Evaluation Report Approved';
-
     //Request steps
     const DEPARTMENT_STEP = 'Department';
     const SUPERVISOR_STEP = 'Supervisor';
@@ -28,18 +25,13 @@ class ProcurementRequestEnum extends Enum
     const STORES_STEP = 'Stores';
     const TOTAL_STEPS=7;
 
+    const PM_APPROVAL = 'Procurement Method Approval';
+    const ER_APPROVAL = 'Evaluation Report Approval';
+
     //Committees
     const CC = 'Contracts Committee';
     const EC = 'Evaluation Committee';
     const NC = 'Negotiation Committee';
-
-    const CC_APPROVAL = 'Contracts Committee Approval';
-    const EC_APPROVAL = 'Evaluation Committee Approval';
-    const NC_APPROVAL = 'Negotiation Committee Approval';
-
-    const CC_REJECTION = 'Contracts Committee Rejection';
-    const EC_REJECTION = 'Evaluation Committee Rejection';
-    const NC_REJECTION = 'Negotiation Committee Rejection';
 
     public static function color($status)
     {

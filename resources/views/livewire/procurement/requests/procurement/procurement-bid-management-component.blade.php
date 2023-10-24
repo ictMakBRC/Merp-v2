@@ -1,3 +1,4 @@
+
 <div class="row" x-data="{ active_tab: @entangle('activeTab')}">
     <div class="col-12">
         <div class="card">
