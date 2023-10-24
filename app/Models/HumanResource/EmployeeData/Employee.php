@@ -77,7 +77,7 @@ class Employee extends Model
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->prefix.' '.$this->surname.' '.$this->first_name.' '.$this->other_name,
+            get: fn () => $this->title.' '.$this->first_name.' '.$this->other_name.' '.$this->surname,
         );
     }
 
@@ -135,7 +135,7 @@ class Employee extends Model
     */
     public function supervisor()
     {
-        return $this->hasOne(User::class, 'reporting_to');
+        return $this->hasOne(Employee::class, 'reporting_to');
     }
 
     /**

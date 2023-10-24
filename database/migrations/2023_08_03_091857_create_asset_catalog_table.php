@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('procurement_type')->nullable();
             $table->string('invoice_number')->nullable();
             $table->float('cost',12,2)->nullable();
-            $table->string('currency')->nullable();
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->unsignedBigInteger('supplier_id')->nullable();
 
             $table->boolean('has_service_contract')->default(false);

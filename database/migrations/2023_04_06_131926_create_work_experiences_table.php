@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('position_held');
             $table->string('employment_type');
             $table->float('monthly_salary',12,2)->nullable();
-            $table->string('currency')->nullable();
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->longText('key_responsibilities')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();

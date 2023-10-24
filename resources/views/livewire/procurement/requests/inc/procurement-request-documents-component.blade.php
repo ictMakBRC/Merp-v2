@@ -1,20 +1,6 @@
 <div>
-    @include('livewire.procurement.requests.inc.loading-info')
     <form wire:submit.prevent="storeDocument">
         <div class="row">
-            {{-- <div class="mb-3 col-md-4">
-                <label for="provider_id" class="form-label required">{{ __('Provider') }}</label>
-                <select class="form-select" id="provider_id" wire:model.lazy="provider_id">
-                    <option selected value="">Select</option>
-                    @forelse ($providers as $provider)
-                        <option value="{{ $provider->id }}">{{ $provider->name }}</option>
-                    @empty
-                    @endforelse
-                </select>
-                @error('provider_id')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div> --}}
 
             <div class="mb-3 col-md-4">
                 <label for="document_category" class="form-label required">{{ __('Document Category') }}</label>

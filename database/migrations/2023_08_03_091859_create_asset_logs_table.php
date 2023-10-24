@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('resolution_status')->nullable();
             $table->string('serviced_by')->nullable();
             $table->float('cost',12,2)->nullable();
-            $table->string('currency')->nullable();
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->date('next_service_date')->nullable();
             $table->foreignId('servicing_recorded_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
     

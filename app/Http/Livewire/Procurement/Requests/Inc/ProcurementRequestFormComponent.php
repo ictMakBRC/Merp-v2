@@ -34,6 +34,10 @@ class ProcurementRequestFormComponent extends Component
         'loadProcurementRequest'=>'loadProcurementRequest',
     ];
 
+    public function updatedProjectId(){
+        $this->currency=Project::findOrFail($this->project_id)->currency;
+    }
+
     public function loadProcurementRequest($details)
     {
         $this->procurement_request_id = $details['procurementRequestId'];

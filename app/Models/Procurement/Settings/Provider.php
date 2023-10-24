@@ -8,6 +8,9 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\Procurement\Request\ProcurementRequest;
+use App\Models\Procurement\Request\SelectedProvider;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Provider extends Model
@@ -19,7 +22,7 @@ class Provider extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Users')
+            ->useLogName('Providers')
             ->dontLogIfAttributesChangedOnly(['updated_at', 'password'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
@@ -30,6 +33,19 @@ class Provider extends Model
     public function procurementSubcategories()
     {
         return $this->belongsToMany(ProcurementSubcategory::class,'provider_subcategory','provider_id','subcategory_id')
+        ->withTimestamps();
+    }
+
+    public function preferred_currency()
+    {
+        return $this->belongsTo(FmsCurrency::class, 'preferred_currency');
+    }
+
+    public function procurement_requests()
+    {
+        return $this->belongsToMany(ProcurementRequest::class,'selected_providers','provider_id','procurement_request_id')
+        ->using(SelectedProvider::class) // Use the pivot model
+        ->withPivot(['bid_returned', 'bid_returned_at','is_best_bidder','bidder_contract_price','bidder_revised_price','payment_status','created_by']) // Include the additional attributes
         ->withTimestamps();
     }
 

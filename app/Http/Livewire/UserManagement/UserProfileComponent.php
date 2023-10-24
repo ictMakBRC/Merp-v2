@@ -68,7 +68,7 @@ class UserProfileComponent extends Component
                     'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
                 ]);
 
-                $avatarName = date('YmdHis').$this->surname.'.'.$this->avatar->extension();
+                $avatarName = date('YmdHis').$this->name.'.'.$this->avatar->extension();
 
                 // Resize the photo to a width and height 150 pixels using intervention lib
                 $resizedPhoto = Image::make($this->avatar)->resize(150, 150, function ($constraint) {

@@ -43,7 +43,7 @@
           <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
             <thead>
               <tr>
-                <th>#</th>
+                <th></th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Category</th>

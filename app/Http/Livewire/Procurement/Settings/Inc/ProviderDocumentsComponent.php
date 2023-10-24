@@ -55,7 +55,7 @@ class ProviderDocumentsComponent extends Component
                 ]);
     
                 $documentName = date('YmdHis').$provider->name.' '.$this->document_category.'.'.$this->document->extension();
-                $this->document_path = $this->document->storeAs('provider_documents/', $documentName);
+                $this->document_path = $this->document->storeAs('provider_documents', $documentName);
             } else {
                 $this->document_path = null;
             }
