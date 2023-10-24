@@ -51,6 +51,7 @@ class InvItem extends Model
     : static::query()
     ->where('name', 'like', '%'.$search.'%')
     ->orWhere('item_code', 'like', '%'.$search.'%')
+    ->orWhere('description', 'like', '%'.$search.'%')
     ->orWhereHas('category', function ($query) use ($search) {
       $query->where('name', 'like', '%'.$search.'%');
     })

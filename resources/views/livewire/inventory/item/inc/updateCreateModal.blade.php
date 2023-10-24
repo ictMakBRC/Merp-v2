@@ -77,10 +77,11 @@ aria-labelledby="updateCreateInvCommodityModalTitle" data-bs-backdrop="static" d
             @enderror
 
             <div class="custom-control custom-switch mb-3 col-md-12">
-              <input type="checkbox" class="custom-control-input"  wire:model.lazy="expires" checked>
-              <label class="custom-control-label" for="customSwitch1">Item Epires <i style="color:gray">(Uncheck if false)</i></label>
+              <input type="checkbox" class="custom-control-input"  wire:model="expires" checked>
+              <label class="custom-control-label" for="customSwitch1">Item Expires <i style="color:gray">(Uncheck if false)</i></label>
             </div>
-          </div>
+            </div>
+
 
           <div class="mb-3 col-md-3" required>
             <label for="max_qty" class="form-label">Max Stock Qty</label>

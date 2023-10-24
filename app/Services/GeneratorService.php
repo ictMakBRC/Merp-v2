@@ -35,7 +35,7 @@ class GeneratorService
     }
 
 
-    
+
     public static function providerNo()
     {
         $provider_code = '';
@@ -102,7 +102,7 @@ class GeneratorService
                     'code'=>$categoryCode,
                     'name'=>$category,
                 ]);
-                return $consultanceSubcategory->code . '/' . str_pad(1, 3, '0', STR_PAD_LEFT);  
+                return $consultanceSubcategory->code . '/' . str_pad(1, 3, '0', STR_PAD_LEFT);
 
             }else{
                 return $categoryCode . '/' . str_pad(1, 3, '0', STR_PAD_LEFT);

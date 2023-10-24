@@ -5,6 +5,7 @@ namespace App\Models\Inventory\Requisitions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use \App\Models\Inventory\Item\InvItem;
+use \App\Models\User;
 use \App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\EmployeeData\Employee;
 
@@ -27,6 +28,21 @@ class InvDepartmentRequest extends Model
     return $this->belongsTo(Employee::class, 'approver_id', 'id');
   }
 
+  public function orderedBy()
+  {
+    return $this->belongsTo(User::class, 'ordered_by', 'id');
+  }
+
+  public function dispatchedBy()
+  {
+    return $this->belongsTo(User::class, 'dispatched_by', 'id');
+  }
+
+  public function receivedBy()
+  {
+    return $this->belongsTo(User::class, 'received_by', 'id');
+  }
+
   public static function search($search)
   {
     return empty($search) ? static::query()
@@ -39,5 +55,4 @@ class InvDepartmentRequest extends Model
       $query->where('name', 'like', '%'.$search.'%');
     });
   }
-
 }

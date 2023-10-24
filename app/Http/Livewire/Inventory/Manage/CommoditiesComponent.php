@@ -58,6 +58,17 @@ class CommoditiesComponent extends Component
 
   public $filter = false;
 
+
+  public function export()
+  {
+
+  }
+
+  public function refresh()
+  {
+    return redirect(request()->header('Referer'));
+  }
+  
   public function createNewInv()
   {
     $this->dispatchBrowserEvent('show-modal');
@@ -91,8 +102,6 @@ class CommoditiesComponent extends Component
     'max_qty' => 'required|numeric',
     'min_qty' => 'required|numeric',
     'item_code' => 'required|unique:inv_items,item_code',
-    'description' => 'required',
-    // 'is_active' => 'required',
     ]);
 
     $commodity = new InvItem();
@@ -103,7 +112,7 @@ class CommoditiesComponent extends Component
     $commodity->min_qty = $this->min_qty;
     $commodity->description = $this->description;
     // $commodity->is_active = $this->is_active;
-    $commodity->expires = $this->expires;
+    $commodity->expires = $this->expires??0;
     $commodity->item_code = $this->item_code;
     $commodity->save();
 
@@ -112,15 +121,72 @@ class CommoditiesComponent extends Component
     $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Commodity successfully added!']);
   }
 
-    public function mainQuery()
-    {
-      return InvItem::search($this->search)
-      ->when($this->category_id, function ($query) {
-        $query->where('category_id',$this->category_id);
-      })
-      ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc');
 
-    }
+  public function editdata($id)
+  {
+    $value = InvItem::where('id', $id)->first();
+    $this->name = $value->name;
+    $this->category_id = $value->category_id;
+    $this->uom_id = $value->uom_id;
+    $this->cost_price = $value->cost_price;
+    $this->inv_uom_id = $value->inv_uom_id;
+    $this->max_qty = $value->max_qty;
+    $this->min_qty = $value->min_qty;
+    $this->item_code = $value->item_code;
+    $this->expires = $value->expires;
+    $this->description = $value->description;
+    $this->is_active = $value->is_active;
+    $this->edit_id = $id;
+
+    $this->dispatchBrowserEvent('show-modal');
+    $this->toggleForm = true;
+
+  }
+
+
+  public function updateData()
+  {
+    $this->validate([
+    'name' => 'required|unique:inv_items,name,'.$this->edit_id.'',
+    'category_id' => 'required',
+    'uom_id' => 'required',
+    'max_qty' => 'required|numeric',
+    'min_qty' => 'required|numeric',
+    'item_code' => 'required|unique:inv_items,item_code,'.$this->edit_id.'',
+    ]);
+
+    $value = InvItem::find($this->edit_id);
+    $value->name = $this->name;
+    $value->category_id = $this->category_id;
+    $value->uom_id = $this->uom_id;
+    $value->cost_price = $this->cost_price;
+    $value->max_qty = $this->max_qty;
+    $value->min_qty = $this->min_qty;
+    $value->item_code = $this->item_code;
+    $value->expires = $this->expires;
+    $value->description = $this->description;
+    $value->is_active = $this->is_active;
+    $value->update();
+
+    $this->is_update = 'false';
+    $this->resetInputs();
+    $this->dispatchBrowserEvent('close-modal');
+    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'value updated successfully!']);
+  }
+
+  public function close()
+  {
+    $this->dispatchBrowserEvent('close-modal');
+  }
+  public function mainQuery()
+  {
+    return InvItem::search($this->search)
+    ->when($this->category_id, function ($query) {
+      $query->where('category_id',$this->category_id);
+    })
+    ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc');
+
+  }
 
   public function render()
   {
