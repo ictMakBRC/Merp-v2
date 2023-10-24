@@ -108,7 +108,7 @@ class Index extends Component
 
     public function render()
     {
-        // $this->authorize('viewany', Resignation::class);
+        $this->authorize('viewAny', Resignation::class);
         $data['resignations'] = $this->filterResignations()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);

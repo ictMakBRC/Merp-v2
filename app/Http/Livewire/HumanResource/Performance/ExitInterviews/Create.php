@@ -72,7 +72,7 @@ class Create extends Component
 
     public function render()
     {
-        // $this->authorize('create', ExitInterview::class);
+        $this->authorize('create', ExitInterview::class);
         return view('livewire.human-resource.performance.exit-interviews.create');
     }
 }

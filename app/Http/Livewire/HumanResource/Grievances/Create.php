@@ -61,6 +61,7 @@ class Create extends Component
 
     public function render()
     {
+        $this->authorize('create', Grievance::class);
         return view('livewire.human-resource.grievances.create');
     }
 }
