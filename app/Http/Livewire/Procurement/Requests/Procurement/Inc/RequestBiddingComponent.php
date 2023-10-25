@@ -234,7 +234,6 @@ class RequestBiddingComponent extends Component
     {
         $data['procurementMethods'] = ProcurementMethod::all();
         $data['providers'] =$this->filterProviders();
-
         $data['document_categories'] = DmCategory::all();
 
         return view('livewire.procurement.requests.procurement.inc.request-bidding-component',$data);

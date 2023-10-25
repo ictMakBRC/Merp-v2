@@ -6,7 +6,8 @@
         <hr>
         <div class="row col-md-5">
             <div class="mb-3 col-md-12">
-                <input class="form-control" id="search" wire:model.lazy="search" placeholder="Search provider/supplier"/>
+                <input class="form-control" id="search" wire:model.lazy="search"
+                    placeholder="Search provider/supplier" />
             </div>
 
             <div class="mb-3 col-md-12 scrollable-div">
@@ -19,14 +20,14 @@
                                 for="provider{{ $provider->id }}">{{ $provider->name }}</label>
                         </div>
                     @empty
-                    <div>
-                        {{ __('public.not_found') }}
-                    </div>
+                        <div>
+                            {{ __('public.not_found') }}
+                        </div>
                     @endforelse
                 </div>
             </div>
         </div>
-        
+
         <div class="row col-md-7">
             <div class="col-12">
                 @if (!$selectedProviders->isEmpty())
@@ -75,18 +76,7 @@
                         </div>
                     </div>
                 @endif
-
-                {{-- @if (count($providerIds))
-                    <hr>
-                    <div class="modal-footer">
-                        <button class="btn btn-outline-success btn-sm"
-                            wire:click='attachProviders'>{{ __('public.submit') }}</button>
-                    </div>
-                @endif --}}
             </div>
-
         </div>
-
     </div>
-
 </div>

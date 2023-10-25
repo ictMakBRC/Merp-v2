@@ -137,7 +137,7 @@ class MdRequestViewComponent extends Component
 
     public function render()
     {
-        $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver')->findOrFail($this->request_id);
+        $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers')->findOrFail($this->request_id);
         return view('livewire.procurement.requests.md.md-request-view-component',$data);
     }
 }

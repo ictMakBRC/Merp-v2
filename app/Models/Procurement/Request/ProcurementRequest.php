@@ -12,10 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Procurement\Settings\Provider;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\Procurement\Request\SelectedProvider;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Procurement\Request\ProcurementRequestItem;
 use App\Models\Procurement\Request\ProcurementRequestApproval;
 use App\Models\Procurement\Request\ProcurementRequestDecision;
+use App\Models\Procurement\Settings\ProcurementCategorization;
+use App\Models\Procurement\Settings\ProcurementMethod;
 
 class ProcurementRequest extends Model
 {
@@ -68,9 +71,26 @@ class ProcurementRequest extends Model
         return $this->belongsTo(Department::class, 'department_id');
     }
 
+    public function procurement_method()
+    {
+        return $this->belongsTo(ProcurementMethod::class, 'procurement_method_id');
+    }
+
+    public function procurement_categorization()
+    {
+        return $this->belongsTo(ProcurementCategorization::class, 'procurement_categorization_id');
+    }
+
+    public function contracts_manager()
+    {
+        return $this->belongsTo(User::class, 'contracts_manager_id');
+    }
+
     public function providers()
     {
         return $this->belongsToMany(Provider::class,'selected_providers','procurement_request_id','provider_id')
+        ->using(SelectedProvider::class) // Use the pivot model
+        ->withPivot(['is_best_bidder','bidder_contract_price','bidder_revised_price','payment_status'])
         ->withTimestamps();
     }
 
@@ -93,8 +113,6 @@ class ProcurementRequest extends Model
             ->orWhere('request_type', 'like', '%'.$search.'%')
             ->orWhere('subject', 'like', '%'.$search.'%')
             ->orWhere('procurement_sector', 'like', '%'.$search.'%')
-            ->orWhere('status', 'like', '%'.$search.'%')
-            
-            ;
+            ->orWhere('status', 'like', '%'.$search.'%');
     }
 }

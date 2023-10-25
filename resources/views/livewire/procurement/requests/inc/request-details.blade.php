@@ -45,7 +45,8 @@
                     </strong>{{ $request->requester->name ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Status') }}:
                     </strong><span
-                        class="badge bg-{{ getProcurementRequestStatusColor($request->status) }}">{{ $request->status }}</span> {{getProcurementRequestStep($request->step_order)}}
+                        class="badge bg-{{ getProcurementRequestStatusColor($request->status) }}">{{ $request->status }}</span>
+                    {{ getProcurementRequestStep($request->step_order) }}
                 </div>
             </td>
         </tr>
@@ -158,7 +159,7 @@
     @endif
 
     <div>
-        <h5 class="px-2 text-cente">Chain of Custody</h5>
+        <h5 class="px-2">Chain of Custody</h5>
     </div>
     @if (!$request->approvals->isEmpty())
         <div class="tab-content scrollable-di">
@@ -186,6 +187,7 @@
                             </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -201,4 +203,14 @@
             </div>
         </div>
     @endif
+
+    <div>
+        <h5 class="px-2">Procurement Method Approval</h5>
+    </div>
+    @include('livewire.procurement.requests.procurement.inc.procurement-method-approval')
+
+    <div>
+        <h5 class="px-2">Evaluation Report Approval</h5>
+    </div>
+    @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
 </div>

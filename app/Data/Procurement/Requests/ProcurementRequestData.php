@@ -11,9 +11,9 @@ class ProcurementRequestData extends Data
   public $body;
   public $procuring_entity_code;
   public $procurement_sector;
-  public $financial_year;
-  public $currency;
-  public $budget_line;
+  public $financial_year_id;
+  public $currency_id;
+  public $budget_line_id;
   public $sequence_number;
   public $procurement_plan_ref;
   public $location_of_delivery;
@@ -35,9 +35,9 @@ class ProcurementRequestData extends Data
         'body' =>'required|string',
         'procuring_entity_code' =>'required|string',
         'procurement_sector' =>'required|string',
-        'financial_year' =>'required|string',
-        'currency' =>'required|string',
-        'budget_line' =>'required|string',
+        'financial_year_id' =>'required|string',
+        'currency_id' =>'required|string',
+        'budget_line_id' =>'required|string',
         'sequence_number' =>'required|string',
         'procurement_plan_ref' =>'required|string',
         'location_of_delivery' =>'required|string',

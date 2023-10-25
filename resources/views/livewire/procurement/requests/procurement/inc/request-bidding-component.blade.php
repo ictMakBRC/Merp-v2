@@ -3,7 +3,7 @@ use App\Enums\ProcurementRequestEnum;
 ?>
 <div>
     <div class="card">
-        <div class="card-header d-print-none">
+        <div class="card-header">
             <div class="row align-items-center">
                 <div class="col">
                     <h4 class="card-title">{{ __('Procurement Method Approval') }}</h4>
@@ -23,7 +23,6 @@ use App\Enums\ProcurementRequestEnum;
                 </div><!--end col-->
             </div> <!--end row-->
         </div>
-
         <div class="card-body">
             @if ($request->status == ProcurementRequestEnum::PROCESSING)
                 <form wire:submit.prevent="saveProcurementMethodDecision">
@@ -121,9 +120,11 @@ use App\Enums\ProcurementRequestEnum;
                         </div>
                     @endif
                 </form>
-
             @endif
         </div>
+
+        @include('livewire.procurement.requests.procurement.inc.procurement-method-approval')
+
     </div>
 
     <div class="card">
@@ -147,6 +148,7 @@ use App\Enums\ProcurementRequestEnum;
                 </div><!--end col-->
             </div> <!--end row-->
         </div>
+
         @if (isProcurementMethodApproved($request->id) && !isProcurementEvaluationApproved($request->id))
             <div class="card-body">
                 <form wire:submit.prevent="saveEvaluationDecision">
@@ -274,7 +276,9 @@ use App\Enums\ProcurementRequestEnum;
 
                     </div>
                     <div class="modal-footer">
-                        @if ($decision == ProcurementRequestEnum::APPROVED && (requiresProcurementContract($bidder_contract_price) || requiresProcurementContract($bidder_revised_price)))
+                        @if (
+                            $decision == ProcurementRequestEnum::APPROVED &&
+                                (requiresProcurementContract($bidder_contract_price) || requiresProcurementContract($bidder_revised_price)))
                             <div class="alert alert-warning border-0 text-center p-2 m-2" role="alert">
                                 {{ __('You will need to issue a contract to the provider and upload the same using the support documents Tab because the bidder amount is higher than') }}
                                 {{ getProcurementCategorization($bidder_contract_price)->contract_requirement_threshold ?? getProcurementCategorization($bidder_revised_price)->contract_requirement_threshold }}
@@ -290,6 +294,7 @@ use App\Enums\ProcurementRequestEnum;
             </div>
         @endif
 
+        @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
     </div>
 
 </div>

@@ -15,12 +15,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('procurement_request_id')->references('id')->on('procurement_requests', 'id')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('provider_id')->references('id')->on('providers', 'id')->constrained()->onUpdate('cascade')->onDelete('restrict');
-            $table->boolean('bid_returned')->default(0);
-            $table->date('bid_returned_at')->nullable();
             $table->boolean('is_best_bidder')->default(0);
             $table->float('bidder_contract_price',12,2)->nullable();
             $table->float('bidder_revised_price',12,2)->nullable();
             $table->boolean('payment_status')->default(false);
+            $table->date('date_paid')->nullable();
+            $table->decimal('quality_rating', 5, 2)->nullable();
+            $table->decimal('timeliness_rating', 5, 2)->nullable();
+            $table->decimal('cost_rating', 5, 2)->nullable();
+            $table->decimal('total_rating', 5, 2)->nullable();
+            $table->longText('contracts_manager_comment')->nullable();
             $table->foreignId('created_by')->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
