@@ -30,10 +30,11 @@
                         <td>
                             <a href="{{ route('stores-procurement-request-details', $procurementRequest->id) }}"
                                 class="btn btn btn-sm btn-outline-primary action-icon"> <i class="ti ti-eye"></i></a>
-                            <a href="{{ route('procurement-items-reception', $procurementRequest->id) }}"
-                                class="btn btn btn-sm btn-outline-success" data-bs-toggle="tooltip"
-                                data-bs-placement="right" title="{{ __('Receive') }}" data-bs-trigger="hover">Receive
-                                Items</a>
+                            
+                                @if ($procurementRequest->step_order >= 7 && $procurementRequest->status != ProcurementRequestEnum::PENDING)
+                                <a href="{{ route('stores-request-mgt', $procurementRequest->id) }}"
+                                    class="btn btn btn-sm btn-outline-info action-icon"> <i class="ti ti-edit"></i></a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

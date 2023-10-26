@@ -32,12 +32,22 @@ class ProcurementRequestFormComponent extends Component
     public $procurement_request_id;
     public $loadingInfo='';
 
+    public $budget_line_balance;
+    public $currency;
+
     protected $listeners = [
         'loadProcurementRequest'=>'loadProcurementRequest',
     ];
 
-    public function updatedProjectId(){
-        $this->currency_id=Project::findOrFail($this->project_id)->currency_id;
+    // public function updatedProjectId(){
+    //     $this->currency_id=Project::findOrFail($this->project_id)->currency_id;
+    // }
+
+    public function updatedBudgetLineId(){
+        $budgetLine = FmsBudgetLine::with('budget','budget.currency')->findOrFail($this->budget_line_id);
+        $this->currency_id = $budgetLine->budget->currency_id;
+        $this->currency = $budgetLine->budget->currency->code;
+        $this->budget_line_balance = $budgetLine->primary_balance;
     }
 
     public function loadProcurementRequest($details)
@@ -157,8 +167,12 @@ class ProcurementRequestFormComponent extends Component
     public function render()
     {
         $data['projects'] = Project::all();
-        $data['budget_lines'] = FmsBudgetLine::all();
-        $data['financial_years'] = FmsFinancialYear::all();
+        $data['financial_years'] = FmsFinancialYear::where('is_budget_year',true)->get();
+
+        $data['budget_lines'] = FmsBudgetLine::where('type','Expense')->whereHas('budget', function ($query) {
+            $query->where(['fiscal_year' => $this->financial_year_id,'department_id' => auth()->user()->employee->department_id]);
+        })->latest()->get();
+
         return view('livewire.procurement.requests.inc.procurement-request-form-component',$data);
     }
 }

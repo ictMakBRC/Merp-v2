@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Procurement\Requests\Md;
 
 use Response;
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Enums\ProcurementRequestEnum;
@@ -14,55 +15,11 @@ class MdRequestViewComponent extends Component
 {
     public $request_id;
     public $comment;
+    public $contracts_manager_id;
 
     public function mount($id){
         $this->request_id=$id;
     }
-
-    public function forwardToSupervisor(ProcurementRequest $procurementRequest)
-    {
-        if ($procurementRequest->step_order==1) {
-            
-            $this->validate([
-                'comment'=>'required|string',
-            ]);
-
-            DB::transaction(function () use($procurementRequest) {
-                $nextStepOrder = $procurementRequest->step_order+1;
-                
-                $procurementRequest->update([
-                    'status'=>ProcurementRequestEnum::PENDING,
-                    'step_order'=>$nextStepOrder,
-                ]);
-
-                ProcurementRequestApproval::create([
-                    'procurement_request_id' => $procurementRequest->id,
-                    'approver_id' => auth()->user()->id,
-                    'comment' => $this->comment,
-                    'status' => ProcurementRequestEnum::SUBMITTED,
-                    'step' => ProcurementRequestEnum::step($nextStepOrder-1),
-                ]);
-
-                ProcurementRequestApproval::create([
-                    'procurement_request_id' => $procurementRequest->id,
-                    'approver_id' => null,
-                    'comment' => null,
-                    'status' => ProcurementRequestEnum::PENDING,
-                    'step' => ProcurementRequestEnum::step($nextStepOrder),
-                ]);
-            });
-
-        } else {
-            $this->dispatchBrowserEvent('swal:modal', [
-                'type' => 'error',
-                'message' => 'Operation failed!',
-                'text' => 'This operation can no be performed!',
-            ]);
-        }
-      
-        // Notify the next approver (e.g., the supervisor)
-    }
-
 
     public function approveAndFowardRequest(ProcurementRequest $procurementRequest,$status)
     {
@@ -70,6 +27,13 @@ class MdRequestViewComponent extends Component
         $this->validate([
             'comment'=>'required|string',
         ]);
+
+        if ($status==ProcurementRequestEnum::APPROVED) {
+            $this->validate([
+                'contracts_manager_id'=>'required|integer',
+            ]);
+        }
+
         DB::transaction(function () use($procurementRequest,$status) {
             $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
 
@@ -87,6 +51,7 @@ class MdRequestViewComponent extends Component
                     $procurementRequest->update([
                         'status'=>ProcurementRequestEnum::PENDING,
                         'step_order'=>$nextStepOrder,
+                        'contracts_manager_id'=>$this->contracts_manager_id,
                     ]);
 
                     ProcurementRequestApproval::create([
@@ -115,6 +80,7 @@ class MdRequestViewComponent extends Component
 
             }
         });
+        $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
     }
 
@@ -135,8 +101,13 @@ class MdRequestViewComponent extends Component
         }
     }
 
+    public function resetInputs(){
+        $this->reset(['comment','contracts_manager_id']);
+    }
+
     public function render()
     {
+        $data['contract_managers'] = User::where('id','!=',auth()->user()->id)->get(); 
         $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers')->findOrFail($this->request_id);
         return view('livewire.procurement.requests.md.md-request-view-component',$data);
     }

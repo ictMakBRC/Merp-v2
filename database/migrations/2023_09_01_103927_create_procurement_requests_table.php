@@ -34,7 +34,7 @@ return new class extends Migration
             $table->foreignId('contracts_manager_id')->nullable()->references('id')->on('users', 'id')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->date('bid_return_deadline')->nullable();
             $table->date('delivery_deadline')->nullable();
-            $table->integer('step_order')->default(0);
+            $table->integer('step_order')->default(1);
             $table->string('status')->default('Draft');
             
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');

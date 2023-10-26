@@ -36,7 +36,7 @@ class ProcurementRequestData extends Data
         'procuring_entity_code' =>'required|string',
         'procurement_sector' =>'required|string',
         'financial_year_id' =>'required|string',
-        'currency_id' =>'required|string',
+        'currency_id' =>'required|integer',
         'budget_line_id' =>'required|string',
         'sequence_number' =>'required|string',
         'procurement_plan_ref' =>'required|string',

@@ -56,7 +56,6 @@ class RequestBiddingComponent extends Component
 
     public function updatedProviderIds()
     {
-
         $this->selectedProviders = Provider::whereHas('procurementSubcategories', function ($query) {
             $query->where(['category' => $this->procurement_category]);
         })->whereIn('id', $this->providerIds)->get();
@@ -70,9 +69,9 @@ class RequestBiddingComponent extends Component
             ]);
 
             $this->request->providers()->sync($this->providerIds);
-            SelectedProvider::where('procurement_request_id',$this->request_id)->update([
-                'created_by' => auth()->id(),
-            ]);
+            // SelectedProvider::where('procurement_request_id',$this->request_id)->update([
+            //     'created_by' => auth()->id(),
+            // ]);
    
             $this->resetInputs();
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Providers attached successfully']);
@@ -144,12 +143,12 @@ class RequestBiddingComponent extends Component
                 'comment'=>$this->comment,
                 'decision_date'=>$this->decision_date,
             ]);
-
-            SelectedProvider::where(['procurement_request_id'=>$this->request->id,'provider_id'=>$this->best_bidder_id])->update([
+            $this->request->providers()->updateExistingPivot($this->best_bidder_id, [
                 'is_best_bidder'=>true,
                 'bidder_contract_price' => $this->bidder_contract_price,
                 'bidder_revised_price' => $this->bidder_revised_price,
             ]);
+
             if ($this->negotiated_with_bidder &&  $this->bidder_revised_price>0) {
 
                 $this->request->update([
@@ -161,6 +160,7 @@ class RequestBiddingComponent extends Component
             } else {
 
                 $this->request->update([
+                    'contract_value' => $this->bidder_contract_price,
                     'delivery_deadline' => $this->delivery_deadline,
                     'status' => $this->decision,
                 ]);
@@ -168,7 +168,7 @@ class RequestBiddingComponent extends Component
             
             $this->storeDocument('Procurement Evaluation Report');
        });
-
+        $this->resetInputs();
        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Evaluation approval information saved successfully']);
     }
 

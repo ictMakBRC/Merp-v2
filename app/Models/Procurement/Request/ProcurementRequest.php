@@ -19,10 +19,12 @@ use App\Models\Procurement\Request\ProcurementRequestApproval;
 use App\Models\Procurement\Request\ProcurementRequestDecision;
 use App\Models\Procurement\Settings\ProcurementCategorization;
 use App\Models\Procurement\Settings\ProcurementMethod;
+use App\Traits\BudgetLineTrait;
+use App\Traits\FinancialYearTrait;
 
 class ProcurementRequest extends Model
 {
-    use HasFactory,LogsActivity,DocumentableTrait,CurrencyTrait;
+    use HasFactory,LogsActivity,DocumentableTrait,CurrencyTrait,BudgetLineTrait,FinancialYearTrait;
 
     public function getActivitylogOptions(): LogOptions
     {

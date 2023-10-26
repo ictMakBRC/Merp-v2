@@ -41,6 +41,10 @@
                             <a href="{{route('procurement-stores-panel')}}" class="nav-link ">Stores Panel</a>
                         </li>
 
+                        <li class="nav-item mb-2">
+                            <a href="{{route('contracts-manager-panel')}}" class="nav-link ">Contracts Manager Panel</a>
+                        </li>
+
                     </ul>
 
                 </div>

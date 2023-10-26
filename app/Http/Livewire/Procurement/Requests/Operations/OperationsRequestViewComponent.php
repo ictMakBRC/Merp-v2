@@ -18,52 +18,7 @@ class OperationsRequestViewComponent extends Component
     public function mount($id){
         $this->request_id=$id;
     }
-
-    public function forwardToSupervisor(ProcurementRequest $procurementRequest)
-    {
-        if ($procurementRequest->step_order==1) {
-            
-            $this->validate([
-                'comment'=>'required|string',
-            ]);
-
-            DB::transaction(function () use($procurementRequest) {
-                $nextStepOrder = $procurementRequest->step_order+1;
-                
-                $procurementRequest->update([
-                    'status'=>ProcurementRequestEnum::PENDING,
-                    'step_order'=>$nextStepOrder,
-                ]);
-
-                ProcurementRequestApproval::create([
-                    'procurement_request_id' => $procurementRequest->id,
-                    'approver_id' => auth()->user()->id,
-                    'comment' => $this->comment,
-                    'status' => ProcurementRequestEnum::SUBMITTED,
-                    'step' => ProcurementRequestEnum::step($nextStepOrder-1),
-                ]);
-
-                ProcurementRequestApproval::create([
-                    'procurement_request_id' => $procurementRequest->id,
-                    'approver_id' => null,
-                    'comment' => null,
-                    'status' => ProcurementRequestEnum::PENDING,
-                    'step' => ProcurementRequestEnum::step($nextStepOrder),
-                ]);
-            });
-
-        } else {
-            $this->dispatchBrowserEvent('swal:modal', [
-                'type' => 'error',
-                'message' => 'Operation failed!',
-                'text' => 'This operation can no be performed!',
-            ]);
-        }
-      
-        // Notify the next approver (e.g., the supervisor)
-    }
-
-
+    
     public function approveAndFowardRequest(ProcurementRequest $procurementRequest,$status)
     {
         // dd('yes');

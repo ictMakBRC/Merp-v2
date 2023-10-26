@@ -1,7 +1,9 @@
 <?php
 
 use App\Enums\ProcurementRequestEnum;
+use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\Procurement\Request\ProcurementRequestDecision;
 use App\Models\Procurement\Settings\ProcurementCategorization;
 
@@ -28,8 +30,6 @@ function getProcurementCategorization($amount)
             return $categorization->last();
         }
     }
-
-    // return 'Uncategorized'; // Handle cases where the thresholds are not set
 }
 
 function isMacroProcurement($amount)
@@ -41,8 +41,6 @@ function isMacroProcurement($amount)
     } else {
         return true;
     }
-
-    return false; // Handle cases where the thresholds are not set
 }
 
 function requiresProcurementContract($amount)
@@ -56,28 +54,40 @@ function requiresProcurementContract($amount)
     if ($amount>=$categorization->first()->contract_requirement_threshold) {
         return true;
     } 
-    
-    return false;
 }
 
-function isProcurementMethodApproved($procurementRequestId)
+function procurementMethodApproved($procurementRequestId)
 {
     $pro_decision_step=ProcurementRequestDecision::where(['procurement_request_id'=>$procurementRequestId,'step'=>ProcurementRequestEnum::PM_APPROVAL])->first();
     if ($pro_decision_step && $pro_decision_step->decision == ProcurementRequestEnum::APPROVED) {
-        
         return true;
     } 
-    return false;
 }
 
-function isProcurementEvaluationApproved($procurementRequestId)
+function checkProcurementMethodApproval($procurementRequestId)
+{
+    $pro_decision=ProcurementRequestDecision::where(['procurement_request_id'=>$procurementRequestId,'step'=>ProcurementRequestEnum::PM_APPROVAL])->get();
+    if (count($pro_decision)>0) {
+        return true;
+    } 
+}
+
+function procuremenEvaluationApproved($procurementRequestId)
 {
     $pro_decision_step = ProcurementRequestDecision::where(['procurement_request_id'=>$procurementRequestId,'step'=>ProcurementRequestEnum::ER_APPROVAL])->first();
     if ($pro_decision_step && $pro_decision_step->decision == ProcurementRequestEnum::APPROVED) {
         return true;
     } 
-    return false;
 }
+
+function checkProcurementEvaluationApproval($procurementRequestId)
+{
+    $pro_decision=ProcurementRequestDecision::where(['procurement_request_id'=>$procurementRequestId,'step'=>ProcurementRequestEnum::ER_APPROVAL])->get();
+    if (count($pro_decision)>0) {
+        return true;
+    } 
+}
+
 
 //CURRENCY HELPERS
 function getCurrencies()
@@ -102,4 +112,31 @@ function isDefaultCurrency($currencyId)
     }else{
         return false;
     }
+}
+
+function getCurrencyCode($fmsCurrencyId)
+{
+    return FmsCurrency::where('id',$fmsCurrencyId)->value('code');
+}
+
+function exchangeToDefaultCurrency($fmsCurrencyId, $amount = 1)
+{
+    $fmsCurrency=FmsCurrency::findOrFail($fmsCurrencyId);
+    return round($fmsCurrency->exchange_rate * $amount,2);
+}
+
+function exchangeToOtherCurrency($fmsCurrencyId, $amount = 1)
+{
+    $fmsCurrency=FmsCurrency::findOrFail($fmsCurrencyId);
+    return round($amount/$fmsCurrency->exchange_rate,2);
+}
+
+
+//BUDGETING HELPERS
+function getBudgetLineBalance(FmsBudgetLine $fmsBudgetLine){
+    return $fmsBudgetLine->primary_balance;
+}
+
+function getFinacialYear(FmsFinancialYear $fmsFinancialYear){
+    return $fmsFinancialYear->name;
 }

@@ -30,7 +30,7 @@ use App\Enums\ProcurementRequestEnum;
                         <td>{{ $procurementRequest->requestable->name }}</td>
                         <td>{{ $procurementRequest->subject }}</td>
                         <td>{{ $procurementRequest->procurement_sector ?? 'N/A' }}</td>
-                        <td>{{ $procurementRequest->currency }} @moneyFormat($procurementRequest->contract_value)</td>
+                        <td>{{ $procurementRequest->currency->code }} @moneyFormat($procurementRequest->contract_value)</td>
                         <td>@formatDate($procurementRequest->date_required)</td>
                         <td><span
                                 class="badge bg-{{ getProcurementRequestStatusColor($procurementRequest->status) }}">{{ $procurementRequest->status }}</span>

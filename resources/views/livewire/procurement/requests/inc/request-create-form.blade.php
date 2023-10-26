@@ -73,11 +73,10 @@
             <label for="financial_year_id" class="form-label">{{ __('Financial Year') }}</label>
             <select class="form-select" id="financial_year_id" wire:model.lazy="financial_year_id">
                 <option selected value="">Select</option>
-                @forelse ($projects as $project)
-                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                @forelse ($financial_years as $financial_year)
+                    <option value="{{ $financial_year->id }}">{{ $financial_year->name }}</option>
                 @empty
                 @endforelse
-
             </select>
             @error('financial_year_id')
                 <div class="text-danger text-small">{{ $message }}</div>
@@ -86,7 +85,7 @@
 
         <div class="mb-3 col-md-2">
             <label for="currency_id" class="form-label">{{ __('Currency') }}</label>
-            <select class="form-select" id="currency_id" wire:model.lazy="currency_id">
+            <select class="form-select" id="currency_id" wire:model.lazy="currency_id" disabled>
                 <option selected value="">Select</option>
                 @include('layouts.currencies')
             </select>
@@ -96,11 +95,13 @@
         </div>
 
         <div class="mb-3 col-md-4">
-            <label for="budget_line_id" class="form-label required">{{ __('Budget Line') }}</label>
+            <label for="budget_line_id" class="form-label required">{{ __('Budget Line') }} @if ($currency)
+            <strong class="text-info">Balance:</strong> {{$currency}} <strong class="text-danger">{{$budget_line_balance}}</strong>  
+            @endif</label>
             <select class="form-select" id="budget_line_id" wire:model.lazy="budget_line_id">
                 <option selected value="">Select</option>
-                @forelse ($projects as $project)
-                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                @forelse ($budget_lines as $budget_line)
+                    <option value="{{ $budget_line->id }}">{{ $budget_line->name }}</option>
                 @empty
                 @endforelse
             </select>

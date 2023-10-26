@@ -29,12 +29,12 @@ class StoresPanelComponent extends Component
     public function filterProcurementRequests()
     {
         $procurementRequests = ProcurementRequest::search($this->search)
-        ->where('step_order','>=',7)
+        ->where('step_order','>=',7)->where('procurement_sector','Supplies')
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
-            });
+        });
 
         $this->procurementRequestIds = $procurementRequests->pluck('id')->toArray();
 

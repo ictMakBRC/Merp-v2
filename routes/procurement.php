@@ -9,6 +9,8 @@ use App\Http\Livewire\Procurement\Requests\Stores\StoresPanelComponent;
 use App\Http\Livewire\Procurement\Requests\Finance\FinancePanelComponent;
 use App\Http\Livewire\Procurement\Settings\ProcurementSubcategoriesComponent;
 use App\Http\Livewire\Procurement\Dashboard\ProcurementMainDashboardComponent;
+use App\Http\Livewire\Procurement\Requests\ContractsManager\ContractsManagerPanelComponent;
+use App\Http\Livewire\Procurement\Requests\ContractsManager\ContractsManagerRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Finance\FinanceRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Md\MdRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\ProcurementRequestDetailsComponent;
@@ -19,6 +21,7 @@ use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementOfficePanelCom
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Supervisor\SupervisorPanelComponent;
 use App\Http\Livewire\Procurement\Requests\Stores\ProcurementItemsReceptionComponent;
+use App\Http\Livewire\Procurement\Requests\Stores\StoresRequestManagementComponent;
 use App\Http\Livewire\Procurement\Requests\Stores\StoresRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Supervisor\SupervisorRequestViewComponent;
 use App\Http\Livewire\Procurement\Settings\ProcurementCategorizationComponent;
@@ -50,7 +53,11 @@ Route::group(['prefix' => 'procurement'], function () {
 
     Route::get('stores', StoresPanelComponent::class)->name('procurement-stores-panel');
     Route::get('stores/request/{id}/details', StoresRequestViewComponent::class)->name('stores-procurement-request-details');
-    Route::get('stores/request/{id}/items-reception', ProcurementItemsReceptionComponent::class)->name('procurement-items-reception');
+    Route::get('stores/request/{id}/mgt', StoresRequestManagementComponent::class)->name('stores-request-mgt');
+
+    Route::get('contracts-manager', ContractsManagerPanelComponent::class)->name('contracts-manager-panel');
+    Route::get('contracts-manager/request/{id}/details', ContractsManagerRequestViewComponent::class)->name('contracts-manager-request-details');
+    Route::get('contracts-manager/request/{id}/mgt', ContractsManagerRequestViewComponent::class)->name('contracts-manager-request-mgt');
     
 
     Route::group(['prefix' => 'settings'], function () {

@@ -52,7 +52,7 @@ class AssetLogService
         $assetLog->resolution_status = $assetLogDTO->resolution_status;
         $assetLog->serviced_by = $assetLogDTO->serviced_by;
         $assetLog->cost = $assetLogDTO->cost;
-        $assetLog->currency = $assetLogDTO->currency;
+        $assetLog->currency_id = $assetLogDTO->currency_id;
         $assetLog->next_service_date = $assetLogDTO->next_service_date;
     }
 }

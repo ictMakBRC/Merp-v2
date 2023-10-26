@@ -1,3 +1,6 @@
+<?php
+use App\Enums\ProcurementRequestEnum;
+?>
 <div class="bg-light">
     <table class="table">
         <tr>
@@ -14,22 +17,25 @@
                     <strong class="text-inverse">{{ __('Sector') }}:
                     </strong>{{ $request->procurement_sector ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Categorization') }}:
-                    </strong>{{ getProcurementCategorization($request->contract_value)->categorization }}<br>
+                    </strong>{{ getProcurementCategorization(exchangeToDefaultCurrency($request->currency_id, $request->contract_value))->categorization }}<br>
                 </div>
             </td>
 
             <td>
                 <div>
                     <strong class="text-inverse">{{ __('Financial Year') }}: </strong>
-                    {{ $request->financial_year }}<br>
-                    <strong class="text-inverse">{{ __('Currency') }}:
-                    </strong>{{ $request->currency ?? 'N/A' }}<br>
+                    {{ $request->financial_year->name }}<br>
                     <strong class="text-inverse">{{ __('Budget Line') }}:
-                    </strong>{{ $request->budget_line ?? 'N/A' }}<br>
+                    </strong>{{ $request->budget_line->name ?? 'N/A' }}<br>
+                    <strong class="text-inverse text-info">{{ __('Line Balance') }}:
+                    </strong>{{ $request->currency->code }} <strong
+                        class="text-danger">{{ $request->budget_line->primary_balance }}</strong><br>
                     <strong class="text-inverse">{{ __('Sequence No') }}:
                     </strong>{{ $request->sequence_number ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Procurement Plan Reference') }}:
-                    </strong>{{ $request->procurement_plan_ref ?? 'N/A' }}
+                    </strong>{{ $request->procurement_plan_ref ?? 'N/A' }}<br>
+                    <strong class="text-inverse">{{ __('Contracts Manager') }}:
+                    </strong>{{ $request->contracts_manager->name ?? 'N/A' }}
                 </div>
             </td>
 
@@ -39,7 +45,7 @@
                     </strong>{{ $request->location_of_delivery ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Date Required') }}:
                     </strong>@formatDate($request->date_required ?? now())<br>
-                    <strong class="text-inverse">{{ __('Contract Value') }} ({{ $request->currency }}):
+                    <strong class="text-inverse">{{ __('Contract Value') }} ({{ $request->currency->code }}):
                     </strong>@moneyFormat($request->contract_value)<br>
                     <strong class="text-inverse">{{ __('Requested By') }}:
                     </strong>{{ $request->requester->name ?? 'N/A' }}<br>
@@ -84,7 +90,7 @@
                             </tr>
                         @endforeach
                         <tr>
-                            <td colspan="4" class="text-end">Total ({{ $request->currency }})</td>
+                            <td colspan="4" class="text-end">Total ({{ $request->currency->code }})</td>
                             <td>@moneyFormat($request->items->sum('total_cost'))</td>
 
                         </tr>
@@ -104,11 +110,11 @@
             </div>
         </div>
     @endif
-
-    <div>
-        <h5 class="px-2 text-cente">Supporting Documents</h5>
-    </div>
     @if (!$request->documents->isEmpty())
+        <div>
+            <h5 class="px-2 text-cente">Supporting Documents</h5>
+        </div>
+
         <div class="tab-content scrollable-di">
             <div class="table-responsive">
                 <table class="table table-striped mb-0 w-100 sortable border">
@@ -145,7 +151,8 @@
                 </table>
             </div>
         </div>
-    @else<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
+    @else
+        <div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
             <div class="d-flex align-items-center">
                 <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
                 </div>
@@ -158,10 +165,10 @@
         </div>
     @endif
 
-    <div>
-        <h5 class="px-2">Chain of Custody</h5>
-    </div>
     @if (!$request->approvals->isEmpty())
+        <div>
+            <h5 class="px-2">Chain of Custody</h5>
+        </div>
         <div class="tab-content scrollable-di">
             <div class="table-responsive">
                 <table class="table table-striped mb-0 w-100 sortable border">
@@ -191,26 +198,20 @@
                 </table>
             </div>
         </div>
-    @else<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-            <div class="d-flex align-items-center">
-                <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0 text-warning">{{ __('Approvals') }}</h6>
-                    <div>{{ __('public.not_found') }}
-                    </div>
-                </div>
-            </div>
-        </div>
     @endif
 
-    <div>
-        <h5 class="px-2">Procurement Method Approval</h5>
-    </div>
-    @include('livewire.procurement.requests.procurement.inc.procurement-method-approval')
+    @if (!$request->decisions->isEmpty())
+        <div>
+            <h5 class="px-2">Procurement Method Approval</h5>
+        </div>
+        @include('livewire.procurement.requests.procurement.inc.procurement-method-approval')
 
-    <div>
-        <h5 class="px-2">Evaluation Report Approval</h5>
-    </div>
-    @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
+        @if (checkProcurementEvaluationApproval($request->id))
+            <div>
+                <h5 class="px-2">Evaluation Report Approval</h5>
+            </div>
+            @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
+        @endif
+
+    @endif
 </div>

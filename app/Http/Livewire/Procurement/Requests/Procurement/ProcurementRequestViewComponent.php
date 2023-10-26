@@ -35,6 +35,7 @@ class ProcurementRequestViewComponent extends Component
             ]);
             
         });
+        
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
         $this->redirect(route('proc-dept-bid-mgt', $procurementRequest->id));
        

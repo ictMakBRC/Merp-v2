@@ -67,7 +67,7 @@
                                 <div class="mb-3 col-md-3">
                                     <label for="currency_id" class="form-label required">{{ __('Currency') }}</label>
                                     <select class="form-select" id="currency_id" wire:model.lazy="currency_id"
-                                        @if ($readonly) {{ 'disabled' }} @endif>
+                                        disabled>
                                         <option selected value="">Select</option>
                                         @include('layouts.currencies')
                                     </select>

@@ -34,9 +34,9 @@ class ProcurementRequestDetailsComponent extends Component
                 $procurementRequest->update([
                     'status'=>ProcurementRequestEnum::PENDING,
                     'step_order'=>$nextStepOrder,
-                    'procurement_categorization_id'=>getProcurementCategorization($procurementRequest->contract_value),
+                    'procurement_categorization_id'=>getProcurementCategorization(exchangeToDefaultCurrency($procurementRequest->currency_id, $procurementRequest->contract_value))->id,
                 ]);
-
+                
                 ProcurementRequestApproval::create([
                     'procurement_request_id' => $procurementRequest->id,
                     'approver_id' => auth()->user()->id,
