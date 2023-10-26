@@ -53,6 +53,7 @@ use App\Enums\ProcurementRequestEnum;
                         <th>{{ __('Revised Price') }}</th>
                         <th>{{ __('Delivery Deadline') }}</th>
                         <th>{{ __('Payment') }}</th>
+                        <th>{{ __('Date Paid') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,6 +75,7 @@ use App\Enums\ProcurementRequestEnum;
                             @else
                                 <td><span class="badge bg-danger">Not Paid</span></td>
                             @endif
+                            <td>@formatDate($provider->pivot->date_paid)</td>
                         </tr>
                     @empty
                     @endforelse

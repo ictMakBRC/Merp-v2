@@ -14,6 +14,7 @@ class FinanceRequestViewComponent extends Component
 {
     public $request_id;
     public $comment;
+    public $date_paid;
 
     public function mount($id){
         $this->request_id=$id;
@@ -75,8 +76,58 @@ class FinanceRequestViewComponent extends Component
        
     }
 
-    public function processBidDocs(ProcurementRequest $procurementRequest){
-        $procurementRequest->update(['status'=>'Bid Docs Processing']);
+    public function acknowledgeRequest(ProcurementRequest $procurementRequest,$status)
+    {
+        DB::transaction(function () use($procurementRequest,$status) {
+            $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
+
+            $procurementRequest->update([
+                'status'=>$status,
+            ]);
+
+            $procurementRequestApproval->update([
+                'approver_id' => auth()->user()->id,
+                'status' => $status,
+            ]);
+            
+        });
+        
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+       
+    }
+
+    public function markAsPaid(ProcurementRequest $procurementRequest,$status)
+    {
+        $this->validate([
+            'date_paid'=>'required|date',
+        ]);
+
+        DB::transaction(function () use($procurementRequest,$status) {
+
+            $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
+
+            if($procurementRequest->step_order <= ProcurementRequestEnum::TOTAL_STEPS){
+                $procurementRequestApproval->update([
+                    'approver_id' => auth()->user()->id,
+                    'comment' => $this->date_paid,
+                    'status' => $status,
+                ]);
+
+                $procurementRequest->update([
+                    'status'=>ProcurementRequestEnum::COMPLETED,
+                ]);
+
+                $provider_id = $procurementRequest->providers->where('pivot.is_best_bidder', true)->first()->id;
+ 
+                $procurementRequest->providers()->updateExistingPivot($provider_id, [
+                    'payment_status'=>true,
+                    'date_paid'=>$this->date_paid,
+                ]);
+            }
+        });
+
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+       
     }
 
     public function downloadDocument(FormalDocument $formalDocument)

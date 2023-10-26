@@ -6,13 +6,11 @@ use Response;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
-use App\Enums\ProcurementRequestEnum;
 use App\Models\Documents\FormalDocument;
 use App\Data\Document\FormalDocumentData;
 use App\Models\Documents\Settings\DmCategory;
 use App\Services\Document\FormalDocumentService;
 use App\Models\Procurement\Request\ProcurementRequest;
-use App\Models\Procurement\Request\ProcurementRequestApproval;
 
 class ContractsManagerRequestManagementComponent extends Component
 {
@@ -33,7 +31,11 @@ class ContractsManagerRequestManagementComponent extends Component
     public $document_path;
     public $description;
 
-    public function storeSupportDocument()
+     public function mount($id){
+        $this->request_id = $id;
+    }
+
+    public function storeDocument()
     {
         if ($this->request_id==null) {
             $this->dispatchBrowserEvent('swal:modal', [
@@ -80,27 +82,6 @@ class ContractsManagerRequestManagementComponent extends Component
             $this->reset($formalDocumentDTO->resetInputs());
 
         });
-    }
-
-    public function mount($id){
-        $this->request_id = $id;
-    }
-
-    public function updateRequest(ProcurementRequest $procurementRequest,$status)
-    {
-        DB::transaction(function () use($procurementRequest,$status) {
-            $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
-
-            $procurementRequest->update([
-                'status'=>$status,
-            ]);
-
-            $procurementRequestApproval->update([
-                'approver_id' => auth()->user()->id,
-                'status' => $status,
-            ]);
-        });
-       
     }
 
     public function downloadDocument(FormalDocument $formalDocument)

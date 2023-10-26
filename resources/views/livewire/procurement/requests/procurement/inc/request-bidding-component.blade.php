@@ -3,7 +3,7 @@ use App\Enums\ProcurementRequestEnum;
 ?>
 <div>
     @if (!checkProcurementMethodApproval($request->id) || checkProcurementMethodApproval($request->id))
-        <div class="card">
+        {{-- <div class="card"> --}}
             <div class="card-header">
                 <div class="row align-items-center">
                     <div class="col">
@@ -24,7 +24,7 @@ use App\Enums\ProcurementRequestEnum;
                     </div><!--end col-->
                 </div> <!--end row-->
             </div>
-            <div class="card-body">
+            {{-- <div class="card-body"> --}}
                 @if (!checkProcurementMethodApproval($request->id))
                     <form wire:submit.prevent="saveProcurementMethodDecision">
                         <div class="row">
@@ -126,12 +126,13 @@ use App\Enums\ProcurementRequestEnum;
                 @if (checkProcurementMethodApproval($request->id))
                     @include('livewire.procurement.requests.procurement.inc.procurement-method-approval')
                 @endif
-            </div>
-        </div>
+            {{-- </div> --}}
+        {{-- </div> --}}
     @endif
 
     @if (procurementMethodApproved($request->id) && today()>=$request->bid_return_deadline )
-        <div class="card">
+    <hr>
+        {{-- <div class="card"> --}}
             <div class="card-header">
                 <div class="row align-items-center">
                     <div class="col">
@@ -154,7 +155,7 @@ use App\Enums\ProcurementRequestEnum;
             </div>
 
             @if (!checkProcurementEvaluationApproval($request->id))
-                <div class="card-body">
+                {{-- <div class="card-body"> --}}
                     <form wire:submit.prevent="saveEvaluationDecision">
                         <div class="row">
                             <div class="mb-3 col-md-3">
@@ -300,12 +301,12 @@ use App\Enums\ProcurementRequestEnum;
                             <x-button type="submit" class="btn btn-success">{{ __('public.save') }}</x-button>
                         </div>
                     </form>
-                </div>
+                {{-- </div> --}}
             @endif
 
             @if (checkProcurementEvaluationApproval($request->id))
                 @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
             @endif
-        </div>
+        {{-- </div> --}}
     @endif
 </div>

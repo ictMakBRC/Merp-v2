@@ -13,11 +13,11 @@ use App\Models\Procurement\Request\ProcurementRequestApproval;
 class StoresRequestViewComponent extends Component
 {
     public $request_id;
-    public $comment;
 
     public function mount($id){
         $this->request_id=$id;
     }
+
 
     public function acknowledgeRequest(ProcurementRequest $procurementRequest,$status)
     {
@@ -36,7 +36,8 @@ class StoresRequestViewComponent extends Component
         });
         
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
-        $this->redirect(route('procurement-items-reception', $procurementRequest->id));
+        $this->redirect(route('stores-request-mgt', $procurementRequest->id));
+       
     }
 
     public function downloadDocument(FormalDocument $formalDocument)

@@ -19,6 +19,55 @@ class ContractsManagerRequestViewComponent extends Component
         $this->request_id=$id;
     }
 
+    public function approveAndFowardRequest(ProcurementRequest $procurementRequest,$status)
+    {
+        $this->validate([
+            'comment'=>'required|string',
+        ]);
+        DB::transaction(function () use($procurementRequest,$status) {
+            $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
+
+            if($procurementRequest->step_order < ProcurementRequestEnum::TOTAL_STEPS){
+                $procurementRequestApproval->update([
+                    'approver_id' => auth()->user()->id,
+                    'comment' => $this->comment,
+                    'status' => $status,
+                ]);
+            
+                $currentStepOrder = $procurementRequest->step_order;
+                $nextStepOrder = $currentStepOrder+1;
+
+                $procurementRequest->update([
+                    'status'=>ProcurementRequestEnum::PENDING,
+                    'step_order'=>$nextStepOrder,
+                ]);
+
+                ProcurementRequestApproval::create([
+                    'procurement_request_id' => $procurementRequest->id,
+                    'approver_id' => null,
+                    'comment' => null,
+                    'status' => ProcurementRequestEnum::PENDING,
+                    'step' => ProcurementRequestEnum::step($nextStepOrder),
+                ]);
+
+            }else{
+                $procurementRequest->update([
+                    'status'=>$status,
+                ]);
+
+                $procurementRequestApproval->update([
+                    'approver_id' => auth()->user()->id,
+                    'comment' => $this->comment,
+                    'status' => $status,
+                ]);
+
+            }
+        });
+
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+       
+    }
+    
     public function acknowledgeRequest(ProcurementRequest $procurementRequest,$status)
     {
         DB::transaction(function () use($procurementRequest,$status) {

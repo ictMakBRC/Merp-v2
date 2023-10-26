@@ -43,8 +43,14 @@ class Provider extends Model
 
     public function procurement_requests()
     {
-        return $this->belongsToMany(ProcurementRequest::class,'selected_providers','provider_id','procurement_request_id')
-        ->withTimestamps();
+        return $this->belongsToMany(ProcurementRequest::class, 'selected_providers', 'provider_id', 'procurement_request_id')
+        ->using(SelectedProvider::class) // Use the pivot model
+        ->withPivot(['is_best_bidder','bidder_contract_price','bidder_revised_price','payment_status','date_paid','quality_rating','timeliness_rating','cost_rating','average_rating','contracts_manager_comment','created_by']);
+    }
+
+    public function bestBidderRequests()
+    {
+        return $this->procurement_requests()->wherePivot('is_best_bidder', true);
     }
 
     public static function boot()

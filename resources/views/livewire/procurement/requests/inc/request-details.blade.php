@@ -62,12 +62,15 @@ use App\Enums\ProcurementRequestEnum;
         <p class="px-2">{{ $request->body ?? 'N/A' }}</p>
     </div>
 
-    <div>
-        <h5 class="px-2">Items</h5>
-    </div>
-
-    @if (!$request->items->isEmpty())
-        <div class="tab-content scrollable-di">
+    @if (!$request->items->isEmpty() && !$request->items->where('received_status', false)->isEmpty())
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="card-title">{{ __('Items') }}</h4>
+                </div><!--end col-->
+            </div> <!--end row-->
+        </div>
+        <div class="tab-content">
             <div class="table-responsive">
                 <table class="table table-striped mb-0 w-100 sortable border">
                     <thead>
@@ -98,21 +101,19 @@ use App\Enums\ProcurementRequestEnum;
                 </table>
             </div>
         </div>
-    @else<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-            <div class="d-flex align-items-center">
-                <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0 text-warning">{{ __('Items') }}</h6>
-                    <div>{{ __('public.not_found') }}
-                    </div>
-                </div>
-            </div>
-        </div>
     @endif
+
+    @if ($request->items->where('received_status', false)->isEmpty())
+        @include('livewire.procurement.requests.stores.inc.items-received')
+    @endif
+
     @if (!$request->documents->isEmpty())
-        <div>
-            <h5 class="px-2 text-cente">Supporting Documents</h5>
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="card-title">{{ __('Supporting Documents') }}</h4>
+                </div><!--end col-->
+            </div> <!--end row-->
         </div>
 
         <div class="tab-content scrollable-di">
@@ -151,24 +152,17 @@ use App\Enums\ProcurementRequestEnum;
                 </table>
             </div>
         </div>
-    @else
-        <div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-            <div class="d-flex align-items-center">
-                <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0 text-warning">{{ __('Items') }}</h6>
-                    <div>{{ __('public.not_found') }}
-                    </div>
-                </div>
-            </div>
-        </div>
     @endif
 
     @if (!$request->approvals->isEmpty())
-        <div>
-            <h5 class="px-2">Chain of Custody</h5>
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="card-title">{{ __('Chain of Custody') }}</h4>
+                </div><!--end col-->
+            </div> <!--end row-->
         </div>
+
         <div class="tab-content scrollable-di">
             <div class="table-responsive">
                 <table class="table table-striped mb-0 w-100 sortable border">
@@ -201,17 +195,29 @@ use App\Enums\ProcurementRequestEnum;
     @endif
 
     @if (!$request->decisions->isEmpty())
-        <div>
-            <h5 class="px-2">Procurement Method Approval</h5>
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="card-title">{{ __('Procurement Method Approval') }}</h4>
+                </div><!--end col-->
+            </div> <!--end row-->
         </div>
         @include('livewire.procurement.requests.procurement.inc.procurement-method-approval')
 
         @if (checkProcurementEvaluationApproval($request->id))
-            <div>
-                <h5 class="px-2">Evaluation Report Approval</h5>
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h4 class="card-title">{{ __('Evaluation Report Approval') }}</h4>
+                    </div><!--end col-->
+                </div> <!--end row-->
             </div>
             @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
         @endif
 
+    @endif
+
+    @if ($request?->bestBidders?->first()?->pivot->average_rating)
+        @include('livewire.procurement.requests.contracts-manager.inc.provider-rating')
     @endif
 </div>

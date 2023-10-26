@@ -46,7 +46,6 @@ class RequestBiddingComponent extends Component
     public $bidder_contract_price;
     public $bidder_revised_price;
  
-
     public function mount(){
         $request = ProcurementRequest::findOrFail($this->request_id);
         $this->procurement_category=$request->procurement_sector;
@@ -143,6 +142,7 @@ class RequestBiddingComponent extends Component
                 'comment'=>$this->comment,
                 'decision_date'=>$this->decision_date,
             ]);
+            
             $this->request->providers()->updateExistingPivot($this->best_bidder_id, [
                 'is_best_bidder'=>true,
                 'bidder_contract_price' => $this->bidder_contract_price,

@@ -1,136 +1,117 @@
-
-<div class="row" x-data="{ active_tab: @entangle('activeTab')}">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header pt-0 d-print-none">
-                <div class="row mb-2">
-                    <div class="col-sm-12 mt-3">
-                        <div class="d-sm-flex align-items-center">
-                            <h5 class="mb-2 mb-sm-0">
-                                {{ __('Procurements Request') }} <span class="badge bg-{{ getProcurementRequestStatusColor($request->status) }}">{{$request->reference_no}}</span>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div>
-                    <div class="card-bod p-0">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs d-print-none" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link" :class="{ 'active': active_tab === 'summary-information' }" data-bs-toggle="tab" href="#summary-information" role="tab"
-                                    aria-selected="true" @click="active_tab = 'summary-information'">Summary Information</a>
-                            </li>
-                
-                            <li class="nav-item">
-                                <a class="nav-link" :class="{ 'active': active_tab === 'request-mgt' }" data-bs-toggle="tab" href="#request-mgt" role="tab"
-                                    aria-selected="false" @click="active_tab = 'request-mgt'">Request Management</a>
-                            </li>
-                
-                            <li class="nav-item">
-                                <a class="nav-link" :class="{ 'active': active_tab === 'documents' }" data-bs-toggle="tab" href="#documents" role="tab"
-                                    aria-selected="false" @click="active_tab = 'documents'">Supporting Documents</a>
-                            </li>
-                        </ul>
-                
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div class="tab-pane p-3 @if ($activeTab == 'summary-information') active @endif" id="summary-information" role="tabpanel">
-                                <x-report-layout>
-                                    <h5 class="text-center">{{ $request->subject ?? 'N/A' }}</h5>
-                            
-                                    @include('livewire.procurement.requests.inc.request-details')
-                            
-                                    <x-slot:action>
-                                        <div class="row d-flex justify-content-center d-print-none">
-                                            <div class="col-lg-12 col-xl-12">
-                                                <div class="float-end d-print-none mt-2 mt-md-0 mb-2">
-                                                    <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
-                                                    <a href="{{ route('contracts-manager-panel') }}" class="btn btn-de-primary btn-sm">Back to list</a>
-                                                </div>
-                                            </div><!--end col-->
-                                        </div><!--end row-->
-                            
-                                    </x-slot>
-                                </x-report-layout>
-                            </div>
-                
-                            <div class="tab-pane p-3 @if ($activeTab == 'request-mgt') active @endif" id="request-mgt" role="tabpanel">
-                                <livewire:procurement.requests.contracts-manager.inc.request-management-component :request_id="$request->id"/>
-                            </div>
-                
-                            <div class="tab-pane p-3 @if ($activeTab == 'documents') active @endif" id="documents" role="tabpanel">
-                                @include('livewire.procurement.requests.procurement.inc.procurement-request-documents')
-                            </div>
-                
-                        </div>
-                    </div>
-                </div>
-                
-            </div> <!-- end card body-->
-        </div> <!-- end card -->
-    </div><!-- end col-->
-</div>
-
 <div>
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header pt-0">
-                    @include('livewire.procurement.requests.inc.loading-info')
-                    {{-- <div class="row mb-2">
-                        <div class="col-lg-12 mt-3">
-                            <div class="d-sm-flex align-items-center">
-                                
-                                <h5 class="mb-2 mb-sm-0">
-                                    {{ __('Procurements Request Items Reception') }}
-                                </h5>
+    @if (!$request->items->where('received_status', false)->isEmpty())
+        <div class="table-responsive scrollable-div">
+            <table class="table mb-0 w-100 table-bordered">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>{{ __('Description') }}</th>
+                        <th>{{ __('Quantity Requested') }}</th>
+                        <th>{{ __('Received?') }}</th>
+                        <th>{{ __('Quantity Delivered') }}</th>
+                        <th>{{ __('Quality') }}</th>
+                        <th>{{ __('Comment') }}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($request->items->where('received_status', false) as $key => $item)
+                        <tr>
+                            <td>
+                                <button wire:click="activateItem({{ $item->id }})"
+                                    class="btn btn btn-sm btn-outline-info action-icon"> {{ $key + 1 }}<i
+                                        class="ti ti-edit"></i></button>
+                            </td>
+                            <td>{!! nl2br(e($item['description'])) !!}</td>
+                            <td>{{ $item['quantity'] }}</td>
+                            @if ($item->id === $item_id)
+                                {{-- <form> --}}
+                                <td>
+                                    <div class="mb-3 row">
+                                        <div class="col-md-9">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="received_status"
+                                                    id='received_status1' wire:model='received_status' checked
+                                                    value="0">
+                                                <label class="form-check-label" for="received_status1">
+                                                    No
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="received_status"
+                                                    id='received_status2' wire:model='received_status' value="1">
+                                                <label class="form-check-label" for="received_status2">
+                                                    Yes
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('received_status')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" wire:model.lazy="quantity_delivered"
+                                        step="0.01">
+                                    @error('quantity_delivered')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </td>
 
-                            </div>
-                        </div>
-                    </div> --}}
-                </div>
-                <div class="card-body">
-                    <div class="p-0" x-cloak x-show="create_new">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#general-information" role="tab"
-                                    aria-selected="true">Items</a>
-                            </li>
-                
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#documents" role="tab"
-                                    aria-selected="false">Supporting Documents</a>
-                            </li>
-                
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#provider_rating" role="tab"
-                                    aria-selected="false">Provider Rating</a>
-                            </li>
-                        </ul>
-                
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div class="tab-pane p-3 active" id="general-information" role="tabpanel">
-                                @include('livewire.procurement.requests.stores.inc.procurement-request-items')
-                            </div>
+                                <td>
+                                    <div class="mb-3 row">
+                                        <div class="col-md-9">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="quality"
+                                                    id="quality1" wire:model='quality' checked value="How">
+                                                <label class="form-check-label" for="quality1">
+                                                    Low
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="quality"
+                                                    id="quality2" wire:model='quality' value="Average">
+                                                <label class="form-check-label" for="quality2">
+                                                    Average
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="quality"
+                                                    id="quality3" wire:model='quality' value="High">
+                                                <label class="form-check-label" for="quality3">
+                                                    High
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @error('quality')
+                                        <div class="text-danger text-small">{{ $message }}</div>
+                                    @enderror
+                                </td>
 
-                            <div class="tab-pane p-3" id="documents" role="tabpanel">
-                                @include('livewire.procurement.requests.stores.inc.procurement-request-documents')
-                            </div>
-                
-                            <div class="tab-pane p-3" id="provider_rating" role="tabpanel">
-                                {{-- <livewire:procurement.requests.inc.procurement-request-items-component /> --}}
-                            </div>
-                
-                        </div>
-                    </div>
+                                <td>
+                                    <textarea type="text" class="form-control" wire:model.lazy="comment"></textarea>
+                                </td>
 
-                </div> <!-- end card body-->
-            </div> <!-- end card -->
-        </div><!-- end col-->
-    </div>
+                                <td>
+                                    <x-button class="btn btn-success"
+                                        wire:click="storeItemReceptionInformation({{ $item->id }})">{{ __('public.save') }}</x-button>
+                                </td>
+                                {{-- </form> --}}
+                            @else
+                                <td colspan="5">
+                                    <div class="alert alert-info border-0 text-center" role="alert">
+                                        {{ __('Please click Item to receive') }}
+                                    </div>
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
 
+                </tbody>
+            </table>
+        </div> <!-- end preview-->
+    @endif
+
+    @include('livewire.procurement.requests.stores.inc.items-received')
 </div>

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->decimal('quality_rating', 5, 2)->nullable();
             $table->decimal('timeliness_rating', 5, 2)->nullable();
             $table->decimal('cost_rating', 5, 2)->nullable();
-            $table->decimal('total_rating', 5, 2)->nullable();
+            $table->decimal('average_rating', 5, 2)->nullable();
             $table->longText('contracts_manager_comment')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();

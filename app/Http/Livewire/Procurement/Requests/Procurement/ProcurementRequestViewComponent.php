@@ -13,7 +13,6 @@ use App\Models\Procurement\Request\ProcurementRequestApproval;
 class ProcurementRequestViewComponent extends Component
 {
     public $request_id;
-    public $comment;
 
     public function mount($id){
         $this->request_id=$id;

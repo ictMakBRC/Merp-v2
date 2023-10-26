@@ -19,6 +19,26 @@ function getProcurementRequestStep($stepOrder)
     return ProcurementRequestEnum::step($stepOrder);
 }
 
+function getRatingColor($rating)
+{
+    return ProcurementRequestEnum::ratingColor(intval(round($rating)));
+}
+
+function getQualityRatingText($rating)
+{
+    return ProcurementRequestEnum::qualityRating(intval(round($rating)));
+}
+
+function getCostRatingText($rating)
+{
+    return ProcurementRequestEnum::costRating(intval(round($rating)));
+}
+
+function getTimelinessRatingText($rating)
+{
+    return ProcurementRequestEnum::timelinessRating(intval(round($rating)));
+}
+
 function getProcurementCategorization($amount)
 {
     $categorization = ProcurementCategorization::latest()->get();
@@ -72,7 +92,7 @@ function checkProcurementMethodApproval($procurementRequestId)
     } 
 }
 
-function procuremenEvaluationApproved($procurementRequestId)
+function procurementEvaluationApproved($procurementRequestId)
 {
     $pro_decision_step = ProcurementRequestDecision::where(['procurement_request_id'=>$procurementRequestId,'step'=>ProcurementRequestEnum::ER_APPROVAL])->first();
     if ($pro_decision_step && $pro_decision_step->decision == ProcurementRequestEnum::APPROVED) {

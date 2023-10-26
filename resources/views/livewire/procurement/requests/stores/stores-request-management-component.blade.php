@@ -2,17 +2,7 @@
 <div class="row" x-data="{ active_tab: @entangle('activeTab')}">
     <div class="col-12">
         <div class="card">
-            <div class="card-header pt-0 d-print-none">
-                <div class="row mb-2">
-                    <div class="col-sm-12 mt-3">
-                        <div class="d-sm-flex align-items-center">
-                            <h5 class="mb-2 mb-sm-0">
-                                {{ __('Procurements Request') }} <span class="badge bg-{{ getProcurementRequestStatusColor($request->status) }}">{{$request->reference_no}}</span>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @include('livewire.procurement.requests.inc.request-card-header')
             <div class="card-body">
                 <div>
                     <div class="card-bod p-0">
@@ -25,7 +15,7 @@
                 
                             <li class="nav-item">
                                 <a class="nav-link" :class="{ 'active': active_tab === 'request-mgt' }" data-bs-toggle="tab" href="#request-mgt" role="tab"
-                                    aria-selected="false" @click="active_tab = 'request-mgt'">Request Management</a>
+                                    aria-selected="false" @click="active_tab = 'request-mgt'">Items Reception</a>
                             </li>
                 
                             <li class="nav-item">

@@ -1,3 +1,6 @@
+<?php
+use App\Enums\ProcurementRequestEnum;
+?>
 <div class="tab-content">
     {{-- @include('livewire.procurement.requests.inc.filter') --}}
 
@@ -7,12 +10,14 @@
                 <tr>
                     <th>No.</th>
                     <th>{{ __('Reference No') }}</th>
-                    <th>{{ __('Requester Type') }}</th>
+                    <th>{{ __('Request Type') }}</th>
                     <th>{{ __('Source') }}</th>
                     <th>{{ __('Subject') }}</th>
                     <th>{{ __('Category') }}</th>
+                    <th>{{ __('Contract Value') }}</th>
                     <th>{{ __('Date Required') }}</th>
                     <th>{{ __('Status') }}</th>
+                    <th>{{ __('Step') }}</th>
                     <th>{{ __('public.action') }}</th>
                 </tr>
             </thead>
@@ -25,8 +30,12 @@
                         <td>{{ $procurementRequest->requestable->name }}</td>
                         <td>{{ $procurementRequest->subject }}</td>
                         <td>{{ $procurementRequest->procurement_sector ?? 'N/A' }}</td>
+                        <<td>{{ $procurementRequest->currency->code }} @moneyFormat($procurementRequest->contract_value)</td>
                         <td>@formatDate($procurementRequest->date_required)</td>
-                        <td><span class="badge bg-info">{{ $procurementRequest->status }}</span></td>
+                        <td><span
+                                class="badge bg-{{ getProcurementRequestStatusColor($procurementRequest->status) }}">{{ $procurementRequest->status }}</span>
+                        </td>
+                        <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
                         <td>
                             <a href="{{ route('stores-procurement-request-details', $procurementRequest->id) }}"
                                 class="btn btn btn-sm btn-outline-primary action-icon"> <i class="ti ti-eye"></i></a>

@@ -85,20 +85,51 @@ class ProcurementBidManagementComponent extends Component
     public function mount($id){
         $this->request_id = $id;
     }
-
+    
     public function updateRequest(ProcurementRequest $procurementRequest,$status)
     {
+        $this->validate([
+            'comment'=>'required|string',
+        ]);
+        
         DB::transaction(function () use($procurementRequest,$status) {
             $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
 
-            $procurementRequest->update([
-                'status'=>$status,
-            ]);
+            if($procurementRequest->step_order < ProcurementRequestEnum::TOTAL_STEPS){
+                $procurementRequestApproval->update([
+                    'approver_id' => auth()->user()->id,
+                    'comment' => $this->comment,
+                    'status' => $status,
+                ]);
+            
+                $currentStepOrder = $procurementRequest->step_order;
+                $nextStepOrder = $currentStepOrder+1;
 
-            $procurementRequestApproval->update([
-                'approver_id' => auth()->user()->id,
-                'status' => $status,
-            ]);
+                $procurementRequest->update([
+                    'status'=>ProcurementRequestEnum::PENDING,
+                    'step_order'=>$nextStepOrder,
+                ]);
+
+                ProcurementRequestApproval::create([
+                    'procurement_request_id' => $procurementRequest->id,
+                    'approver_id' => null,
+                    'comment' => null,
+                    'status' => ProcurementRequestEnum::PENDING,
+                    'step' => ProcurementRequestEnum::step($nextStepOrder),
+                ]);
+
+            }else{
+                $procurementRequest->update([
+                    'status'=>$status,
+                ]);
+
+                $procurementRequestApproval->update([
+                    'approver_id' => auth()->user()->id,
+                    'comment' => $this->comment,
+                    'status' => $status,
+                ]);
+
+            }
         });
        
     }

@@ -92,8 +92,17 @@ class ProcurementRequest extends Model
     {
         return $this->belongsToMany(Provider::class,'selected_providers','procurement_request_id','provider_id')
         ->using(SelectedProvider::class) // Use the pivot model
-        ->withPivot(['is_best_bidder','bidder_contract_price','bidder_revised_price','payment_status'])
+        ->withPivot(['is_best_bidder','bidder_contract_price','bidder_revised_price','payment_status','date_paid','quality_rating','timeliness_rating','cost_rating','average_rating','contracts_manager_comment','created_by'])
         ->withTimestamps();
+    }
+
+    public function bestBidders()
+    {
+        // return $this->providers
+        return $this->belongsToMany(Provider::class, 'selected_providers', 'procurement_request_id', 'provider_id')
+        ->using(SelectedProvider::class)
+        ->withPivot(['is_best_bidder', 'bidder_contract_price', 'bidder_revised_price', 'payment_status', 'date_paid', 'quality_rating', 'timeliness_rating', 'cost_rating', 'average_rating', 'contracts_manager_comment', 'created_by'])
+        ->wherePivot('is_best_bidder', true);
     }
 
     public static function boot()
