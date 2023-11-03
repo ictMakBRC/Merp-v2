@@ -37,13 +37,15 @@ use App\Enums\ProcurementRequestEnum;
                         </td>
                         <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
                         <td>
-                            @if ($procurementRequest->step_order >= 6 && $procurementRequest->status != ProcurementRequestEnum::PENDING)
-                                <a href="{{ route('proc-dept-bid-mgt', $procurementRequest->id) }}"
-                                    class="btn btn btn-sm btn-outline-info action-icon"> <i class="ti ti-edit"></i></a>
-                            @endif
+                            <div class="d-flex justify-content-between">
+                                @if ($procurementRequest->step_order >= 6 && $procurementRequest->status != ProcurementRequestEnum::PENDING)
+                                    <a href="{{ route('proc-dept-bid-mgt', $procurementRequest->id) }}"
+                                        class="btn btn btn-sm btn-outline-info m-1"> <i class="ti ti-edit"></i></a>
+                                @endif
 
-                            <a href="{{ route('proc-dept-request-details', $procurementRequest->id) }}"
-                                class="btn btn btn-sm btn-outline-primary action-icon"> <i class="ti ti-eye"></i></a>
+                                <a href="{{ route('proc-dept-request-details', $procurementRequest->id) }}"
+                                    class="btn btn btn-sm btn-outline-primary m-1"> <i class="ti ti-eye"></i></a>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

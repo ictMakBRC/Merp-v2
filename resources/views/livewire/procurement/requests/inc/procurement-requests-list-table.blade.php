@@ -34,15 +34,17 @@
                         </td>
                         <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
                         <td>
-                            @if ($procurementRequest->step_order <= 2)
-                                <button class="btn btn btn-sm btn-outline-success"
-                                    wire:click="loadRequest({{ $procurementRequest->id }})" data-bs-toggle="tooltip"
-                                    data-bs-placement="right" title="{{ __('public.edit') }}" data-bs-trigger="hover">
-                                    <i class="ti ti-edit fs-18"></i></button>
-                            @endif
+                            <div class="d-flex justify-content-between">
+                                @if ($procurementRequest->step_order <= 2)
+                                    <button class="btn btn-sm btn-outline-success m-1"
+                                        wire:click="loadRequest({{ $procurementRequest->id }})"
+                                        title="{{ __('public.edit') }}">
+                                        <i class="ti ti-edit fs-18"></i></button>
+                                @endif
 
-                            <a href="{{ route('procurement-request-details', $procurementRequest->id) }}"
-                                class="btn btn btn-sm btn-outline-primary action-icon"> <i class="ti ti-eye"></i></a>
+                                <a href="{{ route('procurement-request-details', $procurementRequest->id) }}"
+                                    class="btn btn-sm btn-outline-primary m-1"> <i class="ti ti-eye"></i></a>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

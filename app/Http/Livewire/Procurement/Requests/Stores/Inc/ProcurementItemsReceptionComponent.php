@@ -57,7 +57,7 @@ class ProcurementItemsReceptionComponent extends Component
             }
     
             $this->resetInputs();
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item received successfully']);
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item price updated successfully']);
         }else{
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'error',
@@ -73,11 +73,9 @@ class ProcurementItemsReceptionComponent extends Component
 
     public function render()
     {
-        $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers')->findOrFail($this->request_id);
+        $data['request'] = ProcurementRequest::with('items')->findOrFail($this->request_id);
         
         $this->items_list = $data['request']->items->where('received_status',false);
-
-        $data['document_categories'] = DmCategory::all();
 
         return view('livewire.procurement.requests.stores.inc.procurement-items-reception-component',$data);
     }

@@ -36,13 +36,15 @@ use App\Enums\ProcurementRequestEnum;
                                 class="badge bg-{{ getProcurementRequestStatusColor($procurementRequest->status) }}">{{ $procurementRequest->status }}</span>
                         </td>
                         <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
-                        <td class="table-action">
+                        <td>
+                            <div class="d-flex justify-content-between">
                             @if ($procurementRequest->step_order >= 7 && $procurementRequest->status != ProcurementRequestEnum::PENDING)
                                 <a href="{{ route('contracts-manager-request-mgt', $procurementRequest->id) }}"
-                                    class="btn btn btn-sm btn-outline-info action-icon"> <i class="ti ti-edit"></i></a>
+                                    class="btn btn btn-sm btn-outline-info m-1"> <i class="ti ti-edit"></i></a>
                             @endif
                             <a href="{{ route('contracts-manager-request-details', $procurementRequest->id) }}"
-                                class="btn btn btn-sm btn-outline-primary action-icon"> <i class="ti ti-eye"></i></a>
+                                class="btn btn btn-sm btn-outline-primary m-1"> <i class="ti ti-eye"></i></a>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

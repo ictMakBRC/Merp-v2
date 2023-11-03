@@ -1,6 +1,7 @@
 <?php
 use App\Enums\ProcurementRequestEnum;
 ?>
+
 <div class="tab-content">
     {{-- @include('livewire.procurement.requests.inc.filter') --}}
 
@@ -30,21 +31,25 @@ use App\Enums\ProcurementRequestEnum;
                         <td>{{ $procurementRequest->requestable->name }}</td>
                         <td>{{ $procurementRequest->subject }}</td>
                         <td>{{ $procurementRequest->procurement_sector ?? 'N/A' }}</td>
-                        <<td>{{ $procurementRequest->currency->code }} @moneyFormat($procurementRequest->contract_value)</td>
-                        <td>@formatDate($procurementRequest->date_required)</td>
-                        <td><span
-                                class="badge bg-{{ getProcurementRequestStatusColor($procurementRequest->status) }}">{{ $procurementRequest->status }}</span>
-                        </td>
-                        <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
-                        <td>
-                            <a href="{{ route('stores-procurement-request-details', $procurementRequest->id) }}"
-                                class="btn btn btn-sm btn-outline-primary action-icon"> <i class="ti ti-eye"></i></a>
-                            
-                                @if ($procurementRequest->step_order >= 7 && $procurementRequest->status != ProcurementRequestEnum::PENDING)
-                                <a href="{{ route('stores-request-mgt', $procurementRequest->id) }}"
-                                    class="btn btn btn-sm btn-outline-info action-icon"> <i class="ti ti-edit"></i></a>
-                            @endif
-                        </td>
+                        <td>{{ $procurementRequest->currency->code }} @moneyFormat($procurementRequest->contract_value)</td>
+                            <td>@formatDate($procurementRequest->date_required)</td>
+                            <td><span
+                                    class="badge bg-{{ getProcurementRequestStatusColor($procurementRequest->status) }}">{{ $procurementRequest->status }}</span>
+                            </td>
+                            <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ route('stores-procurement-request-details', $procurementRequest->id) }}"
+                                        class="btn btn-sm btn-outline-primary m-1"> <i class="ti ti-eye"></i></a>
+    
+                                    @if ($procurementRequest->step_order >= 7 && $procurementRequest->status != ProcurementRequestEnum::PENDING)
+                                        <a href="{{ route('stores-request-mgt', $procurementRequest->id) }}"
+                                            class="btn btn-sm btn-outline-info m-1"> <i
+                                                class="ti ti-edit"></i></a>
+                                    @endif
+                                </div>
+                               
+                            </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -50,7 +50,7 @@ use App\Enums\ProcurementRequestEnum;
                         <th>{{ __('Country') }}</th>
                         <th>{{ __('public.address') }}</th>
                         <th>{{ __('Contract Price') }}</th>
-                        <th>{{ __('Revised Price') }}</th>
+                        {{-- <th>{{ __('Revised Price') }}</th> --}}
                         <th>{{ __('Delivery Deadline') }}</th>
                         <th>{{ __('Payment') }}</th>
                         <th>{{ __('Date Paid') }}</th>
@@ -67,15 +67,15 @@ use App\Enums\ProcurementRequestEnum;
                             <td>{{ $provider->email }}</td>
                             <td>{{ $provider->country }}</td>
                             <td>{{ $provider->full_address }}</td>
-                            <td>@moneyFormat($provider->pivot->bidder_contract_price)</td>
-                            <td>{{ $provider->pivot->bidder_revised_price ?? 'N/A' }}</td>
+                            <td>@moneyFormat($request->contract_value)</td>
+                            {{-- <td>{{ $provider->pivot->bidder_revised_price ?? 'N/A' }}</td> --}}
                             <td>{{ $request->delivery_deadline ?? 'N/A' }}</td>
                             @if ($provider->pivot->payment_status)
                                 <td><span class="badge bg-success">Paid</span></td>
                             @else
                                 <td><span class="badge bg-danger">Not Paid</span></td>
                             @endif
-                            <td>@formatDate($provider->pivot->date_paid)</td>
+                            <td>@formatDate($provider->pivot->date_paid??now())</td>
                         </tr>
                     @empty
                     @endforelse

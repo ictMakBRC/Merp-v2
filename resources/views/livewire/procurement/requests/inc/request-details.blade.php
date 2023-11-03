@@ -72,14 +72,17 @@ use App\Enums\ProcurementRequestEnum;
         </div>
         <div class="tab-content">
             <div class="table-responsive">
-                <table class="table table-striped mb-0 w-100 sortable border">
+                <table class="table table-striped mb-0 w-100 table-bordered">
                     <thead>
                         <tr>
                             <th>No.</th>
                             <th>{{ __('Description') }}</th>
-                            <th>{{ __('Quantity') }}</th>
-                            <th>{{ __('Estimated Unit Cost') }}</th>
-                            <th>{{ __('Total Cost') }}</th>
+                            <th>{{ __('Quantity Requested') }}</th>
+                            <th>{{ __('Estimated Unit Price') }}</th>
+                            <th>{{ __('Estimated Total') }}</th>
+                            <th>{{ __('Quantity Delivered') }}</th>
+                            <th>{{ __('Bidder Unit Price') }}</th>
+                            <th>{{ __('Bidder Total') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,11 +93,20 @@ use App\Enums\ProcurementRequestEnum;
                                 <td>{{ $item->quantity }}</td>
                                 <td>@moneyFormat($item->estimated_unit_cost)</td>
                                 <td>@moneyFormat($item->total_cost)</td>
+                                <td>{{ $item->quantity_delivered??'N/A' }}</td>
+                                <td>@moneyFormat($item->bidder_unit_cost)</td>
+                                <td>@moneyFormat($item->bidder_total_cost)</td>
                             </tr>
                         @endforeach
                         <tr>
-                            <td colspan="4" class="text-end">Total ({{ $request->currency->code }})</td>
+                            <td colspan="4" class="text-end">Total: ({{ $request->currency->code }})</td>
                             <td>@moneyFormat($request->items->sum('total_cost'))</td>
+                            <td colspan="2"></td>
+                            {{-- <td></td> --}}
+                            <td>@moneyFormat($request->items->sum('bidder_total_cost'))</td>
+        
+                            {{-- <td colspan="4" class="text-end">Total ({{ $request->currency->code }})</td>
+                            <td>@moneyFormat($request->items->sum('total_cost'))</td> --}}
 
                         </tr>
                     </tbody>

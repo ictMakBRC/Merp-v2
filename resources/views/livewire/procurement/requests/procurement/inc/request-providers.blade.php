@@ -51,7 +51,7 @@
                                         <td>{{ $provider->phone_number }}</td>
                                         <td>{{ $provider->email }}</td>
                                         <td>
-                                            <div class="table-actions">
+                                            <div class="d-flex justify-content-between">
                                                 <button wire:click='detachProvider({{ $provider->id }})'
                                                     class="btn-outline-danger btn btn-sm"
                                                     title="{{ __('public.cancel') }}"><i class="ti ti-x"></i></button>

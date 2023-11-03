@@ -11,9 +11,9 @@ class ProcurementRequestItemsComponent extends Component
 {
     public $procurement_request_id;
     public $description;
-    public $quantity=0;
+    public float $quantity=0;
     public $unit_of_measure;
-    public $estimated_unit_cost=0;
+    public float $estimated_unit_cost=0;
     public $total_cost;
 
     public $loadingInfo;
@@ -97,9 +97,9 @@ class ProcurementRequestItemsComponent extends Component
     public function deleteItem(ProcurementRequestItem $procurementRequestItem)
     {
         DB::transaction(function () use($procurementRequestItem){
-        $procurementRequestItem->delete();
-        $procurementRequest = ProcurementRequest::findOrFail($this->procurement_request_id);
-        $procurementRequest->decrement(['contract_value',$procurementRequestItem->total_cost]);
+            $procurementRequestItem->delete();
+            $procurementRequest = ProcurementRequest::findOrFail($this->procurement_request_id);
+            $procurementRequest->decrement(['contract_value',intVal($procurementRequestItem->total_cost)]);
         });
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item deleted successfully']);
     }

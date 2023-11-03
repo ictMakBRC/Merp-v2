@@ -26,10 +26,13 @@
                     <th>No.</th>
                     <th>{{ __('Description') }}</th>
                     <th>{{ __('Quantity Requested') }}</th>
-                    <th>{{ __('Estimated Unit Cost') }}</th>
+                    <th>{{ __('Estimated Unit Price') }}</th>
+                    <th>{{ __('Estimated Total') }}</th>
                     <th>{{ __('Quantity Delivered') }}</th>
+                    <th>{{ __('Bidder Unit Price') }}</th>
+                    <th>{{ __('Bidder Total') }}</th>
                     <th>{{ __('Quality') }}</th>
-                    <th>{{ __('Total Cost') }}</th>
+                    {{-- <th>{{ __('Total Cost') }}</th> --}}
                     <th>{{ __('Comment') }}</th>
                 </tr>
             </thead>
@@ -42,14 +45,17 @@
                         <td>{!! nl2br(e($item->description)) !!}</td>
                         <td>{{ $item->quantity }}</td>
                         <td>@moneyFormat($item->estimated_unit_cost)</td>
+                        <td>@moneyFormat($item->total_cost)</td>
                         <td>
-                            {{ $item->quantity_delivered }}
+                            {{ $item->quantity_delivered??0 }}
                         </td>
+                        <td>@moneyFormat($item->bidder_unit_cost??0)</td>
+                        <td>@moneyFormat($item->bidder_total_cost??0)</td>
                         <td>
                             <span
                                 class="badge bg-{{ getProcurementRequestStatusColor($item->quality) }}">{{ $item->quality }}</span>
                         </td>
-                        <td>@moneyFormat($item->total_cost)</td>
+                        {{-- <td>@moneyFormat($item->total_cost)</td> --}}
                         <td>
                             {{ $item->comment }}
                         </td>
@@ -57,8 +63,11 @@
                     
                 @endforeach
                 <tr>
-                    <td colspan="7" class="text-end">Total: ({{ $request->currency->code }})</td>
+                    <td colspan="4" class="text-end">Total: ({{ $request->currency->code }})</td>
                     <td>@moneyFormat($request->items->where('received_status', true)->sum('total_cost'))</td>
+                    <td colspan="2"></td>
+                    {{-- <td></td> --}}
+                    <td>@moneyFormat($request->items->where('received_status', true)->sum('bidder_total_cost'))</td>
 
                 </tr>
             </tbody>

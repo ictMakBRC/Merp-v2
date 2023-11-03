@@ -4,6 +4,7 @@ use App\Enums\ProcurementRequestEnum;
 use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsFinancialYear;
+use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Request\ProcurementRequestDecision;
 use App\Models\Procurement\Settings\ProcurementCategorization;
 
@@ -106,6 +107,20 @@ function checkProcurementEvaluationApproval($procurementRequestId)
     if (count($pro_decision)>0) {
         return true;
     } 
+}
+
+function checkBidderPricesAttached($procurementRequestId)
+{
+    $items = ProcurementRequest::with('items')->findOrFail($procurementRequestId)->items()->where('bidder_unit_cost', null);
+    if ($items->isEmpty()) {
+        return true;
+    } 
+}
+
+function getItemsTotalCost($procurementRequestId)
+{
+    $items_cost = ProcurementRequest::with('items')->findOrFail($procurementRequestId)->items()->sum('bidder_total_cost');
+    return $items_cost ;
 }
 
 

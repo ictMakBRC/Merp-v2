@@ -41,10 +41,10 @@ class RequestBiddingComponent extends Component
 
     //Evaluation
     public $best_bidder_id;
-    public $negotiated_with_bidder=false;
+    // public $negotiated_with_bidder=false;
     public $delivery_deadline;
-    public $bidder_contract_price;
-    public $bidder_revised_price;
+    // public $bidder_contract_price;
+    // public $bidder_revised_price;
  
     public function mount(){
         $request = ProcurementRequest::findOrFail($this->request_id);
@@ -129,7 +129,7 @@ class RequestBiddingComponent extends Component
             'decision'=>'required|string',
             'decision_date'=>'required|date|before_or_equal:today',
             'best_bidder_id'=>'required|integer',
-            'bidder_contract_price'=>'required|',
+            // 'bidder_contract_price'=>'required|',
             'comment'=>'required|string',
             
         ]);
@@ -145,26 +145,26 @@ class RequestBiddingComponent extends Component
             
             $this->request->providers()->updateExistingPivot($this->best_bidder_id, [
                 'is_best_bidder'=>true,
-                'bidder_contract_price' => $this->bidder_contract_price,
-                'bidder_revised_price' => $this->bidder_revised_price,
+                // 'bidder_contract_price' => $this->bidder_contract_price,
+                // 'bidder_revised_price' => $this->bidder_revised_price,
             ]);
 
-            if ($this->negotiated_with_bidder &&  $this->bidder_revised_price>0) {
+            // if ($this->negotiated_with_bidder &&  $this->bidder_revised_price>0) {
 
                 $this->request->update([
-                    'contract_value' => $this->bidder_revised_price,
+                    // 'contract_value' => $this->bidder_revised_price,
                     'delivery_deadline' => $this->delivery_deadline,
                     'status' => $this->decision,
                 ]);
 
-            } else {
+            // } else {
 
-                $this->request->update([
-                    'contract_value' => $this->bidder_contract_price,
-                    'delivery_deadline' => $this->delivery_deadline,
-                    'status' => $this->decision,
-                ]);
-            }
+            //     $this->request->update([
+            //         'contract_value' => $this->bidder_contract_price,
+            //         'delivery_deadline' => $this->delivery_deadline,
+            //         'status' => $this->decision,
+            //     ]);
+            // }
             
             $this->storeDocument('Procurement Evaluation Report');
        });
@@ -213,9 +213,10 @@ class RequestBiddingComponent extends Component
         'document_category',
         'comment',
         'best_bidder_id',
-        'bidder_contract_price',
+        // 'bidder_contract_price',
         'delivery_deadline',
-        'bidder_revised_price',]);
+        // 'bidder_revised_price',
+    ]);
 
         $this->providerIds = [];
         $this->selectedProviders = collect([]);

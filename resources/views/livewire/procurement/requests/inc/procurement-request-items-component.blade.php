@@ -82,19 +82,18 @@
                                         <td>@moneyFormat($item->total_cost)</td>
 
                                         <td>
-                                            <button class="btn btn btn-sm btn-outline-danger"
-                                                wire:click="deleteItem({{ $item->id }})" data-bs-toggle="tooltip"
-                                                data-bs-placement="right" title="{{ __('public.delete') }}"
-                                                data-bs-trigger="hover">
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                wire:click="deleteItem({{ $item->id }})" title="{{ __('public.delete') }}">
                                                 <i class="ti ti-x fs-18"></i></button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="4" class="text-end">Total</td>
-                                        <td>@moneyFormat($items->sum('total_cost'))</td>
-
-                                    </tr>
+                                    
                                 @endforeach
+                                <tr>
+                                    <td colspan="5" class="text-end">Total</td>
+                                    <td>@moneyFormat($items->sum('total_cost'))</td>
+
+                                </tr>
                             </tbody>
                         </table>
                     </div> <!-- end preview-->
