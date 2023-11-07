@@ -90,7 +90,7 @@ class FmsPaymentRequestsComponent extends Component
         $this->budgetLines = collect([]);
         $this->ledgers = collect([]);
         $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
-        $this->fiscal_year = $fiscal_year->id;
+        $this->fiscal_year = $fiscal_year->id??null;
     }
 
     public function updated($fields)
@@ -110,6 +110,53 @@ class FmsPaymentRequestsComponent extends Component
             'notice_text' => 'required|string',
         ]);
     }
+    public $budgetLineBalance = 0, $budgetLineAmtHeld = 0, $budgetLineCur, $curCode;
+    public $ledgerBalance = 0, $ledgerCur, $baseAmount = 0;
+    public function updatedBudgetLineId()
+    {
+        $this->budgetLineCur = 0;
+        $this->budgetLineBalance = 0;
+        $data = FmsBudgetLine::Where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
+        $this->budgetLineAmtHeld = $data->amount_held;
+        $this->budgetLineBalance = $data->primary_balance - $this->budgetLineAmtHeld;
+        $this->budgetLineCur = $data->budget?->currency?->code ?? '';
+        $this->currency_id = $data->budget?->currency_id ?? '';
+        $this->updatedCurrencyId();
+        // dd($this->budgetLineBalance);
+    }
+
+    
+    public $ledgerAmtHeld = 0;
+    public function updatedFromAccount()
+    {
+        $this->ledgerCur = 0;
+        $this->ledgerBalance = 0;
+        $data = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();
+        $this->ledgerAmtHeld = $data->amount_held;
+        $this->ledgerBalance = $data->current_balance - $this->ledgerAmtHeld;
+        $this->ledgerCur = $data->currency->code ?? '';
+        // dd($this->ledgerAmtHeld);
+    }
+    public $budgetExpense = 0;
+    public $ledgerExpense = 0;
+    public $ledgerNewBal = 0;
+    public $budgetNewBal = 0;
+    public $viewSummary = false;
+    public function generateTransaction()
+    {
+        try {
+            $this->ledgerExpense = exchangeCurrency($this->ledgerCur, 'foreign', $this->baseAmount);
+            $this->budgetExpense = exchangeCurrency($this->budgetLineCur, 'foreign', $this->baseAmount);
+
+            $this->ledgerNewBal = $this->ledgerBalance - $this->ledgerExpense;
+            $this->budgetNewBal = $this->budgetLineBalance - $this->budgetExpense;
+            $this->viewSummary = true;
+        } catch (\Exception $e) {
+            // If the transaction fails, we handle the error and provide feedback
+            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Generation failed!' . $e->getMessage()]);
+        }
+    }
+
 
     public function storeTransaction()
     {
@@ -143,15 +190,27 @@ class FmsPaymentRequestsComponent extends Component
             $requestable  = Department::find($this->department_id);
         }
 
+        if($this->budgetNewBal<0){
+
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Low Line balance!',
+                'text' => 'You don not have enough money on your budget line, your expense is '.$this->budgetExpense.' but your available balance is '.$this->budgetLineBalance,
+            ]);
+            return false;
+
+        }
 
         try {
-        //     DB::transaction(function () {
+            DB::transaction(function () use($requestable) {
                 $total_amount = (float) str_replace(',', '', $this->total_amount);
                 $p_request = new FmsPaymentRequest();
                 $p_request->request_code = 'PRE' . GeneratorService::getNumber(7);
                 $p_request->request_description = $this->request_description;
-                $p_request->request_type = 'Payment Request';
+                $p_request->request_type = 'Payment';
                 $p_request->total_amount = $total_amount;
+                $p_request->ledger_amount = $this->ledgerExpense;
+                $p_request->budget_amount = $this->budgetExpense;
                 $p_request->amount_in_words = $this->amount_in_words;
                 $p_request->rate = $this->rate;
                 $p_request->currency_id = $this->currency_id;
@@ -159,17 +218,41 @@ class FmsPaymentRequestsComponent extends Component
                 $p_request->department_id = $this->department_id;
                 $p_request->project_id = $this->project_id;
                 $p_request->budget_line_id = $this->budget_line_id;
+                $p_request->from_account = $this->from_account;
                 $p_request->requestable()->associate($requestable);
                 $p_request->save();
                 // dd($p_request);
+                // if($p_request){
+                $dataBudget = FmsBudgetLine::Where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
+                if ($dataBudget) {
+                    $budgetAmountHeld = $dataBudget->amount_held;
+                    $newBudgetAmountHeld = $budgetAmountHeld + $this->budgetExpense;
+                    $dataBudget->amount_held = $newBudgetAmountHeld;
+                    $dataBudget->update();
+                }
+
+                $dataLeger = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();              
+
+                if ($dataLeger) {
+                    $currentAmountHeld = $dataLeger->amount_held;
+                    $newAmountHeld = $currentAmountHeld + $this->ledgerExpense;
+                    $dataLeger->amount_held = $newAmountHeld;
+                    $dataLeger->update();
+                }
+
                 $this->dispatchBrowserEvent('close-modal');
                 $this->resetInputs();
                 $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Request created successfully, please proceed!']);
                 return redirect()->SignedRoute('finance-request_detail', $p_request->request_code);
-        //     });
+            });
         } catch (\Exception $e) {
             // If the transaction fails, we handle the error and provide feedback
             $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Transaction failed!' . $e->getMessage()]);
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Something went wrong!',
+                'text' => 'Failed to save due to this error '.$e->getMessage(),
+            ]);
         }
     }
 
@@ -178,56 +261,18 @@ class FmsPaymentRequestsComponent extends Component
         $this->updatedProjectId();
         $this->updatedDepartmentId();
     }
-    public $budgetLineBalance = 0, $budgetLineCur, $curCode;
-    public $ledgerBalance = 0, $ledgerCur, $baseAmount = 0;
-    public function updatedBudgetLineId()
-    {
-        $this->budgetLineCur = 0;
-        $this->budgetLineBalance = 0;
-        $data = FmsBudgetLine::Where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
-        $this->budgetLineBalance = $data->primary_balance ?? 0 - $data->amount_held ?? 0;
-        $this->budgetLineCur = $data->budget?->currency?->code ?? '';
-        $this->currency_id = $data->budget?->currency_id ?? '';
-        $this->updatedCurrencyId();
-    }
-
-    public function updatedFromAccount()
-    {
-        $this->ledgerCur = 0;
-        $this->ledgerBalance = 0;
-        $data = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();
-        $this->ledgerBalance = $data->current_balance ?? 0 - $data->amount_held ?? 0;
-        $this->ledgerCur = $data->currency->code ?? '';
-    }
 
     public function updatedRate()
     {
         $this->updatedTotalAmount();
+        $this->viewSummary = false;
     }
     public function updatedTotalAmount()
     {
-        $this->baseAmount = $this->rate * $this->total_amount;
+        $this->baseAmount = $this->rate * $this->total_amount;        
+        $this->viewSummary = false;
     }
-    public $budgetExpense = 0;
-    public $ledgerExpense = 0;
-    public $ledgerNewBal = 0;
-    public $budgetNewBal = 0;
-    public $viewSummary = false;
-    public function generateTransaction()
-    {
-        try {
-            $this->ledgerExpense = exchangeCurrency($this->ledgerCur, 'foreign', $this->baseAmount);
-            $this->budgetExpense = exchangeCurrency($this->budgetLineCur, 'foreign', $this->baseAmount);
-
-            $this->ledgerNewBal = $this->ledgerBalance - $this->ledgerExpense;
-            $this->budgetNewBal = $this->budgetLineBalance - $this->budgetExpense;
-            $this->viewSummary = true;
-        } catch (\Exception $e) {
-            // If the transaction fails, we handle the error and provide feedback
-            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Generation failed!' . $e->getMessage()]);
-        }
-    }
-
+   
     public function updatedProjectId()
     {
         $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
@@ -243,6 +288,7 @@ class FmsPaymentRequestsComponent extends Component
 
             if ($latestRate) {
                 $this->rate = $latestRate->exchange_rate;
+                $this->viewSummary = false;
             }
         }
     }
@@ -253,11 +299,13 @@ class FmsPaymentRequestsComponent extends Component
             $query->where(['department_id' => $this->department_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
         $this->ledgers = FmsLedgerAccount::where('department_id', $this->department_id)->with(['project', 'department', 'currency'])->get();
+        $this->viewSummary = false;
     }
 
     public function updatedToAccount()
     {
         $this->toAccountData = FmsLedgerAccount::where('id', $this->to_account)->with(['project', 'department', 'currency'])->first();
+        $this->viewSummary = false;
     }
 
     public function editData(FmsPaymentRequest $service)

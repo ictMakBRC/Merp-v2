@@ -43,9 +43,9 @@ class FmsServicesComponent extends Component
     public $sku;
     public $code;
     public $rate;
-    public $is_taxable;
+    public $is_taxable='0';
     public $tax_rate;
-    public $is_purchased;
+    public $is_purchased = '0';
     public $supplier_id;
     public $cost_price;
     public $sale_price;
@@ -249,7 +249,7 @@ class FmsServicesComponent extends Component
             $data['services'] = $this->filterServices()
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->paginate($this->perPage);
-            $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
+            $data['currencies'] = FmsCurrency::where(['is_active'=> 1, 'system_default'=>1])->get();
             $data['categories'] = FmsServiceCategory::where('is_active', 1)->get();
         return view('livewire.finance.settings.fms-services-component', $data);
     }

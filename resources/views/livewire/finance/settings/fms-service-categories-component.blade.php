@@ -136,7 +136,7 @@
         </div><!-- end col-->
     </div>
 
-    @include('livewire.inventory.settings.inc.new-item-category-form')
+    @include('livewire.finance.settings.inc.new-service-category-form')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {

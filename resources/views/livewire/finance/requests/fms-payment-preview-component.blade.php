@@ -42,7 +42,7 @@
 
             @include('livewire.partials.brc-header')
             <hr>
-            <h3 class="text-center">{{ $request_data->request_type ?? 'REQUEST' }}</h3>
+            <h3 class="text-center">{{ $request_data->request_type ?? 'REQUEST' }} Request: ({{ $request_data->status }})</h3>
             <table style="border-collapse:collapse;" width="100%" cellspacing="0">
                 <tbody>
                     <tr class="b-top-row">
@@ -55,6 +55,20 @@
                             @endif
                         </td>
                     </tr>
+                    @if($request_data->request_type == 'Internal Transfer')
+                        <tr class="b-top-row">
+                            <td class="btop t-bold twidth">
+                            To  Unit/Project/Acronym
+                            </td>
+                            <td class="btop" valign="top">
+                                @if ($request_data->to_department_id)
+                                    {{ $request_data->toDepartment->name ?? 'N/A' }}
+                                @elseif ($request_data->to_project_id)
+                                    {{ $request_data->toProject->name ?? 'N/A' }}
+                                @endif
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <td class="btop t-bold twidth">
                             Request Description
@@ -90,6 +104,7 @@
                 </tbody>
             </table>
             <hr>
+            @if($request_data->request_type == 'Payment')
             <div class="details">
 
                 <div class="header">
@@ -157,6 +172,7 @@
                 </table>
             </div>
             <hr>
+            @endif
             <div class="attachments">
 
                 <div class="header">
@@ -188,7 +204,12 @@
                                     {{ $attachment->reference ?? 'N/A' }}
                                 </td>
                                 <td class="btop" width="66" valign="top">
-                                    <a href="javascriprt:void()" wire:click='downloadAttachment({{ $attachment->id }})'> <i class="fa fa-download"></i></a>
+                                    @if ($attachment->file == null && $request_data->invoice_id)
+                                    <a target="_blank" href="{{URL::signedRoute('finance-invoice_view', $attachment->reference)}}" class="action-ico  mx-1"><i class="fa fa-eye"></i></a>
+                                    
+                                @else                                        
+                                <a href="javascriprt:void()" wire:click='downloadAttachment({{ $attachment->id }})'> <i class="fa fa-download"></i></a>
+                                @endif
                                 </td>
                             </tr>
                         @empty
@@ -197,6 +218,62 @@
                             </tr>
                         @endforelse
                     </tbody>
+                </table>
+            </div>
+            <hr>
+            <div class="Requestor Details ">
+
+                <div class="header">
+                    <h6>Requestor Details </h6>
+                </div>
+                <br>
+
+                <table style="border-collapse:collapse;" width="100%" cellspacing="0">
+                   <thead>
+                        <tr class="b-top-row" style="mso-yfti-irow:0;mso-yfti-firstrow:yes;height:15.75pt">
+                            <td class="btop t-bold" width="149"  valign="top">
+                                Name
+                            </td>
+                            <td class="btop t-bold" width="189"  valign="top">
+                                {{ $request_data->user?->employee?->fullName??'N/A' }}
+                            </td>
+                            <td class="btop t-bold" width="66"  valign="top">
+                                Postion
+                            </td>
+                            <td class="btop t-bold" width="189"  valign="top">
+                                {{ $request_data->user?->employee?->designation?->name??'N/A' }}
+                            </td>
+                        </tr>
+                        <tr class="b-top-row" style="mso-yfti-irow:0;mso-yfti-firstrow:yes;height:15.75pt">
+                            <td class="btop t-bold" width="149"  valign="top">
+                                Signature
+                            </td>
+                            <td class="btop t-bold" width="189"  valign="top">
+                                <img src="{{  asset('storage/' . $request_data->user?->signature)  }}"
+                                    width="120px"  alt="">
+                            </td>
+                            <td class="btop t-bold" width="66"  valign="top">
+                                Date
+                            </td>
+                            <td class="btop t-bold" width="189"  valign="top">
+                                {{ $request_data->date_submitted??'N/A' }}
+                            </td>
+                        </tr>
+                        <tr class="b-top-row" style="mso-yfti-irow:0;mso-yfti-firstrow:yes;height:15.75pt">
+                            <td class="btop t-bold" width="149"  valign="top">
+                                Contact
+                            </td>
+                            <td class="btop t-bold" width="189"  valign="top">
+                                {{ $request_data->user?->employee?->contact??'N/A' }}
+                            </td>
+                            <td class="btop t-bold" width="66"  valign="top">
+                                Email
+                            </td>
+                            <td class="btop t-bold" width="189"  valign="top">
+                                {{ $request_data->user?->email??'N/A' }}
+                            </td>
+                        </tr>
+                   </thead>
                 </table>
             </div>
             <hr>
@@ -213,7 +290,7 @@
                                 Request Description
                             </td>
                             <td class="btop" width="480" colspan="3" valign="top" >
-                                Renewal of Ethics Approval fees
+                                {{ $request_data->request_description ?? 'N/A' }}
                             </td>
                         </tr>
                         <tr>
@@ -244,16 +321,24 @@
                                 {{ $authorizer->approver->employee->fullName ?? $authorizer->approver->name??'N/A' }}
                             </td>
                             <td class="btop" width="151" valign="top">
-                
+                                @if ($authorizer->signature)
+                                    
+                                <img src="{{  asset('storage/' . $authorizer->approver?->signature)  }}"
+                                    width="120px"  alt="">
+                                @endif
+                                <small>{{ $authorizer->signature ?? 'N/A' }}</small>
                             </td>
                             <td class="btop" width="130" valign="top">
-                
+                                {{ $authorizer->signature_date ?? 'N/A' }}
                             </td>
                             <td class="btop" width="66" valign="top">
-                               @if ($authorizer->status =='Active')
-                               <a href="javascriprt:void()" wire:click='approve({{ $authorizer->id }})'> <i class="fa fa-check"></i>Approve</a>
+                               @if ($authorizer->status =='Active' && $authorizer->approver_id == auth()->user()->id)
+                               <div class="btn-group m-1" role="group" aria-label="Basic example">
+                                    <button  data-bs-toggle="modal" data-bs-target="#approveRejectRequest-modal" type="button" title="Approve" class="btn btn-xs btn-outline-success" wire:click="$set('click_action','Signed')"><i class="far fa-check-circle"></i></button>
+                                    <button data-bs-toggle="modal" data-bs-target="#approveRejectRequest-modal"  type="button" title="Decline" class="btn btn-xs btn-outline-danger" wire:click="$set('click_action','Declined')"><i class="fas fa-frown"></i></button>
+                                </div> 
                                @else
-                                   Pending
+                               {{ $authorizer->status ?? 'N/A' }}
                                @endif
                                 
                             </td>
@@ -274,6 +359,26 @@
                     <br>
             </div>
         </div>
+        @if ($request_data->status =='Approved' && Auth::user()->hasPermission(['approve_transaction']) )
+        <div class="card-footer d-grid">
+            <button wire:click='payRequest({{ $request_data->id }})' class="btn btn-success btn-xs">Pay Request</button>
+        </div>
+        
+        @endif
+        <div class="card-footer d-grid">
+            <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
+        </div>
         {{-- end of card body --}}
     </div>
+    @include('livewire.finance.requests.inc.request-action-form')
+    @push('scripts')
+            <script>
+                window.addEventListener('close-modal', event => {
+                    $('#approveRejectRequest-modal').modal('hide');
+                });
+                window.addEventListener('delete-modal', event => {
+                    $('#delete_modal').modal('show');
+                });
+            </script>
+    @endpush
 </div>

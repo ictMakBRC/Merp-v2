@@ -81,6 +81,13 @@ class Employee extends Model
         );
     }
 
+    protected function empName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->first_name.' '.$this->other_name.' '.$this->surname,
+        );
+    }
+
     protected function employeeAge(): Attribute
     {
         return Attribute::make(

@@ -25,6 +25,8 @@ class FmsInvoiceItemsComponent extends Component
     public $confirmingDelete = false;
     public $itemToRemove;
     public $totalAmount = 0;
+    public $biller;
+    public $billed;
     public function updatedItemId()
     {
         $service = FmsService::where('id', $this->item_id)->first();
@@ -99,8 +101,22 @@ class FmsInvoiceItemsComponent extends Component
     }
     public function render()
     {
-        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'biller', 'currency'])->first();
+        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'billedDepartment','billedProject', 'currency'])->first();
         if ($invoiceData) {
+            if($invoiceData->invoice_type =='External'){                
+                $this->billed = $invoiceData->customer;
+            }elseif($invoiceData->invoice_type =='Internal'){
+                if($invoiceData->billed_department){
+                    $this->billed = $invoiceData->billedDepartment;
+                }elseif($invoiceData->billed_project){
+                    $this->billed = $invoiceData->billedProject;
+                }
+            }
+            if($invoiceData->department_id){
+                $this->biller = $invoiceData->department;
+            }elseif($invoiceData->project_id){
+                $this->biller = $invoiceData->project;
+            }
             $this->invoiceData = $invoiceData;
             $this->currency = $invoiceData->currency->code??'UG';
             $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['service'])->get();

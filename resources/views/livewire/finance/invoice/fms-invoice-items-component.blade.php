@@ -6,54 +6,15 @@
                     <div class="row">
                         <div class="col-md-12 d-print-flex">
                             @include('livewire.partials.brc-header') 
-                            </div>  
+                            <div class="text-center">
+                                
+                            <a class="btn btn-outline-primary text-center float-center">INVOICE ({{ $invoice_data->invoice_type }})</a>
+                            </div>
+                        </div>  
                     </div><!--end row-->     
                 </div><!--end card-body-->
                 <div class="card-body">
-                    <div class="row row-cols-3 d-flex justify-content-md-between">
-                        <div class="col-md-3 d-print-flex">
-                            <div class="">
-                                <a class="btn btn-outline-primary">INVOICE</a>
-                                <h6 class="mb-0"><b>Due Date :</b> {{$invoice_data->invoice_date}}</h6>
-                                <h6><b>Invoice ID :</b> # {{$invoice_data->invoice_no}}</h6>
-                            </div>
-                        </div><!--end col--> 
-                        <div class="col-md-3 d-print-flex">                                            
-                            <div class="">
-                                <address class="font-13">
-                                    <strong class="font-14">Billed Trom :</strong><br>
-                                    {{$invoice_data->biller->name??'N/A'}}<br>
-                                    {{$invoice_data->biller->prefix??'N/A'}},
-                                    {{$invoice_data->biller->description??'N/A'}}<br> 
-                                </address>
-                            </div>
-                        </div><!--end col--> 
-                        <div class="col-md-3 d-print-flex">
-                            @if ($invoice_data->customer_id!=null)                                    
-                                <div class="">
-                                    <address class="font-13">
-                                        <strong class="font-14">Billed To:</strong><br>
-                                        {{$invoice_data->customer->name??'N/A'}}<br>
-                                        {{$invoice_data->customer->address??'N/A'}},
-                                        {{$invoice_data->customer->nationality??'N/A'}}<br>
-                                        <abbr title="Phone">P:</abbr> {{$invoice_data->customer->contact??'N/A'}}<br>
-                                        <abbr title="Phone">Proj:</abbr> {{$invoice_data->project->name??'N/A'}}
-                                    </address>
-                                </div>
-                            @else
-                            
-                            <div class="">
-                                <address class="font-13">
-                                    <strong class="font-14">Billed To:</strong><br>
-                                    {{$invoice_data->department->name??'N/A'}}<br>
-                                    {{$invoice_data->department->prefix??'N/A'}},
-                                    {{$invoice_data->department->description??'N/A'}}<br>                                   
-                                </address>
-                            </div>
-                                
-                            @endif
-                        </div> <!--end col-->                       
-                    </div><!--end row-->
+                    @include('livewire.finance.invoice.inc.invoice-header')
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -82,7 +43,7 @@
                                                 @error('item_id')<div class="text-danger text-small">{{ $message }}</div>@enderror
                                             </td>
                                             <td>
-                                                <input type="number" step="any" id="unit_price" class="form-control" required readonly wire:model="unit_price">
+                                                <input type="number" step="any" id="unit_price" class="form-control" required  wire:model="unit_price">
                                                 @error('unit_price')<div class="text-danger text-small">{{ $message }}</div> @enderror
                                             </td>
                                             <td> 

@@ -55,30 +55,53 @@ $(function () {
 			});
 	});
 
+	// window.addEventListener('livewire:load', () => {
+	// 	initializeSelectr();
+	// });
+
+	// window.addEventListener('livewire:update', () => {
+	// 	const selectrElements = document.querySelectorAll('.selectr-container');
+	// 	selectrElements.forEach((element) => {
+	// 		const selectrInstance = element.selectr;
+	// 		selectrInstance.destroy(); // destroy the previous instances of Selectr
+	// 	});
+
+	// 	initializeSelectr();
+	// });
+
+	// function initializeSelectr() {
+	// 	const selectrElements = document.querySelectorAll('.selectr');
+	// 	selectrElements.forEach((element) => {
+	// 		new Selectr(element, {
+	// 			placeholder: element.dataset.placeholder ? element.dataset.placeholder : 'Select',
+	// 			allowClear: Boolean(element.dataset.allowClear),
+	// 		});
+	// 	});
+	// }
+
+
 	window.addEventListener('livewire:load', () => {
-		initializeSelectr();
-	});
+		initializeSelect2();
+	});      
+ 
 
 	window.addEventListener('livewire:update', () => {
-		const selectrElements = document.querySelectorAll('.selectr-container');
-		selectrElements.forEach((element) => {
-			const selectrInstance = element.selectr;
-			selectrInstance.destroy(); // destroy the previous instances of Selectr
-		});
-
-		initializeSelectr();
+		$('.select2').select2('destroy'); //destroy the previous instances of select2
+		initializeSelect2();
 	});
 
-	function initializeSelectr() {
-		const selectrElements = document.querySelectorAll('.selectr');
-		selectrElements.forEach((element) => {
-			new Selectr(element, {
-				placeholder: element.dataset.placeholder ? element.dataset.placeholder : 'Select',
-				allowClear: Boolean(element.dataset.allowClear),
+	function initializeSelect2() {
+
+		$('.select2').each(function() {
+			$(this).select2({
+				theme: 'bootstrap4',
+				width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ?
+					'100%' : 'style',
+				placeholder: $(this).data('placeholder') ? $(this).data('placeholder') : 'Select',
+				allowClear: Boolean($(this).data('allow-clear')),
 			});
 		});
 	}
-
 
 
 });

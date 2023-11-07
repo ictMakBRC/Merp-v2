@@ -61,16 +61,40 @@
                                 @if (Auth::user()->hasPermission(['view_department_ledger']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-ledger_accounts') }}" class="nav-link ">All
-                                            accouts</a>
+                                            Departments</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_department_ledger']))
                                     <li class="nav-item">
-                                        <a href="analytics-reports.html" class="nav-link ">Deparment Ledger</a>
+                                        <a href="analytics-reports.html" class="nav-link ">My Department</a>
                                     </li>
                                 @endif
                             </ul>
 
+                            <!--end nav-->
+                        </div>
+                        <!--end sidebarAnalytics-->
+                    </li>
+                @endif
+                @if (Auth::user()->hasPermission(['view_department_budget']) ||
+                        Auth::user()->hasPermission(['view_organization_budget']))
+                    <li class="nav-item {{ request()->segment(3) == 'lists' ? 'menuitem-active' : '' }}">
+                        <a class="nav-link" href="#listing" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="listing">
+                            Lists
+                        </a>
+                        <div class="collapse " id="listing">
+                            <ul class="nav flex-column">
+                                <!--end nav-item-->
+                                @if (Auth::user()->hasPermission(['view_organization_budget']))
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-department_list') }}" class="nav-link ">Departments</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-project_list') }}" class="nav-link ">Projects</a>
+                                    </li>
+                                @endif
+                            </ul>
                             <!--end nav-->
                         </div>
                         <!--end sidebarAnalytics-->
@@ -120,12 +144,13 @@
                                     <li class="nav-item">
                                         <a href="{{ route('finance-transactions', 'all') }}" class="nav-link ">All</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a href="{{ route('finance-transfers', 'all') }}"
                                             class="nav-link ">Transfers</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-expenses', 'all') }}" class="nav-link ">Expenses</a>
+                                        <a href="{{ route('finance-expenses', 'all') }}"
+                                            class="nav-link ">Expenses</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_department_transaction']))
@@ -148,10 +173,12 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_all_transactions']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-requests', 'all') }}" class="nav-link ">Payment Requests</a>
+                                        <a href="{{ route('finance-requests', 'all') }}" class="nav-link ">Payment
+                                            Requests</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-requests_internal', 'all') }}" class="nav-link ">Internal Transfer</a>
+                                        <a href="{{ route('finance-requests_internal', 'all') }}"
+                                            class="nav-link ">Internal Transfer</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-requests', 'incoming') }}"
@@ -198,7 +225,16 @@
                                         <a href="{{ route('finance-currencies') }}" class="nav-link ">Currencies</a>
                                     </li>
                                     <!--end nav-item-->
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-currency_rates') }}" class="nav-link ">Ex Rates</a>
+                                    </li>
                                 @endif
+                                {{-- @if (Auth::user()->hasPermission(['finance-services'])) --}}
+                                <li class="nav-item">
+                                    <a href="{{ route('finance-req_settings') }}" class="nav-link ">Positions</a>
+                                </li>
+                                <!--end nav-item-->
+                                {{-- @endif --}}
                                 @if (Auth::user()->hasPermission(['view_services']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-categories') }}" class="nav-link ">Service

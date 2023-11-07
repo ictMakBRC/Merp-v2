@@ -12,23 +12,29 @@ return new class extends Migration
      */
     public function up(): void
     {
+        
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Schema::dropIfExists('fms_payment_request_positions');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         Schema::create('fms_payment_request_positions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->string('name_lock')->unique();
+            $table->integer('level')->unique();
             $table->boolean('is_active')->default(true);
+            $table->foreignId('assigned_to')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   
             $table->foreignId('created_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   
             $table->foreignId('updated_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->timestamps();
         });
         DB::statement("
-            INSERT INTO `fms_payment_request_positions` (`id`, `name`, `name_lock`, `created_by`, `updated_by`, `created_at`, `updated_at`, `is_active`) VALUES
-            (1, 'Principal Investigator/ Manager/Unit Head', 'pi_manager', 1, NULL, NULL, NULL, 1),
+            INSERT INTO `fms_payment_request_positions` (`level`, `name`, `name_lock`,`created_by`, `updated_by`, `created_at`, `updated_at`, `is_active`) VALUES
+            (1, 'Principal Investigator/ Manager/Unit Head', 'head', NULL, NULL, NULL, NULL, 1),
             (2, 'Grants Office/ Manager', 'grants', NULL, NULL, NULL, NULL, 1),
-            (3, 'Internal Audit', 'audit', 1, NULL, NULL, NULL, 1),
-            (4, 'Finance/ Manager/Unit Head', 'finance', 1, NULL, NULL, NULL, 1),
-            (5, 'Operations Manager', 'operations', 1, NULL, '2023-10-02 19:15:11', NULL, 1),
-            (6, 'Managing Director', 'director', 1, NULL, NULL, NULL, 1);
+            (3, 'Internal Audit', 'audit', NULL, NULL, NULL, NULL, 1),
+            (4, 'Finance/ Manager/Unit Head', 'finance', NULL, NULL, NULL, NULL, 1),
+            (5, 'Operations Manager', 'operations', NULL, NULL, NULL, NULL, 1),
+            (6, 'Managing Director', 'director', NULL, NULL, NULL, NULL, 1);
         ");
     }
 

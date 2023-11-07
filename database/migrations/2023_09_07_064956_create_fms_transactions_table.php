@@ -41,6 +41,7 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->boolean('is_active')->default(True); 
             $table->boolean('is_department')->default(True); 
+            $table->morphs('requestable');
             $table->timestamps();
         });
     }

@@ -38,6 +38,11 @@ class FmsPaymentRequest extends Model
         return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 
+    public function toProject()
+    {
+        return $this->belongsTo(Project::class, 'to_project_id', 'id');
+    }
+
     public function budgetLine()
     {
         return $this->belongsTo(FmsBudgetLine::class, 'budget_line_id', 'id');
@@ -56,6 +61,11 @@ class FmsPaymentRequest extends Model
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    public function toDepartment()
+    {
+        return $this->belongsTo(Department::class, 'to_department_id', 'id');
     }
     function user() {
         return $this->belongsTo(User::class, 'created_by', 'id');
@@ -89,6 +99,8 @@ class FmsPaymentRequest extends Model
         'request_description',
         'request_type',
         'total_amount',
+        'ledger_amount',
+        'budget_amount',
         'amount_in_words',
         'requester_signature',
         'date_submitted', 

@@ -72,6 +72,11 @@ class Department extends Model
         ->withTimestamps();
     }
 
+    public function ledger()
+    {
+        return $this->HasOne(FmsLedgerAccount::class, 'department_id', 'id');
+    }
+
     public static function boot()
     {
         parent::boot();

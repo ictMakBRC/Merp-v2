@@ -200,7 +200,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $invoice->invoice_no }}</td>
-                                            <td>{{ $invoice->biller->name??'N/A' }}</td>
+                                            <td>{{ $invoice->requestable->name??'N/A' }}</td>
                                             <td>{{ $invoice->customer->name??$invoice->department->name??'N/A' }}</td>
                                             <td>@moneyFormat( $invoice->total_amount )</td>
                                             <td>{{ $invoice->invoice_date }}</td>

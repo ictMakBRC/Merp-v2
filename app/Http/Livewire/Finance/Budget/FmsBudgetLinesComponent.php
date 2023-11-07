@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Finance\Budget;
 use App\Models\Finance\Accounting\FmsChartOfAccount;
 use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Budget\FmsBudgetLine;
+use App\Models\Finance\Budget\FmsUnitBudgetLine;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -24,6 +25,7 @@ class FmsBudgetLinesComponent extends Component
     public $created_by;
     public $updated_by;
     public $is_active;
+    public $line_id;
     public $budget_year;
     public $confirmingDelete = false;
     public $budgetToDelete;
@@ -32,21 +34,41 @@ class FmsBudgetLinesComponent extends Component
         $this->budgetCode = $budget;
 
     }
+    function updatedLineId(){
+     $budgetLine =   FmsUnitBudgetLine::where('id', $this->line_id)->first();
+    //  dd($budgetLine);
+     if($budgetLine){
+        $this->name = $budgetLine->name;
+        $this->description = $budgetLine->description;
+     }
+    }
     public function saveBudgetLine($id)
     {
         $this->validate([
             'name' => 'required',
+            'line_id' => 'required',
             'quantity' => 'required',
             'allocated_amount' => 'required',
             'description' => 'required',
         ]);
-        $budgetName = $this->name[$id];
+        $record = FmsBudgetLine::where(['fms_budget_id'=>$this->budgetData->id, 'line_id'=>$this->line_id])->first();
+        if($record){
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Duplicate data!',
+                'text' => 'the selected line already exists on this budget!',
+            ]);
+            return false;
+        }
+        $line_id = $this->line_id;
+        // $budgetName = $this->name[$id];
         $budgetAmount = $this->allocated_amount[$id];
         $description = $this->description[$id];
         $quantity = $this->quantity[$id];
 
         $budgetLine = new FmsBudgetLine();
-        $budgetLine->name = $budgetName;
+        $budgetLine->name = $this->name;
+        $budgetLine->line_id = $line_id;
         $budgetLine->quantity = $quantity;
         $budgetLine->type = $this->type;
         $budgetLine->fms_budget_id = $this->budgetData->id;
@@ -74,6 +96,7 @@ class FmsBudgetLinesComponent extends Component
             'updated_by',
             'quantity',
             'is_active',
+            'line_id',
         ]);
     }
     public function confirmDelete($budgetId)
@@ -112,9 +135,13 @@ class FmsBudgetLinesComponent extends Component
         $data['budget_data'] = $budgetData = FmsBudget::where('code', $this->budgetCode)->first();
         if ($budgetData) {
             $this->budgetData = $budgetData;
-            $data['budget_lines'] = FmsBudgetLine::where('fms_budget_id', $data['budget_data']->id)->get();
+            $data['budget_lines'] = FmsBudgetLine::where('fms_budget_id', $data['budget_data']->id)->get();            
+            $data['unitLines'] = FmsUnitBudgetLine::where('is_active', 1)->where('requestable_id', $budgetData->requestable_id)
+        ->where('requestable_type', $budgetData->requestable_type)->get();
+
         } else {
             $data['budget_lines'] = collect([]);
+            $data['unitLines'] = collect([]);
         }
         $chartOfAccts = FmsChartOfAccount::where('is_active', 1)->with(['type']);
         $data['incomes'] = $chartOfAccts->where('account_type', 4)->get();

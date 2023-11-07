@@ -11,6 +11,7 @@ use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FmsTransaction extends Model
@@ -27,6 +28,10 @@ class FmsTransaction extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
+    }
+    public function requestable(): MorphTo
+    {
+        return $this->morphTo();
     }
     public function project()
     {

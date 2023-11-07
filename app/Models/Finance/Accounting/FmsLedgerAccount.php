@@ -2,13 +2,14 @@
 
 namespace App\Models\Finance\Accounting;
 
-use App\Models\Finance\Settings\FmsCurrency;
-use App\Models\Grants\Project\Project;
-use App\Models\HumanResource\Settings\Department;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\HumanResource\Settings\Department;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FmsLedgerAccount extends Model
@@ -42,6 +43,10 @@ class FmsLedgerAccount extends Model
         'currency_id',
     ];
 
+    public function requestable(): MorphTo
+    {
+        return $this->morphTo();
+    }
     public function project()
     {
        return $this->belongsTo(Project::class, 'project_id', 'id');

@@ -2,10 +2,13 @@
 
 namespace App\Http\Livewire\Finance\Requests;
 
+use Throwable;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Jobs\SendNotifications;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Requests\FmsPaymentRequestDetail;
@@ -40,6 +43,7 @@ class FmsPaymentRequestDetailsComponent extends Component
     public $position;
     public $approver_id;
     public $position_exists = false;
+    public $requestable_type;
 
     public $signatory_level;
 
@@ -69,7 +73,18 @@ class FmsPaymentRequestDetailsComponent extends Component
             'description' => 'nullable|string',
             'quantity' => 'required|numeric',
             'unit_cost' => 'required|numeric',
+            'amount' => 'required|numeric',
         ]);
+        if($this->amount > $this->amountRemaining ){
+
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Low Line balance!',
+                'text' => 'You don not have enough money on your request line, your expense is '.$this->amount.' but your available balance is '.$this->amountRemaining,
+            ]);
+            return false;
+
+        }
         $amount = $this->quantity*$this->unit_cost;
         $requestItem = new FmsPaymentRequestDetail();
         $requestItem->request_id = $id;
@@ -87,13 +102,15 @@ class FmsPaymentRequestDetailsComponent extends Component
     {
         $this->validate([
             'name' => 'required',
-            'reference' => 'nullable|string',
-            'file' => 'required|mimes:jpg,pdf,docx|max:10240|file|min:10', // 10MB Max
+            'reference' => 'required|string',
+            'file' => 'nullable|mimes:jpg,pdf,docx|max:10240|file|min:10', // 10MB Max
         ]);
         if ($this->file != null) {
             $name = date('Ymdhis').'_'.$this->requestCode.'.'.$this->file->extension();
             $path = date('Y').'/'.date('M').'/Payments/Requests/Attachments';
             $file = $this->file->storeAs($path, $name, $this->disk);
+        }else{
+            $file = null;
         }
         $requestItem = new FmsPaymentRequestAttachment();
         $requestItem->request_id = $id;
@@ -120,13 +137,30 @@ class FmsPaymentRequestDetailsComponent extends Component
             $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Signatory already exists on this particular document, please select another different person']);
             return false;
         }
-        $requestItem = new FmsPaymentRequestAuthorization();
-        $requestItem->request_id = $id;
-        $requestItem->request_code = $this->requestCode;
-        $requestItem->position = $this->position;
-        $requestItem->level = $this->signatory_level;
-        $requestItem->approver_id = $this->approver_id;
-        $requestItem->save();
+        $requestAuth = new FmsPaymentRequestAuthorization();
+        $requestAuth->request_id = $id;
+        $requestAuth->request_code = $this->requestCode;
+        $requestAuth->position = $this->position;
+        $requestAuth->level = $this->signatory_level;
+        $requestAuth->approver_id = $this->approver_id;
+        $requestAuth->save();
+
+        $positions = FmsPaymentRequestPosition::where('name_lock','!=', 'head')
+        ->when($this->requestable_type == 'App\Models\HumanResource\Settings\Department', function ($query) {
+            $query->where('name_lock','!=', 'grants');
+        })->get();
+        foreach($positions as $position){
+            $exists = FmsPaymentRequestAuthorization::where(['position' => $position->id, 'request_id' => $id])->first();
+            if (!$exists) {
+            $requestAuth = new FmsPaymentRequestAuthorization();
+            $requestAuth->request_id = $id;
+            $requestAuth->request_code = $this->requestCode;
+            $requestAuth->position = $position->id;
+            $requestAuth->level = $position->level;
+            $requestAuth->approver_id = $position->assigned_to;
+            $requestAuth->save();
+            }
+        }
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Request attachment added successfully!']);
     }
@@ -181,10 +215,10 @@ class FmsPaymentRequestDetailsComponent extends Component
                     ]);
         }
     }
-    public function confirmDelete($budgetId)
+    public function confirmDelete($itemId)
     {
         $this->confirmingDelete = true;
-        $this->itemToRemove = $budgetId;
+        $this->itemToRemove = $itemId;
     }
 
     public function submitRequest($id)
@@ -192,13 +226,42 @@ class FmsPaymentRequestDetailsComponent extends Component
         DB::transaction(function () use($id){
        $request = FmsPaymentRequest::where(['request_code'=> $this->requestCode, 'id'=>$id])->update(['status'=>'Submitted','date_submitted'=>date('Y-m-d')]);
     //    dd($request);
-        $signatory = FmsPaymentRequestAuthorization::Where(['request_code'=> $this->requestCode, 'request_id'=>$id, 'status' => 'Pending'])
+        $signatory = FmsPaymentRequestAuthorization::Where(['request_code'=> $this->requestCode, 'request_id'=>$id, 'status' => 'Pending'])->with(['approver'])
         ->orderBy('level', 'asc')->first();
     //    dd($signatory);
         $signatory->update(['status' => 'Active']);
+        if($signatory){
+            $body = 'Hello, You have a pending request #'.$this->requestCode.' to sign, please login to view more details';
+            $this->SendMail($signatory->approver_id, $body);
+        }
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Request submitted successfully!']);
         return redirect()->SignedRoute('finance-request_preview', $this->requestCode);
         });
+    }
+    public function SendMail($id, $body)
+    {
+        try {
+            $user = User::where('id',$id )->first();
+            $link = URL::signedRoute('finance-request_preview', $this->requestCode);
+            $notification = [
+                'to' => $user->email,
+                'phone' => $user->contact,
+                'subject' => 'MERP payment Request',
+                'greeting' => 'Dear '.$user->title.' '.$user->name,
+                'body' => $body,
+                'thanks' => 'Thank you, incase of any question, please reply to support@makbrc.org',
+                'actionText' => 'View Details',
+                'actionURL' => $link,
+                'department_id' => $this->requestData->created_by,
+                'user_id' => $this->requestData->created_by,
+            ];
+            // WhatAppMessageService::sendReferralMessage($referral_request);
+          $mm=  SendNotifications::dispatch($notification)->delay(Carbon::now()->addSeconds(20));
+        //   dd($mms);
+        } catch(Throwable $error) {
+            // $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Referral Request '.$error.'!']);
+        }
+        $this->dispatchBrowserEvent('alert', ['type' => 'Success',  'message' => 'Your request has been successfully sent! ']);
     }
   
 
@@ -212,9 +275,10 @@ class FmsPaymentRequestDetailsComponent extends Component
     }
     public function render()
     {
-        $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project','currency','requestable','budgetLine'])->first();
+        $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project','toDepartment','toProject','currency','requestable','budgetLine'])->first();
         if ($requestData) {
             $this->requestData = $requestData;
+            $this->requestable_type = $requestData->requestable_type;
             $this->currency = $requestData->currency->code??'UG';
             $data['items'] = FmsPaymentRequestDetail::where('request_id', $data['request_data']->id)->get();
             $data['attachments'] = FmsPaymentRequestAttachment::where('request_id', $data['request_data']->id)->get();
@@ -224,12 +288,12 @@ class FmsPaymentRequestDetailsComponent extends Component
             $data['attachments'] =collect([]);
             $data['authorizations'] =collect([]);
         }
-        $data['positions'] = FmsPaymentRequestPosition::where('is_active', 1)
-        ->when($requestData->requestable_type == 'App\Models\HumanResource\Settings\Department', function ($query) {
+        $data['positions'] = FmsPaymentRequestPosition::where('name_lock', 'head')
+        ->when($requestData?->requestable_type == 'App\Models\HumanResource\Settings\Department', function ($query) {
             $query->where('name_lock','!=', 'grants');
         })->get();
         $data['signatories'] = User::where('is_active', 1)->get();
-        $level = FmsPaymentRequestAuthorization::where('request_id', $data['request_data']->id)->orderBy('id', 'DESC')->first();
+        $level = FmsPaymentRequestAuthorization::where('request_id', $data['request_data']?->id)->orderBy('id', 'DESC')->first();
         if ($level) {
             $this->signatory_level = $level->level + 1;
         } else {

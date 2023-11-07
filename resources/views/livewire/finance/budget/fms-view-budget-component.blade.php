@@ -41,9 +41,9 @@
             
             <h2 class="text-primary">Revenue</h2>
                 @foreach ($incomes as $income)  
+                @if (count($budget_lines->where('chat_of_account',$income->id))>0)
                 <hr class="hr-custom">           
                 <h5>{{ $income->name }}</h5> 
-                @if (count($budget_lines->where('chat_of_account',$income->id))>0)
                     
                 <div class="table-responsive-sm pt-2">
                     <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
@@ -79,10 +79,9 @@
         <div class="card p-2">
             <h2 class="text-info text-center">Expenses</h2>
                 @foreach ($expenses as $expense)  
+                @if (count($budget_lines->where('chat_of_account',$expense->id))>0)                    
                 <hr class="hr-custom">           
                 <h5>{{ $expense->name }}</h5> 
-                @if (count($budget_lines->where('chat_of_account',$expense->id))>0)
-                    
                 <div class="table-responsive-sm pt-2">
                     <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
                         <thead class="table-light">

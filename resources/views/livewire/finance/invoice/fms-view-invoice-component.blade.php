@@ -6,61 +6,17 @@
                     <div class="row">
                         <div class="col-md-12 d-print-flex">
                             @include('livewire.partials.brc-header')
+                            <h4 class="text-center">Status {{ $invoice_data->status }}</h4>
                         </div>
                     </div><!--end row-->
                 </div><!--end card-body-->
                 <div class="card-body">
-                    <div class="row row-cols-3 d-flex justify-content-md-between">
-                        <div class="col-md-3 d-print-flex">
-                            <div class="">
-                                <a class="btn btn-outline-primary">INVOICE</a>
-                                <h6 class="mb-0"><b>Due Date :</b> {{ $invoice_data->invoice_date }}</h6>
-                                <h6><b>Invoice ID :</b> # {{ $invoice_data->invoice_no }}</h6>
-                            </div>
-                        </div><!--end col-->
-                        <div class="col-md-3 d-print-flex">
-                            <div class="">
-                                <address class="font-13">
-                                    <strong class="font-14">Status :</strong>{{ $invoice_data->status }}<br>
-                                    <strong class="font-14">Billed Trom :</strong><br>
-                                    @if ($invoice_data->department_id )                                        
-                                        {{ $invoice_data->department->name ?? 'N/A' }}<br>
-                                        {{ $invoice_data->department->prefix ?? 'N/A' }},
-                                        {{ $invoice_data->department->description ?? 'N/A' }}<br>
-                                    @endif
-                                    @if ($invoice_data->project_id )                                        
-                                        {{ $invoice_data->project->name ?? 'N/A' }}<br>
-                                        {{ $invoice_data->project->prefix ?? 'N/A' }},
-                                        {{ $invoice_data->project->description ?? 'N/A' }}<br>
-                                    @endif
-                                </address>
-                            </div>
-                        </div><!--end col-->
-                        <div class="col-md-3 d-print-flex">
-                            @if ($invoice_data->customer_id != null)
-                                <div class="">
-                                    <address class="font-13">
-                                        <strong class="font-14">Billed To:</strong><br>
-                                        {{ $invoice_data->customer->name ?? 'N/A' }}<br>
-                                        {{ $invoice_data->customer->address ?? 'N/A' }},
-                                        {{ $invoice_data->customer->nationality ?? 'N/A' }}<br>
-                                        <abbr title="Phone">P:</abbr> {{ $invoice_data->customer->contact ?? 'N/A' }}<br>
-                                        <abbr title="Phone">Proj:</abbr> {{ $invoice_data->project->name ?? 'N/A' }}
-                                    </address>
-                                </div>
-                            @else
-                                <div class="">
-                                    <address class="font-13">
-                                        <strong class="font-14">Billed To:</strong><br>
-                                        {{ $invoice_data->department->name ?? 'N/A' }}<br>
-                                        {{ $invoice_data->department->prefix ?? 'N/A' }},
-                                        {{ $invoice_data->department->description ?? 'N/A' }}<br>
-                                    </address>
-                                </div>
-                            @endif
-                        </div> <!--end col-->
-                    </div><!--end row-->
-
+                    @include('livewire.finance.invoice.inc.invoice-header')
+                    @php
+                        $link =URL::signedRoute('finance-invoice_view', $invoice_data->invoice_no);
+                    @endphp
+                    {{-- {!! QrCode::size(100)->margin(1)->generate($link) !!} --}}
+                   
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="table-responsive project-invoice">
@@ -158,12 +114,18 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Invoice Payments
-                        @if ($invoice_data->status == 'Approved' || $invoice_data->status == 'Partially Paid')                                
-                            <a type="button" data-bs-toggle="modal" data-bs-target="#NewPaymentModal" class="btn btn-sm me-2 btn-primary float-end">
-                                <i class="fa fa-plus"></i>Payment
-                            </a>
+                            @if ($invoice_data->invoice_type =='External')
+                                @if ($invoice_data->status == 'Approved' || $invoice_data->status == 'Partially Paid')                                
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#NewPaymentModal" class="btn btn-sm me-2 btn-primary float-end">
+                                    <i class="fa fa-plus"></i>Payment
+                                </a>
+                                @endif
+                            @elseif($invoice_data->invoice_type =='Internal')
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#internalTransferModal" class="btn btn-sm me-2 btn-primary float-end">
+                                    <i class="fa fa-plus"></i>New Internal Transfer
+                                </a>
+                            @endif
                         </h4>
-                        @endif
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -200,6 +162,7 @@
                 </div>
             </div>
             @include('livewire.finance.invoice.inc.new-invoice-payment')
+            @include('livewire.finance.invoice.inc.new-internal-payment')
         </div>
     @endif
 </div>

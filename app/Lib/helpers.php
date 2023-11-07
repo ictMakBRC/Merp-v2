@@ -1,11 +1,12 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Jobs\ProcessDispatchMails;
-use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Request;
+use App\Models\Finance\Settings\FmsCurrencyUpdate;
 
 function showWhenLinkActive($link)
 {
@@ -158,8 +159,8 @@ if (!function_exists('exchangeMoney')) {
 
 // helpers.php
 
-if (!function_exists('calculatePAYE')) {
-    function calculatePAYE($salary)
+if (!function_exists('calculatePAY')) {
+    function calculatePAY($salary)
     {
         // Define the PAYE tax brackets and their corresponding tax rates
         $taxBrackets = [
@@ -179,6 +180,121 @@ if (!function_exists('calculatePAYE')) {
 
         // Handle the case where no applicable tax bracket is found
         throw new \Exception("No applicable tax bracket found for salary: $salary");
+    }
+}
+if (!function_exists('calculatePAYE')) {
+    function calculatePAYE($chargeableIncome) {
+        $paye = 0;
+
+        if ($chargeableIncome <= 235000) {
+            $paye = 0;
+        }elseif ($chargeableIncome > 235000 && $chargeableIncome <= 335000) {
+            $paye = ($chargeableIncome - 235000) * 0.10; //10%
+        } elseif ($chargeableIncome > 335000 && $chargeableIncome <= 410000) {
+            $paye = ($chargeableIncome - 335000) * 0.20 + 10000; //20%
+        } elseif ($chargeableIncome > 410000 && $chargeableIncome <= 10000000) {
+            $paye = ($chargeableIncome - 410000) * 0.30 + 25000; //30%
+        } elseif ($chargeableIncome > 10000000) {
+            $paye1 = ($chargeableIncome - 410000) * 0.30 + 25000 ;
+            $paye2 = ($chargeableIncome - 10000000) * 0.10;
+            $paye = $paye1 + $paye2;
+        }
+
+        return $paye;
+    }
+
+    
+    function generateInitials(string $name)
+    {
+        $n = Str::of($name)->wordCount();
+        $words = explode(' ', $name);
+
+        if (count($words) <= 2) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 3) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 4) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 5) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 6) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr($words[4], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 7) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr($words[4], 0, 1, 'UTF-8').
+                mb_substr($words[5], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 8) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr($words[4], 0, 1, 'UTF-8').
+                mb_substr($words[5], 0, 1, 'UTF-8').
+                mb_substr($words[6], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) >= 9) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr($words[4], 0, 1, 'UTF-8').
+                mb_substr($words[5], 0, 1, 'UTF-8').
+                mb_substr($words[6], 0, 1, 'UTF-8').
+                mb_substr($words[7], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        }
+
+        return makeInitialsFromSingleWord($name);
+    }
+       /**
+     * Make initials from a word with no spaces
+     *
+     * @return string
+     */
+    function makeInitialsFromSingleWord(string $name)
+    {
+        $n = Str::of($name)->wordCount();
+        preg_match_all('#([A-Z]+)#', $name, $capitals);
+        if (count($capitals[1]) >= $n) {
+            return mb_substr(implode('', $capitals[1]), 0, $n, 'UTF-8');
+        }
+
+        return mb_strtoupper(mb_substr($name, 0, $n, 'UTF-8'), 'UTF-8');
     }
 }
 

@@ -59,6 +59,31 @@ class FmsLedgerAccountsComponent extends Component
         $this->toggleForm = false;
     }
 
+    public function updatedDepartmentId()
+    {
+        $department = Department::where('id', $this->department_id)->first();
+        if($department && $department->name){
+            
+            $this->name = $department->name.' Ledger Acct';
+            }
+    }
+
+    public function updatedProjectId()
+    {
+        $department = Project::where('id', $this->project_id)->first();
+        if($department && $department->name){
+            
+        $this->name = $department->name.' Ledger Acct';
+        }
+    }
+
+    public function updatedEntryType()
+    {
+        $this->project_id = '';
+        $this->department_id = '';
+        $this->name = '';
+    }
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -124,7 +149,7 @@ class FmsLedgerAccountsComponent extends Component
             'is_active' => 'required|numeric',
             'account_number' => 'required|unique:fms_ledger_accounts',
             'department_id' => 'nullable|integer',
-            'account_type' => 'required|integer',
+            // 'account_type' => 'required|integer',
             'project_id' => 'nullable|integer',
             'currency_id' => 'required|integer',
             'opening_balance' => 'required',
@@ -135,17 +160,20 @@ class FmsLedgerAccountsComponent extends Component
 
         ]);
         $record = null;
+        $requestable= null;    
         if ($this->entry_type == 'Project'){
             $this->validate([               
                 'project_id' => 'required|integer',    
             ]);
             $this->department_id = null;
+            $requestable  = Project::find($this->project_id);
             $record = FmsLedgerAccount::where('project_id',$this->project_id)->first();
         }elseif($this->entry_type == 'Department'){
             $this->validate([               
                 'department_id' => 'required|integer',    
             ]);
-            $this->project_id = null;
+            $this->project_id = null;            
+            $requestable  = Department::find($this->department_id);
             $record = FmsLedgerAccount::where('department_id',$this->department_id)->first();
         }
 
@@ -168,12 +196,13 @@ class FmsLedgerAccountsComponent extends Component
         $account->department_id = $this->department_id;
         $account->currency_id = $this->currency_id;
         $account->project_id = $this->project_id;
-        $account->account_type = $this->account_type;
+        // $account->account_type = $this->account_type;
         $account->opening_balance = $opening_balance;
         $account->current_balance = $opening_balance;
         $account->as_of = $this->as_of;
         $account->is_active = $this->is_active;
-        $account->description = $this->description;
+        $account->description = $this->description;        
+        $account->requestable()->associate($requestable);
         $account->save();
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
@@ -188,7 +217,7 @@ class FmsLedgerAccountsComponent extends Component
             'account_number' => 'required|unique:fms_ledger_accounts,account_number,'.$this->edit_id.'',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
-            'account_type' => 'required|integer',
+            // 'account_type' => 'required|integer',
             'opening_balance' => 'required',
             'current_balance' => 'required',
             'as_of' => 'required|date',
@@ -207,7 +236,7 @@ class FmsLedgerAccountsComponent extends Component
         $account->account_number = $this->account_number;
         $account->opening_balance = $opening_balance;
         $account->current_balance = $current_balance;
-        $account->account_type = $this->account_type;
+        // $account->account_type = $this->account_type;
         $this->account_type = $account->account_type;
         $account->as_of = $this->as_of;
         $account->is_active = $this->is_active;
