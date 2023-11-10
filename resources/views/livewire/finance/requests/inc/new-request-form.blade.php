@@ -2,18 +2,30 @@
     <form wire:submit.prevent="storeTransaction" >             
         @include('layouts.messages')
             <div class="row">          
-
+                <div class="col-2">
+                    <label for="type" class="form-label required">Request Type @if ($request_type !='Payement') <small>Max = @moneyFormat($max)</small> @endif </label>
+                    <select id="request_type" class="form-control" name="request_type" required wire:model="request_type">
+                        <option value="">Select</option>
+                        <option value="Payment">Payment Request</option>
+                        <option value="Petty Cash">Petty Cash Request</option>
+                        <option value="Cash Imprest">Cash Imprest Request</option>
+                        <option value="Salary">Salary Request</option>
+                    </select>
+                    @error('request_type')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>
                 @include('livewire.partials.project-department-toggle')           
              
                 <div class="mb-3 col-2">
-                    <label for="from_account" class="form-label required">Ledger</label>
-                    <select id="from_account" class="form-control" name="from_account" required wire:model="from_account">
+                    <label for="ledger_account" class="form-label required">Ledger</label>
+                    <select id="ledger_account" class="form-control" name="ledger_account" required wire:model="ledger_account">
                         <option value="">Select</option>
                         @foreach ($ledgers as $ledger)
                             <option value="{{$ledger->id}}">{{$ledger->name}}</option>
                         @endforeach
                     </select>
-                    @error('from_account')
+                    @error('ledger_account')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                     @if ($ledgerBalance)
@@ -57,10 +69,10 @@
                 <div class="mb-3 col-4">
                     <label for="total_amount" class="form-label required">Amount({{$budgetLineCur}})</label>
                     <div class="input-group">
-                    <input type="text" id="total_amount"  class="form-control" name="total_amount" required
+                    <input type="text" id="total_amount" max="{{ $max }}"  class="form-control" name="total_amount" required
                         wire:model="total_amount">
                         <span class="input-group-text">Base</span>
-                        <input id="baseAmount" readonly class="form-control" name="baseAmount" required wire:model="baseAmount" step="any"  type="number">
+                        <input id="baseAmount" max="{{ $max }}" readonly class="form-control" name="baseAmount" required wire:model="baseAmount" step="any"  type="number">
                     </div>
                     @error('total_amount')
                         <div class="text-danger text-small">{{ $message }}</div>

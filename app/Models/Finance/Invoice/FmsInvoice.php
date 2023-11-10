@@ -32,6 +32,10 @@ class FmsInvoice extends Model
     {
         return $this->morphTo();
     }
+    public function billtable(): MorphTo
+    {
+        return $this->morphTo();
+    }
     public function payments()
     {
         return $this->hasMany(FmsInvoicePayment::class, 'invoice_id', 'id');
@@ -116,5 +120,16 @@ class FmsInvoice extends Model
         'discount',   
         'discount_total',  
         'discount_percent',
+        'invoice_type',
+        'billed_by',
+        'billed_to',
+        'approved_by',
+        'acknowledged_by',
+        'paid_by',
+        'approved_at',   
+        'acknowledged_at',   
+        'paid_at',  
+        'reviewed_at',
+        'reviewed_by'
     ];
 }

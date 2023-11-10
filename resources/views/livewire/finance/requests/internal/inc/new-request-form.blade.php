@@ -6,12 +6,12 @@
                 @include('livewire.partials.project-department-toggle')           
              
                 <div class="mb-3 col-2">
-                    <label for="from_account" class="form-label required">Ledger</label>
-                    <select id="from_account" class="form-control" name="from_account" required wire:model="from_account">
+                    <label for="ledger_account" class="form-label required">Ledger</label>
+                    <select id="ledger_account" class="form-control" name="ledger_account" required wire:model="ledger_account">
                         <option value="">Select</option>
                             <option value="{{$ledger->id??''}}">{{$ledger->name??'NA'}}</option>
                     </select>
-                    @error('from_account')
+                    @error('ledger_account')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                     @if ($ledgerBalance)
@@ -106,7 +106,7 @@
                     @enderror
                 </div>
                 @if ($receiving_type == 'Project')
-                <div class="mb-3 col col-12 col-md-4  col-sm-3">
+                <div class="mb-3 col-3">
                         <label for="project_id" class="form-label required">Receiving Project</label>
                         <select class="select2 form-select" id="to_project_id" wire:model='to_project_id'>
                             <option selected value="">Select</option>
@@ -119,7 +119,7 @@
                         @enderror
                     </div>
                 @elseif($receiving_type =='Department')
-                <div class="mb-3 col col-12 col-md-4  col-sm-3">
+                <div class="mb-3 col-3">
                         <label for="department_id" class="form-label required">Receiving Department</label>
                         <select class="select2 form-select" id="to_department_id" wire:model='to_department_id'>
                             <option selected value="">Select</option>
@@ -132,7 +132,7 @@
                         @enderror
                     </div>
                 @endif 
-                <div class="mb-3 col-4">
+                <div class="mb-3 col-3">
                     <label for="to_account" class="form-label required">Ledger</label>
                     <select id="to_account" class="form-control" name="to_account" required wire:model="to_account">
                         <option value="">Select</option>
@@ -143,6 +143,18 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div> 
+                <div class="mb-3 col-3">
+                    <label for="to_budget_line_id" class="form-label required">Budget Line to credit</label>
+                    <select id="to_budget_line_id" class="form-control" name="to_budget_line_id" required wire:model="to_budget_line_id">
+                        <option value="">Select</option>
+                        @foreach ($toBudgetLines as $budgetLine)
+                            <option value="{{$budgetLine->id}}">{{$budgetLine->name}}</option>
+                        @endforeach
+                    </select>
+                    @error('to_budget_line_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
             @if ($viewSummary )            
             <div class="row">

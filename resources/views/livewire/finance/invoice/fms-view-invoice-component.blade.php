@@ -50,6 +50,18 @@
                                                 <b></b>{{ $currency }}@moneyFormat($invoice_data->total_amount)</td>
                                         </tr><!--end tr-->
                                         <tr>
+                                            <td colspan="2" class="border-0"></td>
+                                            <td class="border-0 font-14 text-dark"><b>Discount Total</b></td>
+                                            <td class="border-0 font-14 text-dark">
+                                                <b></b>{{ $currency }}@moneyFormat($invoice_data->discount_total)</td>
+                                        </tr><!--end tr-->
+                                        <tr>
+                                            <td colspan="2" class="border-0"></td>
+                                            <td class="border-0 font-14 text-dark"><b>Adjustment Total</b></td>
+                                            <td class="border-0 font-14 text-dark">
+                                                <b></b>{{ $currency }}@moneyFormat($invoice_data->adjustment)</td>
+                                        </tr><!--end tr-->
+                                        <tr>
                                             <th colspan="2" class="border-0"></th>
                                             <td class="border-0 font-14 text-dark"><b>Tax Rate
                                                     ({{ $currency }})</b></td>
@@ -97,8 +109,16 @@
                             <div class="float-end d-print-none mt-2 mt-md-0">
                                 <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
                                 @if ($invoice_data->status == 'Submitted')
+                                    <a href="javascript:voide(0)" wire:click="reviewInvoice({{ $invoice_data->id }})"
+                                        class="btn btn-de-primary btn-sm">Mark Reviewed</a>
+                                @endif
+                                @if ($invoice_data->status == 'Reviewed')
                                     <a href="javascript:voide(0)" wire:click="approveInvoice({{ $invoice_data->id }})"
-                                        class="btn btn-de-primary btn-sm">Approve</a>
+                                        class="btn btn-de-primary btn-sm">Approve Inovice</a>
+                                @endif
+                                @if ($invoice_data->status == 'Approved')
+                                    <a href="javascript:voide(0)" wire:click="acknowledgeInvoice({{ $invoice_data->id }})"
+                                        class="btn btn-de-primary btn-sm">Acknowledge Invoice</a>
                                 @endif
                                 <a href="{{ route('finance-invoices') }}" class="btn btn-de-danger btn-sm">Cancel</a>
                             </div>
@@ -108,22 +128,24 @@
             </div><!--end card-->
         </div><!--end col-->
     </div><!--end row-->
-    @if ($invoice_data->status == 'Approved' || $invoice_data->status == 'Partially Paid' || $invoice_data->status == 'Paid')
+    @if ($invoice_data->status == 'Acknowledged' || $invoice_data->status == 'Partially Paid')
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Invoice Payments
                             @if ($invoice_data->invoice_type =='External')
-                                @if ($invoice_data->status == 'Approved' || $invoice_data->status == 'Partially Paid')                                
+                                @if ($invoice_data->status == 'Acknowledged' || $invoice_data->status == 'Partially Paid')                                
                                 <a type="button" data-bs-toggle="modal" data-bs-target="#NewPaymentModal" class="btn btn-sm me-2 btn-primary float-end">
                                     <i class="fa fa-plus"></i>Payment
                                 </a>
                                 @endif
                             @elseif($invoice_data->invoice_type =='Internal')
-                                <a type="button" data-bs-toggle="modal" data-bs-target="#internalTransferModal" class="btn btn-sm me-2 btn-primary float-end">
-                                    <i class="fa fa-plus"></i>New Internal Transfer
-                                </a>
+                                @if ($invoice_data->status == 'Acknowledged' || $invoice_data->status == 'Partially Paid')
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#internalTransferModal" class="btn btn-sm me-2 btn-primary float-end">
+                                        <i class="fa fa-plus"></i>New Internal Transfer
+                                    </a>
+                                @endif
                             @endif
                         </h4>
                     </div>

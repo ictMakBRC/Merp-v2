@@ -447,6 +447,10 @@
                @if (count($attachments)>0 && count($authorizations)>=$num && $request_data->request_type == 'Internal Transfer')
                     <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Request</button>
                 @endif
+
+                @if ( $request_data->request_type == 'Cash Imprest' || $request_data->request_type == 'Petty Cash')
+                    <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Request</button>
+                @endif
         </div>
     </div>
     @include('livewire.partials.delete')

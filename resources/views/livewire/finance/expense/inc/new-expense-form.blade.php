@@ -17,14 +17,14 @@
                     @enderror
                 </div>
                 <div class="mb-3 col-2">
-                    <label for="from_account" class="form-label required">Ledger</label>
-                    <select id="from_account" class="form-control" name="from_account" required wire:model="from_account">
+                    <label for="ledger_account" class="form-label required">Ledger</label>
+                    <select id="ledger_account" class="form-control" name="ledger_account" required wire:model="ledger_account">
                         <option value="">Select</option>
                         @foreach ($ledgers as $ledger)
                             <option value="{{$ledger->id}}">{{$ledger->name}}</option>
                         @endforeach
                     </select>
-                    @error('from_account')
+                    @error('ledger_account')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                     @if ($ledgerBalance)

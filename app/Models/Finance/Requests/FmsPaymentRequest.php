@@ -33,6 +33,10 @@ class FmsPaymentRequest extends Model
     {
         return $this->morphTo();
     }
+    public function paytable(): MorphTo
+    {
+        return $this->morphTo();
+    }
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
@@ -50,7 +54,7 @@ class FmsPaymentRequest extends Model
 
     public function fromAccount()
     {
-        return $this->belongsTo(FmsLedgerAccount::class, 'from_account', 'id');
+        return $this->belongsTo(FmsLedgerAccount::class, 'ledger_account', 'id');
     }
 
     public function toAccount()
@@ -91,8 +95,8 @@ class FmsPaymentRequest extends Model
     {
         return empty($search) ? static::query()
         : static::query()
-            ->where('trx_ref', 'like', '%'.$search.'%')
-            ->where('trx_no', 'like', '%'.$search.'%');
+            ->where('request_code', 'like', '%'.$search.'%')
+            ->where('request_type', 'like', '%'.$search.'%');
     }
 
     protected $fillable =[
@@ -111,7 +115,7 @@ class FmsPaymentRequest extends Model
         'department_id',
         'project_id',
         'budget_line_id',
-        'from_account',
+        'ledger_account',
         'status',
         'created_by',   
         'updated_by',             

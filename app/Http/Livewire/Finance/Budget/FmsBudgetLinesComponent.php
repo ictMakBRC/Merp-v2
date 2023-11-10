@@ -65,7 +65,11 @@ class FmsBudgetLinesComponent extends Component
         $budgetAmount = $this->allocated_amount[$id];
         $description = $this->description[$id];
         $quantity = $this->quantity[$id];
-
+        if($this->type =='Revenue'){
+            $primaryAmount = 0;
+        }else{
+            $primaryAmount = $this->allocated_amount[$id];
+        }
         $budgetLine = new FmsBudgetLine();
         $budgetLine->name = $this->name;
         $budgetLine->line_id = $line_id;
@@ -74,7 +78,7 @@ class FmsBudgetLinesComponent extends Component
         $budgetLine->fms_budget_id = $this->budgetData->id;
         $budgetLine->chat_of_account = $id;
         $budgetLine->allocated_amount = $budgetAmount;
-        $budgetLine->primary_balance = $budgetAmount;
+        $budgetLine->primary_balance = $primaryAmount;
         $budgetLine->description = $description;
         $budgetLine->amount_held = 0;
         $budgetLine->save();

@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string('trx_ref')->nullable();
             $table->date('trx_date');
             $table->double('total_amount',16,2)->default(0.00); 
+            $table->double('line_balance',16,2)->default(0.00); 
+            $table->double('line_amount',16,2)->default(0.00); 
+            $table->double('account_amount',16,2)->default(0.00); 
+            $table->double('account_balance',16,2)->default(0.00); 
             $table->double('rate')->default(1.00); 
             $table->double('rate_to')->default(1.00); 
             $table->foreignId('department_id')->nullable()->constrained('departments','id')->onUpdate('cascade')->onDelete('restrict');    
@@ -30,8 +34,8 @@ return new class extends Migration
             $table->foreignId('customer_id')->nullable()->references('id')->on('fms_customers')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('budget_line_id')->nullable()->references('id')->on('fms_budget_lines')->constrained()->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('income_budget_line_id')->nullable()->references('id')->on('fms_budget_lines')->constrained()->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('from_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('to_budget_line_id')->nullable()->references('id')->on('fms_budget_lines')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('ledger_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('to_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->enum('trx_type',['Income','Expense','Transfer'])->default('Expense');
             $table->enum('entry_type',['Internal','External','Invoice'])->default('External'); 

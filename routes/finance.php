@@ -26,6 +26,8 @@ use App\Http\Livewire\Finance\Requests\FmsInternalTransfersComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsTypesComponent;
 use App\Http\Livewire\Finance\Settings\FmsServiceCategoriesComponent;
 use App\Http\Livewire\Finance\Dashboard\FinanceMainDashboardComponent;
+use App\Http\Livewire\Finance\Dashboard\FmsUnitDashboardComponent;
+use App\Http\Livewire\Finance\Ledger\FmsViewLedgerComponent;
 use App\Http\Livewire\Finance\Lists\FmsDepartmentsComponent;
 use App\Http\Livewire\Finance\Lists\FmsProjectsComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
@@ -36,10 +38,12 @@ use App\Http\Livewire\Finance\Settings\FmsCurrencyUpdatesComponent;
 
 Route::group(['prefix' => 'finance'], function () {
     Route::get('dashboard', FinanceMainDashboardComponent::class)->name('finance-dashboard');
+    Route::get('dashboard/unit/{id}/{type}', FmsUnitDashboardComponent::class)->name('finance-dashboard_unit');
 
     Route::group(['prefix' => 'accounting'], function () {
         Route::get('chart-of-accounts', ChartOfAccountsComponent::class)->name('finance-chart_of_accounts');
         Route::get('ledger/accounts', FmsLedgerAccountsComponent::class)->name('finance-ledger_accounts');
+        Route::get('ledger/account/{id}', FmsViewLedgerComponent::class)->name('finance-ledger_view');
         Route::get('budgets', FmsBudgetsComponent::class)->name('finance-budgets');
         Route::get('budgets/main', FmsMainBudgetListComponent::class)->name('finance-main_budget');
         Route::get('budgets/main/{year}', FmsMainBudgetComponent::class)->name('finance-main_budget_view');

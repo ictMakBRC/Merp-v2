@@ -7,13 +7,10 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
 use App\Models\Finance\Invoice\FmsInvoice;
-use App\Models\Finance\Settings\FmsCurrency;
-use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\HumanResource\Settings\Department;
-use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Transactions\FmsTransaction;
 
-class FinanceMainDashboardComponent extends Component
+class FmsUnitDashboardComponent extends Component
 {
     use WithPagination;
             
@@ -58,28 +55,27 @@ class FinanceMainDashboardComponent extends Component
     public $department_id;
     public $project_id;
     public $department;
-    public $fiscal_year;
+
     public $unitId;
 
-    public function mount(){
-        $this->fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
-    }
+    function mount($id, $type) {                
+        $this->unitId = $id;
+        if($type == 'department'){
+            $this->department_id =$id;
+            $this->requestable_type =  'App\Models\HumanResource\Settings\Department';
+            $this->requestable =  Department::find($id);
+        }elseif($type == 'projects'){
+            $this->project_id = $id;
+            $this->requestable_type  = 'App\Models\Grants\Project\Project';
+            $this->requestable =  Project::find($id);
+        }
 
+    }
     public function transactions()
     {
-        $data = FmsTransaction::when($this->from_date != '' && $this->to_date != '', function ($query) {
-                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
-            }, function ($query) {
-                return $query;
-            });
-
-        $this->lineIds = $data->pluck('id')->toArray();
-
-        return $data;
-    }
-    public function paymentRequests()
-    {
-        $data = FmsPaymentRequest::when($this->from_date != '' && $this->to_date != '', function ($query) {
+        $data = FmsTransaction::where('requestable_id', $this->unitId)
+        ->where('requestable_type', $this->requestable_type)
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
@@ -91,7 +87,8 @@ class FinanceMainDashboardComponent extends Component
     }
     public function filterInvoices()
     {
-        $invoices = FmsInvoice::when($this->from_date != '' && $this->to_date != '', function ($query) {
+        $invoices = FmsInvoice::where('requestable_id', $this->unitId)->where('requestable_type', $this->requestable_type)
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
@@ -100,16 +97,6 @@ class FinanceMainDashboardComponent extends Component
         // $this->invoiceIds = $invoices->pluck('id')->toArray();
 
         return $invoices;
-    }
-    public function convertCurrency($amount, $targetCurrency)
-    {
-        // Fetch the exchange rate from your exchange rate data or API
-        $exchangeRate = FmsCurrency::where('id', $targetCurrency)->first();
-
-        // Perform the currency conversion
-        $convertedAmount = $amount * $exchangeRate->exchange_rate;
-
-        return $convertedAmount;
     }
     public function render()
     {
@@ -127,9 +114,8 @@ class FinanceMainDashboardComponent extends Component
         DB::statement("SET sql_mode=(SELECT CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY'));");
         $data['invoice_chart'] = $this->filterInvoices()->select(DB::raw('count(id) as inv_count'), 'status')->groupBy('status')->get();
         $data['invoice_amounts'] = $this->filterInvoices()->whereIn('status',['Partially Paid','Paid','Approved'])->select(DB::raw('sum(total_amount) as amount'), 'status')->groupBy('status')->get();
-        $data['requests'] = $this->paymentRequests()->where('status', 'Approved')->latest()->limit(10)->get();
-        $data['request_counts'] = $this->paymentRequests()->get();
-        $data['transactions'] = $this->transactions()->latest()->limit(10)->get();
-        return view('livewire.finance.dashboard.finance-main-dashboard-component', $data)->layout('layouts.app');
+        $data['incomes'] = $this->transactions()->where('trx_type', 'Income')->latest()->limit(10)->get();
+        $data['expenses'] = $this->transactions()->where('trx_type', 'Expense')->latest()->limit(10)->get();
+        return view('livewire.finance.dashboard.fms-unit-dashboard-component', $data);
     }
 }

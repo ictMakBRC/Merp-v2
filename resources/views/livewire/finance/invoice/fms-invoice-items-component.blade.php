@@ -74,7 +74,29 @@
                                         <tr>                                                        
                                             <td colspan="2" class="border-0"></td>
                                             <td class="border-0 font-14 text-dark"><b>Sub Total</b></td>
-                                            <td class="border-0 font-14 text-dark"><b></b>{{$currency}}@moneyFormat($totalAmount)</td>
+                                            <td class="border-0 font-14 text-dark"><b></b>{{$currency}}@moneyFormat($subTotal)</td>
+                                            <td></td>
+                                        </tr><!--end tr-->
+                                        <tr>                                                        
+                                            <td colspan="2" class="border-0">
+                                            </td>
+                                            <td class="border-0 font-14 text-dark">
+                                                 <select name="Percent" wire:model="discount_type" class="selectpicker" data-width="100%">
+                                                <option value="Percent">%</option>
+                                                <option value="Fixed">Fixed</option>
+                                            </select>
+                                        </td>   
+                                            <td class="border-0 font-14 text-dark">
+                                                <input type="number" min="0" class="form-control" wire:model="discount">
+                                            </td>
+                                            <td></td>
+                                        </tr><!--end tr-->
+                                        <tr>                                                        
+                                            <td colspan="2" class="border-0"></td>
+                                            <td class="border-0 font-14 text-dark"><b>Adjustment</b></td>
+                                            <td class="border-0 font-14 text-dark">
+                                                <input min="0" type="number" class="form-control" wire:model="adjustment">
+                                            </td>
                                             <td></td>
                                         </tr><!--end tr-->
                                         <tr>

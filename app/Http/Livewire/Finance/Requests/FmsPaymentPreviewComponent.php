@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Finance\Requests;
 use App\Jobs\SendNotifications;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Budget\FmsBudgetLine;
+use App\Models\Finance\Invoice\FmsInvoice;
+use App\Models\Finance\Invoice\FmsInvoicePayment;
 use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Requests\FmsPaymentRequestAttachment;
 use App\Models\Finance\Requests\FmsPaymentRequestAuthorization;
@@ -68,57 +70,9 @@ class FmsPaymentPreviewComponent extends Component
 
                 if ($requestData) {
 
-                    $trans = new FmsTransaction();
-                    $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
-                    $trans->trx_ref = $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
-                    $trans->trx_date = date('Y-m-d');
-                    $trans->total_amount = $requestData->total_amount;
-                    $trans->from_account = $requestData->from_account;
-                    $trans->rate = $requestData->rate;
-                    $trans->department_id = $requestData->department_id;
-                    $trans->project_id = $requestData->project_id;
-                    $trans->budget_line_id = $requestData->budget_line_id;
-                    $trans->currency_id = $requestData->currency_id;
-                    $trans->trx_type = 'Expense';
-                    $trans->status = 'Approved';
-                    $trans->entry_type = 'Internal';
-                    if ($requestData->project_id != null) {
-                        $trans->is_department = false;
-                    }                    
-                    $trans->requestable_type = $requestData->requestable_type;
-                    $trans->requestable_id = $requestData->requestable_id;
-                    $trans->save();
-                    if ($requestData->request_type == 'Internal Transfer') {
-                        $incomeTrans = new FmsTransaction();
-                        $incomeTrans->trx_no = 'TRI' . GeneratorService::getNumber(7);
-                        $incomeTrans->trx_ref = $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
-                        $incomeTrans->trx_date = date('Y-m-d');
-                        $incomeTrans->total_amount = $requestData->total_amount;
-                        $incomeTrans->to_account = $requestData->to_account;
-                        $incomeTrans->rate = $requestData->rate;
-                        $incomeTrans->department_id = $requestData->to_department_id;
-                        $incomeTrans->project_id = $requestData->to_project_id;
-                        $incomeTrans->budget_line_id = $requestData->to_budget_line_id;
-                        $incomeTrans->currency_id = $requestData->currency_id;
-                        $incomeTrans->trx_type = 'Income';
-                        $incomeTrans->status = 'Approved';
-                        $incomeTrans->entry_type = 'Internal';
-                        if ($requestData->to_project_id != null) {
-                            $incomeTrans->is_department = false;
-                        }
-                        $incomeTrans->requestable_type = $requestData->requestable_type;
-                        $incomeTrans->requestable_id = $requestData->requestable_id;
-                        $incomeTrans->save();
-                        $baseAmount = $requestData->total_amount * $requestData->rate;
-                        $creditAccount = FmsLedgerAccount::where('id',$requestData->to_account)->with('currency')->first(); 
-                        $cur = $creditAccount->currency->code??'';                      
-                        $income = exchangeCurrency($cur, 'foreign', $baseAmount);
-                        $creditAccount->current_balance += $income;
-                        $creditAccount->save();
-                    }
-                    // FmsLedgerAccount::where('id', $this->from_account)->update(['current_balance' => DB::raw('current_balance - '.$this->ledgerExpense)]);
+                    // FmsLedgerAccount::where('id', $this->ledger_account)->update(['current_balance' => DB::raw('current_balance - '.$this->ledgerExpense)]);
 
-                    $ledgerAccount = FmsLedgerAccount::find($requestData->from_account);
+                    $ledgerAccount = FmsLedgerAccount::find($requestData->ledger_account);
                     $ledgerAccount->current_balance -= $requestData->ledger_amount;
                     $ledgerAccount->amount_held -= $requestData->ledger_amount;
                     $ledgerAccount->save();
@@ -129,6 +83,77 @@ class FmsPaymentPreviewComponent extends Component
                     $budget->primary_balance -= $requestData->budget_amount;
                     $budget->amount_held -= $requestData->budget_amount;
                     $budget->save();
+
+                    $trans = new FmsTransaction();
+                    $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
+                    $trans->trx_ref = 'Request Payment' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
+                    $trans->trx_date = date('Y-m-d');
+                    $trans->total_amount = $requestData->total_amount;                    
+                    $trans->amount_local = $requestData->total_amount*$requestData->rate; 
+                    $trans->line_balance = $budget->primary_balance;
+                    $trans->line_amount = $requestData->budget_amount;
+                    $trans->account_amount = $requestData->ledger_amount;
+                    $trans->account_balance = $ledgerAccount->current_balance;
+                    $trans->ledger_account = $requestData->ledger_account;
+                    $trans->rate = $requestData->rate;
+                    $trans->department_id = $requestData->department_id;
+                    $trans->project_id = $requestData->project_id;
+                    $trans->budget_line_id = $requestData->budget_line_id;
+                    $trans->currency_id = $requestData->currency_id;
+                    $trans->trx_type = 'Expense';
+                    $trans->status = 'Approved';
+                    $trans->description = 'Payment';
+                    $trans->entry_type = 'Internal';
+                    if ($requestData->project_id != null) {
+                        $trans->is_department = false;
+                    }
+                    $trans->requestable_type = $requestData->requestable_type;
+                    $trans->requestable_id = $requestData->requestable_id;
+                    $trans->save();
+                    if ($requestData->request_type == 'Internal Transfer') {
+
+                        $baseAmount = $requestData->total_amount * $requestData->rate;
+                        $creditAccount = FmsLedgerAccount::where('id', $requestData->to_account)->with('currency')->first();
+                        $cur = $creditAccount->currency->code ?? '';
+                        $accountIncome = exchangeCurrency($cur, 'foreign', $baseAmount);
+                        $creditAccount->current_balance += $accountIncome;
+                        $creditAccount->save();
+
+                        $lineAccount = FmsBudgetLine::where('id', $requestData->to_budget_line_id)->with('budget.currency')->first();
+                        $lineCur = $lineAccount->budget->currency->code;
+                        $lineIncome = exchangeCurrency($lineCur, 'foreign', $baseAmount);
+                        $line_balance = $lineAccount->primary_balance + $lineIncome;
+                        $lineAccount->primary_balance = $line_balance;
+                        $lineAccount->save();
+
+                        $incomeTrans = new FmsTransaction();
+                        $incomeTrans->trx_no = 'TRI' . GeneratorService::getNumber(7);
+                        $incomeTrans->trx_ref = 'Internal transfer for' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
+                        $incomeTrans->trx_date = date('Y-m-d');
+                        $incomeTrans->total_amount = $requestData->total_amount;
+                        $trans->amount_local = $requestData->total_amount*$requestData->rate; 
+                        $incomeTrans->line_balance = $line_balance;
+                        $incomeTrans->line_amount = $lineIncome;
+                        $incomeTrans->account_amount = $accountIncome;
+                        $incomeTrans->account_balance = $creditAccount->current_balance;
+                        $incomeTrans->ledger_account = $requestData->to_account;
+                        $incomeTrans->rate = $requestData->rate;
+                        $incomeTrans->department_id = $requestData->to_department_id;
+                        $incomeTrans->project_id = $requestData->to_project_id;
+                        $incomeTrans->budget_line_id = $requestData->to_budget_line_id;
+                        $incomeTrans->currency_id = $requestData->currency_id;
+                        $incomeTrans->trx_type = 'Income';
+                        $incomeTrans->status = 'Approved';
+                        $incomeTrans->description = 'Internal Transfer payment';
+                        $incomeTrans->entry_type = 'Internal';
+                        if ($requestData->to_project_id != null) {
+                            $incomeTrans->is_department = false;
+                        }
+                        $incomeTrans->requestable_type = $requestData->requestable_type;
+                        $incomeTrans->requestable_id = $requestData->requestable_id;
+                        $incomeTrans->save();
+
+                    }
 
                     $requestData->status = 'Completed';
                     $requestData->date_paid = date('Y-m-d');
@@ -143,12 +168,64 @@ class FmsPaymentPreviewComponent extends Component
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! NOT YOUR TURN',
-                'text' => 'You do not have permission to authorize this request now ' . $e->getMessage(),
+                'text' => 'Transaction failed ' . $e->getMessage(),
             ]);
             // $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Transfer failed!' . $e->getMessage()]);
 
         }
     }
+
+    public function savePayment($id)
+    {
+        $this->validate([
+            'as_of' => 'required',
+            'payment_amount' => 'required',
+            'status' => 'required',
+            'description' => 'required',
+            'to_account' => 'required',
+            'to_budget_line_id' => 'required',
+        ]);
+        try {
+            DB::transaction(function () use ($id) {
+
+                $invoice = FmsInvoice::find($id);
+
+                if ($invoice) {
+                    $payement = new FmsInvoicePayment();
+                    $payement->payment_reference = $this->payment_reference ?? 'P' . GeneratorService::getNumber(7);
+                    $payement->as_of = $this->as_of;
+                    $payement->payment_amount = $this->payment_amount;
+                    $payement->payment_balance = $this->payment_balance;
+                    $payement->invoice_id = $id;
+                    $payement->status = $this->status;
+                    $payement->save();
+
+                    // Calculate the new total_paid amount (e.g., increment by a certain value)
+                    $newTotalPaid = $invoice->total_paid + $this->payment_amount;
+
+                    // Update the invoice status based on the new total_paid amount
+                    $status = ($newTotalPaid >= $invoice->total_amount) ? 'Fully Paid' : 'Partially Paid';
+
+                    // Use a database transaction for data consistency
+                    // DB::transaction(function () use ($invoice, $newTotalPaid, $status) {
+                    // Update the total_paid column
+                    $invoice->update(['total_paid' => $newTotalPaid]);
+                    // Update the status column
+                    $invoice->update(['status' => $status]);
+                    $invoice->update(['paid_by' => auth()->user()->id]);
+                    $invoice->update(['paid_at' => date('Y-d-m H:i:s')]);
+
+                    $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice Paid successfully!']);
+                }
+
+                // $this->resetInputs();
+            });
+        } catch (\Exception $e) {
+            // If the transaction fails, we handle the error and provide feedback
+            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Transaction failed!' . $e->getMessage()]);
+        }
+    }
+
     public function downloadAttachment(FmsPaymentRequestAttachment $attachment)
     {
 

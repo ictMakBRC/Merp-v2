@@ -61,7 +61,7 @@ class FmsExpenseComponent extends Component
     public $to_account;
     public $trx_type;
     public $entry_type;
-    public $from_account;
+    public $ledger_account;
     public $is_department;
     public $invoiceData;
     public $toAccountData;
@@ -105,7 +105,7 @@ class FmsExpenseComponent extends Component
             'budget_line_id' => 'nullable|integer',
             'income_budget_line_id' => 'nullable|integer',
             'to_account' => 'required|integer',
-            'from_account' => 'required|integer',
+            'ledger_account' => 'required|integer',
             'description' => 'required|string',
         ]);
     }
@@ -125,7 +125,7 @@ class FmsExpenseComponent extends Component
             'budgetExpense' => 'required',
             'ledgerExpense' => 'required',
             'budget_line_id' => 'nullable|integer',
-            'from_account' => 'required|integer',
+            'ledger_account' => 'required|integer',
             'description' => 'required|string',
         ]);
 
@@ -150,22 +150,24 @@ class FmsExpenseComponent extends Component
             $trans->trx_ref = $this->trx_ref ?? 'TRF' . GeneratorService::getNumber(7);;
             $trans->trx_date = $this->as_of ?? date('Y-m-d');
             $trans->total_amount = $total_amount;
-            $trans->from_account = $this->from_account;
+            $trans->ledger_account = $this->ledger_account;
             $trans->rate = $this->rate;
+            $trans->amount_local = $total_amount*$this->rate; 
             $trans->department_id = $this->department_id;
             $trans->project_id = $this->project_id;
             $trans->budget_line_id = $this->budget_line_id;
             $trans->currency_id = $this->currency_id;
             $trans->trx_type = 'Expense';
             $trans->status = 'Approved';
+            $trans->description =$this->description;
             $trans->entry_type = 'Internal';
             if ($this->project_id != null) {
                 $trans->is_department = false;
             }
             $trans->save();
-            // FmsLedgerAccount::where('id', $this->from_account)->update(['current_balance' => DB::raw('current_balance - '.$this->ledgerExpense)]);
+            // FmsLedgerAccount::where('id', $this->ledger_account)->update(['current_balance' => DB::raw('current_balance - '.$this->ledgerExpense)]);
            
-            $ledgerAccount = FmsLedgerAccount::find($this->from_account);
+            $ledgerAccount = FmsLedgerAccount::find($this->ledger_account);
             $ledgerAccount->current_balance -= $this->ledgerExpense;
             $ledgerAccount->save();
 
@@ -201,11 +203,11 @@ class FmsExpenseComponent extends Component
         $this->budgetLineCur = $data->budget?->currency?->code ?? '';
     }
 
-    public function updatedFromAccount()
+    public function updatedLedgerAccount()
     {
         $this->ledgerCur = 0;
         $this->ledgerBalance = 0;
-        $data = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();
+        $data = FmsLedgerAccount::Where('id', $this->ledger_account)->with('currency')->first();
         $this->ledgerBalance = $data->current_balance ?? 0 - $data->amount_held ?? 0;
         $this->ledgerCur = $data->currency->code ?? '';
     }

@@ -64,7 +64,7 @@ class FmsPaymentRequestsComponent extends Component
     public $request_table;
     public $subject_id;
     public $entry_type = 'Department';
-    public $from_account;
+    public $ledger_account;
     public $is_department;
     public $invoiceData;
     public $toAccountData;
@@ -73,11 +73,25 @@ class FmsPaymentRequestsComponent extends Component
     public $fiscal_year;
     public $description;
     public $ledgers;
+    public $type;
+    public $max = 0;
 
     public function updatedCreateNew()
     {
         $this->resetInputs();
         $this->toggleForm = false;
+    }
+
+    public function updatedRequestType()
+    {
+        $this->max = 0;
+        if($this->request_type =='Petty Cash'){
+            $this->max = 200000;
+        }elseif($this->request_type =='Cash Imprest'){
+            $this->max = 1000000;
+        }else{
+            $this->max = 1000000000;
+        }
     }
 
     public function updatingSearch()
@@ -96,6 +110,7 @@ class FmsPaymentRequestsComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, [
+            'type' => 'required',
             'total_amount' => 'required',
             'request_description' => 'required|string',
             'amount_in_words' => 'required|string',
@@ -105,7 +120,7 @@ class FmsPaymentRequestsComponent extends Component
             'department_id' => 'nullable|integer',
             'currency_id' => 'required|integer',
             'budget_line_id' => 'nullable|integer',
-            'from_account' => 'required|integer',
+            'ledger_account' => 'required|integer',
             'description' => 'required|string',
             'notice_text' => 'required|string',
         ]);
@@ -127,11 +142,11 @@ class FmsPaymentRequestsComponent extends Component
 
     
     public $ledgerAmtHeld = 0;
-    public function updatedFromAccount()
+    public function updatedLedgerAccount()
     {
         $this->ledgerCur = 0;
         $this->ledgerBalance = 0;
-        $data = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();
+        $data = FmsLedgerAccount::Where('id', $this->ledger_account)->with('currency')->first();
         $this->ledgerAmtHeld = $data->amount_held;
         $this->ledgerBalance = $data->current_balance - $this->ledgerAmtHeld;
         $this->ledgerCur = $data->currency->code ?? '';
@@ -161,6 +176,7 @@ class FmsPaymentRequestsComponent extends Component
     public function storeTransaction()
     {
         $this->validate([
+            'request_type' => 'required',
             'total_amount' => 'required',
             'request_description' => 'required|string',
             'amount_in_words' => 'required|string',
@@ -169,7 +185,7 @@ class FmsPaymentRequestsComponent extends Component
             'project_id' => 'nullable|integer',
             'currency_id' => 'required|integer',
             'budget_line_id' => 'required|integer',
-            // 'from_account' => 'required|integer',
+            'ledger_account' => 'required|integer',
             'notice_text' => 'required|string',
         ]);
        
@@ -200,6 +216,23 @@ class FmsPaymentRequestsComponent extends Component
             return false;
 
         }
+        $total_amount = (float) str_replace(',', '', $this->total_amount);
+        if($this->request_type =='Petty Cash'){
+            $this->max = 200000;
+        }elseif($this->request_type =='Cash Imprest'){
+            $this->max = 1000000;
+        }else{
+            $this->max = 1000000000;
+        }
+        if($this->max <  $total_amount){
+            
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Low Line balance!',
+                'text' => 'You don not have enough money on your budget line, your expense is '.$this->budgetExpense.' but your available balance is '.$this->budgetLineBalance,
+            ]);
+            return false;
+        }
 
         try {
             DB::transaction(function () use($requestable) {
@@ -207,7 +240,7 @@ class FmsPaymentRequestsComponent extends Component
                 $p_request = new FmsPaymentRequest();
                 $p_request->request_code = 'PRE' . GeneratorService::getNumber(7);
                 $p_request->request_description = $this->request_description;
-                $p_request->request_type = 'Payment';
+                $p_request->request_type = $this->request_type;
                 $p_request->total_amount = $total_amount;
                 $p_request->ledger_amount = $this->ledgerExpense;
                 $p_request->budget_amount = $this->budgetExpense;
@@ -218,7 +251,7 @@ class FmsPaymentRequestsComponent extends Component
                 $p_request->department_id = $this->department_id;
                 $p_request->project_id = $this->project_id;
                 $p_request->budget_line_id = $this->budget_line_id;
-                $p_request->from_account = $this->from_account;
+                $p_request->ledger_account = $this->ledger_account;
                 $p_request->requestable()->associate($requestable);
                 $p_request->save();
                 // dd($p_request);
@@ -231,7 +264,7 @@ class FmsPaymentRequestsComponent extends Component
                     $dataBudget->update();
                 }
 
-                $dataLeger = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();              
+                $dataLeger = FmsLedgerAccount::Where('id', $this->ledger_account)->with('currency')->first();              
 
                 if ($dataLeger) {
                     $currentAmountHeld = $dataLeger->amount_held;

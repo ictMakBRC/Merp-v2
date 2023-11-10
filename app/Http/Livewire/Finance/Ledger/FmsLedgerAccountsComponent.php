@@ -4,11 +4,13 @@ namespace App\Http\Livewire\Finance\Ledger;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Services\GeneratorService;
 use App\Models\Grants\Project\Project;
+use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Transactions\FmsTransaction;
 use App\Models\Finance\Settings\FmsChartOfAccountsType;
-use App\Models\Finance\Settings\FmsCurrency;
 
 class FmsLedgerAccountsComponent extends Component
 {
@@ -204,6 +206,30 @@ class FmsLedgerAccountsComponent extends Component
         $account->description = $this->description;        
         $account->requestable()->associate($requestable);
         $account->save();
+
+        $incomeTrans = new FmsTransaction();
+        $incomeTrans->trx_no = 'TRL' . GeneratorService::getNumber(7);
+        $incomeTrans->trx_ref = $account->account_number ?? 'TRF' . GeneratorService::getNumber(7);;
+        $incomeTrans->trx_date = date('Y-m-d');
+        $incomeTrans->total_amount = $account->current_balance;
+        $incomeTrans->account_amount = $account->current_balance; 
+        $incomeTrans->account_balance = $account->current_balance;
+        $incomeTrans->ledger_account = $account->id;
+        $incomeTrans->rate = 1;
+        $incomeTrans->department_id = $account->department_id;
+        $incomeTrans->project_id = $account->project_id;
+        $incomeTrans->currency_id = $account->currency_id;
+        $incomeTrans->trx_type = 'Income';
+        $incomeTrans->status = 'Approved';
+        $incomeTrans->description = 'Unit initial Income deposit';
+        $incomeTrans->entry_type = 'Internal';
+        if ($account->to_project_id != null) {
+            $incomeTrans->is_department = false;
+        }
+        $incomeTrans->requestable_type = $account->requestable_type;
+        $incomeTrans->requestable_id = $account->requestable_id;
+        $incomeTrans->save();
+        
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'account created successfully!']);
@@ -234,10 +260,10 @@ class FmsLedgerAccountsComponent extends Component
         $account->name = $this->name;
         $account->is_active = $this->is_active;
         $account->account_number = $this->account_number;
-        $account->opening_balance = $opening_balance;
-        $account->current_balance = $current_balance;
+        // $account->opening_balance = $opening_balance;
+        // $account->current_balance = $current_balance;
         // $account->account_type = $this->account_type;
-        $this->account_type = $account->account_type;
+        // $this->account_type = $account->account_type;
         $account->as_of = $this->as_of;
         $account->is_active = $this->is_active;
         $account->description = $this->description;

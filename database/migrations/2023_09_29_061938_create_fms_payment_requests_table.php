@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('request_type',70);
             $table->string('request_code',20)->unique();
             $table->decimal('total_amount', 16, 2);
+            $table->decimal('total_paid', 16, 2)->default(0);
             $table->decimal('budget_amount', 16, 2);
             $table->decimal('ledger_amount', 16, 2);
             $table->string('amount_in_words');
@@ -36,9 +37,12 @@ return new class extends Migration
             $table->foreignId('project_id')->nullable()->constrained('projects','id')->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('to_project_id')->nullable()->constrained('projects','id')->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('budget_line_id')->nullable()->references('id')->on('fms_budget_lines')->constrained()->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('from_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('to_budget_line_id')->nullable()->references('id')->on('fms_budget_lines')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('ledger_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('to_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('invoice_id')->nullable()->references('id')->on('fms_invoices')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('procurement_request_id')->nullable()->constrained('procurement_requests', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->string('payment_method')->nullable();
             $table->enum('status',['Pending','Submitted','Rejected','Approved','Completed','Paid'])->default('Pending');            
             $table->foreignId('created_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   
             $table->foreignId('updated_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');             

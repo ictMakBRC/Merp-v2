@@ -96,8 +96,6 @@
                                         <th>No.</th>
                                         <th>Name</th>
                                         <th>Type</th>
-                                        <th>Parent</th>
-                                        <th>Description</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -108,16 +106,14 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $department->name }}</td>
                                             <td>{{ $department->type }}</td>
-                                            <td>{{ $department->parent->name??'N/A' }}</td>
-                                            <td>{{ $department->description ?? 'N/A' }}</td>
                                             @if ($department->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
                                             <td class="table-action">
-                                                <a href="{{ route('finance-unit_lines',[$department->id, 'department']) }}" class="action-ico btn-sm btn btn-outline-success mx-1">
-                                                    <i class="fa fa-edit"></i></a>
+                                                <a href="{{ route('finance-unit_lines',[$department->id, 'department']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="budget-lines"><i class="fas fa-briefcase"></i></a>
+                                                <a href="{{ route('finance-dashboard_unit',[$department->id, 'department']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="dashboard"><i class="fa fa-home"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach

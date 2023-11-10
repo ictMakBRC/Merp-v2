@@ -120,6 +120,7 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>No.</th>
+                                        <th>Type</th>
                                         <th>Ref</th>
                                         <th>Date</th>
                                         <th>From Account</th>
@@ -134,6 +135,7 @@
                                     @foreach ($requests as $key => $request)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
+                                            <td>{{ $request->request_type }}</td>
                                             <td>{{ $request->request_code }}</td>
                                             <td>{{ $request->created_at ?? 'N/A' }}</td>
                                             <td>{{ $request->project->name ?? ($request->department->name ?? 'N/A') }}</td>

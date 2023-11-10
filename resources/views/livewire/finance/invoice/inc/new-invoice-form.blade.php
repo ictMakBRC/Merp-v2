@@ -4,24 +4,24 @@
 
         <div class="row">
             @include('livewire.partials.project-department-toggle')
-            <div class="mb-3 col">
-                <label for="invoice_type" class="form-label required">Invoice Type</label>
-                <select id="invoice_type" class="form-control form-select" name="invoice_type" required
-                    wire:model="invoice_type">
-                    <option value="">Select</option>
-                    <option value="External">External</option>
-                    <option value="Internal">Internal</option>
+            
+            <div class="mb-3 col col-12 col col-sm-4">
+                <label for="invoice_to" class="form-label required">Billed To</label>
+                <select class="form-control form-select" id="invoice_to" wire:model='invoice_to'>
+                    <option selected value="">Select</option>
+                    <option value="Customer">Customer</option>
+                    <option value="Department">Department</option>
+                    <option value="Project">Project</option>
                 </select>
-                @error('invoice_type')
+                @error('invoice_to')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
+            @if ($invoice_to == 'Customer')
 
-            @if ($invoice_type == 'External')
-
-                <div class="mb-3 col-md-2">
+                <div class="mb-3 col-md-3">
                     <label for="name" class="form-label required">Customer Name</label>
-                    <select id="customer_id" wire:model='customer_id' class="form-control form-select">
+                    <select id="customer_id" wire:model='customer_id' required class="form-control form-select">
                         <option value="">Select</option>
                         @foreach ($customers as $customer)
                             <option value="{{ $customer->id }}">{{ $customer->name }}</option>
@@ -32,7 +32,7 @@
                     @enderror
                 </div>
                 <div class="mb-3 col-md-3">
-                    <label for="name" class="form-label required">Project</label>
+                    <label for="name" class="form-label ">Project</label>
                     <select id="billed_project" wire:model='billed_project' class="form-control form-select">
                         <option value="">Select</option>
                         @foreach ($projects as $project)
@@ -43,19 +43,7 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div>
-            @else
-            <div class="mb-3 col col-12 col-md-2  col-sm-3">
-                <label for="billed_type" class="form-label required">Billed Unit Type</label>
-                <select class="form-control form-select" id="billed_type" wire:model='billed_type'>
-                    <option selected value="">Select</option>
-                    <option value="Department">Department</option>
-                    <option value="Project">Project</option>
-                </select>
-                @error('billed_type')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
-            @if ($billed_type == 'Project')
+            @elseif ($invoice_to == 'Project')
             <div class="mb-3 col col-12 col-md-4  col-sm-3">
                     <label for="project_id" class="form-label required">Billed Project</label>
                     <select class="select2 form-select" id="billed_project" wire:model='billed_project'>
@@ -67,8 +55,8 @@
                     @error('billed_project')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
-                </div>
-            @elseif($billed_type =='Department')
+            </div>
+            @elseif($invoice_to =='Department')
             <div class="mb-3 col col-12 col-md-4  col-sm-3">
                     <label for="department_id" class="form-label required">Billed Department</label>
                     <select class="select2 form-select" id="billed_department" wire:model='billed_department'>
@@ -83,9 +71,6 @@
                 </div>
             @endif 
 
-            @endif
-
-
             <div class="mb-3 col-2">
                 <label for="currency_id" class="form-label required">Currency</label>
                 <select id="currency_id" class="form-control form-select" name="currency_id" required
@@ -99,7 +84,6 @@
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
-
 
             <div class="mb-3 col-2">
                 <label for="opening_balance" class="form-label required">As of</label>
@@ -121,8 +105,7 @@
                 <div class="form-group select-placeholder">
                     <label for="recurring" class="form-label required">
                         Recurring Invoice? </label>
-                    <select class="form-select" data-width="100%" name="recurring"
-                        data-none-selected-text="Nothing selected" wire:model='recurring'>
+                    <select class="form-select" data-width="100%" name="recurring" wire:model='recurring'>
                         <option value="0">No</option>
                         <option value="1">Every 1 month</option>
                         <option value="2">Every 2 months</option>
@@ -146,7 +129,7 @@
             @if ($recurring != 0)
                 <div class="mb-3 col-2">
                     <label for="due_date" class="form-label required">Number of Times</label>
-                    <input type="number" id="cycles" min="1" class="form-control" wire:model.defer='cycles'>
+                    <input type="number" id="cycles" min="1" class="form-control" wire:model='cycles'>
                     @error('cycles')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror

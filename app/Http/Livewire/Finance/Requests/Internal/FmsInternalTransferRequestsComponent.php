@@ -60,6 +60,7 @@ class FmsInternalTransferRequestsComponent extends Component
     public $project_id;
     public $to_project_id;
     public $budget_line_id;
+    public $to_budget_line_id;
     public $status;
     public $created_by;
     public $updated_by;
@@ -67,7 +68,7 @@ class FmsInternalTransferRequestsComponent extends Component
     public $subject_id;
     public $entry_type = 'Department';
     public $receiving_type = 'Department';
-    public $from_account;
+    public $ledger_account;
     public $to_account;
     public $is_department;
     public $invoiceData;
@@ -78,6 +79,7 @@ class FmsInternalTransferRequestsComponent extends Component
     public $description;
     public $ledger;
     public $to_ledger;
+    public $toBudgetLines;
 
     public function updatedCreateNew()
     {
@@ -93,6 +95,7 @@ class FmsInternalTransferRequestsComponent extends Component
     public function mount()
     {
         $this->budgetLines = collect([]);
+        $this->toBudgetLines = collect([]);
         $this->ledger = [];
         $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
         $this->fiscal_year = $fiscal_year->id;
@@ -110,7 +113,7 @@ class FmsInternalTransferRequestsComponent extends Component
             'department_id' => 'nullable|integer',
             'currency_id' => 'required|integer',
             'budget_line_id' => 'nullable|integer',
-            'from_account' => 'required|integer',
+            'ledger_account' => 'required|integer',
             'to_account' => 'required|integer',
             'description' => 'required|string',
             'notice_text' => 'required|string',
@@ -133,11 +136,11 @@ class FmsInternalTransferRequestsComponent extends Component
 
     
     public $ledgerAmtHeld = 0;
-    public function updatedFromAccount()
+    public function updatedLedgerAccount()
     {
         $this->ledgerCur = 0;
         $this->ledgerBalance = 0;
-        $data = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();
+        $data = FmsLedgerAccount::Where('id', $this->ledger_account)->with('currency')->first();
         $this->ledgerAmtHeld = $data->amount_held;
         $this->ledgerBalance = $data->current_balance - $this->ledgerAmtHeld;
         $this->ledgerCur = $data->currency->code ?? '';
@@ -175,7 +178,8 @@ class FmsInternalTransferRequestsComponent extends Component
             'project_id' => 'nullable|integer',
             'currency_id' => 'required|integer',
             'budget_line_id' => 'required|integer',
-            'from_account' => 'required|integer',
+            'to_budget_line_id' => 'required|integer',
+            'ledger_account' => 'required|integer',
             'to_account' => 'required|integer',
             'notice_text' => 'required|string',
         ]);
@@ -219,7 +223,7 @@ class FmsInternalTransferRequestsComponent extends Component
             return false;
 
         }
-        if($this->from_account == $this->to_account){
+        if($this->ledger_account == $this->to_account){
 
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
@@ -249,7 +253,8 @@ class FmsInternalTransferRequestsComponent extends Component
                 $p_request->project_id = $this->project_id;
                 $p_request->to_project_id = $this->to_project_id;
                 $p_request->budget_line_id = $this->budget_line_id;
-                $p_request->from_account = $this->from_account;
+                $p_request->to_budget_line_id = $this->to_budget_line_id;
+                $p_request->ledger_account = $this->ledger_account;
                 $p_request->to_account = $this->to_account;
                 $p_request->requestable()->associate($requestable);
                 $p_request->save();
@@ -263,7 +268,7 @@ class FmsInternalTransferRequestsComponent extends Component
                     $dataBudget->update();
                 }
 
-                $dataLeger = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();              
+                $dataLeger = FmsLedgerAccount::Where('id', $this->ledger_account)->with('currency')->first();              
 
                 if ($dataLeger) {
                     $currentAmountHeld = $dataLeger->amount_held;
@@ -307,18 +312,21 @@ class FmsInternalTransferRequestsComponent extends Component
    
     public function updatedProjectId()
     {
-        $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
+        $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['project_id' => $this->project_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
         $this->ledger = FmsLedgerAccount::Where('project_id', $this->project_id)->with(['project', 'department', 'currency'])->first();
         $this->viewSummary = false;
         if($this->ledger ){
-        $this->from_account = $this->ledger->id??null;
-        $this->updatedFromAccount();
+        $this->ledger_account = $this->ledger->id??null;
+        $this->updatedLedgerAccount();
         }
     }
     public function updatedToProjectId()
     {
+        $this->toBudgetLines = FmsBudgetLine::with('budget')->where('type', 'Revenue')->WhereHas('budget', function ($query) {
+            $query->where(['project_id' => $this->to_project_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
+        })->get();
         $this->to_ledger = FmsLedgerAccount::Where('project_id', $this->to_project_id)->with(['project', 'department', 'currency'])->first();
         $this->viewSummary = false;
         $this->to_account = $this->to_ledger->id??null;
@@ -326,6 +334,9 @@ class FmsInternalTransferRequestsComponent extends Component
     public function updatedToDepartmentId()
     {
     
+        $this->toBudgetLines = FmsBudgetLine::with('budget')->where('type', 'Revenue')->WhereHas('budget', function ($query) {
+            $query->where(['department_id' => $this->to_department_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
+        })->get();
         $this->to_ledger = FmsLedgerAccount::where('department_id', $this->to_department_id)->with(['department', 'currency'])->first();
         $this->to_account = $this->to_ledger->id??null;
         $this->viewSummary = false;
@@ -345,14 +356,14 @@ class FmsInternalTransferRequestsComponent extends Component
 
     public function updatedDepartmentId()
     {
-        $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
+        $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['department_id' => $this->department_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
         $this->ledger = FmsLedgerAccount::where('department_id', $this->department_id)->with(['project', 'department', 'currency'])->first();
         $this->viewSummary = false;
         if($this->ledger ){
-        $this->from_account = $this->ledger->id??null;
-        $this->updatedFromAccount();
+        $this->ledger_account = $this->ledger->id??null;
+        $this->updatedLedgerAccount();
         }
     }
 

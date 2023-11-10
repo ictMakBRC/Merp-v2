@@ -38,7 +38,7 @@
                                     </div><!--end media-->                                                    
                                 </div><!--end col-->
                                 <div class="col-auto align-self-center">
-                                    <h4 class="my-1">  <h5 class="my-1">@moneyFormat($invoices->where('status','Paid')->sum('total_amount'))</h5></h4>
+                                    <h4 class="my-1">  <h5 class="my-1">@moneyFormat($invoices->where('status','Fully Paid')->sum('total_amount'))</h5></h4>
                                 </div><!--end col-->
                             </div><!--end row-->
                         </div><!--end card-body-->                                            
