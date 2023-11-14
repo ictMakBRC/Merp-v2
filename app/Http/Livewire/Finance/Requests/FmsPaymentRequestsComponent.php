@@ -88,7 +88,7 @@ class FmsPaymentRequestsComponent extends Component
         if($this->request_type =='Petty Cash'){
             $this->max = 200000;
         }elseif($this->request_type =='Cash Imprest'){
-            $this->max = 1000000;
+            $this->max = 5000000;
         }else{
             $this->max = 1000000000;
         }
@@ -216,24 +216,22 @@ class FmsPaymentRequestsComponent extends Component
             return false;
 
         }
-        $total_amount = (float) str_replace(',', '', $this->total_amount);
         if($this->request_type =='Petty Cash'){
             $this->max = 200000;
         }elseif($this->request_type =='Cash Imprest'){
-            $this->max = 1000000;
+            $this->max = 5000000;
         }else{
             $this->max = 1000000000;
         }
-        if($this->max <  $total_amount){
+        if($this->max <  $this->baseAmount){
             
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
-                'message' => 'Oops! Low Line balance!',
-                'text' => 'You don not have enough money on your budget line, your expense is '.$this->budgetExpense.' but your available balance is '.$this->budgetLineBalance,
+                'message' => 'Maximum amount exceeded!',
+                'text' => 'You gone beyond the maximum amount available for this request, your amount is '.$this->baseAmount.' but the maximum is '.$this->max,
             ]);
             return false;
         }
-
         try {
             DB::transaction(function () use($requestable) {
                 $total_amount = (float) str_replace(',', '', $this->total_amount);

@@ -9,6 +9,16 @@
                             <h4 class="text-center"> Ledger Account for: <span>{{ $ledger_account->requestable->name }}</span> Unit</h4>
                             <h5>Account Name: {{ $ledger_account->name }}({{ $ledger_account->currency->code ?? 'UG' }})</h5>
                         </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="from_date" class="form-label">From Date</label>
+                                <input id="from_date" type="date" class="form-control"
+                                    wire:model.lazy="from_date">
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="to_date" class="form-label">To Date</label>
+                                <input id="to_date" type="date" class="form-control" wire:model.lazy="to_date">
+                            </div>
                     </div><!--end row-->
                 </div><!--end card-body-->
                 <div class="card-body">
@@ -40,12 +50,12 @@
                                                     </p>
                                                 </td>
                                                 <td class="text-end">
-                                                    @if ($transaction->trx_type=='Expense')
+                                                    @if ($transaction->trx_type=='Income')
                                                         @moneyFormat($transaction->account_amount ?? 0)                                                       
                                                     @endif
                                                 </td>
                                                 <td class="text-end">
-                                                    @if ($transaction->trx_type=='Income')
+                                                    @if ($transaction->trx_type=='Expense')
                                                         @moneyFormat($transaction->account_amount ?? 0)                                                       
                                                     @endif
                                                 </td>
@@ -55,8 +65,8 @@
                                         <tr>
                                             <td colspan="3" class="border-0"></td>
                                             <td class="border-0 font-14 text-dark"><b> Total</b>({{ $ledger_account->currency->code }})</td>
-                                            <td class="border-0 font-14 text-dark text-end">@moneyFormat($transactions->where('trx_type','Expense')->sum('account_amount'))</td>
                                             <td class="border-0 font-14 text-dark text-end">@moneyFormat($transactions->where('trx_type','Income')->sum('account_amount'))</td>
+                                            <td class="border-0 font-14 text-dark text-end">@moneyFormat($transactions->where('trx_type','Expense')->sum('account_amount'))</td>
                                             <td class="border-0 font-14 text-dark text-end">@moneyFormat($ledger_account->current_balance??0)</td>
                                         </tr><!--end tr-->
                                         

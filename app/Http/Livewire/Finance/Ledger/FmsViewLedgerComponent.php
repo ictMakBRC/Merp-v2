@@ -42,7 +42,11 @@ class FmsViewLedgerComponent extends Component
     public function render()
     {
         $data['ledger_account']= FmsLedgerAccount::where('id', $this->ledger_id)->with('currency','requestable')->first();
-        $data['transactions'] = FmsTransaction::where('ledger_account', $this->ledger_id)->get();
+        $data['transactions'] = FmsTransaction::where('ledger_account', $this->ledger_id)->when($this->from_date != '' && $this->to_date != '', function ($query) {
+            $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+        }, function ($query) {
+            return $query;
+        })->get();
         return view('livewire.finance.ledger.fms-view-ledger-component',$data);
     }
 }

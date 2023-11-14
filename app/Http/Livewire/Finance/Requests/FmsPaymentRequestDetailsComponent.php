@@ -144,11 +144,12 @@ class FmsPaymentRequestDetailsComponent extends Component
         $requestAuth->level = $this->signatory_level;
         $requestAuth->approver_id = $this->approver_id;
         $requestAuth->save();
-
+      if($this->requestData->request_type != 'Petty Cash'){
         $positions = FmsPaymentRequestPosition::where('name_lock','!=', 'head')
         ->when($this->requestable_type == 'App\Models\HumanResource\Settings\Department', function ($query) {
-            $query->where('name_lock','!=', 'grants');
-        })->get();
+            $query->where('name_lock','!=', 'grants');})
+        ->when($this->requestData->request_type == 'Internal Transfer', function ($query) {
+            $query->where('name_lock','!=', 'operations');})->get();
         foreach($positions as $position){
             $exists = FmsPaymentRequestAuthorization::where(['position' => $position->id, 'request_id' => $id])->first();
             if (!$exists) {
@@ -161,6 +162,7 @@ class FmsPaymentRequestDetailsComponent extends Component
             $requestAuth->save();
             }
         }
+    }
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Request attachment added successfully!']);
     }
