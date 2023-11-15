@@ -107,7 +107,7 @@ class MdRequestViewComponent extends Component
 
     public function render()
     {
-        $data['contract_managers'] = User::where('id','!=',auth()->user()->id)->get(); 
+        $data['contract_managers'] = User::where('is_active',true)->get(); 
         $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers')->findOrFail($this->request_id);
         return view('livewire.procurement.requests.md.md-request-view-component',$data);
     }

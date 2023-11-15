@@ -24,6 +24,7 @@
                 <thead>
                     <tr>
                         <th>No.</th>
+                        <th>{{__('Item Name')}}</th>
                         <th>{{ __('Description') }}</th>
                         <th>{{ __('Quantity Requested') }}</th>
                         <th>{{ __('Estimated Unit Price') }}</th>
@@ -41,6 +42,7 @@
                                     class="btn btn btn-sm btn-outline-info action-icon"> {{ $key + 1 }}<i
                                         class="ti ti-edit"></i></button>
                             </td>
+                            <td>{{ $item->item_name??'N/A' }}</td>
                             <td>{!! nl2br(e($item->description)) !!}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ $item->estimated_unit_cost }}</td>
@@ -88,6 +90,7 @@
                 <thead>
                     <tr>
                         <th>No.</th>
+                        <th>{{__('Item Name')}}</th>
                         <th>{{ __('Description') }}</th>
                         <th>{{ __('Quantity Requested') }}</th>
                         <th>{{ __('Estimated Unit Price') }}</th>
@@ -102,6 +105,7 @@
                             <td>
                                 {{ $key + 1 }}
                             </td>
+                            <td>{{ $item->item_name??'N/A' }}</td>
                             <td>{!! nl2br(e($item->description)) !!}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ $item->estimated_unit_cost }}</td>

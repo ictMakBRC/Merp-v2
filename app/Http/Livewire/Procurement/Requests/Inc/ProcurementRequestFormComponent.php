@@ -10,6 +10,7 @@ use App\Models\Procurement\Request\ProcurementRequest;
 use App\Data\Procurement\Requests\ProcurementRequestData;
 use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Settings\FmsFinancialYear;
+use App\Models\Procurement\Settings\ProcurementSubcategory;
 use App\Services\Procurement\Requests\ProcurementRequestService;
 
 class ProcurementRequestFormComponent extends Component
@@ -21,9 +22,10 @@ class ProcurementRequestFormComponent extends Component
     public $body;
     public $procuring_entity_code;
     public $procurement_sector;
+    public $subcategory_id;
     public $financial_year_id;
     public $currency_id;
-    public $sequence_number;
+    // public $sequence_number;
     public $procurement_plan_ref;
     public $location_of_delivery;
     public $date_required;
@@ -34,20 +36,25 @@ class ProcurementRequestFormComponent extends Component
 
     public $budget_line_balance;
     public $currency;
+    public $subcategories;
 
     protected $listeners = [
         'loadProcurementRequest'=>'loadProcurementRequest',
     ];
 
-    // public function updatedProjectId(){
-    //     $this->currency_id=Project::findOrFail($this->project_id)->currency_id;
-    // }
+    public function mount(){
+        $this->subcategories=collect([]);
+    }
 
     public function updatedBudgetLineId(){
         $budgetLine = FmsBudgetLine::with('budget','budget.currency')->findOrFail($this->budget_line_id);
         $this->currency_id = $budgetLine->budget->currency_id;
         $this->currency = $budgetLine->budget->currency->code;
         $this->budget_line_balance = $budgetLine->primary_balance;
+    }
+
+    public function updatedProcurementSector(){
+        $this->subcategories = ProcurementSubcategory::where('category',$this->procurement_sector)->get();
     }
 
     public function loadProcurementRequest($details)
@@ -70,9 +77,10 @@ class ProcurementRequestFormComponent extends Component
         $this->body = $procurementRequest->body;
         $this->procuring_entity_code = $procurementRequest->procuring_entity_code;
         $this->procurement_sector = $procurementRequest->procurement_sector;
+        $this->subcategory_id = $procurementRequest->subcategory_id;
         $this->financial_year_id = $procurementRequest->financial_year_id;
         $this->currency_id = $procurementRequest->currency_id;
-        $this->sequence_number = $procurementRequest->sequence_number;
+        // $this->sequence_number = $procurementRequest->sequence_number;
         $this->procurement_plan_ref = $procurementRequest->procurement_plan_ref;
         $this->location_of_delivery = $procurementRequest->location_of_delivery;
         $this->date_required = $procurementRequest->date_required;
@@ -94,7 +102,6 @@ class ProcurementRequestFormComponent extends Component
                 $requestableModel = Project::findOrFail($this->project_id);
             }
 
-            
             $procurementRequestDTO = ProcurementRequestData::from([
                 'budget_line_id' => $this->budget_line_id,
                 'request_type' => $this->request_type,
@@ -102,9 +109,10 @@ class ProcurementRequestFormComponent extends Component
                 'body' => $this->body,
                 'procuring_entity_code' => $this->procuring_entity_code,
                 'procurement_sector' => $this->procurement_sector,
+                'subcategory_id' => $this->subcategory_id,
                 'financial_year_id' => $this->financial_year_id,
                 'currency_id' => $this->currency_id,
-                'sequence_number' => $this->sequence_number,
+                // 'sequence_number' => $this->sequence_number,
                 'procurement_plan_ref' => $this->procurement_plan_ref,
                 'location_of_delivery' => $this->location_of_delivery,
                 'date_required' => $this->date_required,
@@ -124,7 +132,7 @@ class ProcurementRequestFormComponent extends Component
 
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request created successfully']);
 
-            $this->reset($procurementRequestDTO->resetInputs());
+            $this->reset(...$procurementRequestDTO->resetInputs(),...['budget_line_balance','currency']);
 
         });
     }
@@ -143,9 +151,10 @@ class ProcurementRequestFormComponent extends Component
                 'body' => $this->body,
                 'procuring_entity_code' => $this->procuring_entity_code,
                 'procurement_sector' => $this->procurement_sector,
+                'subcategory_id' => $this->subcategory_id,
                 'financial_year_id' => $this->financial_year_id,
                 'currency_id' => $this->currency_id,
-                'sequence_number' => $this->sequence_number,
+                // 'sequence_number' => $this->sequence_number,
                 'procurement_plan_ref' => $this->procurement_plan_ref,
                 'location_of_delivery' => $this->location_of_delivery,
                 'date_required' => $this->date_required,

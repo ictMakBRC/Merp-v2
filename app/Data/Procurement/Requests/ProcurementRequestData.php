@@ -11,10 +11,11 @@ class ProcurementRequestData extends Data
   public $body;
   public $procuring_entity_code;
   public $procurement_sector;
+  public $subcategory_id;
   public $financial_year_id;
   public $currency_id;
   public $budget_line_id;
-  public $sequence_number;
+  // public $sequence_number;
   public $procurement_plan_ref;
   public $location_of_delivery;
   public $date_required;
@@ -35,10 +36,11 @@ class ProcurementRequestData extends Data
         'body' =>'required|string',
         'procuring_entity_code' =>'required|string',
         'procurement_sector' =>'required|string',
-        'financial_year_id' =>'required|string',
+        'subcategory_id' =>'required|integer',
+        'financial_year_id' =>'required|integer',
         'currency_id' =>'required|integer',
-        'budget_line_id' =>'required|string',
-        'sequence_number' =>'required|string',
+        'budget_line_id' =>'required|integer',
+        // 'sequence_number' =>'required|string',
         'procurement_plan_ref' =>'required|string',
         'location_of_delivery' =>'required|string',
         'date_required' =>'required|string',

@@ -24,6 +24,7 @@
             <thead>
                 <tr>
                     <th>No.</th>
+                    <th>{{__('Item Name')}}</th>
                     <th>{{ __('Description') }}</th>
                     <th>{{ __('Quantity Requested') }}</th>
                     <th>{{ __('Estimated Unit Price') }}</th>

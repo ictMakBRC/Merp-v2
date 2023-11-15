@@ -5,6 +5,7 @@
                 <thead>
                     <tr>
                         <th>No.</th>
+                        <th>{{__('Item Name')}}</th>
                         <th>{{ __('Description') }}</th>
                         <th>{{ __('Quantity Requested') }}</th>
                         <th>{{ __('Received?') }}</th>
@@ -22,6 +23,7 @@
                                     class="btn btn btn-sm btn-outline-info action-icon"> {{ $key + 1 }}<i
                                         class="ti ti-edit"></i></button>
                             </td>
+                            <td>{{ $item->item_name??'N/A' }}</td>
                             <td>{!! nl2br(e($item['description'])) !!}</td>
                             <td>{{ $item['quantity'] }}</td>
                             @if ($item->id === $item_id)

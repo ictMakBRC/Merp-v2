@@ -34,7 +34,7 @@ class ProcurementRequestEnum extends Enum
     //Committees
     const CC = 'Contracts Committee';
     const EC = 'Evaluation Committee';
-    const NC = 'Negotiation Committee';
+    const PD = 'Procurement Department';
 
     //ITEM QUALITY
     const LOW = 'Low';

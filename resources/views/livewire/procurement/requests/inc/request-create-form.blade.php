@@ -69,6 +69,20 @@
             @enderror
         </div>
 
+        <div class="mb-3 col-md-4">
+            <label for="subcategory_id" class="form-label required">{{ __('Subcategory') }}</label>
+            <select class="form-select" id="subcategory_id" wire:model.lazy="subcategory_id">
+                <option selected value="">Select</option>
+                @forelse ($subcategories as $subcategory)
+                <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+            @empty
+            @endforelse
+            </select>
+            @error('subcategory_id')
+                <div class="text-danger text-small">{{ $message }}</div>
+            @enderror
+        </div>
+
         <div class="mb-3 col-md-2">
             <label for="financial_year_id" class="form-label">{{ __('Financial Year') }}</label>
             <select class="form-select" id="financial_year_id" wire:model.lazy="financial_year_id">
@@ -79,17 +93,6 @@
                 @endforelse
             </select>
             @error('financial_year_id')
-                <div class="text-danger text-small">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="mb-3 col-md-2">
-            <label for="currency_id" class="form-label">{{ __('Currency') }}</label>
-            <select class="form-select" id="currency_id" wire:model.lazy="currency_id" disabled>
-                <option selected value="">Select</option>
-                @include('layouts.currencies')
-            </select>
-            @error('currency_id')
                 <div class="text-danger text-small">{{ $message }}</div>
             @enderror
         </div>
@@ -110,13 +113,24 @@
             @enderror
         </div>
 
-        <div class="mb-3 col-md-4">
+        <div class="mb-3 col-md-2">
+            <label for="currency_id" class="form-label">{{ __('Currency') }}</label>
+            <select class="form-select" id="currency_id" wire:model.lazy="currency_id" disabled>
+                <option selected value="">Select</option>
+                @include('layouts.currencies')
+            </select>
+            @error('currency_id')
+                <div class="text-danger text-small">{{ $message }}</div>
+            @enderror
+        </div>
+
+        {{-- <div class="mb-3 col-md-4">
             <label for="sequence_number" class="form-label">{{ __('Sequence Number') }}</label>
             <input type="text" id="sequence_number" class="form-control" wire:model.defer="sequence_number">
             @error('sequence_number')
                 <div class="text-danger text-small">{{ $message }}</div>
             @enderror
-        </div>
+        </div> --}}
 
         <div class="mb-3 col-md-3">
             <label for="procurement_plan_ref" class="form-label">{{ __('Procurement Plan Reference') }}</label>

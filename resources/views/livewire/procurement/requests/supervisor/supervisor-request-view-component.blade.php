@@ -25,13 +25,13 @@ use App\Enums\ProcurementRequestEnum;
 
                         @if ($request->step_order == 2 || ($request->step_order ==2 && $request->status == ProcurementRequestEnum::REJECTED))
                             <x-button class="btn btn-de-success btn-sm"
-                                wire:click="approveAndFowardRequest({{ $request->id }},'{{ ProcurementRequestEnum::APPROVED }}')">Approve
+                                wire:click="approveAndFowardRequest({{ $request->id }},'{{ ProcurementRequestEnum::APPROVED }}')" onclick="return confirm('Are you sure you want to proceed?');">Approve
                                 & forward to {{ getProcurementRequestStep($request->step_order + 1) }} </x-button>
                         @endif
 
                         @if ($request->step_order ==2 && $request->status != ProcurementRequestEnum::REJECTED)
                             <button class="btn btn-de-danger btn-sm"
-                                wire:click="approveAndFowardRequest({{ $request->id }},'{{ ProcurementRequestEnum::REJECTED }}')">Reject</button>
+                                wire:click="approveAndFowardRequest({{ $request->id }},'{{ ProcurementRequestEnum::REJECTED }}')" onclick="return confirm('Are you sure you want to proceed?');">Reject</button>
                         @endif
 
                         <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>

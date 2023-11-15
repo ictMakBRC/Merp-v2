@@ -26,12 +26,16 @@ class ProcurementBidManagementComponent extends Component
 
     //SUPPORT DOCUMENTS
     public $document_category;
-    public $expires;
-    public $expiry_date;
+    public $expires=0;
+    public $expiry_date=null;
     public $document_name;
     public $document;
     public $document_path;
     public $description;
+
+    public function mount($id){
+        $this->request_id = $id;
+    }
 
     public function storeSupportDocument()
     {
@@ -80,10 +84,6 @@ class ProcurementBidManagementComponent extends Component
             $this->reset($formalDocumentDTO->resetInputs());
 
         });
-    }
-
-    public function mount($id){
-        $this->request_id = $id;
     }
     
     public function updateRequest(ProcurementRequest $procurementRequest,$status)

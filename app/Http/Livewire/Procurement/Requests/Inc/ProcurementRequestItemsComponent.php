@@ -10,6 +10,7 @@ use App\Models\Procurement\Request\ProcurementRequestItem;
 class ProcurementRequestItemsComponent extends Component
 {
     public $procurement_request_id;
+    public $item_name;
     public $description;
     public float $quantity=0;
     public $unit_of_measure;
@@ -56,7 +57,7 @@ class ProcurementRequestItemsComponent extends Component
         }
 
         $this->validate([
-            // 'procurement_request_id' => 'required|integer',
+            'item_name' => 'required|string',
             'description' => 'required|string',
             'quantity' => 'required|numeric',
             'unit_of_measure' => 'required|string',
@@ -68,6 +69,7 @@ class ProcurementRequestItemsComponent extends Component
 
             $procurementRequestItem = ProcurementRequestItem::create([
                 'procurement_request_id' => $this->procurement_request_id,
+                'item_name' => $this->item_name,
                 'description' => $this->description,
                 'quantity' => $this->quantity,
                 'unit_of_measure' => $this->unit_of_measure,
@@ -83,7 +85,7 @@ class ProcurementRequestItemsComponent extends Component
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item created successfully']);
 
             $this->reset([
-                // 'procurement_request_id',
+                'item_name',
                 'description',
                 'quantity',
                 'unit_of_measure',

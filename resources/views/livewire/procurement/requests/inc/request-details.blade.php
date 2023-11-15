@@ -56,6 +56,11 @@ use App\Enums\ProcurementRequestEnum;
                 </div>
             </td>
         </tr>
+        <tr>
+            <td><strong class="text-inverse">{{ __('Subcategory') }}:
+                </strong>{{ $request->subcategory->code ?? 'N/A' }} || {{ $request->subcategory->name }}
+            </td>
+        </tr>
     </table>
 
     <div>
@@ -76,6 +81,7 @@ use App\Enums\ProcurementRequestEnum;
                     <thead>
                         <tr>
                             <th>No.</th>
+                            <th>{{__('Item Name')}}</th>
                             <th>{{ __('Description') }}</th>
                             <th>{{ __('Quantity Requested') }}</th>
                             <th>{{ __('Estimated Unit Price') }}</th>
@@ -89,11 +95,12 @@ use App\Enums\ProcurementRequestEnum;
                         @foreach ($request->items as $key => $item)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
+                                <td>{{ $item->item_name??'N/A' }}</td>
                                 <td>{!! nl2br(e($item->description)) !!}</td>
                                 <td>{{ $item->quantity }}</td>
                                 <td>@moneyFormat($item->estimated_unit_cost)</td>
                                 <td>@moneyFormat($item->total_cost)</td>
-                                <td>{{ $item->quantity_delivered??'N/A' }}</td>
+                                <td>{{ $item->quantity_delivered ?? 'N/A' }}</td>
                                 <td>@moneyFormat($item->bidder_unit_cost)</td>
                                 <td>@moneyFormat($item->bidder_total_cost)</td>
                             </tr>
@@ -104,7 +111,7 @@ use App\Enums\ProcurementRequestEnum;
                             <td colspan="2"></td>
                             {{-- <td></td> --}}
                             <td>@moneyFormat($request->items->sum('bidder_total_cost'))</td>
-        
+
                             {{-- <td colspan="4" class="text-end">Total ({{ $request->currency->code }})</td>
                             <td>@moneyFormat($request->items->sum('total_cost'))</td> --}}
 

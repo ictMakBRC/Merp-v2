@@ -19,6 +19,7 @@ use App\Models\Procurement\Request\ProcurementRequestApproval;
 use App\Models\Procurement\Request\ProcurementRequestDecision;
 use App\Models\Procurement\Settings\ProcurementCategorization;
 use App\Models\Procurement\Settings\ProcurementMethod;
+use App\Models\Procurement\Settings\ProcurementSubcategory;
 use App\Traits\BudgetLineTrait;
 use App\Traits\FinancialYearTrait;
 
@@ -78,6 +79,11 @@ class ProcurementRequest extends Model
         return $this->belongsTo(ProcurementMethod::class, 'procurement_method_id');
     }
 
+    public function subcategory()
+    {
+        return $this->belongsTo(ProcurementSubcategory::class,'subcategory_id');
+    }
+
     public function procurement_categorization()
     {
         return $this->belongsTo(ProcurementCategorization::class, 'procurement_categorization_id');
@@ -111,7 +117,8 @@ class ProcurementRequest extends Model
         if (Auth::check()) {
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
-                $model->reference_no = GeneratorService::procurementRequestRef();
+                $model->reference_no = GeneratorService::procurementRequestRef($model->procurement_sector);
+                $model->sequence_number = GeneratorService::procurementRequestRef($model->procurement_sector);
             });
         }
     }

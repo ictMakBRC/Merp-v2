@@ -30,7 +30,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-4">
+            {{-- <div class="mb-3 col-md-4">
                 <label for="expires" class="form-label required">{{ __('Expires?') }}</label>
                 <select class="form-select" id="expires" wire:model.lazy="expires">
                     <option selected value="">Select</option>
@@ -40,7 +40,7 @@
                 @error('expires')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
-            </div>
+            </div> --}}
 
             <div class="mb-3 col-md-4">
                 <label for="document_name" class="form-label required">{{ __('Document Name') }}</label>
@@ -59,7 +59,7 @@
                 @enderror
             </div>
 
-            @if ($expires)
+            {{-- @if ($expires)
                 <div class="mb-3 col-md-4">
                     <label for="expiry_date" class="form-label required">{{ __('Expiry Date') }}</label>
                     <input type="date" id="expiry_date" class="form-control" wire:model.defer="expiry_date">
@@ -67,7 +67,7 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div>
-            @endif
+            @endif --}}
 
             <div class="mb-3 col-md-4">
                 <label for="description" class="form-label">{{ __('Description') }}</label>
