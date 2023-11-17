@@ -285,7 +285,7 @@ use App\Enums\ProcurementRequestEnum;
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
-
+                            
                         @elseif($decision == 'Rejected')
                             <div class="mb-3 col-md-3">
                                 <label for="bidder_contract_price"
@@ -409,7 +409,6 @@ use App\Enums\ProcurementRequestEnum;
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
-
                         @elseif($decision == 'Rejected')
                             <div class="mb-3 col-md-3">
                                 <label for="bidder_contract_price"
@@ -439,12 +438,10 @@ use App\Enums\ProcurementRequestEnum;
             </form>
         @endif
 
-
         @if (checkProcurementEvaluationApproval($request->id))
             @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
+            <livewire:procurement.requests.procurement.inc.bidder-prices-component :request_id="$request->id" />
         @endif
-
-        <livewire:procurement.requests.procurement.inc.bidder-prices-component :request_id="$request->id" />
-
+        
     @endif
 </div>

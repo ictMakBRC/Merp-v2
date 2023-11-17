@@ -15,7 +15,6 @@ class MdRequestViewComponent extends Component
 {
     public $request_id;
     public $comment;
-    public $contracts_manager_id;
 
     public function mount($id){
         $this->request_id=$id;
@@ -27,12 +26,6 @@ class MdRequestViewComponent extends Component
         $this->validate([
             'comment'=>'required|string',
         ]);
-
-        if ($status==ProcurementRequestEnum::APPROVED) {
-            $this->validate([
-                'contracts_manager_id'=>'required|integer',
-            ]);
-        }
 
         DB::transaction(function () use($procurementRequest,$status) {
             $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
@@ -51,7 +44,6 @@ class MdRequestViewComponent extends Component
                     $procurementRequest->update([
                         'status'=>ProcurementRequestEnum::PENDING,
                         'step_order'=>$nextStepOrder,
-                        'contracts_manager_id'=>$this->contracts_manager_id,
                     ]);
 
                     ProcurementRequestApproval::create([
@@ -107,7 +99,6 @@ class MdRequestViewComponent extends Component
 
     public function render()
     {
-        $data['contract_managers'] = User::where('is_active',true)->get(); 
         $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers')->findOrFail($this->request_id);
         return view('livewire.procurement.requests.md.md-request-view-component',$data);
     }

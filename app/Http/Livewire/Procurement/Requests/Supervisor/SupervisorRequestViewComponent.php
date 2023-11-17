@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Procurement\Requests\Supervisor;
 
 use Response;
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Enums\ProcurementRequestEnum;
@@ -14,6 +15,7 @@ class SupervisorRequestViewComponent extends Component
 {
     public $request_id;
     public $comment;
+    public $contracts_manager_id;
 
     public function mount($id){
         $this->request_id=$id;
@@ -21,10 +23,16 @@ class SupervisorRequestViewComponent extends Component
 
     public function approveAndFowardRequest(ProcurementRequest $procurementRequest,$status)
     {
-        // dd('yes');
         $this->validate([
             'comment'=>'required|string',
         ]);
+
+        if ($status==ProcurementRequestEnum::APPROVED) {
+            $this->validate([
+                'contracts_manager_id'=>'required|integer',
+            ]);
+        }
+
         DB::transaction(function () use($procurementRequest,$status) {
             $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
 
@@ -40,6 +48,7 @@ class SupervisorRequestViewComponent extends Component
                     $nextStepOrder = $currentStepOrder+1;
 
                     $procurementRequest->update([
+                        'contracts_manager_id'=>$this->contracts_manager_id,
                         'status'=>ProcurementRequestEnum::PENDING,
                         'step_order'=>$nextStepOrder,
                     ]);
@@ -70,6 +79,9 @@ class SupervisorRequestViewComponent extends Component
 
             }
         });
+
+        $this->resetInputs();
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
        
     }
 
@@ -90,8 +102,13 @@ class SupervisorRequestViewComponent extends Component
         }
     }
 
+    public function resetInputs(){
+        $this->reset(['comment','contracts_manager_id']);
+    }
+
     public function render()
     {
+        $data['contract_managers'] = User::where('is_active',true)->get(); 
         $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers')->findOrFail($this->request_id);
         return view('livewire.procurement.requests.supervisor.supervisor-request-view-component',$data);
     }
