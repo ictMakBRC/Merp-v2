@@ -2,25 +2,26 @@
 
 namespace App\Http\Livewire\Finance\Requests;
 
-use App\Jobs\SendNotifications;
-use App\Models\Finance\Accounting\FmsLedgerAccount;
-use App\Models\Finance\Budget\FmsBudgetLine;
-use App\Models\Finance\Invoice\FmsInvoice;
-use App\Models\Finance\Invoice\FmsInvoicePayment;
-use App\Models\Finance\Requests\FmsPaymentRequest;
-use App\Models\Finance\Requests\FmsPaymentRequestAttachment;
-use App\Models\Finance\Requests\FmsPaymentRequestAuthorization;
-use App\Models\Finance\Requests\FmsPaymentRequestDetail;
-use App\Models\Finance\Transactions\FmsTransaction;
-use App\Models\User;
-use App\Services\GeneratorService;
+use Throwable;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Throwable;
+use App\Jobs\SendNotifications;
+use App\Services\GeneratorService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Finance\Invoice\FmsInvoice;
+use App\Models\Finance\Budget\FmsBudgetLine;
+use App\Models\Finance\Invoice\FmsInvoicePayment;
+use App\Models\Finance\Requests\FmsPaymentRequest;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Requests\FmsRequestEmployee;
+use App\Models\Finance\Transactions\FmsTransaction;
+use App\Models\Finance\Requests\FmsPaymentRequestDetail;
+use App\Models\Finance\Requests\FmsPaymentRequestAttachment;
+use App\Models\Finance\Requests\FmsPaymentRequestAuthorization;
 
 class FmsPaymentPreviewComponent extends Component
 {
@@ -102,7 +103,7 @@ class FmsPaymentPreviewComponent extends Component
                     $trans->currency_id = $requestData->currency_id;
                     $trans->trx_type = 'Expense';
                     $trans->status = 'Approved';
-                    $trans->description = 'Payment';
+                    $trans->description = $requestData->request_type.' Request';
                     $trans->entry_type = 'Internal';
                     if ($requestData->project_id != null) {
                         $trans->is_department = false;
@@ -152,6 +153,9 @@ class FmsPaymentPreviewComponent extends Component
                         $incomeTrans->requestable_type = $requestData->requestable_type;
                         $incomeTrans->requestable_id = $requestData->requestable_id;
                         $incomeTrans->save();
+
+                    }
+                    if ($requestData->request_type == 'Salary') {
 
                     }
 
@@ -272,7 +276,7 @@ class FmsPaymentPreviewComponent extends Component
                         $body = 'Hello, You have a pending request #' . $this->requestCode . ' to sign, please login to view more details';
                         $this->SendMail($signatory->approver_id, $body);
                     }
-                    $pendingSignatory = FmsPaymentRequestAuthorization::where(['request_id' => $id])->where('status', '!=', 'Signed')->first();
+                    $pendingSignatory = FmsPaymentRequestAuthorization::where(['request_id' => $id])->where('status', '!=', 'Signed')->orWhere('status', 'Declined')->first();
                     // dd($pendinSignatory);
                     if ($pendingSignatory == null) {
                         $this->markRequestApproved();
@@ -329,6 +333,7 @@ class FmsPaymentPreviewComponent extends Component
         $data->status = 'Approved';
         $data->date_approved = date('Y-m-d');
         $data->update();
+        FmsRequestEmployee::where('request_id', $data->id)->update(['status'=>'Approved']);
         $body = 'Hello, Your request #' . $this->requestCode . ' has been approved, please login to view more details';
         $this->SendMail($data->created_by, $body);
         $this->dispatchBrowserEvent('alert', ['type' => 'Success', 'message' => 'Document request has been successfully marked complete! ']);
@@ -368,11 +373,13 @@ class FmsPaymentPreviewComponent extends Component
             $this->currency = $requestData->currency->code ?? 'UG';
             $data['items'] = FmsPaymentRequestDetail::where('request_id', $data['request_data']->id)->get();
             $data['attachments'] = FmsPaymentRequestAttachment::where('request_id', $data['request_data']->id)->get();
-            $data['authorizations'] = FmsPaymentRequestAuthorization::where('request_id', $data['request_data']->id)->with(['authPosition', 'user', 'approver'])->orderBy('level', 'ASC')->get();
+                $data['req_employees'] = FmsRequestEmployee::where('request_id', $data['request_data']->id)->with('employee')->get();
+                $data['authorizations'] = FmsPaymentRequestAuthorization::where('request_id', $data['request_data']->id)->with(['authPosition', 'user', 'approver'])->orderBy('level', 'ASC')->get();
         } else {
             $data['items'] = collect([]);
             $data['attachments'] = collect([]);
-            $data['authorizations'] = collect([]);
+                $data['req_employees'] = collect([]);
+                $data['authorizations'] = collect([]);
         }
         $this->totalAmount = $data['items']->sum('amount');
         return view('livewire.finance.requests.fms-payment-preview-component', $data);

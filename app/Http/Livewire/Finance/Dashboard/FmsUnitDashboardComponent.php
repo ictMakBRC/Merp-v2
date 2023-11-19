@@ -64,7 +64,7 @@ class FmsUnitDashboardComponent extends Component
             $this->department_id =$id;
             $this->requestable_type =  'App\Models\HumanResource\Settings\Department';
             $this->requestable =  Department::find($id);
-        }elseif($type == 'projects'){
+        }elseif($type == 'project'){
             $this->project_id = $id;
             $this->requestable_type  = 'App\Models\Grants\Project\Project';
             $this->requestable =  Project::find($id);

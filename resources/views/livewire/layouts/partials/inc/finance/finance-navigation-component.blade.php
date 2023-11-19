@@ -64,9 +64,15 @@
                                             Departments</a>
                                     </li>
                                 @endif
-                                @if (Auth::user()->hasPermission(['view_department_ledger']))
+                                @if (Auth::user()->hasPermission(['view_department_ledgerh']))
                                     <li class="nav-item">
                                         <a href="analytics-reports.html" class="nav-link ">My Department</a>
+                                    </li>
+                                @endif
+                                
+                                @if (Auth::user()->hasPermission(['view_department_ledger']))
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-banks') }}" class="nav-link ">Banks</a>
                                     </li>
                                 @endif
                             </ul>
@@ -161,6 +167,31 @@
                         <!--end sidebarAnalytics-->
                     </li>
                 @endif
+                
+                    {{-- //======================= --}}
+                    @if (Auth::user()->hasPermission(['view_all_transactions']) ||
+                    Auth::user()->hasPermission(['view_department_transaction']))
+                        <li class="nav-item {{ request()->segment(3) == 'payroll' ? 'menuitem-active' : '' }}">
+                            <a class="nav-link" href="#payroll" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="payroll">
+                                Payroll
+                            </a>
+                            <div class="collapse " id="payroll">
+                                <ul class="nav flex-column">
+                                    <!--end nav-item-->
+                                    @if (Auth::user()->hasPermission(['view_all_transactions']))
+                                        <li class="nav-item">
+                                            <a href="{{ route('finance-payroll_list') }}"
+                                                class="nav-link ">All Payrolls</a>
+                                        </li>
+                                    @endif
+                                </ul>
+                                <!--end nav-->
+                            </div>
+                            <!--end sidebarAnalytics-->
+                        </li>
+                    @endif
+
                 @if (Auth::user()->hasPermission(['view_all_transactions']) ||
                         Auth::user()->hasPermission(['view_department_transaction']))
                     <li class="nav-item {{ request()->segment(3) == 'requests' ? 'menuitem-active' : '' }}">

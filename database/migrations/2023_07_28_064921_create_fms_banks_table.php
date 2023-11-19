@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('fms_banks', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('type',8)->default('Bank');
             $table->string('account_no')->unique(); 
             $table->date('as_of')->nullable(); 
             $table->boolean('is_active')->default(true);

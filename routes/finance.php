@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Finance\FinanceGeneralController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Http\Livewire\Finance\Budget\FmsBudgetsComponent;
@@ -17,6 +18,7 @@ use App\Http\Livewire\Finance\Invoice\FmsInvoiceListsComponent;
 use App\Http\Livewire\Finance\Budget\FmsMainBudgetListComponent;
 use App\Http\Livewire\Finance\Ledger\FmsLedgerAccountsComponent;
 use App\Http\Livewire\Finance\Accounting\ChartOfAccountsComponent;
+use App\Http\Livewire\Finance\Banking\FmsBanksComponent;
 use App\Http\Livewire\Finance\Budget\FmsDepartmentBudgetLinesComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentPreviewComponent;
 use App\Http\Livewire\Finance\Settings\FmsFinancialYearsComponent;
@@ -30,6 +32,8 @@ use App\Http\Livewire\Finance\Dashboard\FmsUnitDashboardComponent;
 use App\Http\Livewire\Finance\Ledger\FmsViewLedgerComponent;
 use App\Http\Livewire\Finance\Lists\FmsDepartmentsComponent;
 use App\Http\Livewire\Finance\Lists\FmsProjectsComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollScheduleComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollsComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestDetailsComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestSettingComponent;
@@ -74,11 +78,18 @@ Route::group(['prefix' => 'finance'], function () {
         Route::get('services', FmsServicesComponent::class)->name('finance-services');
         Route::get('years', FmsFinancialYearsComponent::class)->name('finance-years');
         Route::get('positions', FmsPaymentRequestSettingComponent::class)->name('finance-req_settings');
+        Route::get('banks', FmsBanksComponent::class)->name('finance-banks');
     });
     Route::group(['prefix' => 'lists'], function () {
         Route::get('departments', FmsDepartmentsComponent::class)->name('finance-department_list');
         Route::get('unit/{id}/{type}/lines', FmsDepartmentBudgetLinesComponent::class)->name('finance-unit_lines');
         Route::get('projects', FmsProjectsComponent::class)->name('finance-project_list');
+        
+    });
+    Route::group(['prefix' => 'payroll'], function () {
+        Route::get('list', FmsPayrollsComponent::class)->name('finance-payroll_list');
+        Route::get('create/{voucher}/add', FmsPayrollScheduleComponent::class)->name('finance-payroll_data');
+        Route::get('payslip/{payroll_id}/download', [FinanceGeneralController::class, 'downloadPayslip'])->name('finance-pay_slip');
         
     });
 });

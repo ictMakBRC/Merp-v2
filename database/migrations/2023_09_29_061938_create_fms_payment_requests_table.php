@@ -43,7 +43,9 @@ return new class extends Migration
             $table->foreignId('invoice_id')->nullable()->references('id')->on('fms_invoices')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('procurement_request_id')->nullable()->constrained('procurement_requests', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('payment_method')->nullable();
-            $table->enum('status',['Pending','Submitted','Rejected','Approved','Completed','Paid'])->default('Pending');            
+            $table->enum('status',['Pending','Submitted','Rejected','Approved','Completed','Paid','Ongoing'])->default('Pending'); 
+            $table->integer('month')->nullable();
+            $table->integer('year')->nullable();           
             $table->foreignId('created_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   
             $table->foreignId('updated_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');             
             $table->morphs('requestable');

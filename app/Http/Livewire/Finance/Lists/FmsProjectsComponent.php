@@ -85,25 +85,25 @@ class FmsProjectsComponent extends Component
         }
     }
 
-    public function filterDepartments()
+    public function filterProjects()
     {
-        $departments = Project::search($this->search)
+        $projects = Project::search($this->search)->with('principalInvestigator')
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
             });
 
-        $this->departmentIds = $departments->pluck('id')->toArray();
+        // $this->projectIds = $projects->pluck('id')->toArray();
 
-        return $departments;
+        return $projects;
     }
 
     public function render()
     {
-        $data['departments'] = $this->filterDepartments()->With(['parent'])
-            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-            ->paginate($this->perPage);
+        $data['projects'] = $this->filterProjects()
+        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+        ->paginate($this->perPage);
 
         return view('livewire.finance.lists.fms-projects-component', $data);
     }

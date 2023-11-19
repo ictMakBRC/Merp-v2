@@ -118,7 +118,7 @@ class GeneratorService
         $latestIdentifier = FmsBudget::select('code')->orderBy('id', 'desc')->first();
 
         if ($latestIdentifier) {
-            $numberSplit = explode('-', $latestIdentifier->identifier);
+            $numberSplit = explode('-', $latestIdentifier->code);
             $numberYear = (int) filter_var($numberSplit[0], FILTER_SANITIZE_NUMBER_INT);
 
             if ($numberYear == $yearStart) {
