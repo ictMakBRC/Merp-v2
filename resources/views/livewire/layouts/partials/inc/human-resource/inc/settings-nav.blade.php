@@ -26,11 +26,15 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{route('human-resource-leaves')}}" class="nav-link ">Leaves</a>
+                <a href="{{route('human-resource-leave-types')}}" class="nav-link ">Leave Types</a>
             </li>
 
             <li class="nav-item">
                 <a href="#" class="nav-link ">Statutory charges</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{route('human-resource.settings.performances')}}" class="nav-link ">Performance
+                    Configurations</a>
             </li>
 
             <li class="nav-item">

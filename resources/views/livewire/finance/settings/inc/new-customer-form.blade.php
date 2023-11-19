@@ -1,60 +1,13 @@
 <div x-cloak x-show="create_new">
     <form  @if ($toggleForm) wire:submit.prevent="updateCustomer" @else wire:submit.prevent="storeCustomer" @endif >             
 
-        <div class="row">
-
-            <div class="mb-3 col">
-                <label for="title" class="form-label required">Title</label>
-                <select class="form-select select2" id="title" wire:model.defer='title'>
-                    <option selected value="">Select</option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Ms.">Ms.</option>
-                    <option value="Miss.">Miss.</option>
-                    <option value="Dr.">Dr.</option>
-                    <option value="Eng.">Eng.</option>
-                    <option value="Prof.">Prof.</option>
-                </select>
-                @error('title')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3 col">
-                <label for="gender" class="form-label required">Gender</label>
-                <select class="form-select select2" id="gender" wire:model.lazy='gender'>
-                    <option selected value="">Select</option>
-                    <option value='Male'>Male</option>
-                    <option value='Female'>Female</option>
-                    <option value='Other'>Other</option>
-                </select>
-                @error('gender')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="row">          
 
             <div class="mb-3 col-md-3">
-                <label for="surname" class="form-label required">Surname</label>
-                <input type="text" id="surname" class="form-control text-uppercase"
-                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='surname'>
-                @error('surname')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3 col-md-3">
-                <label for="first_name" class="form-label required">First Name</label>
-                <input type="text" id="first_name" class="form-control text-uppercase"
-                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='first_name'>
-                @error('first_name')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3 col-md-3">
-                <label for="other_name" class="form-label">Other Name</label>
-                <input type="text" id="other_name" class="form-control text-uppercase"
-                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='other_name'>
-                @error('other_name')
+                <label for="name" class="form-label required">Customer Name</label>
+                <input type="text" id="name" class="form-control text-uppercase"
+                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='name'>
+                @error('name')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
@@ -158,31 +111,27 @@
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
-
-            <div class="mb-3 col-md-3">
-                <label for="opening_balance" class="form-label">Social Security Number</label>
-                <input type="text" id="opening_balance" class="form-control text-uppercase"
-                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='opening_balance'>
-                @error('opening_balance')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
             
-            <div class="mb-3 col-md-3">
-                <label for="opening_balance" class="form-label required">Opening Balance</label>
-                <input type="number" step='any' id="opening_balance" class="form-control" wire:model.defer='opening_balance'>
-                @error('opening_balance')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div>
-            
-            <div class="mb-3 col-md-3">
+                        
+            <div class="mb-3 col">
                 <label for="opening_balance" class="form-label required">As of</label>
                 <input type="date" id="as_of" class="form-control" wire:model.defer='as_of'>
                 @error('as_of')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3 col">
+                <label for="is_active" class="form-label required">{{ __('public.status') }}</label>
+                <select class="form-select select2" id="is_active" wire:model.defer="is_active">
+                    <option selected value="">Select</option>
+                    <option value='1'>Active</option>
+                    <option value='0'>Inactive</option>
+                </select>
+                @error('is_active')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+
 
         </div>
         <div class="modal-footer">

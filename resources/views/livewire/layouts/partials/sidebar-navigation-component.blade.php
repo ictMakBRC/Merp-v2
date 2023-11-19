@@ -26,6 +26,16 @@
                         </li>
                         <!--end nav-item-->
 
+                        <!--end nav-item-->
+                        <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Grants & Projects"
+                            data-bs-trigger="hover">
+                            <a href="#grantsManagement" id="grantsManagement-tab" class="nav-link">
+                                <i class="ti ti-subtask menu-icon"></i>
+                            </a>
+                            <!--end nav-link-->
+                        </li>
+                        <!--end nav-item-->
+
                         <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Finance"
                             data-bs-trigger="hover">
                             <a href="#financeManagement" id="financeManagement-tab" class="nav-link">
@@ -37,9 +47,28 @@
 
                         <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right"
                             title="Inventory Management" data-bs-trigger="hover">
-                            <a href="#inventoryManagement" id="inventoryManagement-tab" class="nav-link">
+
+                            @if(\Auth::user()->category == "Department-staff")
+
+                            <!-- <a class="nav-link" data-bs-toggle="modal"
+                              data-bs-target="#selectDepartmentModal">
                                 <i class="fas fa-boxes menu-icon"></i>
+                            </a> -->
+
+                            <a href="#inventoryManagement" id="inventoryManagement-tab" class="nav-link">
+                              <i class="fas fa-boxes menu-icon"></i>
                             </a>
+
+                            @else
+                            <a href="#inventoryManagement" id="inventoryManagement-tab" class="nav-link">
+                              <i class="fas fa-boxes menu-icon"></i>
+                            </a>
+                            <!-- <a href="{{ route('inventory-home') }}" class="nav-link">
+                              <i class="fas fa-boxes menu-icon"></i>
+                            </a> -->
+
+
+                            @endif
                             <!--end nav-link-->
                         </li>
                         <!--end nav-item-->
@@ -110,7 +139,8 @@
             <!--end topbar-left-->
             <!--end logo-->
             <div class="menu-body navbar-vertical tab-content" data-simplebar>
-                <div id="home" class="main-icon-menu-pane tab-pane" role="tabpanel" aria-labelledby="dasboard-tab">
+                <div id="home" class="main-icon-menu-pane tab-pane" role="tabpanel"
+                    aria-labelledby="dasboard-tab">
                     <div class="title-box">
                         <h6 class="menu-title">Home</h6>
                     </div>
@@ -124,13 +154,6 @@
                     <!--end nav-->
                 </div><!-- end Dashboards -->
 
-                <!--start human-resource -->
-                <livewire:layouts.partials.inc.human-resource.human-resource-navigation-component />
-                <!--end human-resource -->
-
-                <!--start finance -->
-                <livewire:layouts.partials.inc.finance.finance-navigation-component />
-                <!--end finance -->
 
                 <!--start inventory -->
                 <livewire:layouts.partials.inc.inventory.inventory-navigation-component />
@@ -140,13 +163,7 @@
                 <livewire:layouts.partials.inc.assets.assets-navigation-component />
                 <!--end assets -->
 
-                <!--start procurement -->
-                <livewire:layouts.partials.inc.procurement.procurement-navigation-component />
-                <!--end procurement -->
 
-                <!--start documents -->
-                <livewire:layouts.partials.inc.documents.documents-navigation-component />
-                <!--end documents -->
 
                 <!--start user-management -->
                 @include('livewire.layouts.partials.inc.user-management.user-mgt-nav')
@@ -157,3 +174,4 @@
         </div><!-- end main-menu-inner-->
     </div>
 </div>
+@include('livewire.layouts.partials.inc.inventory.inc.select-user-department-modal')
