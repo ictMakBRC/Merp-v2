@@ -182,19 +182,20 @@ use App\Enums\ProcurementRequestEnum;
                 <div class="col">
                     <h4 class="card-title">{{ __('Evaluation Report Approval') }}</h4>
                 </div><!--end col-->
-                <div class="col-auto">
-                    <div class="dropdown">
-                        <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <!-- <i class="las la-menu align-self-center text-muted icon-xs"></i>  -->
-                            <i class="mdi mdi-dots-horizontal text-muted"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Notify CC for Approval</a>
-                            <a class="dropdown-item" href="#">Notify Best Bidder</a>
+                @if ($request->items->whereNull('bidder_unit_cost')->isEmpty())
+                    <div class="col-auto">
+                        <div class="dropdown">
+                            <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="mdi mdi-dots-horizontal text-muted"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="{{ route('proc-lpo', $request->id) }}">Generate LPO</a>
+                            </div>
                         </div>
-                    </div>
-                </div><!--end col-->
+                    </div><!--end col-->
+                @endif
+
             </div> <!--end row-->
         </div>
 
@@ -271,7 +272,8 @@ use App\Enums\ProcurementRequestEnum;
                             <div class="mb-3 col-md-2">
                                 <label for="net_payment_terms"
                                     class="form-label required">{{ __('Net Payment Terms') }}</label>
-                                <select class="form-select" id="net_payment_terms" wire:model.lazy="net_payment_terms">
+                                <select class="form-select" id="net_payment_terms"
+                                    wire:model.lazy="net_payment_terms">
                                     <option selected value="">Select</option>
                                     <option value="15">Net 15</option>
                                     <option value="30">Net 30</option>
@@ -285,7 +287,6 @@ use App\Enums\ProcurementRequestEnum;
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
                         @elseif($decision == 'Rejected')
                             <div class="mb-3 col-md-3">
                                 <label for="bidder_contract_price"
@@ -395,7 +396,8 @@ use App\Enums\ProcurementRequestEnum;
                             <div class="mb-3 col-md-2">
                                 <label for="net_payment_terms"
                                     class="form-label required">{{ __('Net Payment Terms') }}</label>
-                                <select class="form-select" id="net_payment_terms" wire:model.lazy="net_payment_terms">
+                                <select class="form-select" id="net_payment_terms"
+                                    wire:model.lazy="net_payment_terms">
                                     <option selected value="">Select</option>
                                     <option value="15">Net 15</option>
                                     <option value="30">Net 30</option>
@@ -442,6 +444,6 @@ use App\Enums\ProcurementRequestEnum;
             @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
             <livewire:procurement.requests.procurement.inc.bidder-prices-component :request_id="$request->id" />
         @endif
-        
+
     @endif
 </div>

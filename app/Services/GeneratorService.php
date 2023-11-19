@@ -219,15 +219,23 @@ class GeneratorService
     public static function localPurchaseOrderNo()
     {
         $lpoNo = null;
+        $yearStart = date('y');
 
-        $latestLpoNo = ProcurementRequest::select('lpo_no')->orderBy('id', 'desc')->first();;
-        
+        $latestLpoNo = ProcurementRequest::orderBy('id', 'desc')->first();
+
         if ($latestLpoNo) {
-            $lpoNo = $latestLpoNo->lpo_no+1;
-        } else {
-            $lpoNo = date('y').'-001';
-        }
+            $latestLpoNoSplit = explode('-', $latestLpoNo->lpo_no);
+            $lpoYear = (int) filter_var($latestLpoNoSplit[0], FILTER_SANITIZE_NUMBER_INT);
 
+            if ($lpoYear == $yearStart) {
+                $lpoNo = $yearStart.'-'.str_pad(((int) filter_var($latestLpoNoSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT);
+            } else {
+                $lpoNo = $yearStart.'-001';
+            }
+        } else {
+            $lpoNo = $yearStart.'-001';
+        }
+        
         return $lpoNo;
     }
 

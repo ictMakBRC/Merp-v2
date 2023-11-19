@@ -9,7 +9,7 @@
                 </div><!--end col-->
             </div> <!--end row-->
         </div>
-        @if (requiresProcurementContract(exchangeToDefaultCurrency($request->currency_id, getItemsTotalCost($request->id))))
+        {{-- @if (requiresProcurementContract(exchangeToDefaultCurrency($request->currency_id, getItemsTotalCost($request->id))))
             <div class="alert alert-danger border-0 text-center p-2 m-2" role="alert">
                 {{ __('You will need to issue a contract to the provider and upload the same using the support documents Tab because the bidder amount is higher than') }}
                 @moneyFormat(getProcurementCategorization(exchangeToDefaultCurrency($request->currency_id, getItemsTotalCost($request->id)))->contract_requirement_threshold)
@@ -18,7 +18,7 @@
             <div class="alert alert-warning border-0 text-center p-2 m-2" role="alert">
                 {{ __('You will need to issue an LPO to the provider and upload the same via the support documents Tab') }}
             </div>
-        @endif
+        @endif --}}
         <div class="table-responsive scrollable-div">
             <table class="table mb-0 w-100 table-bordered">
                 <thead>

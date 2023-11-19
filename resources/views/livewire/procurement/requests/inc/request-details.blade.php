@@ -106,15 +106,10 @@ use App\Enums\ProcurementRequestEnum;
                             </tr>
                         @endforeach
                         <tr>
-                            <td colspan="4" class="text-end">Total: ({{ $request->currency->code }})</td>
+                            <td colspan="5" class="text-end">Total: ({{ $request->currency->code }})</td>
                             <td>@moneyFormat($request->items->sum('total_cost'))</td>
                             <td colspan="2"></td>
-                            {{-- <td></td> --}}
                             <td>@moneyFormat($request->items->sum('bidder_total_cost'))</td>
-
-                            {{-- <td colspan="4" class="text-end">Total ({{ $request->currency->code }})</td>
-                            <td>@moneyFormat($request->items->sum('total_cost'))</td> --}}
-
                         </tr>
                     </tbody>
                 </table>
