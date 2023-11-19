@@ -22,7 +22,7 @@ class ResignationsPolicy
      */
     public function view(User $user, Resignation $resignation): bool
     {
-        return $user->hasPermission('view_resignations');
+        return $user->hasPermission('view_resignation');
 
     }
 

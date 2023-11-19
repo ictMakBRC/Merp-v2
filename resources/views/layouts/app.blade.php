@@ -17,6 +17,7 @@
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/libs/mobius1-selectr/selectr.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Include Select2 library and CSS -->
+    <script src="{{ asset('assets/libs/select2/css/select2.min.css') }}"></script>
 
     <!-- iziToast CSS -->
     <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
@@ -63,36 +64,18 @@
     <script src="{{ asset('assets/libs/sweetalert/sweetalert.min.js') }}"></script>
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
-    <script src="{{ asset('assets/libs/mobius1-selectr/selectr.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/js/index.js') }}"></script>
 
     @livewireScripts
 
     @stack('scripts')
-    <script>
-        function formatAmount(input) {
-            var value = input.value.replace(/,/g, ''); // Remove existing commas
-
-            // Remove non-numeric and non-decimal characters
-            value = value.replace(/[^0-9.]/g, '');
-
-            // Ensure there's only one decimal point
-            var parts = value.split('.');
-            if (parts.length > 2) {
-                value = parts[0] + '.' + parts.slice(1).join('');
-            }
-
-            var formattedValue = addCommasToNumber(value);
-
-            input.value = formattedValue;
-        }
-
-        function addCommasToNumber(value) {
-            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        }
-    </script>
+    
+    
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+    
 </body>
 
 </html>

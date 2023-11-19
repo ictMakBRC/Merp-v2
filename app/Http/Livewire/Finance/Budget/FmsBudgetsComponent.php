@@ -45,6 +45,7 @@ class FmsBudgetsComponent extends Component
     public $project_id;
     public $account_id;
     public $currency_id;
+    public $year_name ='Budget';
     protected $paginationTheme = 'bootstrap';
 
     public $createNew = false;
@@ -53,7 +54,7 @@ class FmsBudgetsComponent extends Component
 
     public $filter = false;
 
-    public $entry_type;
+    public $entry_type = 'Department';
 
     public function updatedCreateNew()
     {
@@ -65,6 +66,44 @@ class FmsBudgetsComponent extends Component
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function updatedDepartmentId()
+    {
+        $department = Department::where('id', $this->department_id)->first();
+        if($department && $department->name){
+            
+            $this->name = $department->name.' '.$this->year_name;
+            }
+    }
+
+    public function updatedProjectId()
+    {
+        $department = Project::where('id', $this->project_id)->first();
+        if($department && $department->name){
+            
+        $this->name = $department->name.' '.$this->year_name;
+        }
+    }
+
+    public function updatedFiscalYear()
+    {
+        $record = FmsFinancialYear::where('id', $this->fiscal_year)->first();
+        if($record && $record->name){
+            
+        $this->year_name = 'Budget '.$record->name;
+        $this->project_id = '';
+        $this->department_id = '';
+        $this->name = '';
+        }
+    }
+
+    public function updatedEntryType()
+    {
+        $this->project_id = '';
+        $this->department_id = '';
+        $this->name = '';
+        $this->year_name = 'Budget';
     }
 
     public function updated($fields)
@@ -100,17 +139,20 @@ class FmsBudgetsComponent extends Component
         ]);
 
         $record = null;
+        $requestable = null;
         if ($this->entry_type == 'Project'){
             $this->validate([               
                 'project_id' => 'required|integer',    
             ]);
             $this->department_id = null;
+            $requestable =  Project::find($this->project_id);
             $record = FmsBudget::where(['project_id' => $this->project_id, 'fiscal_year' => $this->fiscal_year])->first();
         }elseif($this->entry_type == 'Department'){
             $this->validate([               
                 'department_id' => 'required|integer',    
             ]);
             $this->project_id = null;
+            $requestable =  Department::find($this->department_id);
             $record = FmsBudget::where(['department_id' =>$this->department_id, 'fiscal_year' => $this->fiscal_year])->first();
         }
 
@@ -118,7 +160,7 @@ class FmsBudgetsComponent extends Component
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! Duplicate data!',
-                'text' => 'the selected unit has a budet for this selected '.$this->fiscal_year.' fiscal Year!',
+                'text' => 'the selected unit has a budget for this selected '.$this->fiscal_year.' fiscal Year!',
             ]);
             return false;
         }
@@ -135,6 +177,7 @@ class FmsBudgetsComponent extends Component
         $budget->project_id = $this->project_id;
         $budget->currency_id = $this->currency_id;
         $budget->account_id = $this->account_id;
+        $budget->requestable()->associate($requestable);
         $budget->save();
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();

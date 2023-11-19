@@ -33,6 +33,7 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   
             $table->boolean('is_active')->default(1);
             $table->tinyText('description')->nullable();
+            $table->morphs('requestable');
             $table->timestamps();
         });
     }

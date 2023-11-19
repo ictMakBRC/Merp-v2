@@ -22,7 +22,7 @@ class WarningsPolicy
      */
     public function view(User $user, Warning $warning): bool
     {
-        return $user->hasPermission('view_warnings');
+        return $user->hasPermission('view_warning');
 
     }
 

@@ -2,8 +2,7 @@
     <form  @if ($toggleForm) wire:submit.prevent="updateBudget" @else wire:submit.prevent="storeBudget" @endif >             
 
         <div class="row">          
-
-            @include('livewire.partials.project-department-toggle')            
+           
             <div class="mb-3 col-2">
                 <label for="fiscal_year" class="form-label required">Fiscal year</label>
                 <select id="fiscal_year" class="form-control" name="fiscal_year" required wire:model="fiscal_year">
@@ -15,7 +14,8 @@
                 @error('fiscal_year')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
-            </div> 
+            </div>             
+            @include('livewire.partials.project-department-toggle') 
             <div class="mb-3 col-2">
                 <label for="currency_id" class="form-label required">Currency</label>
                 <select id="currency_id" class="form-control" name="currency_id" required wire:model="currency_id">

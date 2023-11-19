@@ -127,7 +127,7 @@
                                                             <i class="mdi mdi-chevron-left"></i>
                                                           </button>
                                                           <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#">Account History</a>
+                                                            <a class="dropdown-item" href="{{ route('finance-ledger_view', $account->id) }}">Account History</a>
                                                             <a class="dropdown-item" href="#">Run Report</a>
                                                             
                                                         </div>

@@ -2,9 +2,10 @@
 
 namespace App\Http\Livewire\Finance\Settings;
 
-use App\Models\Finance\Settings\FmsCurrency;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\Finance\Settings\FmsCurrencyUpdate;
 
 class FmsCurrencyComponent extends Component
 {
@@ -90,6 +91,11 @@ class FmsCurrencyComponent extends Component
         if($this->system_default ==1){
             FmsCurrency::where('id', '!=', $currency->id)->update(['system_default'=>'0']);
         }
+            $rate = new FmsCurrencyUpdate();
+            $rate->currency_code = $currency->code;
+            $rate->exchange_rate = $currency->exchange_rate;
+            $rate->currency_id = $currency->id;
+            $rate->save();
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'currency created successfully!']);
@@ -135,7 +141,12 @@ class FmsCurrencyComponent extends Component
         $currency->code = $this->code;
         $currency->is_active = $this->is_active;
         $currency->system_default = $this->system_default;
-        $currency->update();        
+        $currency->update();     
+        $rate = new FmsCurrencyUpdate();
+        $rate->currency_code = $currency->code;
+        $rate->exchange_rate = $currency->exchange_rate;
+        $rate->currency_id = $currency->id;
+        $rate->save();   
         if($this->system_default ==1){
             FmsCurrency::where('id', '!=', $currency->id)->update(['system_default'=>'0']);
         }

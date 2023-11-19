@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\User;
 use App\Jobs\ProcessDispatchMails;
-use App\Models\Finance\Settings\FmsCurrencyUpdate;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Str;
 
 function showWhenLinkActive($link)
 {
@@ -20,7 +19,7 @@ function showWhenLinkActive($link)
 function isLinkActive(array $links, $class = 'active')
 {
     foreach ($links as $link) {
-        if(showWhenLinkActive($link)) {
+        if (showWhenLinkActive($link)) {
             return $class;
         }
     }
@@ -31,19 +30,20 @@ function isLinkActive(array $links, $class = 'active')
  * Method to globalize the authentication of a user
  * @param $permission - examples of permissions are f_tat, c_bsc etc
  */
-function  isUserAuthorized($permission){
+function isUserAuthorized($permission)
+{
 
-        // get the user
-        $user = auth()->user();
+    // get the user
+    $user = auth()->user();
 
-        // isAuthorized true or false
-        $isAuthorized = false;
+    // isAuthorized true or false
+    $isAuthorized = false;
 
-        if($user->hasPermission($permission)){
-            $isAuthorized = true;
-        }
+    if ($user->hasPermission($permission)) {
+        $isAuthorized = true;
+    }
 
-        return $isAuthorized;
+    return $isAuthorized;
 }
 
 /**
@@ -53,7 +53,7 @@ function  isUserAuthorized($permission){
  */
 function getUsersDelegatee($employee)
 {
-    if($employee->isOnLeave()){
+    if ($employee->isOnLeave()) {
         return $employee;
     }
     return $employee;
@@ -76,71 +76,7 @@ function globalSendEmail($recipient, $subject, $mailable)
         //check if the recipient is on leave
         ProcessDispatchMails::dispatch($mailable, $recipient)->onQueue('emails');
 
-    } catch(\Throwable $th) {//throw $th;
+    } catch (\Throwable $th) { //throw $th;
         Log::error("Global Send Mail overall failed: $subject\nrecipient not found!" . $th->getMessage(), [$th]);
     }
 }
-
-
-if (!function_exists('exchangeCurrency')) {
-    function exchangeCurrency($fromCurrency, $amount = 1)
-    {
-        $latestExchangeRate = getLatestExchangeRate($fromCurrency);
-        
-        if ($latestExchangeRate) {
-            $convertedAmount = $amount * $latestExchangeRate;
-            return $convertedAmount;
-        }
-
-        throw new \Exception("Exchange rate not found for $fromCurrency");
-    }
-
-    function getLatestExchangeRate($currencyCode)
-    {
-        // Query the database or fetch exchange rates from an API
-        $latestExchangeRate = FmsCurrencyUpdate::where('currency_code',$currencyCode)->latest()->first();
-        
-        return $latestExchangeRate ? $latestExchangeRate->exchange_rate : 0;
-    }
-}
-
-if (!function_exists('exchangeMoney')) {
-    function exchangeMoney($amount = 1, $rate = 1)
-    {
-        
-        if ($rate) {
-            $convertedAmount = $amount * $rate;
-            return $convertedAmount;
-        }
-
-    }
-
-}
-
-// helpers.php
-
-if (!function_exists('calculatePAYE')) {
-    function calculatePAYE($salary)
-    {
-        // Define the PAYE tax brackets and their corresponding tax rates
-        $taxBrackets = [
-            ['min' => 0, 'max' => 235000, 'rate' => 0],
-            ['min' => 235001, 'max' => 335000, 'rate' => 0.1], // 10%
-            ['min' => 335001, 'max' => 410000, 'rate' => 0.2], // 20%
-            ['min' => 410001, 'max' => 10000000, 'rate' => 0.3], // 30%
-            ['min' => 10000001, 'max' => PHP_INT_MAX, 'rate' => 0.4], // 40% for salaries above 10,000,000
-        ];
-
-        // Find the applicable tax bracket for the given salary
-        foreach ($taxBrackets as $bracket) {
-            if ($salary >= $bracket['min'] && $salary <= $bracket['max']) {
-                return $bracket['rate'];
-            }
-        }
-
-        // Handle the case where no applicable tax bracket is found
-        throw new \Exception("No applicable tax bracket found for salary: $salary");
-    }
-}
-
-

@@ -21,6 +21,7 @@ class DepartmentFactory extends Factory
      */
     public function definition(): array
     {
+        return null;
         return [
             'name' => $this->faker->unique()->words(3, true),
             'type' => $this->faker->randomElement(["Full Time", "Part Time", "department", "unit", "sub-unit", "laboratory"]),

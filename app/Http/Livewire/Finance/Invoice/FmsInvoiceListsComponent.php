@@ -39,10 +39,9 @@ class FmsInvoiceListsComponent extends Component
     public $filter = false;
 
     public $invoice_no;
-    
+
     public $billed_project;
     public $billed_department;
-    public $invoice_type = 'External';
     public $invoice_date;
     public $total_amount;
     public $total_paid;
@@ -56,9 +55,29 @@ class FmsInvoiceListsComponent extends Component
     public $description;
     public $created_by;
     public $updated_by;
+    public $adjustment = 0;
+    public $discount_type = 'Percent';
+    public $discount = 0;
+    public $discount_total = 0;
+    public $discount_percent = 0;
+    public $due_date;
+    public $recurring;
+    public $custom_recurring;
+    public $recurring_type;
+    public $cycles = 0;
+    public $total_cycles;
+    public $recurring_from;
+    public $recurring_to;
+    public $last_due_reminder;
+    public $last_overdue_reminder;
+    public $cancel_overdue_reminders = 0;
     public $status;
-    public $entry_type='Department';
+    public $entry_type = 'Department';
+    public $invoice_to = 'Customer';
     public $reminder_sent_at;
+
+    public $billed_by;
+    public $billed_to;
 
     public function updatedCreateNew()
     {
@@ -74,8 +93,9 @@ class FmsInvoiceListsComponent extends Component
     public function validateInputs()
     {
         return [
-            'invoice_date' => 'required',
+            'invoice_date' => 'required|date',
             'entry_type' => 'required',
+            'invoice_to' => 'required',
             'department_id' => 'nullable',
             'project_id' => 'nullable',
             'customer_id' => 'nullable',
@@ -83,6 +103,14 @@ class FmsInvoiceListsComponent extends Component
             'tax_id' => 'nullable',
             'terms_id' => 'nullable',
             'description' => 'required',
+            'due_date' => 'required|date',
+            'recurring' => 'required|numeric',
+            // 'custom_recurring'=> 'required|numeric',
+            // 'recurring_type' => 'required|numeric',
+            'cancel_overdue_reminders' => 'required|numeric',
+            'cycles' => 'nullable|numeric',
+            // 'recurring_from'=> 'nullable',
+            // 'recurring_to'=> 'nullable',
         ];
     }
 
@@ -94,55 +122,74 @@ class FmsInvoiceListsComponent extends Component
     public function storeInvoice()
     {
         $this->validate($this->validateInputs());
-
-        if ($this->entry_type == 'Project'){
-            $this->validate([               
-                'project_id' => 'required|integer',    
+        $requestable = null;
+        $billtable = null;
+        $invoice_type = 'Internal';
+        if ($this->entry_type == 'Project') {
+            $this->validate([
+                'project_id' => 'required|integer',
             ]);
+            $requestable  = Project::find($this->project_id);
             $this->department_id = null;
-        }elseif($this->entry_type == 'Department'){
-            $this->validate([               
-                'department_id' => 'required|integer',    
+        } elseif ($this->entry_type == 'Department') {
+            $this->validate([
+                'department_id' => 'required|integer',
             ]);
             $this->project_id = null;
+            $requestable  = Department::find($this->department_id);
         }
 
-        if ($this->invoice_type =='External'){
-            $this->validate([               
-                'billed_project' => 'nullable|integer',    
-                'customer_id' => 'required|integer',    
+        if ($this->invoice_to == 'Customer') {
+            $this->validate([
+                'customer_id' => 'required|integer',
             ]);
-            $this->billed_department = null;            
-            if($this->project_id == $this->billed_project && $this->billed_project !=null){
-                $this->dispatchBrowserEvent('swal:modal', [
-                    'type' => 'warning',
-                    'message' => 'Oops! invalid data!',
-                    'text' => 'The billing project can not be the same as the paying department!',
-                ]);
-                return false;
-            }
-        }elseif($this->invoice_type =='Internal'){
-            $this->validate([               
-                'billed_department' => 'required|integer',    
-            ]);
+            
+            $invoice_type = 'External';
+            $this->billed_department = null;
             $this->billed_project = null;
-            $this->customer_id = null;
-            if($this->department_id == $this->billed_department){
-                $this->dispatchBrowserEvent('swal:modal', [
-                    'type' => 'warning',
-                    'message' => 'Oops! invalid data!',
-                    'text' => 'The billing department can not be the same as the paying department!',
+            $billtable  = FmsCustomer::find($this->customer_id);
+        }elseif ($this->invoice_to == 'Project') {
+                $this->validate([
+                    'billed_project' => 'required|integer',
+                ]);                
+                $invoice_type = 'Internal';
+                $this->billed_department = null;                
+                $this->customer_id = null;                
+                $billtable  = Project::find($this->billed_project);
+                if ($this->project_id == $this->billed_project) {
+                    $this->dispatchBrowserEvent('swal:modal', [
+                        'type' => 'warning',
+                        'message' => 'Oops! be serious!',
+                        'text' => 'The billing project can not be the same as the paying project!',
+                    ]);
+                    return false;
+                }
+        } elseif ($this->invoice_to == 'Department') {
+                $this->validate([
+                    'billed_department' => 'required|integer',
                 ]);
-                return false;
+                $invoice_type = 'Internal';
+                $this->billed_project = null;              
+                $this->customer_id = null;  
+                $billtable  = Department::find($this->billed_department);
+                if ($this->department_id == $this->billed_department) {
+                    $this->dispatchBrowserEvent('swal:modal', [
+                        'type' => 'warning',
+                        'message' => 'Oops! be serious!',
+                        'text' => 'The billing department can not be the same as the paying department!',
+                    ]);
+                    return false;
+                } 
             }
-        }
 
-       
         $invoice = new FmsInvoice();
+        $invoice->invoice_type = $invoice_type;
         $invoice->invoice_no = GeneratorService::getInvNumber();
         $invoice->invoice_date = $this->invoice_date;
-        $invoice->billed_department = $this->billed_department;
-        $invoice->billed_project = $this->billed_project;
+        $invoice->billed_to = $this->invoice_to;
+        $invoice->billed_by = $this->entry_type;
+        $invoice->billed_department = $this->billed_department??null;
+        $invoice->billed_project = $this->billed_project??null;
         $invoice->department_id = $this->department_id;
         $invoice->project_id = $this->project_id;
         $invoice->customer_id = $this->customer_id;
@@ -150,11 +197,19 @@ class FmsInvoiceListsComponent extends Component
         $invoice->tax_id = $this->tax_id;
         $invoice->terms_id = $this->terms_id;
         $invoice->description = $this->description;
+        $invoice->due_date = $this->due_date;
+        $invoice->recurring = $this->recurring;
+        // $invoice->custom_recurring = $this->custom_recurring;
+        // $invoice->recurring_type = $this->recurring_type;
+        $invoice->cycles = $this->cycles;
+        $invoice->cancel_overdue_reminders = $this->cancel_overdue_reminders;        
+        $invoice->requestable()->associate($requestable);
+        $invoice->billtable()->associate($billtable);
         $invoice->save();
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'customer created successfully!']);
-      
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice created successfully!']);
+
         return redirect()->SignedRoute('finance-invoice_items', $invoice->invoice_no);
     }
 
@@ -203,7 +258,24 @@ class FmsInvoiceListsComponent extends Component
             'updated_by',
             'status',
             'reminder_sent_at',
-            'edit_id']);
+            'edit_id',
+            'adjustment',
+            'discount_type',
+            'discount',
+            'discount_total',
+            'discount_percent',
+            'due_date',
+            'recurring',
+            'custom_recurring',
+            'recurring_type',
+            'cycles',
+            'total_cycles',
+            'recurring_from',
+            'recurring_to',
+            'last_due_reminder',
+            'last_overdue_reminder',
+            'cancel_overdue_reminders',
+        ]);
     }
 
     public function updateInvoice()
@@ -230,7 +302,7 @@ class FmsInvoiceListsComponent extends Component
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'customer updated successfully!']);
-  
+
     }
 
     public function refresh()
@@ -269,10 +341,10 @@ class FmsInvoiceListsComponent extends Component
         $data['invoices'] = $this->filterInvoices()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        $data['customers']=FmsCustomer::where('is_active',1)->get();
-        $data['currencies']=FmsCurrency::where('is_active',1)->get();
-        $data['departments']=Department::where('is_active',1)->get();
-        $data['projects']=Project::all();
+        $data['customers'] = FmsCustomer::where('is_active', 1)->get();
+        $data['currencies'] = FmsCurrency::where('system_default', 1)->get();
+        $data['departments'] = Department::where('is_active', 1)->get();
+        $data['projects'] = Project::all();
         return view('livewire.finance.invoice.fms-invoice-lists-component', $data);
     }
 }

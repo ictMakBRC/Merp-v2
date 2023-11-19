@@ -59,7 +59,7 @@ class Create extends Component
 
     public function render()
     {
-        // $this->authorize('create', Appraisal::class);
+        $this->authorize('create', Appraisal::class);
         return view('livewire.human-resource.performance.appraisals.create');
     }
 }

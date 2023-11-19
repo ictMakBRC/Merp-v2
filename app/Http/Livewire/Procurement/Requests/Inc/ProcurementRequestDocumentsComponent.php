@@ -67,7 +67,7 @@ class ProcurementRequestDocumentsComponent extends Component
                 ]);
     
                 $documentName = date('YmdHis').$procurementRequest->reference_no.' '.$this->document_category.'.'.$this->document->extension();
-                $this->document_path = $this->document->storeAs('procurement_request_documents/', $documentName);
+                $this->document_path = $this->document->storeAs('procurement_request_documents', $documentName);
             } else {
                 $this->document_path = null;
             }

@@ -173,7 +173,20 @@
             </tbody>
         </table>
     </div> <!-- end preview-->
-   
+    <div class="row text-center">
+        @php
+            $difference = $totalRevenue-$totalExpenses;
+        @endphp
+        <div class="col-4">
+            <h5>Revenue: @moneyFormat($totalRevenue)</h5>
+        </div>
+        <div class="col-4">
+            <h5>Expenditure: @moneyFormat($totalExpenses)</h5>
+        </div>
+        <div class="col-4">
+            <h5 @if ($difference<0)class="text-danger" @endif>Difference: @moneyFormat($difference)</h5>
+        </div>
+    </div>
 
     @if ($budget_data != null)
         @include('livewire.finance.budget.inc.preview-budget')

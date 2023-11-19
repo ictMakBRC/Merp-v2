@@ -55,7 +55,7 @@ class FmsTransferComponent extends Component
     public $to_account;
     public $trx_type;
     public $entry_type;
-    public $from_account;
+    public $ledger_account;
     public $is_department;
     public $invoiceData;
     public $toAccountData;
@@ -97,7 +97,7 @@ class FmsTransferComponent extends Component
                 'budget_line_id'=>'nullable|integer',
                 'income_budget_line_id'=>'nullable|integer',
                 'to_account'=>'required|integer',
-                'from_account'=>'required|integer',
+                'ledger_account'=>'required|integer',
                 'description'=>'required|string',    
             ]);
 
@@ -112,7 +112,7 @@ class FmsTransferComponent extends Component
                 ]);
                 $this->project_id = null;
             }  
-            if($this->to_account == $this->from_account){
+            if($this->to_account == $this->ledger_account){
                 $this->dispatchBrowserEvent('swal:modal', [
                     'type' => 'warning',
                     'message' => 'Oops! invalid transaction!',
@@ -129,14 +129,14 @@ class FmsTransferComponent extends Component
             $trans->trx_date = $this->as_of;
             $trans->total_amount = $total_amount;
             $trans->to_account = $this->to_account;
-            $trans->from_account = $this->from_account;
+            $trans->ledger_account = $this->ledger_account;
             $trans->rate = $this->rate;
             $trans->department_id =  $this->department_id;
             $trans->project_id = $this->project_id;
             $trans->billed_department = $this->billed_department;
             $trans->billed_project = $this->billed_project;
             $trans->budget_line_id = $this->budget_line_id;
-            $trans->income_budget_line_id = $this->income_budget_line_id;
+            $trans->to_budget_line_id = $this->income_budget_line_id;
             $trans->currency_id = $this->currency_id;
             $trans->trx_type = 'Transfer';
             $trans->entry_type = 'Internal';
@@ -152,8 +152,8 @@ class FmsTransferComponent extends Component
             
         }
 
-        function updatedFromAccount(){
-            $this->fromAccountData = FmsLedgerAccount::where('id', $this->from_account)->with(['project', 'department','currency'])->first();
+        function updatedLedgerAccount(){
+            $this->fromAccountData = FmsLedgerAccount::where('id', $this->ledger_account)->with(['project', 'department','currency'])->first();
         }
         function updatedToAccount(){
             $this->toAccountData = FmsLedgerAccount::where('id', $this->to_account)->with(['project', 'department','currency'])->first();

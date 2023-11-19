@@ -22,7 +22,7 @@ class ProcurementSubcategory extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Users')
+            ->useLogName('Procurement Subcategories')
             ->dontLogIfAttributesChangedOnly(['updated_at', 'password'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

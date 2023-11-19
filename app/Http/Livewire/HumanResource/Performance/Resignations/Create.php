@@ -61,7 +61,7 @@ class Create extends Component
 
     public function render()
     {
-        // $this->authorize('create', Resignation::class);
+        $this->authorize('create', Resignation::class);
         return view('livewire.human-resource.performance.resignations.create');
     }
 }
