@@ -52,19 +52,6 @@ class FmsPaymentRequestService
 
         $paymentRequest->requestable()->associate($requestData['requestable']);
         $paymentRequest->save();
-        // $paymentRequest = FmsPaymentRequest::create($requestData);
-
-        // Additional logic based on request type
-        // if ($requestData['request_type'] === 'salary') {
-        // Handle salary-specific logic
-        // $paymentRequest->salarySpecificField = $requestData['salary_specific_field'];
-        // } elseif ($requestData['request_type'] === 'procurement') {
-        // Handle procurement-specific logic
-        // $paymentRequest->procurementSpecificField = $requestData['procurement_specific_field'];
-        // }
-
-        // Save the model
-        // $paymentRequest->save();
 
         return $paymentRequest;
     }
