@@ -3,13 +3,13 @@
         @include('layouts.messages')
             <div class="row">          
                 <div class="col-2">
-                    <label for="type" class="form-label required">Request Type @if ($request_type !='Payment') <small>Max = @moneyFormat($max)</small> @endif </label>
+                    <label for="type" class="form-label required">Request Type @if ($request_type =='Petty Cash' || $request_type =='Cash Imprest') <small>Max = @moneyFormat($max)</small> @endif </label>
                     <select id="request_type" class="form-control" name="request_type" required wire:model="request_type">
                         <option value="">Select</option>
                         <option value="Payment">Payment Request</option>
                         <option value="Petty Cash">Petty Cash Request</option>
                         <option value="Cash Imprest">Cash Imprest Request</option>
-                        <option value="Salary">Salary Request</option>
+                        {{-- <option value="Salary">Salary Request</option> --}}
                     </select>
                     @error('request_type')
                         <div class="text-danger text-small">{{ $message }}</div>

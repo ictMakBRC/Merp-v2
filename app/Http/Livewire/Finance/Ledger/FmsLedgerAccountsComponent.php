@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Finance\Ledger;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Services\GeneratorService;
+use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\HumanResource\Settings\Department;
@@ -53,7 +54,7 @@ class FmsLedgerAccountsComponent extends Component
     public $as_of;
     public $is_active;
     public $currency_id;
-    public $entry_type ='Department';
+    public $entry_type = 'Department';
 
     public function updatedCreateNew()
     {
@@ -64,18 +65,18 @@ class FmsLedgerAccountsComponent extends Component
     public function updatedDepartmentId()
     {
         $department = Department::where('id', $this->department_id)->first();
-        if($department && $department->name){
-            
-            $this->name = $department->name.' Ledger Acct';
-            }
+        if ($department && $department->name) {
+
+            $this->name = $department->name . ' Ledger Acct';
+        }
     }
 
     public function updatedProjectId()
     {
         $department = Project::where('id', $this->project_id)->first();
-        if($department && $department->name){
-            
-        $this->name = $department->name.' Ledger Acct';
+        if ($department && $department->name) {
+
+            $this->name = $department->name . ' Ledger Acct';
         }
     }
 
@@ -146,90 +147,92 @@ class FmsLedgerAccountsComponent extends Component
     public function storeAccount()
     {
 
-        $this->validate([
-            'name' => 'required|string|unique:fms_ledger_accounts',
-            'is_active' => 'required|numeric',
-            'account_number' => 'required|unique:fms_ledger_accounts',
-            'department_id' => 'nullable|integer',
-            // 'account_type' => 'required|integer',
-            'project_id' => 'nullable|integer',
-            'currency_id' => 'required|integer',
-            'opening_balance' => 'required',
-            'as_of' => 'required|date',
-            'is_active' => 'required|numeric',
-            'description' => 'nullable|string',
-            'entry_type'=>'required'
+        DB::transaction(function () {
+            $this->validate([
+                'name' => 'required|string|unique:fms_ledger_accounts',
+                'is_active' => 'required|numeric',
+                'account_number' => 'required|unique:fms_ledger_accounts',
+                'department_id' => 'nullable|integer',
+                // 'account_type' => 'required|integer',
+                'project_id' => 'nullable|integer',
+                'currency_id' => 'required|integer',
+                'opening_balance' => 'required',
+                'as_of' => 'required|date',
+                'is_active' => 'required|numeric',
+                'description' => 'nullable|string',
+                'entry_type' => 'required',
 
-        ]);
-        $record = null;
-        $requestable= null;    
-        if ($this->entry_type == 'Project'){
-            $this->validate([               
-                'project_id' => 'required|integer',    
             ]);
-            $this->department_id = null;
-            $requestable  = Project::find($this->project_id);
-            $record = FmsLedgerAccount::where('project_id',$this->project_id)->first();
-        }elseif($this->entry_type == 'Department'){
-            $this->validate([               
-                'department_id' => 'required|integer',    
-            ]);
-            $this->project_id = null;            
-            $requestable  = Department::find($this->department_id);
-            $record = FmsLedgerAccount::where('department_id',$this->department_id)->first();
-        }
+            $record = null;
+            $requestable = null;
+            if ($this->entry_type == 'Project') {
+                $this->validate([
+                    'project_id' => 'required|integer',
+                ]);
+                $this->department_id = null;
+                $requestable = Project::find($this->project_id);
+                $record = FmsLedgerAccount::where('project_id', $this->project_id)->first();
+            } elseif ($this->entry_type == 'Department') {
+                $this->validate([
+                    'department_id' => 'required|integer',
+                ]);
+                $this->project_id = null;
+                $requestable = Department::find($this->department_id);
+                $record = FmsLedgerAccount::where('department_id', $this->department_id)->first();
+            }
 
-        if($record){
-            $this->dispatchBrowserEvent('swal:modal', [
-                'type' => 'warning',
-                'message' => 'Oops! Duplicate data!',
-                'text' => 'the selected unit has an account!',
-            ]);
-            return false;
-        }
+            if ($record) {
+                $this->dispatchBrowserEvent('swal:modal', [
+                    'type' => 'warning',
+                    'message' => 'Oops! Duplicate data!',
+                    'text' => 'the selected unit has an account!',
+                ]);
+                return false;
+            }
 
-        $opening_balance = (float) str_replace(',', '', $this->opening_balance);
-        $current_balance = (float) str_replace(',', '', $this->current_balance);
+            $opening_balance = (float) str_replace(',', '', $this->opening_balance);
+            $current_balance = (float) str_replace(',', '', $this->current_balance);
 
-        $account = new FmsLedgerAccount();
-        $account->name = $this->name;
-        $account->is_active = $this->is_active;
-        $account->account_number = $this->account_number;
-        $account->department_id = $this->department_id;
-        $account->currency_id = $this->currency_id;
-        $account->project_id = $this->project_id;
-        // $account->account_type = $this->account_type;
-        $account->opening_balance = $opening_balance;
-        $account->current_balance = $opening_balance;
-        $account->as_of = $this->as_of;
-        $account->is_active = $this->is_active;
-        $account->description = $this->description;        
-        $account->requestable()->associate($requestable);
-        $account->save();
+            $account = new FmsLedgerAccount();
+            $account->name = $this->name;
+            $account->is_active = $this->is_active;
+            $account->account_number = $this->account_number;
+            $account->department_id = $this->department_id;
+            $account->currency_id = $this->currency_id;
+            $account->project_id = $this->project_id;
+            // $account->account_type = $this->account_type;
+            $account->opening_balance = $opening_balance;
+            $account->current_balance = $opening_balance;
+            $account->as_of = $this->as_of;
+            $account->is_active = $this->is_active;
+            $account->description = $this->description;
+            $account->requestable()->associate($requestable);
+            $account->save();
 
-        $incomeTrans = new FmsTransaction();
-        $incomeTrans->trx_no = 'TRL' . GeneratorService::getNumber(7);
-        $incomeTrans->trx_ref = $account->account_number ?? 'TRF' . GeneratorService::getNumber(7);;
-        $incomeTrans->trx_date = date('Y-m-d');
-        $incomeTrans->total_amount = $account->current_balance;
-        $incomeTrans->account_amount = $account->current_balance; 
-        $incomeTrans->account_balance = $account->current_balance;
-        $incomeTrans->ledger_account = $account->id;
-        $incomeTrans->rate = 1;
-        $incomeTrans->department_id = $account->department_id;
-        $incomeTrans->project_id = $account->project_id;
-        $incomeTrans->currency_id = $account->currency_id;
-        $incomeTrans->trx_type = 'Income';
-        $incomeTrans->status = 'Approved';
-        $incomeTrans->description = 'Unit initial Income deposit';
-        $incomeTrans->entry_type = 'Internal';
-        if ($account->to_project_id != null) {
-            $incomeTrans->is_department = false;
-        }
-        $incomeTrans->requestable_type = $account->requestable_type;
-        $incomeTrans->requestable_id = $account->requestable_id;
-        $incomeTrans->save();
-        
+            $incomeTrans = new FmsTransaction();
+            $incomeTrans->trx_no = 'TRL' . GeneratorService::getNumber(7);
+            $incomeTrans->trx_ref = $account->account_number ?? 'TRF' . GeneratorService::getNumber(7);;
+            $incomeTrans->trx_date = date('Y-m-d');
+            $incomeTrans->total_amount = $account->current_balance;
+            $incomeTrans->account_amount = $account->current_balance;
+            $incomeTrans->account_balance = $account->current_balance;
+            $incomeTrans->ledger_account = $account->id;
+            $incomeTrans->rate = 1;
+            $incomeTrans->department_id = $account->department_id;
+            $incomeTrans->project_id = $account->project_id;
+            $incomeTrans->currency_id = $account->currency_id;
+            $incomeTrans->trx_type = 'Income';
+            $incomeTrans->status = 'Approved';
+            $incomeTrans->description = 'Unit initial Income deposit';
+            $incomeTrans->entry_type = 'Internal';
+            if ($account->to_project_id != null) {
+                $incomeTrans->is_department = false;
+            }
+            $incomeTrans->requestable_type = $account->requestable_type;
+            $incomeTrans->requestable_id = $account->requestable_id;
+            $incomeTrans->save();
+
+        });
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'account created successfully!']);
@@ -238,9 +241,9 @@ class FmsLedgerAccountsComponent extends Component
     public function updateAccount()
     {
         $this->validate([
-            'name' => 'required|string|unique:fms_ledger_accounts,name,'.$this->edit_id.'',
+            'name' => 'required|string|unique:fms_ledger_accounts,name,' . $this->edit_id . '',
             'is_active' => 'required|numeric',
-            'account_number' => 'required|unique:fms_ledger_accounts,account_number,'.$this->edit_id.'',
+            'account_number' => 'required|unique:fms_ledger_accounts,account_number,' . $this->edit_id . '',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
             // 'account_type' => 'required|integer',
@@ -252,11 +255,10 @@ class FmsLedgerAccountsComponent extends Component
 
         ]);
 
-        
         $opening_balance = (float) str_replace(',', '', $this->opening_balance);
         $current_balance = (float) str_replace(',', '', $this->current_balance);
 
-        $account = FmsLedgerAccount::where('id',$this->edit_id)->first();
+        $account = FmsLedgerAccount::where('id', $this->edit_id)->first();
         $account->name = $this->name;
         $account->is_active = $this->is_active;
         $account->account_number = $this->account_number;
@@ -289,9 +291,9 @@ class FmsLedgerAccountsComponent extends Component
         $this->description = $account->description;
         $this->createNew = true;
         $this->toggleForm = true;
-        if ($this->project_id != null){
+        if ($this->project_id != null) {
             $this->entry_type == 'Project';
-        }elseif($this->department_id != null){
+        } elseif ($this->department_id != null) {
             $this->entry_type == 'Department';
         }
     }
@@ -305,7 +307,7 @@ class FmsLedgerAccountsComponent extends Component
 
     public function filterAccount()
     {
-        $accountSubType = FmsLedgerAccount::search($this->search)->with(['project', 'department','currency'])
+        $accountSubType = FmsLedgerAccount::search($this->search)->with(['project', 'department', 'currency'])
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -324,7 +326,7 @@ class FmsLedgerAccountsComponent extends Component
         $data['projects'] = Project::get();
         $data['types'] = FmsChartOfAccountsType::get();
         $data['accounts'] = $this->filterAccount()->where('is_active', 1)->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
+            ->paginate($this->perPage);
         return view('livewire.finance.ledger.fms-ledger-accounts-component', $data);
     }
 }

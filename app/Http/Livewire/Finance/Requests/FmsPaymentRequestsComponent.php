@@ -180,7 +180,7 @@ class FmsPaymentRequestsComponent extends Component
             'total_amount' => 'required',
             'request_description' => 'required|string',
             'amount_in_words' => 'required|string',
-            // 'rate' => 'required|numeric',
+            'rate' => 'required|numeric',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
             'currency_id' => 'required|integer',
@@ -259,7 +259,7 @@ class FmsPaymentRequestsComponent extends Component
                     $budgetAmountHeld = $dataBudget->amount_held;
                     $newBudgetAmountHeld = $budgetAmountHeld + $this->budgetExpense;
                     $dataBudget->amount_held = $newBudgetAmountHeld;
-                    $dataBudget->update();
+                    // $dataBudget->update();
                 }
 
                 $dataLeger = FmsLedgerAccount::Where('id', $this->ledger_account)->with('currency')->first();              
@@ -268,7 +268,7 @@ class FmsPaymentRequestsComponent extends Component
                     $currentAmountHeld = $dataLeger->amount_held;
                     $newAmountHeld = $currentAmountHeld + $this->ledgerExpense;
                     $dataLeger->amount_held = $newAmountHeld;
-                    $dataLeger->update();
+                    // $dataLeger->update();
                 }
 
                 $this->dispatchBrowserEvent('close-modal');
@@ -302,6 +302,9 @@ class FmsPaymentRequestsComponent extends Component
     {
         $this->baseAmount = $this->rate * $this->total_amount;        
         $this->viewSummary = false;
+        // if($this->total_amount!=''){
+        //     $this->amount_in_words = convertToWords($this->total_amount, 'USD');
+        // }
     }
    
     public function updatedProjectId()

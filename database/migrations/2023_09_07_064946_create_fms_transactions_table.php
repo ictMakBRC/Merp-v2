@@ -34,6 +34,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->nullable()->references('id')->on('fms_customers')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('budget_line_id')->nullable()->references('id')->on('fms_budget_lines')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('bank_id')->nullable()->references('id')->on('fms_banks')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('to_budget_line_id')->nullable()->references('id')->on('fms_budget_lines')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('ledger_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('to_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');

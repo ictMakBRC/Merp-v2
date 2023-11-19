@@ -23,11 +23,10 @@ return new class extends Migration
             $table->decimal('unit_cost', 16, 2);
             $table->decimal('amount', 16, 2);
             $table->foreignId('request_id')->nullable()->references('id')->on('fms_payment_requests')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('employee_id')->nullable()->references('id')->on('employees')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->string('request_code')->nullable()->references('request_code')->on('fms_payment_requests')->constrained();
             $table->enum('status',['Pending','Submitted','Rejected','Approved','Completed'])->default('Pending');            
             $table->foreignId('created_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   
-            $table->foreignId('updated_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');  
+            $table->foreignId('updazzted_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');  
             $table->timestamps();
         });
     }
