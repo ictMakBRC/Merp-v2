@@ -2,13 +2,15 @@
 
 namespace App\Http\Livewire\Procurement\Requests;
 
-use App\Enums\ProcurementRequestEnum;
 use Response;
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use App\Enums\ProcurementRequestEnum;
 use App\Models\Documents\FormalDocument;
 use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Request\ProcurementRequestApproval;
+use App\Jobs\Procurement\SendProcRequestChainOfCustodyNotification;
 
 class ProcurementRequestDetailsComponent extends Component
 {
@@ -22,8 +24,9 @@ class ProcurementRequestDetailsComponent extends Component
 
     public function forwardToSupervisor(ProcurementRequest $procurementRequest)
     {
+
         if ($procurementRequest->step_order==1) {
-            
+
             $this->validate([
                 'comment'=>'required|string',
             ]);
@@ -54,15 +57,25 @@ class ProcurementRequestDetailsComponent extends Component
                 ]);
             });
 
+            $users= User::whereHas('employee', function($query){
+                $query->where('department_id',auth()->user()->employee->department_id);
+            })->get();
+             // $users= User::whereHasPermission('approve_procurement_request_as_supervisor')->whereHas('employee'. function($query){
+        //     $query->where('department_id',auth()->user()->employee->department_id);
+        // })->get();
+    
+            SendProcRequestChainOfCustodyNotification::dispatch(ProcurementRequestEnum::step($procurementRequest->step_order-1),$procurementRequest->reference_no, $users);
+
         } else {
-            $this->dispatchBrowserEvent('swal:modal', [
-                'type' => 'error',
-                'message' => 'Operation failed!',
-                'text' => 'This operation can no be performed!',
-            ]);
+            return;
+            // $this->dispatchBrowserEvent('swal:modal', [
+            //     'type' => 'error',
+            //     'message' => 'Operation failed!',
+            //     'text' => 'This operation can no be performed!',
+            // ]);
         }
-      
-        // Notify the next approver (e.g., the supervisor)
+
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request forwarded successfully']);
     }
 
 

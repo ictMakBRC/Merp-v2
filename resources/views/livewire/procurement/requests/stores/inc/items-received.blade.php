@@ -43,6 +43,7 @@
                         <td>
                             {{ $key + 1 }}
                         </td>
+                        <td>{{$item->item_name??'N/A'}}</td>
                         <td>{!! nl2br(e($item->description)) !!}</td>
                         <td>{{ $item->quantity }}</td>
                         <td>@moneyFormat($item->estimated_unit_cost)</td>

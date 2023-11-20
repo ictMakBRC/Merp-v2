@@ -35,7 +35,7 @@ use App\Enums\ProcurementRequestEnum;
                     <strong class="text-inverse">{{ __('Procurement Plan Reference') }}:
                     </strong>{{ $request->procurement_plan_ref ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Contracts Manager') }}:
-                    </strong>{{ $request->contracts_manager->name ?? 'N/A' }}
+                    </strong>{{ $request->contracts_manager->employee->fullName ?? 'N/A' }}
                 </div>
             </td>
 

@@ -117,7 +117,7 @@ class RequestBiddingComponent extends Component
                 $this->request->update([
                     'procurement_method_id'=>$this->procurement_method_id,
                     'bid_return_deadline'=>$this->bid_return_deadline,
-                    'status'=>$this->decision,
+                    'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,
     
                 ]);
     
@@ -147,7 +147,7 @@ class RequestBiddingComponent extends Component
                 $this->request->update([
                     'procurement_method_id'=>$this->procurement_method_id,
                     'bid_return_deadline'=>$this->bid_return_deadline,
-                    'status'=>ProcurementRequestEnum::APPROVED,
+                    'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,
     
                 ]);
 
@@ -201,7 +201,7 @@ class RequestBiddingComponent extends Component
                     $this->request->update([
                         'delivery_deadline' => $this->delivery_deadline,
                         'net_payment_terms' => $this->net_payment_terms,
-                        'status' => $this->decision,
+                        'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,
                         
                     ]);
 
@@ -241,7 +241,7 @@ class RequestBiddingComponent extends Component
                 $this->request->update([
                     'delivery_deadline' => $this->delivery_deadline,
                     'net_payment_terms' => $this->net_payment_terms,
-                    'status' => $this->decision,
+                    'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,
 
                 ]);
     

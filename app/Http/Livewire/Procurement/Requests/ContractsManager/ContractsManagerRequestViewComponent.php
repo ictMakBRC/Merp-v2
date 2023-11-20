@@ -3,12 +3,14 @@
 namespace App\Http\Livewire\Procurement\Requests\ContractsManager;
 
 use Response;
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Enums\ProcurementRequestEnum;
 use App\Models\Documents\FormalDocument;
 use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Request\ProcurementRequestApproval;
+use App\Jobs\Procurement\SendProcRequestChainOfCustodyNotification;
 
 class ContractsManagerRequestViewComponent extends Component
 {
@@ -24,47 +26,63 @@ class ContractsManagerRequestViewComponent extends Component
         $this->validate([
             'comment'=>'required|string',
         ]);
-        DB::transaction(function () use($procurementRequest,$status) {
-            $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
-
-            if($procurementRequest->step_order < ProcurementRequestEnum::TOTAL_STEPS){
-                $procurementRequestApproval->update([
-                    'approver_id' => auth()->user()->id,
-                    'comment' => $this->comment,
-                    'status' => $status,
-                ]);
+        if ($procurementRequest->step_order==7) {
             
-                $currentStepOrder = $procurementRequest->step_order;
-                $nextStepOrder = $currentStepOrder+1;
+            DB::transaction(function () use($procurementRequest,$status) {
+                $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
+    
+                if($procurementRequest->step_order < ProcurementRequestEnum::TOTAL_STEPS){
+                    $procurementRequestApproval->update([
+                        'approver_id' => auth()->user()->id,
+                        'comment' => $this->comment,
+                        'status' => $status,
+                    ]);
+                
+                    $currentStepOrder = $procurementRequest->step_order;
+                    $nextStepOrder = $currentStepOrder+1;
+    
+                    $procurementRequest->update([
+                        'status'=>ProcurementRequestEnum::PENDING,
+                        'step_order'=>$nextStepOrder,
+                    ]);
+    
+                    ProcurementRequestApproval::create([
+                        'procurement_request_id' => $procurementRequest->id,
+                        'approver_id' => null,
+                        'comment' => null,
+                        'status' => ProcurementRequestEnum::PENDING,
+                        'step' => ProcurementRequestEnum::step($nextStepOrder),
+                    ]);
+    
+                }else{
+                    $procurementRequest->update([
+                        'status'=>$status,
+                    ]);
+    
+                    $procurementRequestApproval->update([
+                        'approver_id' => auth()->user()->id,
+                        'comment' => $this->comment,
+                        'status' => $status,
+                    ]);
+    
+                }
+            });
 
-                $procurementRequest->update([
-                    'status'=>ProcurementRequestEnum::PENDING,
-                    'step_order'=>$nextStepOrder,
-                ]);
+            if ($status==ProcurementRequestEnum::PROCESSED) {
+                $users= User::whereHas('employee', function($query){
+                    $query->where('department_id',auth()->user()->employee->department_id);
+                })->get();
 
-                ProcurementRequestApproval::create([
-                    'procurement_request_id' => $procurementRequest->id,
-                    'approver_id' => null,
-                    'comment' => null,
-                    'status' => ProcurementRequestEnum::PENDING,
-                    'step' => ProcurementRequestEnum::step($nextStepOrder),
-                ]);
-
-            }else{
-                $procurementRequest->update([
-                    'status'=>$status,
-                ]);
-
-                $procurementRequestApproval->update([
-                    'approver_id' => auth()->user()->id,
-                    'comment' => $this->comment,
-                    'status' => $status,
-                ]);
-
+                // $users= User::where('id',$procurementRequest->contracts_manager_id)->orWhereHasPermission('process_procurement_request_payment')->get();
+        
+                SendProcRequestChainOfCustodyNotification::dispatch(ProcurementRequestEnum::step($procurementRequest->step_order-1),$procurementRequest->reference_no, $users);
             }
-        });
 
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+            $this->resetInputs();
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+        } else {
+            return;
+        }
        
     }
     
@@ -103,6 +121,10 @@ class ContractsManagerRequestViewComponent extends Component
                 'text' => 'Document not found!',
             ]);
         }
+    }
+
+    public function resetInputs(){
+        $this->reset(['comment']);
     }
 
     public function render()

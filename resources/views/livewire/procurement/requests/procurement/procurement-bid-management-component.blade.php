@@ -40,7 +40,7 @@ use App\Enums\ProcurementRequestEnum;
 
                                     <x-slot:action>
                                         <div class="row d-flex justify-content-center d-print-none">
-                                            @if ($request->step_order == 6 && procurementEvaluationApproved($request->id) && $request->items->whereNull('bidder_unit_price')->isEmpty())
+                                            @if ($request->step_order == 6 && procurementEvaluationApproved($request->id) && $request->items->whereNull('bidder_unit_cost')->isEmpty())
                                                 <div class="col-lg-12 col-xl-12 mb-2 ms-auto float-start">
                                                     <div class="text-center">
                                                         <textarea type="text" id="comment" class="form-control" wire:model.defer="comment" placeholder="Enter comment"></textarea>
@@ -52,7 +52,7 @@ use App\Enums\ProcurementRequestEnum;
                                             @endif
                                             <div class="col-lg-12 col-xl-12">
                                                 <div class="float-end d-print-none mt-2 mt-md-0 mb-2">
-                                                    @if ($request->step_order == 6 && procurementEvaluationApproved($request->id) && $request->items->whereNull('bidder_unit_price')->isEmpty())
+                                                    @if ($request->step_order == 6 && procurementEvaluationApproved($request->id) && $request->items->whereNull('bidder_unit_cost')->isEmpty())
                                                         @if ($request->procurement_sector == 'Supplies')
                                                             <button class="btn btn-de-success btn-sm"
                                                                 wire:click="updateRequest({{ $request->id }},'{{ ProcurementRequestEnum::PROCESSED }}')"

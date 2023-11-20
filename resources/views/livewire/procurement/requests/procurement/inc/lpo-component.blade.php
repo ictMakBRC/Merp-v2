@@ -61,7 +61,7 @@ use App\Enums\ProcurementRequestEnum;
                                 <strong class="text-inverse">{{ __('Signature') }}:
                                 </strong>{{ $request->approvals->where('step','Procurement')->first()->approver->employee->signature ?? 'N/A' }}<br>
                                 <strong class="text-inverse">{{ __('Date') }}:
-                                </strong>@formatDate($request->approvals->where('step','Procurement')->first()->updated_at)<br>
+                                </strong>@formatDate($request->updated_at)<br>
                                 <strong class="text-inverse">{{ __('Name') }}:
                                 </strong>{{ $request->approvals->where('step','Procurement')->first()->approver->employee->fullName }}<br>
                                 <strong class="text-inverse">{{ __('Designation') }}:
@@ -73,7 +73,7 @@ use App\Enums\ProcurementRequestEnum;
                                 <strong class="text-inverse">{{ __('Signature') }}:
                                 </strong>{{ $request->approvals->where('step','Operations')->first()->approver->employee->signature ?? 'N/A' }}<br>
                                 <strong class="text-inverse">{{ __('Date') }}:
-                                </strong>@formatDate($request->approvals->where('step','Operations')->first()->updated_at)<br>
+                                </strong>@formatDate($request->updated_at)<br>
                                 <strong class="text-inverse">{{ __('Name') }}:
                                 </strong>{{ $request->approvals->where('step','Operations')->first()->approver->employee->fullName }}<br>
                                 <strong class="text-inverse">{{ __('Designation') }}:
@@ -85,7 +85,7 @@ use App\Enums\ProcurementRequestEnum;
                                 <strong class="text-inverse">{{ __('Signature') }}:
                                 </strong>{{ $request->approvals->where('step','Finance')->first()->approver->employee->signature ?? 'N/A' }}<br>
                                 <strong class="text-inverse">{{ __('Date') }}:
-                                </strong>@formatDate($request->approvals->where('step','Finance')->first()->updated_at)<br>
+                                </strong>@formatDate($request->updated_at)<br>
                                 <strong class="text-inverse">{{ __('Name') }}:
                                 </strong>{{ $request->approvals->where('step','Finance')->first()->approver->employee->fullName }}<br>
                                 <strong class="text-inverse">{{ __('Designation') }}:

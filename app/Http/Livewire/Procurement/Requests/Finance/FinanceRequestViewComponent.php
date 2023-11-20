@@ -3,12 +3,14 @@
 namespace App\Http\Livewire\Procurement\Requests\Finance;
 
 use Response;
+use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Enums\ProcurementRequestEnum;
 use App\Models\Documents\FormalDocument;
 use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Request\ProcurementRequestApproval;
+use App\Jobs\Procurement\SendProcRequestChainOfCustodyNotification;
 
 class FinanceRequestViewComponent extends Component
 {
@@ -26,53 +28,68 @@ class FinanceRequestViewComponent extends Component
         $this->validate([
             'comment'=>'required|string',
         ]);
-        DB::transaction(function () use($procurementRequest,$status) {
-            $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
-
-            if($procurementRequest->step_order < ProcurementRequestEnum::TOTAL_STEPS){
-                $procurementRequestApproval->update([
-                    'approver_id' => auth()->user()->id,
-                    'comment' => $this->comment,
-                    'status' => $status,
-                ]);
-            
-                if ($status!=ProcurementRequestEnum::REJECTED) {
-                    $currentStepOrder = $procurementRequest->step_order;
-                    $nextStepOrder = $currentStepOrder+1;
-
-                    $procurementRequest->update([
-                        'status'=>ProcurementRequestEnum::PENDING,
-                        'step_order'=>$nextStepOrder,
+        
+        if ($procurementRequest->step_order==3) {
+            DB::transaction(function () use($procurementRequest,$status) {
+                $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
+    
+                if($procurementRequest->step_order < ProcurementRequestEnum::TOTAL_STEPS){
+                    $procurementRequestApproval->update([
+                        'approver_id' => auth()->user()->id,
+                        'comment' => $this->comment,
+                        'status' => $status,
                     ]);
-
-                    ProcurementRequestApproval::create([
-                        'procurement_request_id' => $procurementRequest->id,
-                        'approver_id' => null,
-                        'comment' => null,
-                        'status' => ProcurementRequestEnum::PENDING,
-                        'step' => ProcurementRequestEnum::step($nextStepOrder),
-                    ]);
+                
+                    if ($status!=ProcurementRequestEnum::REJECTED) {
+                        $currentStepOrder = $procurementRequest->step_order;
+                        $nextStepOrder = $currentStepOrder+1;
+    
+                        $procurementRequest->update([
+                            'status'=>ProcurementRequestEnum::PENDING,
+                            'step_order'=>$nextStepOrder,
+                        ]);
+    
+                        ProcurementRequestApproval::create([
+                            'procurement_request_id' => $procurementRequest->id,
+                            'approver_id' => null,
+                            'comment' => null,
+                            'status' => ProcurementRequestEnum::PENDING,
+                            'step' => ProcurementRequestEnum::step($nextStepOrder),
+                        ]);
+                    }else{
+                        $procurementRequest->update([
+                            'status'=>$status,
+                        ]);
+                    }
+    
                 }else{
                     $procurementRequest->update([
                         'status'=>$status,
                     ]);
+    
+                    $procurementRequestApproval->update([
+                        'approver_id' => auth()->user()->id,
+                        'comment' => $this->comment,
+                        'status' => $status,
+                    ]);
+    
                 }
+            });
+            
+            if ($status!=ProcurementRequestEnum::REJECTED) {
+                $users= User::whereHas('employee', function($query){
+                    $query->where('department_id',auth()->user()->employee->department_id);
+                })->get();
 
-            }else{
-                $procurementRequest->update([
-                    'status'=>$status,
-                ]);
-
-                $procurementRequestApproval->update([
-                    'approver_id' => auth()->user()->id,
-                    'comment' => $this->comment,
-                    'status' => $status,
-                ]);
-
+                // $users= User::whereHasPermission('approve_procurement_request_as_operations')->get();
+        
+                SendProcRequestChainOfCustodyNotification::dispatch(ProcurementRequestEnum::step($procurementRequest->step_order-1),$procurementRequest->reference_no, $users);
             }
-        });
-
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+            $this->comment='';
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+        } else {
+            return;
+        }
        
     }
 
@@ -91,7 +108,7 @@ class FinanceRequestViewComponent extends Component
             ]);
             
         });
-        
+
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
        
     }
@@ -102,31 +119,35 @@ class FinanceRequestViewComponent extends Component
             'date_paid'=>'required|date',
         ]);
 
-        DB::transaction(function () use($procurementRequest,$status) {
+        if ($procurementRequest->step_order==8) {
+            DB::transaction(function () use($procurementRequest,$status) {
 
-            $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
-
-            if($procurementRequest->step_order <= ProcurementRequestEnum::TOTAL_STEPS){
-                $procurementRequestApproval->update([
-                    'approver_id' => auth()->user()->id,
-                    'comment' => $this->date_paid,
-                    'status' => $status,
-                ]);
-
-                $procurementRequest->update([
-                    'status'=>ProcurementRequestEnum::COMPLETED,
-                ]);
-
-                $provider_id = $procurementRequest->providers->where('pivot.is_best_bidder', true)->first()->id;
- 
-                $procurementRequest->providers()->updateExistingPivot($provider_id, [
-                    'payment_status'=>true,
-                    'date_paid'=>$this->date_paid,
-                ]);
-            }
-        });
-
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+                $procurementRequestApproval=ProcurementRequestApproval::where(['procurement_request_id'=>$procurementRequest->id,'step'=>ProcurementRequestEnum::step($procurementRequest->step_order)])->latest()->first();
+    
+                if($procurementRequest->step_order <= ProcurementRequestEnum::TOTAL_STEPS){
+                    $procurementRequestApproval->update([
+                        'approver_id' => auth()->user()->id,
+                        'comment' => $this->date_paid,
+                        'status' => $status,
+                    ]);
+    
+                    $procurementRequest->update([
+                        'status'=>ProcurementRequestEnum::COMPLETED,
+                    ]);
+    
+                    $provider_id = $procurementRequest->providers->where('pivot.is_best_bidder', true)->first()->id;
+     
+                    $procurementRequest->providers()->updateExistingPivot($provider_id, [
+                        'payment_status'=>true,
+                        'date_paid'=>$this->date_paid,
+                    ]);
+                }
+            });
+            
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
+        } else {
+            return;
+        }
        
     }
 
