@@ -16,7 +16,7 @@ class GrantFormComponent extends Component
     public $grant_type;
     public $funding_source;
     public $funding_amount;
-    public $currency;
+    public $currency_id;
     public $start_date;
     public $end_date;
     public $proposal_submission_date;
@@ -55,7 +55,7 @@ class GrantFormComponent extends Component
                 'grant_type' => $this->grant_type,
                 'funding_source' => $this->funding_source,
                 'funding_amount' => $this->funding_amount,
-                'currency' => $this->currency,
+                'currency_id' => $this->currency_id,
                 'start_date' => $this->start_date,
                 'end_date' => $this->end_date,
                 'proposal_submission_date' => $this->proposal_submission_date,
@@ -91,7 +91,7 @@ class GrantFormComponent extends Component
                 'grant_type' => $this->grant_type,
                 'funding_source' => $this->funding_source,
                 'funding_amount' => $this->funding_amount,
-                'currency' => $this->currency,
+                'currency_id' => $this->currency_id,
                 'start_date' => $this->start_date,
                 'end_date' => $this->end_date,
                 'proposal_submission_date' => $this->proposal_submission_date,

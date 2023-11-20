@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('procurement_request_id')->constrained('procurement_requests', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('approver_id')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->text('comment')->nullable();
-            $table->enum('status', ['Submitted','Pending', 'Approved', 'Rejected','Processing'])->default('Pending');
-            $table->enum('step', ['Department', 'Supervisor', 'Finance', 'Operations', 'Md', 'Procurement']);
+            $table->enum('status', ['Submitted','Pending', 'Approved', 'Rejected','Processing','Processed','Paid'])->default('Pending');
+            $table->enum('step', ['Department', 'Supervisor', 'Finance', 'Operations', 'Md', 'Procurement','Stores','Accounts']);
             $table->timestamps();
         });
     }

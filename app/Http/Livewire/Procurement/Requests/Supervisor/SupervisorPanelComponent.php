@@ -18,7 +18,7 @@ class SupervisorPanelComponent extends Component
 
     public $search = '';
 
-    public $orderBy = 'id';
+    public $orderBy = 'status';
 
     public $orderAsc = 0;
 

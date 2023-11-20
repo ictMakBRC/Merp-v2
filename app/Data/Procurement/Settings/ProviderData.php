@@ -64,7 +64,7 @@ class ProviderData extends Data
         'bank_account' => 'required|string',
         'tin' => 'required|string',
         'tax_withholding_rate' => 'nullable|numeric|min:0|max:100',
-        'preferred_currency' => 'required|string',
+        'preferred_currency' => 'required|integer',
         'notes' => 'nullable|string',
         'is_active' => 'boolean',
       ];

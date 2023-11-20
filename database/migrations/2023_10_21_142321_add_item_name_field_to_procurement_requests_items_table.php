@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('procurement_requests', function (Blueprint $table) {
-            // $table->integer('step_order')->after('status')->default(1);
+        Schema::table('procurement_request_items', function (Blueprint $table) {
+            $table->string('item_name')->nullable()->after('id');
         });
     }
 
@@ -21,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('procurement_requests');
+        // Schema::dropIfExists('procurement_requests');
     }
 };

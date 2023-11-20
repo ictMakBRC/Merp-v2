@@ -13,7 +13,6 @@ use App\Models\Procurement\Request\ProcurementRequestApproval;
 class ProcurementRequestViewComponent extends Component
 {
     public $request_id;
-    public $comment;
 
     public function mount($id){
         $this->request_id=$id;
@@ -35,6 +34,7 @@ class ProcurementRequestViewComponent extends Component
             ]);
             
         });
+        
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Request updated successfully']);
         $this->redirect(route('proc-dept-bid-mgt', $procurementRequest->id));
        
@@ -59,7 +59,7 @@ class ProcurementRequestViewComponent extends Component
 
     public function render()
     {
-        $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver')->findOrFail($this->request_id);
+        $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers')->findOrFail($this->request_id);
         return view('livewire.procurement.requests.procurement.procurement-request-view-component',$data);
     }
 }

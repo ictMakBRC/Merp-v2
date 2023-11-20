@@ -16,8 +16,8 @@ class ProcurementRequestDocumentsComponent extends Component
     
     public $procurement_request_id;
     public $document_category;
-    public $expires;
-    public $expiry_date;
+    public $expires=0;
+    public $expiry_date=null;
     public $document_name;
     public $document;
     public $document_path;
