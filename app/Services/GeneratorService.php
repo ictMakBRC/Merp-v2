@@ -34,8 +34,6 @@ class GeneratorService
         return $emp_number;
     }
 
-
-
     public static function providerNo()
     {
         $provider_code = '';
@@ -171,17 +169,6 @@ class GeneratorService
 
         return str_shuffle($randomString);
         return $randomString;
-    }
-
-    //Generate a request code
-    public static function requestCode()
-    {
-      $yearMonth = date('ym');
-      $characters = 'ABCDEFGHJKLMNOPQRSTUVWXYZ123456789';
-      $l = $characters[rand(2, strlen($characters) - 4)];
-      $randomGeneratedNumber = intval('0'.mt_rand(1, 9).mt_rand(0, 9).mt_rand(0, 9).mt_rand(0, 9));
-
-      return 'MERP-RQ/'.$yearMonth.'-'.$randomGeneratedNumber.'-'.$l;
     }
 
     //Generate a request code
