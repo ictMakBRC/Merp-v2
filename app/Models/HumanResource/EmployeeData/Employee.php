@@ -102,7 +102,7 @@ class Employee extends Model
 
     public function officialContract()
     {
-        return $this->hasOne(OfficialContract::class, 'employee_id', 'id')->where('status','Running');
+        return $this->hasOne(OfficialContract::class, 'employee_id', 'id')->where('status',1);
     }
 
     public static function boot()

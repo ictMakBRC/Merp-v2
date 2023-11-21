@@ -3,3 +3,40 @@
 	font-weight: bold;
 	color: red;
 }
+
+.btop {
+	border: solid 0.5px;
+}
+
+.b-top-row {
+	border-top: solid 2px;
+	border-top: double;
+}
+
+.b-bottom-row {
+	border-bottom: solid 2px;
+	border-bottom: double;
+	border-bottom-right-radius: 22px;
+}
+
+.bleft {
+	border-left: solid 0.5px;
+}
+
+.t-right {
+	text-align: right;
+}
+
+.t-bold {
+	font-weight: bold;
+}
+
+.twidth {
+	width: 30%;
+}
+
+.txt-center {
+	text-align: center;
+	font-size: 22px;
+	color: #f8f8f897;
+}

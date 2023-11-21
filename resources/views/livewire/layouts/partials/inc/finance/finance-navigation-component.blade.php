@@ -118,10 +118,10 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_organization_budget']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-budgets') }}" class="nav-link ">Dpt. Budgets</a>
+                                        <a href="{{ route('finance-budgets') }}" class="nav-link ">Unit Budgets</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-main_budget') }}" class="nav-link ">Org Main
+                                        <a href="{{ route('finance-main_budget') }}" class="nav-link ">Main
                                             Budgets</a>
                                     </li>
                                 @endif
@@ -182,7 +182,11 @@
                                     @if (Auth::user()->hasPermission(['view_all_transactions']))
                                         <li class="nav-item">
                                             <a href="{{ route('finance-payroll_list') }}"
-                                                class="nav-link ">All Payrolls</a>
+                                                class="nav-link ">Main Payrolls</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{ route('finance-payroll_unit_list') }}"
+                                                class="nav-link ">Unit Payrolls</a>
                                         </li>
                                     @endif
                                 </ul>

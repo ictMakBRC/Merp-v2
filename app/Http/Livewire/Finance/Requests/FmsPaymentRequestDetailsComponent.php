@@ -18,6 +18,7 @@ use App\Models\Finance\Requests\FmsRequestEmployee;
 use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\Finance\Requests\FmsPaymentRequestDetail;
 use App\Models\Finance\Requests\FmsPaymentRequestPosition;
+use App\Services\Finance\Requests\FmsPaymentRequestService;
 use App\Models\Finance\Requests\FmsPaymentRequestAttachment;
 use App\Models\Finance\Requests\FmsPaymentRequestAuthorization;
 use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
@@ -273,36 +274,39 @@ class FmsPaymentRequestDetailsComponent extends Component
 
     public function submitRequest($id)
     {
-        DB::transaction(function () use ($id) {
-            $request = FmsPaymentRequest::where(['request_code' => $this->requestCode, 'id' => $id])->first();
-            $dataBudget = FmsBudgetLine::Where('id', $request->budget_line_id)->with('budget', 'budget.currency')->first();
-            // if ($dataBudget) {
-                $budgetAmountHeld = $dataBudget->amount_held;
-                $newBudgetAmountHeld = $budgetAmountHeld + $request->budget_amount;
-                $dataBudget->amount_held = $newBudgetAmountHeld;
-                $dataBudget->update();
-            // }
+        $request = FmsPaymentRequest::where(['request_code' => $this->requestCode, 'id' => $id])->first();
+        $submit = FmsPaymentRequestService::submitRequest($request->id);
+        return $submit;
+        // DB::transaction(function () use ($id) {
+        //     $request = FmsPaymentRequest::where(['request_code' => $this->requestCode, 'id' => $id])->first();
+        //     $dataBudget = FmsBudgetLine::Where('id', $request->budget_line_id)->with('budget', 'budget.currency')->first();
+        //     // if ($dataBudget) {
+        //         $budgetAmountHeld = $dataBudget->amount_held;
+        //         $newBudgetAmountHeld = $budgetAmountHeld + $request->budget_amount;
+        //         $dataBudget->amount_held = $newBudgetAmountHeld;
+        //         $dataBudget->update();
+        //     // }
 
-            $dataLeger = FmsLedgerAccount::Where('id', $request->ledger_account)->with('currency')->first();              
+        //     $dataLeger = FmsLedgerAccount::Where('id', $request->ledger_account)->with('currency')->first();              
 
-            // if ($dataLeger) {
-                $currentAmountHeld = $dataLeger->amount_held;
-                $newAmountHeld = $currentAmountHeld + $request->ledger_amount;
-                $dataLeger->amount_held = $newAmountHeld;
-                $dataLeger->update();
-            // }
-            $request->update(['status' => 'Submitted', 'date_submitted' => date('Y-m-d')]);
-            $signatory = FmsPaymentRequestAuthorization::Where(['request_code' => $this->requestCode, 'request_id' => $id, 'status' => 'Pending'])->with(['approver'])
-                ->orderBy('level', 'asc')->first();
-            //    dd($signatory);
-            $signatory->update(['status' => 'Active']);
-            if ($signatory) {
-                $body = 'Hello, You have a pending request #' . $this->requestCode . ' to sign, please login to view more details';
-                $this->SendMail($signatory->approver_id, $body);
-            }
-            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Request submitted successfully!']);
-            return redirect()->SignedRoute('finance-request_preview', $this->requestCode);
-        });
+        //     // if ($dataLeger) {
+        //         $currentAmountHeld = $dataLeger->amount_held;
+        //         $newAmountHeld = $currentAmountHeld + $request->ledger_amount;
+        //         $dataLeger->amount_held = $newAmountHeld;
+        //         $dataLeger->update();
+        //     // }
+        //     $request->update(['status' => 'Submitted', 'date_submitted' => date('Y-m-d')]);
+        //     $signatory = FmsPaymentRequestAuthorization::Where(['request_code' => $this->requestCode, 'request_id' => $id, 'status' => 'Pending'])->with(['approver'])
+        //         ->orderBy('level', 'asc')->first();
+        //     //    dd($signatory);
+        //     $signatory->update(['status' => 'Active']);
+        //     if ($signatory) {
+        //         $body = 'Hello, You have a pending request #' . $this->requestCode . ' to sign, please login to view more details';
+        //         $this->SendMail($signatory->approver_id, $body);
+        //     }
+        //     $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Request submitted successfully!']);
+        //     return redirect()->SignedRoute('finance-request_preview', $this->requestCode);
+        // });
     }
     public function SendMail($id, $body)
     {

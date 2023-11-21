@@ -32,6 +32,8 @@ use App\Http\Livewire\Finance\Dashboard\FmsUnitDashboardComponent;
 use App\Http\Livewire\Finance\Ledger\FmsViewLedgerComponent;
 use App\Http\Livewire\Finance\Lists\FmsDepartmentsComponent;
 use App\Http\Livewire\Finance\Lists\FmsProjectsComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollRequestDetailsComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollRequestsComponent;
 use App\Http\Livewire\Finance\Payroll\FmsPayrollScheduleComponent;
 use App\Http\Livewire\Finance\Payroll\FmsPayrollsComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
@@ -87,6 +89,8 @@ Route::group(['prefix' => 'finance'], function () {
         
     });
     Route::group(['prefix' => 'payroll'], function () {
+        Route::get('list/unit', FmsPayrollRequestsComponent::class)->name('finance-payroll_unit_list');
+        Route::get('payroll/{code}/employees', FmsPayrollRequestDetailsComponent::class)->name('finance-payroll_unit_details');
         Route::get('list', FmsPayrollsComponent::class)->name('finance-payroll_list');
         Route::get('create/{voucher}/add', FmsPayrollScheduleComponent::class)->name('finance-payroll_data');
         Route::get('payslip/{payroll_id}/download', [FinanceGeneralController::class, 'downloadPayslip'])->name('finance-pay_slip');
