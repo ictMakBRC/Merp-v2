@@ -29,7 +29,7 @@ class AssetsComponent extends Component
     public $procurement_type;
     public $invoice_number;
     public $cost;
-    public $currency;
+    public $currency_id;
     public $supplier_id;
     public $has_service_contract;
     public $service_contract_expiry_date;
@@ -122,7 +122,7 @@ class AssetsComponent extends Component
                 'procurement_type' => $this->procurement_type,
                 'invoice_number' => $this->invoice_number,
                 'cost' => $this->cost,
-                'currency' => $this->currency,
+                'currency_id' => $this->currency_id,
                 'supplier_id' => $this->supplier_id,
                 'has_service_contract' => $this->has_service_contract,
                 'service_contract_expiry_date' => $this->service_contract_expiry_date,
@@ -165,7 +165,7 @@ class AssetsComponent extends Component
         $this->procurement_type = $assetCatalog->procurement_type;
         $this->invoice_number = $assetCatalog->invoice_number;
         $this->cost = $assetCatalog->cost;
-        $this->currency = $assetCatalog->currency;
+        $this->currency_id = $assetCatalog->currency_id;
         $this->supplier_id = $assetCatalog->supplier_id;
         $this->has_service_contract = $assetCatalog->has_service_contract;
         $this->service_contract_expiry_date = $assetCatalog->service_contract_expiry_date;
@@ -203,7 +203,7 @@ class AssetsComponent extends Component
                 'procurement_type' => $this->procurement_type,
                 'invoice_number' => $this->invoice_number,
                 'cost' => $this->cost,
-                'currency' => $this->currency,
+                'currency_id' => $this->currency_id,
                 'supplier_id' => $this->supplier_id,
                 'has_service_contract' => $this->has_service_contract,
                 'service_contract_expiry_date' => $this->service_contract_expiry_date,

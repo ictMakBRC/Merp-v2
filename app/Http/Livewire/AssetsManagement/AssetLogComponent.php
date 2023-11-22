@@ -37,7 +37,7 @@ class AssetLogComponent extends Component
     public $resolution_status;
     public $serviced_by;
     public $cost;
-    public $currency;
+    public $currency_id;
     public $next_service_date;
 
     public $asset_name;
@@ -142,7 +142,7 @@ class AssetLogComponent extends Component
                     'resolution_status'=>$this->resolution_status,
                     'serviced_by' => $this->serviced_by,
                     'cost' => $this->cost,
-                    'currency' => $this->currency,
+                    'currency_id' => $this->currency_id,
                     'next_service_date' => $this->next_service_date,
                     
                     ]

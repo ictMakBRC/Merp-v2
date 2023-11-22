@@ -25,6 +25,10 @@ class ProcurementCategorizationComponent extends Component
 
     public $procurementCategorization;
 
+    public function mount(){
+        $this->currency_id=getDefaultCurrency()->id;
+    }
+
     public function updatedCreateNew()
     {
         $this->resetInputs();
@@ -155,7 +159,6 @@ class ProcurementCategorizationComponent extends Component
             'categorization',
             'threshold',
             'contract_requirement_threshold',
-            'currency_id',
             'description',
         ]);
     }

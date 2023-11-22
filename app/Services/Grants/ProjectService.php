@@ -38,42 +38,13 @@ class ProjectService
         $project->grant_id = $projectDTO->grant_id;
         $project->funding_source = $projectDTO->funding_source;
         $project->funding_amount = $projectDTO->funding_amount;
-        $project->currency = $projectDTO->currency;
+        $project->currency_id = $projectDTO->currency_id;
         $project->pi = $projectDTO->pi;
         $project->co_pi = $projectDTO->co_pi;
         $project->start_date = $projectDTO->start_date;
         $project->end_date = $projectDTO->end_date;
         $project->project_summary = $projectDTO->project_summary;
         $project->progress_status = $projectDTO->progress_status;
-    }
-
-    //PROJECT DOCUMENTS
-    public function createProjectDocument(ProjectData $projectDocumentDTO):ProjectDocument
-    {
-        $projectDocument = new ProjectDocument();
-        $this->fillProjectDocumentFromDTO($projectDocument, $projectDocumentDTO);
-        $projectDocument->save();
-
-        return $projectDocument;
-    }
-
-    public function updateProjectDocument(ProjectDocument $projectDocument, ProjectData $projectDocumentDTO):ProjectDocument
-    {
-        $this->fillProjectDocumentFromDTO($projectDocument, $projectDocumentDTO);
-        $projectDocument->save();
-
-        return $projectDocument;
-    }
-
-    private function fillProjectDocumentFromDTO(ProjectDocument $projectDocument, ProjectData $projectDocumentDTO)
-    {
-        $projectDocument->project_id = $projectDocumentDTO->project_id;
-        $projectDocument->document_category = $projectDocumentDTO->document_category;
-        $projectDocument->expires = $projectDocumentDTO->expires;
-        $projectDocument->expiry_date = $projectDocumentDTO->expiry_date;
-        $projectDocument->document_name = $projectDocumentDTO->document_name;
-        $projectDocument->document_path = $projectDocumentDTO->document_path;
-        $projectDocument->description = $projectDocumentDTO->description;
     }
 
     //ATTACH EMPLOYEE
