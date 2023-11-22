@@ -12,10 +12,11 @@ use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Request\SelectedProvider;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class Provider extends Model
 {
-    use HasFactory , LogsActivity, DocumentableTrait;
+    use HasFactory , LogsActivity, DocumentableTrait, Notifiable;
 
     public function getActivitylogOptions(): LogOptions
     {

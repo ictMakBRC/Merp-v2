@@ -38,7 +38,8 @@ use App\Enums\ProcurementRequestEnum;
                         <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
                         <td>
                             <div class="d-flex justify-content-between">
-                                @if ($procurementRequest->step_order >= 6 && $procurementRequest->status != ProcurementRequestEnum::PENDING)
+                                @if ($procurementRequest->step_order >= 6)
+                                {{-- @if ($procurementRequest->step_order >= 6 && $procurementRequest->status != ProcurementRequestEnum::PENDING) --}}
                                     <a href="{{ route('proc-dept-bid-mgt', $procurementRequest->id) }}"
                                         class="btn btn btn-sm btn-outline-info m-1"> <i class="ti ti-edit"></i></a>
                                 @endif

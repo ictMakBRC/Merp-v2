@@ -18,8 +18,7 @@ use App\Enums\ProcurementRequestEnum;
                             <i class="mdi mdi-dots-horizontal text-muted"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Notify CC for Approval</a>
-                            <a class="dropdown-item" href="#">Notify Requester & EC</a>
+                            <a class="dropdown-item" href="{{ route('proc-rfq', $request->id) }}">Generate RFQ</a>
                         </div>
                     </div>
                 </div><!--end col-->
@@ -190,7 +189,8 @@ use App\Enums\ProcurementRequestEnum;
                                 <i class="mdi mdi-dots-horizontal text-muted"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="{{ route('proc-lpo', $request->id) }}">Generate LPO</a>
+                                <a class="dropdown-item" href="{{ route('proc-lpo', $request->id) }}">Generate
+                                    LPO</a>
                             </div>
                         </div>
                     </div><!--end col-->

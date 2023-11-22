@@ -18,6 +18,7 @@ use App\Http\Livewire\Procurement\Requests\ProcurementRequestDetailsComponent;
 use App\Http\Livewire\Procurement\Requests\Operations\OperationsPanelComponent;
 use App\Http\Livewire\Procurement\Requests\Operations\OperationsRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\Inc\LpoComponent;
+use App\Http\Livewire\Procurement\Requests\Procurement\Inc\RfqComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementBidManagementComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementOfficePanelComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementRequestViewComponent;
@@ -51,6 +52,7 @@ Route::group(['prefix' => 'procurement'], function () {
     Route::get('proc-dept/request/{id}/details', ProcurementRequestViewComponent::class)->name('proc-dept-request-details');
     Route::get('proc-dept/request/{id}/bid-mgt', ProcurementBidManagementComponent::class)->name('proc-dept-bid-mgt');
     Route::get('proc-dept/request/{id}/lpo', LpoComponent::class)->name('proc-lpo');
+    Route::get('proc-dept/request/{id}/rfq', RfqComponent::class)->name('proc-rfq');
     
 
     Route::get('stores', StoresPanelComponent::class)->name('procurement-stores-panel');

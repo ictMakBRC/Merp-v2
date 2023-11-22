@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\ProcurementRequestEnum;
+use App\Models\Global\FacilityInformation;
 use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsFinancialYear;
@@ -8,7 +9,9 @@ use App\Models\Procurement\Request\ProcurementRequest;
 use App\Models\Procurement\Request\ProcurementRequestDecision;
 use App\Models\Procurement\Settings\ProcurementCategorization;
 
-
+function organizationInfo(){
+    return FacilityInformation::first();
+}
 //PROCUREMENT HELPERS
 function getProcurementRequestStatusColor($status)
 {
