@@ -57,6 +57,7 @@ class ProcurementRequestComponent extends Component
     public function filterProcurementRequests()
     {
         $procurementRequests = ProcurementRequest::search($this->search)
+            ->where('created_by',auth()->user()->id)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

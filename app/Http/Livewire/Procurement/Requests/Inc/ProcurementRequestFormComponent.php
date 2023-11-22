@@ -175,12 +175,19 @@ class ProcurementRequestFormComponent extends Component
 
     public function render()
     {
-        $data['projects'] = Project::all();
+        $data['projects'] = auth()->user()->employee->projects??Collect([]);
         $data['financial_years'] = FmsFinancialYear::where('is_budget_year',true)->get();
 
         $data['budget_lines'] = FmsBudgetLine::where('type','Expense')->whereHas('budget', function ($query) {
             $query->where(['fiscal_year' => $this->financial_year_id,'department_id' => auth()->user()->employee->department_id]);
         })->latest()->get();
+        
+        if ($this->project_id) {
+            $data['budget_lines'] = FmsBudgetLine::where('type','Expense')->whereHas('budget', function ($query) {
+                $query->where(['fiscal_year' => $this->financial_year_id,'project_id' => $this->project_id]);
+            })->latest()->get();
+        }
+
 
         return view('livewire.procurement.requests.inc.procurement-request-form-component',$data);
     }

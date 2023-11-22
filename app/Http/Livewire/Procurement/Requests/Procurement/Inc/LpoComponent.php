@@ -80,6 +80,7 @@ class LpoComponent extends Component
                 'ledger_account'=>$ledger_account,
                 'budget_line_id'=>$budget_line_id,
                 'requestable'=>$requestable,
+                'procurement_request_id'=>$this->request_id,
                 'total_amount'=> $this->procurementRequest->contract_value,
                 'net_payment_terms'=> $this->procurementRequest->net_payment_terms,
             ];
