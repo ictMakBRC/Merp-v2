@@ -93,6 +93,7 @@ class FmsPayrollRequestDetailsComponent extends Component
                         $requestEmployee->currency_id = $this->requestData->currency_id;
                         $requestEmployee->requestable_type = $this->requestData->requestable_type;
                         $requestEmployee->requestable_id = $this->requestData->requestable_id;
+                        $requestEmployee->contractable()->associate($employee); 
                         $requestEmployee->save();
                         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Added!']);
 
@@ -154,7 +155,7 @@ class FmsPayrollRequestDetailsComponent extends Component
         $requestEmployee->amount = $this->amount;
         $requestEmployee->requestable_type = $this->requestData->requestable_type;
         $requestEmployee->requestable_id = $this->requestData->requestable_id;
-        $requestEmployee->contractable = $this->selectedEmployee;        
+        $requestEmployee->contractable()->associate($this->selectedEmployee);       
         $requestEmployee->save();
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'request item created successfully!']);

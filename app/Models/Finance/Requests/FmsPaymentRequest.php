@@ -12,6 +12,7 @@ use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Budget\FmsBudgetLine;
+use App\Models\Procurement\Request\ProcurementRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -29,7 +30,12 @@ class FmsPaymentRequest extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-     public function requestable(): MorphTo
+    
+    public function procurementRequest()
+    {
+        return $this->belongsTo(ProcurementRequest::class, 'procurement_request_id', 'id');
+    }
+    public function requestable(): MorphTo
     {
         return $this->morphTo();
     }

@@ -269,6 +269,9 @@ return [
         'create_department_invoice',
         'create_ledger',
         'create_transaction',
+        'create_payment_request',
+        'create_salary_request',
+        'create_payroll',
         'create_transfer',
         'create_journal_entry',
         'create_coa',
@@ -303,6 +306,9 @@ return [
         'view_advanced_reports',
         'view_main_dashboard',
         'view_department_dashboard',
+        'view_payment_request',
+        'view_salary_request',
+        'view_payroll'
         ],
 
         'Update' => [
@@ -325,6 +331,9 @@ return [
         'update_years',
         'update_currencies',
         'update_service_category',
+        'update_payment_request',
+        'update_salary_request',
+        'update_payroll'
         ],
 
         'Delete' => [
@@ -343,6 +352,9 @@ return [
         'delete_services',
         'delete_years',
         'delete_currencies',
+        'delete_payment_request',
+        'delete_salary_request',
+        'delete_payroll'
         ],
         ],
 
@@ -502,6 +514,9 @@ return [
         'update_department_invoice',
         'update_customers',
         'update_services',
+        'create_payment_request',
+        'create_salary_request',
+        'create_payroll'
         ],
         ],
         // DOCUMENT MANAGEMENT

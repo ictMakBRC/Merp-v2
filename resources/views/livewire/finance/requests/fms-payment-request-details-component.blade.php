@@ -88,23 +88,27 @@
                @endif  
 
                @if ($amountRemaining ==0 && count($authorizations)>=$num && $request_data->request_type == 'Payment')
-                   <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Request</button>
+                   <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Payment Request</button>
                @endif
 
                @if (count($req_employees)>0 && count($authorizations)>=$num && $request_data->request_type == 'Salary')
-                    <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Request</button>
+                    <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Salary Request</button>
                @endif
+
+               @if (count($authorizations)>=$num && $request_data->request_type == 'Procurement')
+                    <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Procurement Request</button>
+                @endif
 
                @if(count($attachments)<=0 && $request_data->request_type == 'Internal Transfer')
                <p class="text-danger">Please make sure that you have atleast put one attachement or invoice </p>                                
                @endif          
 
                @if (count($attachments)>0 && count($authorizations)>=$num && $request_data->request_type == 'Internal Transfer')
-                    <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Request</button>
+                    <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Internal Transfer Request</button>
                 @endif
 
                 @if (count($authorizations)>0 && $request_data->request_type == 'Cash Imprest' || $request_data->request_type == 'Petty Cash')
-                    <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Request</button>
+                    <button wire:click="submitRequest({{ $request_data->id }})" class="btn btn-success float-end">Submit Petty Cash Request</button>
                 @endif
         </div>
     </div>

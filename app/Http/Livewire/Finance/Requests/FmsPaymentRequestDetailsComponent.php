@@ -358,7 +358,7 @@ class FmsPaymentRequestDetailsComponent extends Component
     }
     public function render()
     {
-        $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'toDepartment', 'toProject', 'currency', 'requestable', 'budgetLine'])->first();
+        $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'toDepartment', 'toProject', 'currency', 'requestable', 'budgetLine','procurementRequest'])->first();
         if ($requestData) {
             $this->requestData = $requestData;
             $this->requestable_type = $requestData->requestable_type;

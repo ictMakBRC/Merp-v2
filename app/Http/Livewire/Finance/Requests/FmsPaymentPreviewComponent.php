@@ -367,7 +367,7 @@ class FmsPaymentPreviewComponent extends Component
 
     public function render()
     {
-        $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'currency', 'requestable', 'budgetLine', 'fromAccount'])->first();
+        $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'currency', 'requestable', 'budgetLine', 'fromAccount','procurementRequest'])->first();
         if ($requestData) {
             $this->requestData = $requestData;
             $this->currency = $requestData->currency->code ?? 'UG';

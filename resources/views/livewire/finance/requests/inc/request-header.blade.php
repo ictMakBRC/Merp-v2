@@ -26,6 +26,40 @@
                             </td>
                         </tr>
                     @endif
+                    @if($request_data->request_type == 'Procurement')
+                        <tr>
+                            <td class="btop t-bold twidth">
+                                Procurement Ref No.
+                            </td>
+                            <td class="btop" valign="top">
+                                {{ $request_data->procurementRequest->reference_no ?? 'N/A' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="btop t-bold twidth">
+                                Supplier
+                            </td>
+                            <td class="btop" valign="top">
+                                {{ $request_data->procurementRequest->supplier ?? 'N/A' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="btop t-bold twidth">
+                                LPO No
+                            </td>
+                            <td class="btop" valign="top">
+                                {{ $request_data->procurementRequest->lpo_no ?? 'N/A' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="btop t-bold twidth">
+                                GRN
+                            </td>
+                            <td class="btop" valign="top">
+                                {{ $request_data->procurementRequest->grn ?? 'N/A' }}
+                            </td>
+                        </tr>
+                    @endif
 
                     <tr>
                         <td class="btop t-bold twidth">

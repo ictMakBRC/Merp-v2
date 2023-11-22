@@ -22,17 +22,38 @@ class FmsPaymentRequestService
     {
 
         // Validation rules
+
+        // Common validation rules
         $rules = [
             'requestable' => 'required',
             'request_type' => 'required',
             'request_description' => 'required',
-            'month' => 'nullable|integer',
-            'year' => 'nullable|integer',
             'currency_id' => 'required|integer',
             'rate' => 'required|numeric',
             'ledger_account' => 'required|integer',
             'budget_line_id' => 'required|integer',
         ];
+
+        // Additional rules based on request type
+        if ($requestData['request_type'] === 'Salary') {
+            $rules += [
+                'month' => 'required|integer',
+                'year' => 'required|integer',
+            ];
+        } elseif ($requestData['request_type'] === 'Procurement') {
+            $rules += [
+                'procurement_request_id' => 'required|integer',
+                'net_payment_terms' => 'required',
+            ];
+        } elseif ($requestData['request_type'] === 'Internal Transfer') {
+            $rules += [
+                'to_department_id' => 'required|integer',
+                'to_project_id' => 'required|integer',
+                'to_budget_line_id' => 'required|integer',
+                'to_account' => 'required|integer',
+                'invoice_id' => 'nullable|integer',
+            ];
+        }
 
         // Run the validation
         $validator = Validator::make($requestData, $rules);
@@ -73,10 +94,14 @@ class FmsPaymentRequestService
             $paymentRequest->to_account = $requestData['to_account'] ?? null;
             $paymentRequest->invoice_id = $requestData['invoice_id'] ?? null;
         }
-
         $paymentRequest->requestable()->associate($requestData['requestable']);
         $paymentRequest->save();
-        return redirect()->SignedRoute('finance-request_detail', $paymentRequest->request_code);
+
+        if ($paymentRequest->request_type == 'Salary') {
+            return redirect()->SignedRoute('finance-payroll_unit_details', $paymentRequest->request_code);
+        } else {
+            return redirect()->SignedRoute('finance-request_detail', $paymentRequest->request_code);
+        }
         return $paymentRequest;
     }
 
@@ -113,12 +138,12 @@ class FmsPaymentRequestService
             $requestData->ledger_amount = $ledgerExpense;
             $requestData->budget_amount = $budgetExpense;
             $requestData->status = 'Submitted';
-            $requestData->date_submitted = date('Y-m-d');            
+            $requestData->date_submitted = date('Y-m-d');
             // dd($requestData);
             $signatory = FmsPaymentRequestAuthorization::Where(['request_code' => $requestData->request_code, 'request_id' => $id, 'status' => 'Pending'])->with(['approver'])
                 ->orderBy('level', 'asc')->first();
-            if(!$signatory){
-                return 'Please add all signatories'; 
+            if (!$signatory) {
+                return 'Please add all signatories';
             }
             $signatory->update(['status' => 'Active']);
             $requestData->update();
