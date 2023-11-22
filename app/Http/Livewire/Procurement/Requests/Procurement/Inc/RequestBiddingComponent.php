@@ -40,9 +40,6 @@ class RequestBiddingComponent extends Component
     public $selectedProviders;
     public $subcategory_id;
 
-    public $sendRfq;//Request for Quotation
-    public $sendLpo;//Local Purchase Order
-
     //Evaluation
     public $best_bidder_id;
     public $invoice_no;
@@ -152,18 +149,10 @@ class RequestBiddingComponent extends Component
                 ]);
 
                 $this->attachProviders();
-                $this->sendRequestForQuotation($this->request,$this->selectedProviders);
            });
         }
         
        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Procurement Method approval information saved successfully']);
-    }
-
-    public function sendRequestForQuotation(ProcurementRequest $procurementRequest,$providers){
-
-        if ($this->sendRfq) {
-            
-        }
     }
 
     public function saveEvaluationDecision(){
@@ -182,31 +171,30 @@ class RequestBiddingComponent extends Component
             ]);
 
             DB::transaction(function () {
-                    ProcurementRequestDecision::create([
-                        'procurement_request_id'=>$this->request->id,
-                        'decision_maker'=>ProcurementRequestEnum::CC,
-                        'decision'=>$this->decision,
-                        'step'=>ProcurementRequestEnum::ER_APPROVAL,
-                        'comment'=>$this->comment,
-                        'decision_date'=>$this->decision_date,
-                    ]);
+                ProcurementRequestDecision::create([
+                    'procurement_request_id'=>$this->request->id,
+                    'decision_maker'=>ProcurementRequestEnum::CC,
+                    'decision'=>$this->decision,
+                    'step'=>ProcurementRequestEnum::ER_APPROVAL,
+                    'comment'=>$this->comment,
+                    'decision_date'=>$this->decision_date,
+                ]);
+                
+                $this->request->providers()->updateExistingPivot($this->best_bidder_id, [
+                    'is_best_bidder'=>true,
+                    'invoice_no'=>$this->invoice_no,
+                    'invoice_date'=>$this->invoice_date,
+                    'bidder_contract_price'=>$this->bidder_contract_price,
+                ]);
+
+                $this->request->update([
+                    'delivery_deadline' => $this->delivery_deadline,
+                    'net_payment_terms' => $this->net_payment_terms,
+                    'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,
                     
-                    $this->request->providers()->updateExistingPivot($this->best_bidder_id, [
-                        'is_best_bidder'=>true,
-                        'invoice_no'=>$this->invoice_no,
-                        'invoice_date'=>$this->invoice_date,
-                        'bidder_contract_price'=>$this->bidder_contract_price,
-                    ]);
+                ]);
 
-                    $this->request->update([
-                        'delivery_deadline' => $this->delivery_deadline,
-                        'net_payment_terms' => $this->net_payment_terms,
-                        'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,
-                        
-                    ]);
-
-                    $this->storeDocument('Procurement Evaluation Report');
-                    $this->sendLocalPurchaseOrder($this->request,$this->best_bidder_id);
+                $this->storeDocument('Procurement Evaluation Report');
             });
         }else{
             $this->validate([
@@ -244,8 +232,6 @@ class RequestBiddingComponent extends Component
                     'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,
 
                 ]);
-    
-                // $this->sendLocalPurchaseOrder($this->request,$this->best_bidder_id);
            });
         }
         $this->resetInputs();
@@ -278,13 +264,6 @@ class RequestBiddingComponent extends Component
 
         $formalDocumentService = new FormalDocumentService();
         $document = $formalDocumentService->createFormalDocument($this->request,$formalDocumentDTO);
-    }
-
-    public function sendLocalPurchaseOrder(ProcurementRequest $procurementRequest,Provider $provider){
-
-        if ($this->sendLpo) {
-            
-        }
     }
 
     public function resetInputs()

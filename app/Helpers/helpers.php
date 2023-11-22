@@ -169,6 +169,11 @@ function exchangeToOtherCurrency($fmsCurrencyId, $amount = 1)
     return round($amount/$fmsCurrency->exchange_rate,2);
 }
 
+function exchangeRate($fmsCurrencyId)
+{
+    return FmsCurrency::findOrFail($fmsCurrencyId)->exchange_rate;
+}
+
 
 //BUDGETING HELPERS
 function getBudgetLineBalance(FmsBudgetLine $fmsBudgetLine){

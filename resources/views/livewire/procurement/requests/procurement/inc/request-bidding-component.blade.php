@@ -156,12 +156,6 @@ use App\Enums\ProcurementRequestEnum;
                 @include('livewire.procurement.requests.procurement.inc.request-providers')
                 @if (count($providerIds))
                     <div class="modal-footer">
-                        <div class="form-check  py-1 ms-2 mx-3">
-                            <input class="form-check-input" type="checkbox" id="sendRfq" checked
-                                wire:model="sendRfq">
-                            <label class="form-check-label text-primary fw-bold"
-                                for="sendRfq">{{ __('Send RFQ') }}</label>
-                        </div>
                         <x-button type="submit" class="btn btn-success">{{ __('public.save') }}</x-button>
                     </div>
                 @endif

@@ -64,8 +64,8 @@ class FmsPaymentRequestService
             $paymentRequest->month = $requestData['month'];
             $paymentRequest->year = $requestData['year'];
         }if ($requestData['request_type'] === 'Procurement') {
-            $paymentRequest->month = $requestData['procurement_request_id'];
-            $paymentRequest->year = $requestData['payment_method'];
+            $paymentRequest->procurement_request_id = $requestData['procurement_request_id'];
+            $paymentRequest->net_payment_terms = $requestData['net_payment_terms'];
         }if ($requestData['request_type'] === 'Internal Transfer') {
             $paymentRequest->to_department_id = $requestData['to_department_id'] ?? null;
             $paymentRequest->to_project_id = $requestData['to_project_id'] ?? null;

@@ -12,7 +12,7 @@
                         <strong class="text-inverse">{{ __('Address') }}:
                         </strong>{{ $request->providers->first()->full_address ?? 'N/A' }}<br>
                         <strong class="text-inverse">{{ __('Email') }}:
-                        </strong>{{$request->providers->first()->email}}<br>
+                        </strong>{{ $request->providers->first()->email }}<br>
                         <strong class="text-inverse">{{ __('Contact') }}:
                         </strong>{{ $request->providers->first()->phone_number }}<br>
                     </td>
@@ -27,8 +27,8 @@
                 </div><!--end col-->
 
                 <div class="col">
-                    <h4 class="card-title">Reference #<strong
-                            class="text-danger">{{ $request->reference_no }}</strong></h4>
+                    <h4 class="card-title">Reference #<strong class="text-danger">{{ $request->reference_no }}</strong>
+                    </h4>
                 </div><!--end col-->
             </div> <!--end row-->
         </div>
@@ -87,17 +87,16 @@
             </div>
         </div>
 
-
         <x-slot:action>
             <div class="row d-flex justify-content-center d-print-none">
                 <div class="col-lg-12 col-xl-12">
                     <div class="float-end d-print-none mt-2 mt-md-0 mb-2">
 
                         {{-- @if ($request->step_order == 6) --}}
-                            <x-button class="btn btn-de-success btn-sm"
-                                wire:click="sendRequestForQuotation({{$request->id}})"
-                                onclick="return confirm('Are you sure you want to proceed?');">Send to
-                                Provider</x-button>
+                        <x-button class="btn btn-de-success btn-sm"
+                            wire:click="sendRequestForQuotation({{ $request->id }})"
+                            onclick="return confirm('Are you sure you want to proceed?');">Send to
+                            Providers</x-button>
                         {{-- @endif --}}
 
                         <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>

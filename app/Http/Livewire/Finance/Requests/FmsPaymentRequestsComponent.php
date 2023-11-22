@@ -228,7 +228,7 @@ class FmsPaymentRequestsComponent extends Component
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Maximum amount exceeded!',
-                'text' => 'You gone beyond the maximum amount available for this request, your amount is '.$this->baseAmount.' but the maximum is '.$this->max,
+                'text' => 'You have gone beyond the maximum amount available for this request, your amount is '.$this->baseAmount.' but the maximum is '.$this->max,
             ]);
             return false;
         }
