@@ -150,10 +150,10 @@
                                     <li class="nav-item">
                                         <a href="{{ route('finance-transactions', 'all') }}" class="nav-link ">All</a>
                                     </li>
-                                    {{-- <li class="nav-item">
-                                        <a href="{{ route('finance-transfers', 'all') }}"
-                                            class="nav-link ">Transfers</a>
-                                    </li> --}}
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-revenues', 'all') }}"
+                                            class="nav-link ">Income</a>
+                                    </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-expenses', 'all') }}"
                                             class="nav-link ">Expenses</a>

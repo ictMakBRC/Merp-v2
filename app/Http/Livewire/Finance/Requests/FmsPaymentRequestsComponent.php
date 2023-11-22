@@ -309,7 +309,7 @@ class FmsPaymentRequestsComponent extends Component
    
     public function updatedProjectId()
     {
-        $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
+        $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['project_id' => $this->project_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
         $this->ledgers = FmsLedgerAccount::Where('project_id', $this->project_id)->with(['project', 'department', 'currency'])->get();
@@ -329,7 +329,7 @@ class FmsPaymentRequestsComponent extends Component
 
     public function updatedDepartmentId()
     {
-        $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
+        $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['department_id' => $this->department_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
         $this->ledgers = FmsLedgerAccount::where('department_id', $this->department_id)->with(['project', 'department', 'currency'])->get();

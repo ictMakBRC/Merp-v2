@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Finance\Payroll\FmsPayroll;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Payroll\FmsPayrollData;
+use App\Models\Finance\Payroll\FmsPayrollRates;
+use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Finance\Requests\FmsRequestEmployee;
 
 class FmsPayrollScheduleComponent extends Component
@@ -43,7 +45,62 @@ class FmsPayrollScheduleComponent extends Component
     public $is_active = 1;
     public $voucher;
     public $payroll;
-    public $months;
+    public $months;    
+    public $currency_id;
+    public $rate;
+    public $employee_id;
+    public $payroll_data_id;
+    public $payroll_employee_data;
+    public $payment_ref;
+    public $payment_date;
+    public $pay;
+
+    
+    public function mount($voucher)
+    {
+        $this->voucher = $voucher;
+        $this->payroll = FmsPayroll::where('payment_voucher', $voucher)->with('currency')->first();
+
+    }
+    function close(){
+        $this->resetInputs(); 
+    }
+    public function createPayrollRate()
+    {
+        $this->validate([
+            'currency_id'=>'required',
+            'rate'=>'required'
+        ]);
+        $record = FmsPayrollRates::where([ 'payroll_id' => $this->payroll->id, 'currency_id'=>$this->currency_id])->first();
+        if($record){
+
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! payroll already exists!',
+                'text' => 'Months already paid or in queue',
+            ]);
+            return false;
+
+        }
+        $payroll = new FmsPayrollRates();
+        $payroll->payroll_id = $this->payroll->id;
+        $payroll->currency_id = $this->currency_id;
+        $payroll->rate = $this->rate;
+        $payroll->save();
+        $this->resetInputs();        
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Payroll created successfully!']);
+    }
+
+    public function updatedCurrencyId()
+    {
+        if ($this->currency_id) {
+            $latestRate = FmsCurrencyUpdate::where('currency_id', $this->currency_id)->latest()->first();
+
+            if ($latestRate) {
+                $this->rate = $latestRate->exchange_rate;
+            }
+        }
+    }
 
     public function export()
     {
@@ -57,35 +114,32 @@ class FmsPayrollScheduleComponent extends Component
             ]);
         }
     }
-    public function mount($voucher)
+    public function addEmployee($rate_id, $employee_id)
     {
-        $this->voucher = $voucher;
-        $this->payroll = FmsPayroll::where('payment_voucher', $voucher)->with('currency')->first();
-
-    }
-    public function addEmployee($id)
-    {
-        DB::transaction(function () use ($id) {
-            $employee = FmsRequestEmployee::where(['status' => 'Approved', 'id' => $id])->first();
+        DB::transaction(function () use ($rate_id, $employee_id) {
+            $payroll_rate = FmsPayrollRates::where('id', $rate_id)->first();
+            $employee = FmsRequestEmployee::where(['status' => 'Approved', 'id' => $employee_id])->first();            
+            // dd($employee);
             if ($employee) {
-                $payroll = FmsPayrollData::where(['status' => 'Pending', 'employee_id' => $employee->employee_id])->first();
-                if($payroll){
-                    $payroll->salary += $employee->amount;
-                    $base_salary = $employee->amount * $this->payroll->rate;
-                    $payroll->base_salary += $base_salary;
+                $payrollDataExists = FmsPayrollData::where(['status' => 'Pending', 'payroll_rate_id'=>$payroll_rate->id,'employee_id' => $employee->employee_id])->first();
+                if($payrollDataExists){
+                    $payrollDataExists->salary += $employee->amount;
+                    $base_salary = $employee->amount * $payroll_rate->rate;
+                    $payrollDataExists->base_salary += $base_salary;
                     // dd($payroll);
-                    $payroll->update();                    
-                    $employee->payroll_id = $payroll->id;
+                    $payrollDataExists->update();                    
+                    $employee->payroll_id = $payrollDataExists->id;
             }else{
                 $payrollData = new FmsPayrollData();
                 $payrollData->employee_id = $employee->employee_id;
-                $payrollData->fms_payroll_id = $this->payroll->id;
+                $payrollData->payroll_rate_id = $payroll_rate->id;
+                $payrollData->fms_payroll_id = $payroll_rate->payroll_id;
                 $payrollData->month = $employee->month;
                 $payrollData->year = $employee->year;
                 $payrollData->currency_id = $employee->currency_id;
                 $payrollData->salary = $employee->amount;
-                $payrollData->rate = $this->payroll->rate;
-                $payrollData->base_salary = $employee->amount * $this->payroll->rate;
+                $payrollData->rate = $payroll_rate->rate;
+                $payrollData->base_salary = $employee->amount * $payroll_rate->rate;;
                 // $payrollData->deductions = $employee->deductions;
                 // $payrollData->employee_nssf = $employee->employee_nssf;
                 // $payrollData->employer_nssf = $employee->employer_nssf;
@@ -100,6 +154,103 @@ class FmsPayrollScheduleComponent extends Component
                 $employee->update();
 
                 $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Employee salary submitted successfully!']);
+            }
+        });
+    }
+    public $rateData;
+    function markAsPaid($id, $type) {
+        $this->pay = $type;
+        if($type=='Single'){
+            $this->payroll_employee_data = FmsPayrollData::where(['id' => $id])->with('employee')->first();
+        }elseif($type =='PayrollRate'){
+            $this->rateData  = FmsPayrollRates::where('id', $id)->first();
+        }elseif($type =='Payroll'){
+
+        }
+    }
+    function savePaymentRecord() {
+        $this->validate([
+            'payment_date'=>'required|date',
+            'payment_ref'=>'required',
+        ]);
+
+        if($this->pay=='Single' && $this->payroll_employee_data){
+            DB::transaction(function ()  {
+            $data = FmsPayrollData::where(['id' => $this->payroll_employee_data->id])->first();
+            if($data){
+                $employees = FmsRequestEmployee::where(['payroll_id' => $data->id, 'employee_id' => $data->employee_id, 'currency_id' => $data->currency_id,'status'=>'Pending Payment'])
+                ->update(['status'=>'Paid']);  
+                $data->status = 'Paid';
+                $data->payment_ref = $this->payment_ref;
+                $data->payment_date = $this->payment_date;
+                $data->update();
+                $this->resetInputs(); 
+                $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Employee salary has been successfully marked as paid!']);
+            }
+        });
+        }elseif($this->pay =='PayrollRate' && $this->rateData){
+            DB::transaction(function ()  {
+                $rateData  = FmsPayrollRates::where('id', $this->rateData->id)->first();
+                if($rateData){
+                    $payrollRecords = FmsPayrollData::where(['payroll_rate_id' => $this->rateData->id,'status'=>'Pending'])->get();
+                    foreach($payrollRecords as $payrollRecord){
+                        $data = FmsPayrollData::where(['id' => $payrollRecord->id])->first();
+                        if($data){
+                            $employees = FmsRequestEmployee::where(['payroll_id' => $data->id, 'employee_id' => $data->employee_id, 'currency_id' => $data->currency_id,'status'=>'Pending Payment'])
+                            ->update(['status'=>'Paid']);  
+                            $data->status = 'Paid';
+                            $data->payment_ref = $this->payment_ref;
+                            $data->payment_date = $this->payment_date;
+                            $data->update();
+                            $this->resetInputs(); 
+                            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Employee salary has been successfully marked as paid!']);
+                        }
+                    }
+                }
+
+            });
+        }elseif($this->pay =='Payroll'){
+
+        }
+    }
+    public function addAllEmployees($rate_id)
+    {
+        DB::transaction(function () use ($rate_id) {
+            $payroll_rate = FmsPayrollRates::where('id', $rate_id)->first();
+            $employees = FmsRequestEmployee::where(['status' => 'Approved', 'currency_id' => $payroll_rate->currency_id])->get();            
+            // dd($employees);
+            foreach($employees as $requestEmployee){
+                $employee = FmsRequestEmployee::where(['status' => 'Approved', 'employee_id' => $requestEmployee->employee_id])->first();
+                if ($employee) {
+                    $payrollDataExists = FmsPayrollData::where(['status' => 'Pending', 'payroll_rate_id'=>$payroll_rate->id,'employee_id' => $employee->employee_id])->first();
+                    if($payrollDataExists){
+                        $payrollDataExists->salary += $employee->amount;
+                        $base_salary = $employee->amount * $payroll_rate->rate;
+                        $payrollDataExists->base_salary += $base_salary;
+                        $payrollDataExists->update();                    
+                        $employee->payroll_id = $payrollDataExists->id;                        
+                        $employee->status = 'Pending Payment';
+                        $employee->update();
+                    }else{
+                    $payrollData = new FmsPayrollData();
+                    $payrollData->employee_id = $employee->employee_id;
+                    $payrollData->payroll_rate_id = $payroll_rate->id;
+                    $payrollData->fms_payroll_id = $payroll_rate->payroll_id;
+                    $payrollData->month = $employee->month;
+                    $payrollData->year = $employee->year;
+                    $payrollData->currency_id = $employee->currency_id;
+                    $payrollData->salary = $employee->amount;
+                    $payrollData->rate = $payroll_rate->rate;
+                    $payrollData->base_salary = $employee->amount * $payroll_rate->rate;
+                    $payrollData->request_id = $employee->id;
+                    $payrollData->save();
+                    $employee->payroll_id = $payrollData->id;                    
+                    $employee->status = 'Pending Payment';
+                    $employee->update();
+                    $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Employee salary submitted successfully!']);
+                    }
+
+                }
             }
         });
     }
@@ -118,30 +269,19 @@ class FmsPayrollScheduleComponent extends Component
     public function resetInputs()
     {
         $this->reset([
-            'employee_id',
-            'created_by',
-            'updated_by',
-            'status',
-            'fms_payroll_id',
-            'month',
-            'year',
+            'employee_id',           
             'currency_id',
-            'employee_id',
-            'salary',
-            'base_salary',
-            'deductions',
-            'employee_nssf',
-            'employer_nssf',
-            'other_deductions',
-            'deduction_description',
-            'net_salary',
-            'request_id',
+            'rate',
+            'payment_date',
+            'payment_ref',
         ]);
+        $this->dispatchBrowserEvent('close-modal');
     }
     public function render()
     {
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
-        $data['employees'] = FmsRequestEmployee::where(['status' => 'Approved', 'currency_id' => $this->payroll->currency_id])->with('employee', 'currency','requestable')->get();
+        $data['payroll_rates'] = FmsPayrollRates::where('payroll_id', $this->payroll->id)->with('currency')->get();
+        $data['employees'] = FmsRequestEmployee::where(['status' => 'Approved'])->with('employee', 'currency','requestable')->get();
         $data['payroll_employees'] = FmsPayrollData::where('fms_payroll_id', $this->payroll->id)->with('employee', 'currency')->get();
         return view('livewire.finance.payroll.fms-payroll-schedule-component', $data);
     }

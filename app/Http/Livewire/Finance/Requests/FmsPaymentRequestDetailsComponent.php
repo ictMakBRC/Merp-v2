@@ -366,7 +366,7 @@ class FmsPaymentRequestDetailsComponent extends Component
             $data['items'] = FmsPaymentRequestDetail::where('request_id', $data['request_data']->id)->get();
             $data['attachments'] = FmsPaymentRequestAttachment::where('request_id', $data['request_data']->id)->get();
             $data['authorizations'] = FmsPaymentRequestAuthorization::where('request_id', $data['request_data']->id)->with(['authPosition', 'user', 'approver'])->get();
-            if ($requestData->request_type == 'Salary') {
+            // if ($requestData->request_type == 'Salary') {
                 $data['req_employees'] = FmsRequestEmployee::where('request_id', $data['request_data']->id)->with('employee')->get();
                 if ($requestData->requestable_type == 'App\Models\HumanResource\Settings\Department') {
                     $this->entry = 'Department';
@@ -379,10 +379,10 @@ class FmsPaymentRequestDetailsComponent extends Component
                 } else {
                     $data['employees'] = collect([]);
                 }
-            } else {
-                $data['req_employees'] = collect([]);
-                $data['employees'] = collect([]);
-            }
+            // } else {
+            //     $data['req_employees'] = collect([]);
+            //     $data['employees'] = collect([]);
+            // }
         } else {
             $data['items'] = collect([]);
             $data['attachments'] = collect([]);

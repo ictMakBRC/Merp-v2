@@ -130,6 +130,7 @@ class FmsPayrollRequestDetailsComponent extends Component
             'month' => 'required',
             'year' => 'required',
             'amount' => 'required|numeric',
+            'selectedEmployee' => 'required',
         ]);
         $record = FmsRequestEmployee::where(['employee_id' => $this->employee_id, 'month' => $this->month,
             'year' => $this->year, 'requestable_type' => $this->requestData->requestable_type, 'requestable_id' => $this->requestData->requestable_id])->first();
@@ -153,6 +154,7 @@ class FmsPayrollRequestDetailsComponent extends Component
         $requestEmployee->amount = $this->amount;
         $requestEmployee->requestable_type = $this->requestData->requestable_type;
         $requestEmployee->requestable_id = $this->requestData->requestable_id;
+        $requestEmployee->contractable = $this->selectedEmployee;        
         $requestEmployee->save();
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'request item created successfully!']);

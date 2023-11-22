@@ -87,7 +87,7 @@ class FmsPaymentPreviewComponent extends Component
 
                     $trans = new FmsTransaction();
                     $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
-                    $trans->trx_ref = 'Request Payment' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
+                    $trans->trx_ref = 'RQP #' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
                     $trans->trx_date = date('Y-m-d');
                     $trans->total_amount = $requestData->total_amount;                    
                     $trans->amount_local = $requestData->total_amount*$requestData->rate; 
@@ -129,7 +129,7 @@ class FmsPaymentPreviewComponent extends Component
 
                         $incomeTrans = new FmsTransaction();
                         $incomeTrans->trx_no = 'TRI' . GeneratorService::getNumber(7);
-                        $incomeTrans->trx_ref = 'Internal transfer for' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
+                        $incomeTrans->trx_ref = 'INT #' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
                         $incomeTrans->trx_date = date('Y-m-d');
                         $incomeTrans->total_amount = $requestData->total_amount;
                         $trans->amount_local = $requestData->total_amount*$requestData->rate; 
@@ -145,7 +145,7 @@ class FmsPaymentPreviewComponent extends Component
                         $incomeTrans->currency_id = $requestData->currency_id;
                         $incomeTrans->trx_type = 'Income';
                         $incomeTrans->status = 'Approved';
-                        $incomeTrans->description = 'Internal Transfer payment';
+                        $incomeTrans->description = 'Received an Internal Transfer payment';
                         $incomeTrans->entry_type = 'Internal';
                         if ($requestData->to_project_id != null) {
                             $incomeTrans->is_department = false;

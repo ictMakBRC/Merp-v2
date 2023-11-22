@@ -40,7 +40,7 @@ class FmsPaymentRequestService
         // Check if validation fails
         if ($validator->fails()) {
             // Handle validation errors (throw exception, log, etc.)
-            throw new \Exception($validator->errors()->first());
+            // throw new \Exception($validator->errors()->first());
             return $validator->errors()->first();
         }
 
@@ -76,7 +76,7 @@ class FmsPaymentRequestService
 
         $paymentRequest->requestable()->associate($requestData['requestable']);
         $paymentRequest->save();
-
+        return redirect()->SignedRoute('finance-request_detail', $paymentRequest->request_code);
         return $paymentRequest;
     }
 
@@ -115,11 +115,13 @@ class FmsPaymentRequestService
             $requestData->status = 'Submitted';
             $requestData->date_submitted = date('Y-m-d');            
             // dd($requestData);
-            $requestData->update();
             $signatory = FmsPaymentRequestAuthorization::Where(['request_code' => $requestData->request_code, 'request_id' => $id, 'status' => 'Pending'])->with(['approver'])
                 ->orderBy('level', 'asc')->first();
-            //    dd($signatory);
+            if(!$signatory){
+                return 'Please add all signatories'; 
+            }
             $signatory->update(['status' => 'Active']);
+            $requestData->update();
             if ($signatory) {
                 $body = 'Hello, You have a pending request #' . $requestData->request_code . ' to sign, please login to view more details';
                 self::SendMail($signatory->approver_id, $body, $requestData);

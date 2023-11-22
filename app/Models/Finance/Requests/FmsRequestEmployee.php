@@ -16,6 +16,10 @@ class FmsRequestEmployee extends Model
     {
         return $this->morphTo();
     }
+    public function contractable(): MorphTo
+    {
+        return $this->morphTo();
+    }
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id', 'id');

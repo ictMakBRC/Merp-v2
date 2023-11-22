@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -11,10 +12,16 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Schema::dropIfExists('fms_payroll_data');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         Schema::create('fms_payroll_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->references('id')->on('employees')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('fms_payroll_id')->references('id')->on('fms_payrolls')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('payroll_rate_id')->references('id')->on('fms_payroll_rates')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->string('payment_ref',70)->nullable();
+            $table->date('payment_date')->nullable();
             $table->integer('month');
             $table->integer('year');
             $table->foreignId('currency_id')->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');

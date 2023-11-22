@@ -67,10 +67,8 @@ class FmsPayrollsComponent extends Component
         $this->validate([
             'month' => 'required',
             'year' => 'required',
-            'currency_id'=>'required',
-            'rate'=>'required'
         ]);
-        $record = FmsPayroll::where([ 'month' => $this->month, 'year' => $this->year, 'currency_id'=>$this->currency_id])->first();
+        $record = FmsPayroll::where([ 'month' => $this->month, 'year' => $this->year])->first();
         if($record){
 
             $this->dispatchBrowserEvent('swal:modal', [
@@ -84,9 +82,7 @@ class FmsPayrollsComponent extends Component
         $payroll = new FmsPayroll();
         $payroll->month = $this->month;
         $payroll->year = $this->year;
-        $payroll->currency_id = $this->currency_id;
-        $payroll->rate = $this->rate;
-        $payroll->payment_voucher = 'BRCP'.time();
+        $payroll->payment_voucher = 'BRCP-'.$this->month.'-'.$this->year.time();
         $payroll->save();
         $this->resetInputs();        
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Payroll created successfully!']);
