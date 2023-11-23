@@ -279,7 +279,7 @@ class FmsPaymentRequestDetailsComponent extends Component
         return $submit;
         // DB::transaction(function () use ($id) {
         //     $request = FmsPaymentRequest::where(['request_code' => $this->requestCode, 'id' => $id])->first();
-        //     $dataBudget = FmsBudgetLine::Where('id', $request->budget_line_id)->with('budget', 'budget.currency')->first();
+        //     $dataBudget = FmsBudgetLine::where('id', $request->budget_line_id)->with('budget', 'budget.currency')->first();
         //     // if ($dataBudget) {
         //         $budgetAmountHeld = $dataBudget->amount_held;
         //         $newBudgetAmountHeld = $budgetAmountHeld + $request->budget_amount;
@@ -287,7 +287,7 @@ class FmsPaymentRequestDetailsComponent extends Component
         //         $dataBudget->update();
         //     // }
 
-        //     $dataLeger = FmsLedgerAccount::Where('id', $request->ledger_account)->with('currency')->first();              
+        //     $dataLeger = FmsLedgerAccount::where('id', $request->ledger_account)->with('currency')->first();              
 
         //     // if ($dataLeger) {
         //         $currentAmountHeld = $dataLeger->amount_held;
@@ -296,7 +296,7 @@ class FmsPaymentRequestDetailsComponent extends Component
         //         $dataLeger->update();
         //     // }
         //     $request->update(['status' => 'Submitted', 'date_submitted' => date('Y-m-d')]);
-        //     $signatory = FmsPaymentRequestAuthorization::Where(['request_code' => $this->requestCode, 'request_id' => $id, 'status' => 'Pending'])->with(['approver'])
+        //     $signatory = FmsPaymentRequestAuthorization::where(['request_code' => $this->requestCode, 'request_id' => $id, 'status' => 'Pending'])->with(['approver'])
         //         ->orderBy('level', 'asc')->first();
         //     //    dd($signatory);
         //     $signatory->update(['status' => 'Active']);

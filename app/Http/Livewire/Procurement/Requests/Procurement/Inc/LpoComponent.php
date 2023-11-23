@@ -38,8 +38,9 @@ class LpoComponent extends Component
         }
     }
 
-    public function initiatePaymentRequest(FmsPaymentRequestService $paymentRequestService)
+    public function initiatePaymentRequest()
     {
+        // dd('YES');
         $requestable = null;
         $department_id = null;
         $project_id = null;
@@ -51,13 +52,14 @@ class LpoComponent extends Component
             $department_id = null;
             $requestable = Project::with('ledger')->find($this->procurementRequest->requestable_id);
             $ledger_account = $requestable->ledger->id;
+
         } elseif ($this->procurementRequest->request_type == 'Departmental') {
             $project_id = null;
             $requestable = Department::with('ledger')->find($this->procurementRequest->requestable_id);
             $ledger_account = $requestable->ledger->id;
         }
 
-        $exists = FmsPaymentRequest::where('procurement_request_id', $this->procurementRrequest->id->id)->first();
+        $exists = FmsPaymentRequest::where('procurement_request_id', $this->procurementRequest->id)->first();
     
         if ($exists) {
 
@@ -85,6 +87,7 @@ class LpoComponent extends Component
                 'net_payment_terms'=> $this->procurementRequest->net_payment_terms,
             ];
 
+            $paymentRequestService= new FmsPaymentRequestService();
             // Call the service to create the payment request
             $saveData = $paymentRequestService->createPaymentRequest($requestData);  
     

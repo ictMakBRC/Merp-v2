@@ -73,7 +73,7 @@ class BidderPricesComponent extends Component
                     'lpo_no'=>GeneratorService::localPurchaseOrderNo(),
                 ]);
 
-                if (requiresProcurementContract($this->request->contract_value)) {
+                if (requiresProcurementContract(exchangeToDefaultCurrency($this->request->currency_id, $this->request->contract_value))) {
                 
                     $this->dispatchBrowserEvent('swal:modal', [
                         'type' => 'warning',

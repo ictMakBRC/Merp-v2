@@ -194,8 +194,8 @@
                                     <th>{{ __('Description') }}</th>
                                     <th>{{ __('Unit') }}</th>
                                     <th>{{ __('Quantity') }}</th>
-                                    <th>{{ __('Estimated Cost') }}</th>
-                                    <th>{{ __('Total Cost') }}</th>
+                                    {{-- <th>{{ __('Estimated Cost') }}</th>
+                                    <th>{{ __('Total Cost') }}</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -206,19 +206,19 @@
                                         <td>{!! nl2br(e($item->description)) !!}</td>
                                         <td>{{ $item->unit_of_measure }}</td>
                                         <td>{{ $item->quantity }}</td>
-                                        <td>@moneyFormat($item->estimated_unit_cost)</td>
-                                        <td>@moneyFormat($item->total_cost)</td>
+                                        {{-- <td>@moneyFormat($item->estimated_unit_cost)</td>
+                                        <td>@moneyFormat($item->total_cost)</td> --}}
 
                                     </tr>
                                 @endforeach
                                 <tr>
-                                    <td colspan="2"><strong class="text-dange">Submit Response to:
+                                    <td colspan="3"><strong class="text-dange">Submit Response to:
                                         </strong>{{ $request->approvals->where('step', 'Procurement')->first()->approver->employee->email }}
                                     </td>
-                                    <td colspan="1" class="text-start">Closing date: (<strong
+                                    <td colspan="2" class="text-start">Closing date: (<strong
                                             class="text-danger">@formatDate($request->bid_return_deadline)</strong>)</td>
-                                    <td colspan="3" class="text-end">Total: ({{ $request->currency->code }})</td>
-                                    <td><strong class="text-danger">@moneyFormat($request->items->sum('total_cost'))</strong></td>
+                                    {{-- <td colspan="3" class="text-end">Total: ({{ $request->currency->code }})</td>
+                                    <td><strong class="text-danger">@moneyFormat($request->items->sum('total_cost'))</strong></td> --}}
                                 </tr>
                                 <tr>
                                     <td colspan="7" class="text-start">
@@ -231,7 +231,7 @@
                                         <strong class="text-inverse">{{ __('Name') }}:
                                         </strong>{{ $request->approvals->where('step', 'Department')->first()->approver->employee->fullName }}<br>
                                         <strong class="text-inverse">{{ __('Designation') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Department')->first()->approver->employee->designation->name }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Department')->first()->approver?->employee?->designation?->name }}<br>
                                     </td>
                                 </tr>
                             </tbody>

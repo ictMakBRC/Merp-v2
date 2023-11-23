@@ -8,7 +8,7 @@ use App\Enums\ProcurementRequestEnum;
             <div class="row align-items-center">
                 <div class="col">
                     <h4 class="card-title">{{ __('Procurement Method Approval') }} <span
-                            class="badge bg-info">{{ getProcurementCategorization($request->contract_value)->categorization }}
+                            class="badge bg-info">{{ getProcurementCategorization(exchangeToDefaultCurrency($request->currency_id, $request->contract_value))->categorization }}
                             Procurement</span></h4>
                 </div><!--end col-->
                 <div class="col-auto">

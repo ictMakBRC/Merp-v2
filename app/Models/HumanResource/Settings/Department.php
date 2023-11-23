@@ -2,16 +2,17 @@
 
 namespace App\Models\HumanResource\Settings;
 
-use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AssetsManagement\Asset;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\HumanResource\EmployeeData\Employee;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
 {

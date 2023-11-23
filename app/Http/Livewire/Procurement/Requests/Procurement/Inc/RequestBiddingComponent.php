@@ -55,7 +55,8 @@ class RequestBiddingComponent extends Component
         $this->subcategory_id = $request->subcategory_id;
         $this->selectedProviders = collect([]);
 
-        $this->isMacroProcurement=isMacroProcurement($request->contract_value);
+        $this->isMacroProcurement=isMacroProcurement(exchangeToDefaultCurrency($request->currency_id, $request->contract_value));
+       
     }
 
     public function updatedProviderIds()
@@ -120,7 +121,6 @@ class RequestBiddingComponent extends Component
     
                 $this->storeDocument('Procurement Method Report');
                 $this->attachProviders();
-                $this->sendRequestForQuotation($this->request,$this->selectedProviders);
            });
 
         }else{
@@ -157,6 +157,7 @@ class RequestBiddingComponent extends Component
 
     public function saveEvaluationDecision(){
         if ($this->isMacroProcurement) {
+            
             $this->validate([
                 'decision'=>'required|string',
                 'best_bidder_id'=>'required|integer',
@@ -164,11 +165,12 @@ class RequestBiddingComponent extends Component
                 'invoice_date'=>'required_if:decision,Approved|date|before_or_equal:today',
                 'delivery_deadline'=>'required_if:decision,Approved|date|after_or_equal:today',
                 'net_payment_terms'=>'required_if:decision,Approved|integer',
-                'bidder_contract_price'=>'required_if:decision,Rejected|numeric',
+                'bidder_contract_price'=>'required_if:decision,Rejected',
                 'decision_date'=>'required|date|before_or_equal:today',
                 'comment'=>'required|string',
                 
             ]);
+            // dd('YES');
 
             DB::transaction(function () {
                 ProcurementRequestDecision::create([
