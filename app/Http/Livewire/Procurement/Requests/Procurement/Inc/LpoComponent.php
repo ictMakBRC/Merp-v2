@@ -53,7 +53,7 @@ class LpoComponent extends Component
             $requestable = Project::with('ledger')->find($this->procurementRequest->requestable_id);
             $ledger_account = $requestable->ledger->id;
 
-        } elseif ($this->procurementRequest->request_type == 'Departmental') {
+        } elseif ($this->procurementRequest->request_type == 'Department') {
             $project_id = null;
             $requestable = Department::with('ledger')->find($this->procurementRequest->requestable_id);
             $ledger_account = $requestable->ledger->id;
@@ -91,7 +91,7 @@ class LpoComponent extends Component
             // Call the service to create the payment request
             $saveData = $paymentRequestService->createPaymentRequest($requestData);  
     
-            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Upfront/Advance Payment Request sent successfully!']);      
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Upfront/Advance Payment Request initiated successfully!']);      
 
         } catch (\Exception $e) {
             $this->dispatchBrowserEvent('swal:modal', [

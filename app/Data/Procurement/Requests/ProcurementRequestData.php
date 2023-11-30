@@ -41,7 +41,7 @@ class ProcurementRequestData extends Data
         'currency_id' =>'required|integer',
         'budget_line_id' =>'required|integer',
         // 'sequence_number' =>'required|string',
-        'procurement_plan_ref' =>'required|string',
+        'procurement_plan_ref' =>'nullable|string',
         'location_of_delivery' =>'required|string',
         'date_required' =>'required|string',
       ];

@@ -38,26 +38,17 @@ class ProviderFormComponent extends Component
 
     public $provider;
     public $provider_id;
+    public $editMode=false;
 
     protected $listeners = [
-        'switchProvider' => 'setProviderId',
+        'loadProvider',
     ];
-
-    public function setProviderId($details)
-    {
-        $this->provider_id = $details['providerId'];
-
-        $provider = Provider::findOrFail($this->provider_id);
-        $this->provider = $provider;
-        
-    }
 
     public function storeProvider()
     {
         $providerDTO = new ProviderData();
        
         $this->validate($providerDTO->rules());
-        // dd('YES');
         DB::transaction(function (){
 
             $providerDTO = ProviderData::from([
@@ -98,6 +89,39 @@ class ProviderFormComponent extends Component
             $this->reset($providerDTO->resetInputs());
 
         });
+    }
+
+    public function loadProvider($details)
+    {
+        $this->provider_id = $details['providerId'];
+        $provider = Provider::findOrFail($this->provider_id);
+        $this->provider = $provider;
+
+        $this->name =  $this->provider->name;
+        $this->provider_type =  $this->provider->provider_type;
+        $this->phone_number =  $this->provider->phone_number;
+        $this->alt_phone_number =  $this->provider->alt_phone_number;
+        $this->email =  $this->provider->email;
+        $this->alt_email =  $this->provider->alt_email;
+        $this->full_address =  $this->provider->full_address;
+        $this->contact_person =  $this->provider->contact_person;
+        $this->contact_person_phone =  $this->provider->contact_person_phone;
+        $this->contact_person_email =  $this->provider->contact_person_email;
+        $this->website =  $this->provider->website;
+        $this->country =  $this->provider->country;
+        $this->payment_terms =  $this->provider->payment_terms;
+        $this->payment_method =  $this->provider->payment_method;
+        $this->bank_name =  $this->provider->bank_name;
+        $this->branch =  $this->provider->branch;
+        $this->account_name =  $this->provider->account_name;
+        $this->bank_account =  $this->provider->bank_account;
+        $this->tin =  $this->provider->tin; 
+        $this->tax_withholding_rate =  $this->provider->tax_withholding_rate;
+        $this->preferred_currency =  $this->provider->preferred_currency;
+        $this->notes =  $this->provider->notes;
+        $this->is_active =  $this->provider->is_active;
+
+        $this->editMode=true;
     }
 
     public function updateProvider()

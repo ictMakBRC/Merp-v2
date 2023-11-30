@@ -100,7 +100,7 @@
                                     
                                 @endforeach
                                 <tr>
-                                    <td colspan="5" class="text-end">Total</td>
+                                    <td colspan="5" class="text-end">Total ({{ $procurementRequest->currency->code }})</td>
                                     <td>@moneyFormat($items->sum('total_cost'))</td>
 
                                 </tr>

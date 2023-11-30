@@ -48,9 +48,8 @@ class ProcurementRequestComponent extends Component
                 'procurementRequestId' => $procurementRequest->id,
                 'info'=>$loadingInfo,
             ]);
-
+           
         $this->createNew = true;
-
         $this->toggleForm = true;
     }
  

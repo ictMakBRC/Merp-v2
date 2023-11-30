@@ -1,5 +1,3 @@
-
-
 <div>
     <div class="card-bod p-0" x-cloak x-show="create_new">
         <!-- Nav tabs -->
@@ -9,8 +7,7 @@
                     aria-selected="true">General Information</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#sector" role="tab"
-                    aria-selected="false">Sector</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#sector" role="tab" aria-selected="false">Sector</a>
             </li>
 
             <li class="nav-item">
@@ -22,7 +19,10 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane p-3 active" id="general-information" role="tabpanel">
-                <form wire:submit.prevent="storeProvider">
+                <form
+                    @if ($editMode) wire:submit.prevent="updateProvider"
+                @else
+                wire:submit.prevent="storeProvider" @endif>
                     <div class="row">
                         <div class="mb-3 col-md-4">
                             <label for="name" class="form-label required">{{ __('Name') }}</label>
@@ -31,7 +31,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="provider_type" class="form-label required">{{ __('Provider Type') }}</label>
                             <select class="form-select" id="provider_type" wire:model.lazy="provider_type">
@@ -48,23 +48,25 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="phone_number" class="form-label required">{{ __('Telephone') }}</label>
-                            <input type="text" id="phone_number" class="form-control" wire:model.defer="phone_number">
+                            <input type="text" id="phone_number" class="form-control"
+                                wire:model.defer="phone_number">
                             @error('phone_number')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="alt_phone_number" class="form-label">{{ __('Alternative Telephone') }}</label>
-                            <input type="text" id="alt_phone_number" class="form-control" wire:model.defer="alt_phone_number">
+                            <input type="text" id="alt_phone_number" class="form-control"
+                                wire:model.defer="alt_phone_number">
                             @error('alt_phone_number')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="email" class="form-label required">{{ __('Email') }}</label>
                             <input type="email" id="email" class="form-control" wire:model.defer="email">
@@ -72,7 +74,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="alt_email" class="form-label">{{ __('Alternative Email') }}</label>
                             <input type="email" id="alt_email" class="form-control" wire:model.defer="alt_email">
@@ -80,7 +82,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="full_address" class="form-label required">{{ __('Full Address') }}</label>
                             <textarea id="full_address" class="form-control" wire:model.defer="full_address"></textarea>
@@ -88,15 +90,17 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
-                            <label for="contact_person" class="form-label required">{{ __('Contact Person Name') }}</label>
-                            <input type="text" id="contact_person" class="form-control" wire:model.defer="contact_person">
+                            <label for="contact_person"
+                                class="form-label required">{{ __('Contact Person Name') }}</label>
+                            <input type="text" id="contact_person" class="form-control"
+                                wire:model.defer="contact_person">
                             @error('contact_person')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="contact_person_phone"
                                 class="form-label required">{{ __('Contact Person Telephone') }}</label>
@@ -106,16 +110,17 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
-                            <label for="contact_person_email" class="form-label required">{{ __('Contact Person Email') }}</label>
+                            <label for="contact_person_email"
+                                class="form-label required">{{ __('Contact Person Email') }}</label>
                             <input type="email" id="contact_person_email" class="form-control"
                                 wire:model.defer="contact_person_email">
                             @error('contact_person_email')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="website" class="form-label">{{ __('Website') }}</label>
                             <input type="url" id="website" class="form-control" wire:model.defer="website">
@@ -123,7 +128,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="country" class="form-label required">{{ __('Country') }}</label>
                             <select class="form-select" id="country" wire:model.lazy="country">
@@ -153,9 +158,10 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-3">
-                            <label for="payment_method" class="form-label required">{{ __('Payment Method') }}</label>
+                            <label for="payment_method"
+                                class="form-label required">{{ __('Payment Method') }}</label>
                             <select class="form-select" id="payment_method" wire:model.lazy="payment_method">
                                 <option selected value="">Select</option>
                                 <option value="cheque">Cheque</option>
@@ -171,9 +177,10 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-2">
-                            <label for="preferred_currency" class="form-label required">{{ __('Preferred Currency') }}</label>
+                            <label for="preferred_currency"
+                                class="form-label required">{{ __('Preferred Currency') }}</label>
                             <select class="form-select" id="preferred_currency" wire:model.lazy="preferred_currency">
                                 <option selected value="">Select</option>
                                 @include('layouts.currencies')
@@ -182,7 +189,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-5">
                             <label for="bank_name" class="form-label required">{{ __('Bank Name') }}</label>
                             <input type="text" id="bank_name" class="form-control" wire:model.defer="bank_name">
@@ -190,7 +197,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="branch" class="form-label required">{{ __('Bank Branch') }}</label>
                             <input type="text" id="branch" class="form-control" wire:model.defer="branch">
@@ -198,18 +205,20 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="account_name" class="form-label required">{{ __('Account Name') }}</label>
-                            <input type="text" id="account_name" class="form-control" wire:model.defer="account_name">
+                            <input type="text" id="account_name" class="form-control"
+                                wire:model.defer="account_name">
                             @error('account_name')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-4">
                             <label for="bank_account" class="form-label required">{{ __('Account Number') }}</label>
-                            <input type="text" id="bank_account" class="form-control" wire:model.defer="bank_account">
+                            <input type="text" id="bank_account" class="form-control"
+                                wire:model.defer="bank_account">
                             @error('bank_account')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
@@ -222,16 +231,17 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-2">
-                            <label for="tax_withholding_rate" class="form-label">{{ __('Tax With-holding Rate') }}</label>
+                            <label for="tax_withholding_rate"
+                                class="form-label">{{ __('Tax With-holding Rate') }}</label>
                             <input type="number" id="tax_withholding_rate" class="form-control"
                                 wire:model.defer="tax_withholding_rate">
                             @error('tax_withholding_rate')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-2">
                             <label for="is_active" class="form-label required">{{ __('Status') }}</label>
                             <select class="form-select" id="is_active" wire:model.lazy="is_active">
@@ -243,7 +253,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
+
                         <div class="mb-3 col-md-6">
                             <label for="notes" class="form-label">{{ __('Notes') }}</label>
                             <textarea id="notes" class="form-control" wire:model.defer="notes"></textarea>
@@ -251,15 +261,15 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-            
-            
+
+
                     </div>
-            
+
                     <div class="modal-footer">
                         <x-button type="submit" class="btn btn-success">{{ __('public.save') }}</x-button>
                     </div>
                 </form>
-                
+
             </div>
 
             <div class="tab-pane p-3" id="sector" role="tabpanel">
@@ -273,4 +283,3 @@
         </div>
     </div>
 </div>
-

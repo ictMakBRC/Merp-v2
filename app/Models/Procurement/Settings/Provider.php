@@ -37,7 +37,7 @@ class Provider extends Model
         ->withTimestamps();
     }
 
-    public function preferred_currency()
+    public function currency()
     {
         return $this->belongsTo(FmsCurrency::class, 'preferred_currency');
     }
@@ -46,7 +46,8 @@ class Provider extends Model
     {
         return $this->belongsToMany(ProcurementRequest::class, 'selected_providers', 'provider_id', 'procurement_request_id')
         ->using(SelectedProvider::class) // Use the pivot model
-        ->withPivot(['is_best_bidder','invoice_no','invoice_date','payment_status','date_paid','quality_rating','timeliness_rating','cost_rating','average_rating','contracts_manager_comment','created_by']);
+        ->withPivot(['is_best_bidder','invoice_no','invoice_date','payment_status','date_paid','quality_rating','timeliness_rating','cost_rating','average_rating','contracts_manager_comment','created_by'])
+        ->wherePivot('is_best_bidder', true);
     }
 
     public function bestBidderRequests()
