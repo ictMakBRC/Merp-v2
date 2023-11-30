@@ -10,6 +10,7 @@ use App\Http\Livewire\Inventory\Settings\InvUnitOfMeasuresComponent;
 use App\Http\Livewire\Inventory\Settings\StoresComponent;
 use App\Http\Livewire\Inventory\Settings\RejectionReasons;
 use App\Http\Livewire\Inventory\Manage\CommoditiesComponent;
+use App\Http\Livewire\Inventory\Manage\InvSuppliersComponent;
 use App\Http\Livewire\Inventory\Manage\DepartmentItemsComponent;
 use App\Http\Livewire\Inventory\Requisitions\ForecastsComponent;
 use App\Http\Livewire\Inventory\Requisitions\GeneralRequisitionsComponent;
@@ -30,7 +31,7 @@ Route::group(['prefix' => 'inventory','middleware' => ['permission:access_invent
     Route::get('categories', InvCategoriesComponent::class)->name('inventory-categories');
     Route::get('commodities', CommoditiesComponent::class)->name('inventory-commodities');
     Route::get('department-items', DepartmentItemsComponent::class)->name('department-items');
-    // Route::get('stores/sections', InvStorageSectionsComponent::class)->name('inventory-sections');
+    Route::get('suppliers', InvSuppliersComponent::class)->name('suppliers');
     // Route::get('stores/sections/bins', InvStorageSubSectionsComponent::class)->name('inventory-storage_bins');
     // Route::get('unit_of_measures', InvUnitOfMeasuresComponent::class)->name('inventory-unit_of_measures');
   });

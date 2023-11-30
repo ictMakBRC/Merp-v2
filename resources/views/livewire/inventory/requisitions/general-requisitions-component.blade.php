@@ -47,11 +47,10 @@
                   <option value=6>Received by Dept</option>
                   <option value=7>Canceled</option>
                 </select>
-
               </div>
 
               <div class="mb-1 col-md-2">
-                <label for="department" class="form-label">Deparment / Project</label>
+                <label for="department" class="form-label">Deparment</label>
                 <select wire:model="department" class="form-select">
                   <option value="">select</option>
                   @foreach ($departments as $key => $value)

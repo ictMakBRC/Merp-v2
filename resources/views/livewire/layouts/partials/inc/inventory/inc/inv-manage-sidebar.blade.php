@@ -16,9 +16,14 @@
     <li class="nav-item">
       <a href="{{ route('inventory-unit_of_measures') }}" class="nav-link ">Unit Of Measure</a>
     </li>
-    <li class="nav-item">
       <a href="{{ route('department-items') }}" class="nav-link ">Department Items</a>
     </li>
+    <li class="nav-item">
+
+      <li class="nav-item">
+        <a href="{{ route('suppliers') }}" class="nav-link ">Inventory Suppliers</a>
+      </li>
+
     <li class="nav-item">
       <a href="{{ route('rejection-reasons') }}" class="nav-link ">Rejection Reasons</a>
     </li>

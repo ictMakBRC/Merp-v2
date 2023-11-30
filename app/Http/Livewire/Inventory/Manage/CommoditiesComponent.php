@@ -58,7 +58,6 @@ class CommoditiesComponent extends Component
 
   public $filter = false;
 
-
   public function export()
   {
 
@@ -68,7 +67,7 @@ class CommoditiesComponent extends Component
   {
     return redirect(request()->header('Referer'));
   }
-  
+
   public function createNewInv()
   {
     $this->dispatchBrowserEvent('show-modal');

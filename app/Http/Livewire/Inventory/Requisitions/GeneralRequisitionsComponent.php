@@ -169,7 +169,7 @@ class GeneralRequisitionsComponent extends Component
     $this->issue_id = $id;
 
     //get stock balance
-    $this->stock_balance = InvDepartmentItem::where('inv_item_id',$request->item_id)
+    $this->stock_balance = InvDepartmentItem::where('inv_item_id',$request->item_id)->latest('created_at')
     ->value('qty_left');
 
     $this->dispatchBrowserEvent(['issue-item-modal']);
@@ -271,10 +271,38 @@ class GeneralRequisitionsComponent extends Component
 
     $this->orders = collect([]);
     $this->orders = InvDepartmentRequest::where('request_code', $this->request_code)->latest()->get();
+    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item successfully added to list!']);
+  }
 
-    // $this->close();
-    // $this->dispatchBrowserEvent('close-modal');
-    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Reqquest successfully submitted!']);
+  public function submitRequest($id)
+  {
+    \DB::transaction(function () {
+
+      InvDepartmentRequest::where('request_code', $this->request_code)->update(['submission_status' => 2]);
+      $order_item_list = FacilityOrders::with(['institution.country'])->with(['asset'])->where('order_number',$this->order_number)->get();
+      $order = $order_item_list->toArray();
+      try {
+        // $general_contact = GeneralContact::where('module','Logistics')->value('email');
+        Mail::to(["$general_contact"])
+        // Mail::to(["benbyron24@gmail.com"c ])
+        ->queue(new NewGeneralRequestMailable($order));
+
+        $this->refresh();
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Request  successfuly submitted!']);
+      } catch (\Exception $e) {
+
+        $this->dispatchBrowserEvent('swal:modal', [
+        'type' => 'warning',
+        'message' => 'Operation Error',
+        'text' => 'Oops..! Transaction not complete.',
+        // 'text' => $e->getMessage(),
+        ]);
+      }
+    });
+
+        // $requset = InvDepartmentRequest::where
+        $this->close();
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Reqquest successfully submitted!']);
   }
 
   public function newRequest()
@@ -329,13 +357,13 @@ class GeneralRequisitionsComponent extends Component
   public function mainQuery()
   {
     return InvDepartmentRequest::search($this->search)
-    ->when(\Auth::user()->category == 'System-Admin', function ($query) {
-      $query->whereIn('status',[1,3,5,6]);
-      // $query->where('department_id',\Auth::user()->$employee->department);
-    })
-    ->when(\Auth::user()->category == 'Deparment-staff', function ($query) {
-      $query->where('department_id',\Auth::user()->$employee->department);
-    })
+    // ->when(\Auth::user()->category == 'System-Admin', function ($query) {
+    //   $query->whereIn('status',[1,3,5,6]);
+    //   // $query->where('department_id',\Auth::user()->$employee->department);
+    // })
+    // ->when(\Auth::user()->category == 'Department-staff', function ($query) {
+    //   $query->where('department_id',\Auth::user()->$employee->department);
+    // })
     ->when($this->department, function ($query) {
       $query->where('department_id',$this->department);
     })
