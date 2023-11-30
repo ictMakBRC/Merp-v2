@@ -19,25 +19,25 @@
         <a href="#officialContactsSubMenu" class="nav-link" data-bs-toggle="collapse" role="button"
             aria-expanded="false" aria-controls="officialContactsSubMenu">
             @if(\Auth::user()->hasRole(['Regular Department User']) || \Auth::user()->hasRole(['Department Head']))
-            My Requests
+            Department Requisitions
             @elseif(\Auth::user()->hasRole(['Store Admin']))
-            Incoming Department Requests
+            Incoming Department Requisitions
             @endif
         </a>
         <div class="collapse" id="officialContactsSubMenu">
             <ul class="nav flex-column">
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('forecast') }}">Forecasts</a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('general-requests') }}">General Request</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('consumption-based') }}">Consumption Based Request</a>
-                </li>
-                <li class="nav-item">
+                </li> -->
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ route('consumption-based') }}">Incoming Requests</a>
-                </li>
+                </li> -->
                 <!--end nav-item-->
                 <!--end nav-item-->
             </ul>

@@ -54,9 +54,62 @@ class InvSuppliersComponent extends Component
   {
     $this->dispatchBrowserEvent('show-modal');
     $this->resetInputs();
-    $this->toggleForm = false;
+    $this->createNew = true;
   }
 
+  public function storeData()
+  {
+    $this->validate([
+        'name' => 'required|unique:inv_suppliers,name',
+        'email' => 'email'
+    ]);
+
+    $supplier = new InvSupplier;
+    $supplier->name = $this->name;
+    $supplier->contact = $this->contact;
+    $supplier->email = $this->email;
+    $supplier->address = $this->address;
+
+    $supplier->save();
+    $this->resetInputs();
+    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Supplier successfully added']);
+  }
+
+  public function editdata(InvSupplier $supplier)
+  {
+    $this->edit_id = $supplier->id;
+    $this->name = $supplier->name;
+    $this->contact = $supplier->contact;
+    $this->email = $supplier->email;
+    $this->address = $supplier->address;
+
+    $this->createNew = false;
+    $this->dispatchBrowserEvent('show-modal');
+  }
+
+    public function updateData()
+    {
+      $this->validate([
+          'email' => 'email',
+          'name' => 'required|unique:inv_suppliers,name,'.$this->edit_id
+      ]);
+
+      $supplier = InvSupplier::findOrFail($this->edit_id);
+      $supplier->name = $this->name;
+      $supplier->contact = $this->contact;
+      $supplier->email = $this->email;
+      $supplier->address = $this->address;
+
+      $supplier->update();
+      $this->close();
+      $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Supplier successfully updated']);
+    }
+
+public function close()
+{
+  $this->resetInputs();
+  $this->dispatchBrowserEvent('close-modal');
+}
   public function resetInputs()
   {
     $this->reset([
@@ -64,7 +117,6 @@ class InvSuppliersComponent extends Component
     'contact',
     'address',
     'email',
-    'is_active',
     ]);
   }
 

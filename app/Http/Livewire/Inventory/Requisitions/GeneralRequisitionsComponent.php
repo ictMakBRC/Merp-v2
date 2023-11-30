@@ -300,9 +300,9 @@ class GeneralRequisitionsComponent extends Component
       }
     });
 
-        // $requset = InvDepartmentRequest::where
-        $this->close();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Reqquest successfully submitted!']);
+    // $requset = InvDepartmentRequest::where
+    $this->close();
+    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Reqquest successfully submitted!']);
   }
 
   public function newRequest()
