@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        UOM (<span class="text-danger fw-bold">{{ $uoms->total() }}</span>)
+                                        Units Of Measure (<span class="text-danger fw-bold">{{ $uoms->total() }}</span>)
                                         {{-- @include('livewire.layouts.partials.inc.filter-toggle') --}}
                                     @else
                                         UMO
@@ -91,7 +91,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
+                            <table id="datableButton" class="table table-bordered table-striped mb-0 w-100 sortable">
                                 <thead>
                                     <tr>
                                         <th>No.</th>

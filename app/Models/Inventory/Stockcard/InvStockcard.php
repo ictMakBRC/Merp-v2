@@ -11,19 +11,13 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
 class InvStockcard extends Model
 {
   use HasFactory,LogsActivity;
 
   protected $fillable = [
-    'item_id',
+    'commodity_id',
     'created_by',
-    'department_id',
-    'barcode',
-    'voucher_number',
     'quantity',
     'action',
     'batch_number',
@@ -37,20 +31,17 @@ class InvStockcard extends Model
     'transaction_date',
     'quantity_in',
     'quantity_out',
-    'opening_balance',
     'physical_count',
     'discrepancy',
     'quantity_resolved',
-    'created_at',
-    'updated_at',
     'losses_adjustments',
     'transaction_type',
     'to_from',
   ];
 
-  public function item()
+  public function commodity()
   {
-    return $this->belongsTo(InvItem::class, 'item_id', 'id');
+    return $this->belongsTo(InvItem::class, 'commodity_id', 'id');
   }
 
   public function department()
@@ -65,7 +56,7 @@ class InvStockcard extends Model
 
   public function storageBin()
   {
-    return $this->belongsTo(StorageBin::class,'storage_bin_id','id');
+    return $this->belongsTo(InvStorageBin::class,'storage_bin_id','id');
   }
 
   public function user()

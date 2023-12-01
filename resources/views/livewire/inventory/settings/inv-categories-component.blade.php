@@ -91,7 +91,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
+                            <table id="datableButton" class="table table-bordered table-striped mb-0 w-100 sortable">
                                 <thead>
                                     <tr>
                                         <th>No.</th>

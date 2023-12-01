@@ -8,7 +8,7 @@
   <ul class="nav flex-column">
 
     <li class="nav-item">
-      <a href="#" class="nav-link"> Stock Card</a>
+      <a href="{{ route('stockcards') }}" class="nav-link"> Stockcards</a>
     </li>
 
     <!-- @if(\Auth::user()->category != "Department-staff") -->

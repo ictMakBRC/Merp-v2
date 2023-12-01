@@ -15,6 +15,8 @@ use App\Http\Livewire\Inventory\Manage\DepartmentItemsComponent;
 use App\Http\Livewire\Inventory\Requisitions\ForecastsComponent;
 use App\Http\Livewire\Inventory\Requisitions\GeneralRequisitionsComponent;
 use App\Http\Livewire\Inventory\Requisitions\ConsumptionBasedRequisitionsComponent;
+use App\Http\Livewire\Inventory\StockMgt\ManageStockCardComponent;
+use App\Http\Livewire\Inventory\StockMgt\StockCardComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'inventory','middleware' => ['permission:access_inventory_module']], function () {
@@ -34,6 +36,8 @@ Route::group(['prefix' => 'inventory','middleware' => ['permission:access_invent
     Route::get('suppliers', InvSuppliersComponent::class)->name('suppliers');
     // Route::get('stores/sections/bins', InvStorageSubSectionsComponent::class)->name('inventory-storage_bins');
     // Route::get('unit_of_measures', InvUnitOfMeasuresComponent::class)->name('inventory-unit_of_measures');
+    Route::get('/stockcards', StockCardComponent::class)->name('stockcards');
+    Route::get('/stock/receive', ManageStockCardComponent::class)->name('receive-stock');
   });
 
   Route::group(['prefix' => 'manage-stock','middleware' => ['permission:access_stock_management']], function () {

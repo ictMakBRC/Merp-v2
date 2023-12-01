@@ -62,7 +62,7 @@
                 <tr>
                   <td>{{$key+1}}</td>
                   <td>{{$value->item?->name }}</td>
-                  <td>{{ $value->item?->description }}</td>
+                  <td>{{ $value->item?->category->name }}</td>
                   <td>{{ $value->brand }}</td>
                   <td>{{ $value->department?->name }}</td>
                   <td>{{ $value->created_at }}</td>
