@@ -23,9 +23,9 @@ use App\Enums\ProcurementRequestEnum;
                 
                 <div class="col-lg-12 col-xl-12">
                     <div class="float-end d-print-none mt-2 mt-md-0 mb-2">
-                        @if ($request->step_order < 2)
+                        @if ($request->step_order < 2 && !$request->items->isEmpty())
                             <button class="btn btn-de-info btn-sm"
-                                wire:click='forwardToSupervisor({{ $request->id }})'>Submit to
+                                wire:click='forwardToSupervisor({{ $request->id }})' onclick="return confirm('Are you sure you want to proceed?');">Submit to
                                 {{ getProcurementRequestStep($request->step_order + 1) }}</button>
                         @endif
 

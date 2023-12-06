@@ -494,7 +494,7 @@ class FmsViewInvoiceComponent extends Component
             // $this->payment_amount = $this->amount - $this->balance;
 
             $data['ledgers'] = FmsLedgerAccount::where('department_id', $invoiceData->department_id)->get();
-            $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['service'])->get();
+            $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['uintService.service'])->get();
         } else {
             $data['items'] = collect([]);
             $data['ledgers'] = collect([]);

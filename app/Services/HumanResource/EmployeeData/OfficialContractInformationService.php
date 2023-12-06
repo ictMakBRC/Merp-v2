@@ -32,7 +32,7 @@ class OfficialContractInformationService
         $contractInformation->employee_id = $officialContractDTO->employee_id;
         $contractInformation->contract_summary = $officialContractDTO->contract_summary;
         $contractInformation->gross_salary =  $officialContractDTO->gross_salary;
-        $contractInformation->currency =  $officialContractDTO->currency;
+        $contractInformation->currency_id =  $officialContractDTO->currency_id;
         $contractInformation->start_date = $officialContractDTO->start_date;
         $contractInformation->end_date =  $officialContractDTO->end_date;
         $contractInformation->contract_file = $officialContractDTO->contractFilePath;

@@ -20,6 +20,8 @@
                         </div>
                     </div>
                 </div>
+                
+                    
                 <div class="card-body">
                     @include('livewire.finance.budget.inc.new-budget-form')
                 </div>

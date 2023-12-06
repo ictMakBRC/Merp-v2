@@ -33,9 +33,9 @@
                                         @foreach ($items as $item)
                                             <tr>
                                                 <td>
-                                                    <h5 class="mt-0 mb-1 font-14">{{ $item->service->name ?? 'N/A' }}
+                                                    <h5 class="mt-0 mb-1 font-14">{{ $item->uintService->service->name ?? 'N/A' }}
                                                     </h5>
-                                                    <p class="mb-0 text-muted">{{ $item->service->description ?? '' }}
+                                                    <p class="mb-0 text-muted">{{ $item->uintService->service->description ?? '' }}
                                                     </p>
                                                 </td>
                                                 <td>@moneyFormat($item->unit_price ?? 0)</td>

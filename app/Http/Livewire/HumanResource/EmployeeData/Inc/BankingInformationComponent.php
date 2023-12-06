@@ -14,7 +14,7 @@ class BankingInformationComponent extends Component
     public $branch;
     public $account_name;
     public $account_number;
-    public $currency;
+    public $currency_id;
     public $is_default;
 
     public $loadingInfo='';
@@ -50,7 +50,7 @@ class BankingInformationComponent extends Component
                 'branch'=>    $this->branch,
                 'account_name'=>    $this->account_name,
                 'account_number'=>    $this->account_number,
-                'currency'=>    $this->currency,
+                'currency_id'=>    $this->currency_id,
                 'is_default'=>    $this->is_default,
                 ]
             );

@@ -16,6 +16,10 @@ class FmsRequestEmployee extends Model
     {
         return $this->morphTo();
     }
+    public function contractable(): MorphTo
+    {
+        return $this->morphTo();
+    }
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id', 'id');
@@ -52,6 +56,13 @@ class FmsRequestEmployee extends Model
             'updated_by',      
             'status',
             'payroll_id',
+            'paye_rate',
+            'worker_nssf_rate',
+            'emp_nssf_rate',
+            'deductions',
+            'bonuses',
+            'net_salary', 
+            'schedule_id',
         ];
     
 }

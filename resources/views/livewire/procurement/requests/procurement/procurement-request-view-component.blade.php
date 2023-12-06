@@ -15,7 +15,7 @@ use App\Enums\ProcurementRequestEnum;
 
                         @if ($request->step_order == 6 && $request->status == ProcurementRequestEnum::PENDING)
                             <x-button class="btn btn-de-success btn-sm"
-                                wire:click="acknowledgeRequest({{ $request->id }},'{{ ProcurementRequestEnum::PROCESSING }}')">Acknowledge
+                                wire:click="acknowledgeRequest({{ $request->id }},'{{ ProcurementRequestEnum::PROCESSING }}')" onclick="return confirm('Are you sure you want to proceed?');">Acknowledge
                                 & Process</x-button>
                         @endif
 

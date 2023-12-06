@@ -36,8 +36,8 @@
                                             <td>
                                                 <select  id="item_id" wire:model='item_id' class="form-control-sm form-select">
                                                     <option value="">Select</option>
-                                                    @foreach ($services as $service)
-                                                        <option value="{{$service->id}}">{{$service->name}}</option>
+                                                    @foreach ($services as $uservice)
+                                                        <option value="{{$uservice->id}}">{{$uservice->service->name}}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('item_id')<div class="text-danger text-small">{{ $message }}</div>@enderror
@@ -58,8 +58,8 @@
                                             
                                         <tr>
                                             <td>
-                                                <h5 class="mt-0 mb-1 font-14">{{$item->service->name??'N/A'}}</h5>
-                                                <p class="mb-0 text-muted">{{$item->service->description??''}}</p>
+                                                <h5 class="mt-0 mb-1 font-14">{{$item->uintService->service->name??'N/A'}}</h5>
+                                                <p class="mb-0 text-muted">{{$item->uintService->service->description??''}}</p>
                                             </td>
                                             <td>@moneyFormat($item->unit_price??0)</td>
                                             <td>{{$item->quantity??'N/A'}}</td>

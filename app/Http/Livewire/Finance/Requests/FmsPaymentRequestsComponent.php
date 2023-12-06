@@ -75,6 +75,45 @@ class FmsPaymentRequestsComponent extends Component
     public $ledgers;
     public $type;
     public $max = 0;
+    public $unit_type = 'department';
+    public $unit_id = 0;
+    public $requestable_type;
+    public $requestable_id;
+    public $requestable;
+    public function mount($type)
+    {
+        $this->budgetLines = collect([]);
+        $this->ledgers = collect([]);
+        $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
+        $this->fiscal_year = $fiscal_year->id??null;
+
+        if ($type == 'all') {
+            $this->unit_type = 'all';
+            $this->unit_id = '0';
+        } else {
+            if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                $this->unit_id = session('unit_id');
+                $this->unit_type = session('unit_type');
+                $this->requestable = $requestable = Project::find($this->unit_id);
+                $this->project_id = $requestable->id??null;
+                $this->entry_type = 'Project';
+                $this->updatedProjectId();
+            } else {
+                $this->unit_id = auth()->user()->employee->department_id ?? 0;
+                $this->unit_type = 'department';
+                $this->entry_type = 'Department';
+                $this->requestable = $requestable = Department::find($this->unit_id);
+                $this->department_id = $requestable->id??null;
+                $this->updatedDepartmentId();
+            }
+            if ($requestable) {
+                $this->requestable_type = get_class($requestable);
+                $this->requestable_id = $this->unit_id;
+            }else{
+                abort(403, 'Unauthorized access or action.'); 
+            }
+        }
+    }
 
     public function updatedCreateNew()
     {
@@ -97,14 +136,6 @@ class FmsPaymentRequestsComponent extends Component
     public function updatingSearch()
     {
         $this->resetPage();
-    }
-
-    public function mount()
-    {
-        $this->budgetLines = collect([]);
-        $this->ledgers = collect([]);
-        $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
-        $this->fiscal_year = $fiscal_year->id??null;
     }
 
     public function updated($fields)
@@ -139,7 +170,7 @@ class FmsPaymentRequestsComponent extends Component
         $this->updatedCurrencyId();
         // dd($this->budgetLineBalance);
     }
-
+    
     
     public $ledgerAmtHeld = 0;
     public function updatedLedgerAccount()
@@ -228,7 +259,7 @@ class FmsPaymentRequestsComponent extends Component
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Maximum amount exceeded!',
-                'text' => 'You gone beyond the maximum amount available for this request, your amount is '.$this->baseAmount.' but the maximum is '.$this->max,
+                'text' => 'You have gone beyond the maximum amount available for this request, your amount is '.$this->baseAmount.' but the maximum is '.$this->max,
             ]);
             return false;
         }
@@ -309,7 +340,7 @@ class FmsPaymentRequestsComponent extends Component
    
     public function updatedProjectId()
     {
-        $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
+        $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['project_id' => $this->project_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
         $this->ledgers = FmsLedgerAccount::Where('project_id', $this->project_id)->with(['project', 'department', 'currency'])->get();
@@ -329,7 +360,7 @@ class FmsPaymentRequestsComponent extends Component
 
     public function updatedDepartmentId()
     {
-        $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
+        $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['department_id' => $this->department_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
         $this->ledgers = FmsLedgerAccount::where('department_id', $this->department_id)->with(['project', 'department', 'currency'])->get();
@@ -370,8 +401,8 @@ class FmsPaymentRequestsComponent extends Component
             'rate',
             'currency_id',
             'notice_text',
-            'department_id',
-            'project_id',
+            // 'department_id',
+            // 'project_id',
             'budget_line_id',
             'status',
         ]);
@@ -397,7 +428,8 @@ class FmsPaymentRequestsComponent extends Component
 
     public function mainQuery()
     {
-        $services = FmsPaymentRequest::search($this->search)
+        $services = FmsPaymentRequest::search($this->search)->when($this->requestable_id && $this->requestable_type, function ($query) {
+            $query->where(['requestable_id'=> $this->requestable_id,'requestable_type' => $this->requestable_type]);})
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

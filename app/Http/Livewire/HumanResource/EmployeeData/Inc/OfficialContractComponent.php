@@ -15,7 +15,7 @@ class OfficialContractComponent extends Component
     public $employee_id;
     public $contract_summary;
     public $gross_salary;
-    public $currency;
+    public $currency_id;
     public $start_date;
     public $end_date;
     public $contract_file;
@@ -64,7 +64,7 @@ class OfficialContractComponent extends Component
                     'employee_id'=>$this->employee_id,
                     'contract_summary'=>$this->contract_summary,
                     'gross_salary'=> $this->gross_salary,
-                    'currency'=> $this->currency,
+                    'currency_id'=> $this->currency_id,
                     'start_date'=> $this->start_date,
                     'end_date'=> $this->end_date,
                     'contractFilePath'=> $this->contractFilePath,

@@ -13,7 +13,7 @@
 <div class="mb-3 col col-12 col-md-4  col-sm-3">
         <label for="project_id" class="form-label required">Project</label>
         <select class="select2 form-select" id="project_id" wire:model='project_id'>
-            <option selected value="">Select</option>
+            <option value="">Select</option>
             @foreach ($projects as $project)
                 <option value='{{ $project->id }}'>{{ $project->name }}</option>
             @endforeach

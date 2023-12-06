@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('department_project', function (Blueprint $table) {
+        Schema::create('fms_main_budgets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('department_id')->references('id')->on('departments', 'id')->constrained()->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('project_id')->references('id')->on('projects', 'id')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('department_project');
+        Schema::dropIfExists('fms_main_budgets');
     }
 };

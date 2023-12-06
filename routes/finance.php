@@ -29,9 +29,15 @@ use App\Http\Livewire\Finance\Settings\ChartOfAccountsTypesComponent;
 use App\Http\Livewire\Finance\Settings\FmsServiceCategoriesComponent;
 use App\Http\Livewire\Finance\Dashboard\FinanceMainDashboardComponent;
 use App\Http\Livewire\Finance\Dashboard\FmsUnitDashboardComponent;
+use App\Http\Livewire\Finance\Income\FmsIncomeComponent;
+use App\Http\Livewire\Finance\Invoice\FmsIncomingInvoiceComponent;
+use App\Http\Livewire\Finance\Invoice\FmsOutGoingInvoiceComponent;
 use App\Http\Livewire\Finance\Ledger\FmsViewLedgerComponent;
 use App\Http\Livewire\Finance\Lists\FmsDepartmentsComponent;
 use App\Http\Livewire\Finance\Lists\FmsProjectsComponent;
+use App\Http\Livewire\Finance\Payroll\FmsGeneratePayrollComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollRequestDetailsComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollRequestsComponent;
 use App\Http\Livewire\Finance\Payroll\FmsPayrollScheduleComponent;
 use App\Http\Livewire\Finance\Payroll\FmsPayrollsComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
@@ -39,6 +45,7 @@ use App\Http\Livewire\Finance\Requests\FmsPaymentRequestDetailsComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestSettingComponent;
 use App\Http\Livewire\Finance\Requests\Internal\FmsInternalTransferRequestsComponent;
 use App\Http\Livewire\Finance\Settings\FmsCurrencyUpdatesComponent;
+use App\Http\Livewire\Finance\Settings\FmsUnitServicesComponent;
 
 Route::group(['prefix' => 'finance'], function () {
     Route::get('dashboard', FinanceMainDashboardComponent::class)->name('finance-dashboard');
@@ -46,27 +53,36 @@ Route::group(['prefix' => 'finance'], function () {
 
     Route::group(['prefix' => 'accounting'], function () {
         Route::get('chart-of-accounts', ChartOfAccountsComponent::class)->name('finance-chart_of_accounts');
-        Route::get('ledger/accounts', FmsLedgerAccountsComponent::class)->name('finance-ledger_accounts');
-        Route::get('ledger/account/{id}', FmsViewLedgerComponent::class)->name('finance-ledger_view');
-        Route::get('budgets', FmsBudgetsComponent::class)->name('finance-budgets');
+       
+        Route::get('budgets/{type}', FmsBudgetsComponent::class)->name('finance-budgets');
         Route::get('budgets/main', FmsMainBudgetListComponent::class)->name('finance-main_budget');
         Route::get('budgets/main/{year}', FmsMainBudgetComponent::class)->name('finance-main_budget_view');
         Route::get('budgets/lines/{budget}', FmsBudgetLinesComponent::class)->name('finance-budget_lines');
         Route::get('budgets/view/{budget}', FmsViewBudgetComponent::class)->name('finance-budget_view');
         Route::get('invoices', FmsInvoiceListsComponent::class)->name('finance-invoices');
+        Route::get('invoices/incoming', FmsIncomingInvoiceComponent::class)->name('finance-invoices_in');
+        Route::get('invoices/outgoing', FmsOutGoingInvoiceComponent::class)->name('finance-invoices_out');
         Route::get('invoice/items/{inv_no}', FmsInvoiceItemsComponent::class)->name('finance-invoice_items');
         Route::get('invoice/view/{inv_no}', FmsViewInvoiceComponent::class)->name('finance-invoice_view');
-        Route::get('transactions/{type}', FmsTransactionsComponent::class)->name('finance-transactions');
-        // Route::get('transfers/{type}', FmsInternalTransfersComponent::class)->name('finance-transfers');
-        Route::get('expenses/{type}', FmsExpenseComponent::class)->name('finance-expenses');
-        Route::get('requests/{type}', FmsPaymentRequestsComponent::class)->name('finance-requests');
-        Route::get('requests/details/{code}', FmsPaymentRequestDetailsComponent::class)->name('finance-request_detail');
-        Route::get('requests/preview/{code}', FmsPaymentPreviewComponent::class)->name('finance-request_preview');
-
-        Route::get('requests/internal/{type}', FmsInternalTransferRequestsComponent::class)->name('finance-requests_internal');
-        Route::get('requests/internal/details/{code}', FmsInternalTransferRequestsComponent::class)->name('finance-request_detail_internal');
-        Route::get('requests/internal/preview/{code}', FmsPaymentPreviewComponent::class)->name('finance-request_preview_internal');
         
+        
+    });
+    Route::group(['prefix' => 'ledger'], function () {
+        Route::get('accounts/{type}', FmsLedgerAccountsComponent::class)->name('finance-ledger_accounts');
+        Route::get('account/{id}', FmsViewLedgerComponent::class)->name('finance-ledger_view');
+    });
+    Route::group(['prefix' => 'transactions'], function () {
+        Route::get('all/{type}', FmsTransactionsComponent::class)->name('finance-transactions');
+        Route::get('expenses/{type}', FmsExpenseComponent::class)->name('finance-expenses');
+        Route::get('income/{type}', FmsIncomeComponent::class)->name('finance-revenues');    
+    });
+    Route::group(['prefix' => 'requests'], function () {
+        Route::get('list/{type}', FmsPaymentRequestsComponent::class)->name('finance-requests');
+        Route::get('details/{code}', FmsPaymentRequestDetailsComponent::class)->name('finance-request_detail');
+        Route::get('preview/{code}', FmsPaymentPreviewComponent::class)->name('finance-request_preview');
+        Route::get('internal/{type}', FmsInternalTransferRequestsComponent::class)->name('finance-requests_internal');
+        Route::get('internal/details/{code}', FmsInternalTransferRequestsComponent::class)->name('finance-request_detail_internal');
+        Route::get('internal/preview/{code}', FmsPaymentPreviewComponent::class)->name('finance-request_preview_internal');
     });
     Route::group(['prefix' => 'settings'], function () {
         Route::get('chart-of-accounts/types', ChartOfAccountsTypesComponent::class)->name('finance-chart_of_account_types');
@@ -76,20 +92,25 @@ Route::group(['prefix' => 'finance'], function () {
         Route::get('currencies/rates', FmsCurrencyUpdatesComponent::class)->name('finance-currency_rates');
         Route::get('categories', FmsServiceCategoriesComponent::class)->name('finance-categories');
         Route::get('services', FmsServicesComponent::class)->name('finance-services');
+        Route::get('unit/services', FmsUnitServicesComponent::class)->name('finance-unit_services');
         Route::get('years', FmsFinancialYearsComponent::class)->name('finance-years');
         Route::get('positions', FmsPaymentRequestSettingComponent::class)->name('finance-req_settings');
         Route::get('banks', FmsBanksComponent::class)->name('finance-banks');
     });
     Route::group(['prefix' => 'lists'], function () {
         Route::get('departments', FmsDepartmentsComponent::class)->name('finance-department_list');
-        Route::get('unit/{id}/{type}/lines', FmsDepartmentBudgetLinesComponent::class)->name('finance-unit_lines');
+        Route::get('unit/lines', FmsDepartmentBudgetLinesComponent::class)->name('finance-unit_lines');
         Route::get('projects', FmsProjectsComponent::class)->name('finance-project_list');
         
     });
     Route::group(['prefix' => 'payroll'], function () {
+        Route::get('requests/{type}', FmsPayrollRequestsComponent::class)->name('finance-payroll_unit_list');
+        Route::get('payroll/{code}/employees', FmsPayrollRequestDetailsComponent::class)->name('finance-payroll_unit_details');
         Route::get('list', FmsPayrollsComponent::class)->name('finance-payroll_list');
         Route::get('create/{voucher}/add', FmsPayrollScheduleComponent::class)->name('finance-payroll_data');
+        Route::get('generate/{voucher}/add', FmsGeneratePayrollComponent::class)->name('finance-payroll_generate');
         Route::get('payslip/{payroll_id}/download', [FinanceGeneralController::class, 'downloadPayslip'])->name('finance-pay_slip');
+        Route::get('payslip/{payroll_id}/generate', [FinanceGeneralController::class, 'generatePayslip'])->name('finance-gen_pay_slip');
         
     });
 });

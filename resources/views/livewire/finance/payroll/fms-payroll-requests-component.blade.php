@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    All Payrolls (<span class="text-danger fw-bold">{{ $payrolls->total() }}</span>)
+                                    Salary Payement Requests (<span class="text-danger fw-bold">{{ $requests->total() }}</span>)
                                     @include('livewire.layouts.partials.inc.filter-toggle')
                                 </h5>
                                 @include('livewire.layouts.partials.inc.create-resource-alpine')
@@ -16,46 +16,9 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form wire:submit.prevent="createPayroll()">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="month">Month:</label>
-                                <select class="form-select" wire:model="month" id="month">
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ \Carbon\Carbon::create(null, $i, 1)->format('F') }}</option>
-                                    @endfor
-                                </select>
-                            </div>
-                            
-                            <div class="col-md-3">
-                                <label  for="year">Year:</label>
-                                <select class="form-select" wire:model="year" id="year">
-                                    @for ($i = date('Y'); $i >= (date('Y') - 10); $i--)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>     
-                            <div class="col-2">
-                                <label  for="year">Currency:</label>
-                                <select class="form-select" wire:model="currency_id" id="currency_id">
-                                    <option value="">select</option>
-                                    @foreach ($currencies as $currency)
-                                        <option value="{{ $currency->id }}">{{ $currency->code }}</option>
-                                    @endforeach
-                                </select>
-                            </div>    
-                            
-                            <div class="col-md-2">
-                                <label  for="year">Rate:</label>
-                                <input type="number" step="any" class="form-control" wire:model="rate" id="rate">
-                            </div>                
-
-                            <div class="col-2 pt-3 text-end">
-                                <button class="btn btn-primary" type="submit">Create Payroll</button>
-                            </div>
-                        </div>
-                    </form>
+                    @include('livewire.finance.payroll.inc.new-salary-request-form')
                 </div>
+                @include('livewire.finance.requests.inc.request_counts')
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
@@ -96,28 +59,44 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Year</th>
-                                        <th>Month</th>
-                                        <th>Date created</th>
-                                        <th>Voucher</th>
-                                        <th>Status</th>
+                                        <th>Type</th>
+                                        <th>Ref</th>
+                                        <th>Date</th>
+                                        <th>From Account</th>
+                                        <th>Trx Amount</th>
+                                        <th>Rate</th>
+                                        <th>Currency</th>
+                                        <th>status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($payrolls as $key => $payroll)
+                                    @foreach ($requests as $key => $request)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $payroll->year }}</td>
-                                            <td>{{ $payroll->month }}</td>
-                                            <td>{{ $payroll->created_at ?? 'N/A' }}</td>
-                                            <td>{{ $payroll->payment_voucher ?? 'N/A' }}</td>
-                                            <td><span class="badge bg-success">{{ $payroll->status }}</span></td>
+                                            <td>{{ $request->request_type }}</td>
+                                            <td>{{ $request->request_code }}</td>
+                                            <td>{{ $request->created_at ?? 'N/A' }}</td>
+                                            <td>{{ $request->project->name ?? ($request->department->name ?? 'N/A') }}</td>
+                                            <td>@moneyFormat($request->total_amount)</td>
+                                            <td>@moneyFormat($request->rate)</td>
+                                            <td>{{ $request->currency->code ?? 'N/A' }}</td>
+                                            <td><span class="badge bg-success">{{ $request->status }}</span></td>
                                             <td class="table-action">
-                                                <a href="{{ URL::signedRoute('finance-payroll_data', $payroll->payment_voucher) }}"
+                                                {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
+                                                @if ($request->status =='Pending' || $request->status =='Rejected')
+                                                <a href="{{ URL::signedRoute('finance-payroll_unit_details', $request->request_code) }}"
+                                                    class="btn btn-sm btn-outline-secondary">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                    
+                                                @else
+                                                <a href="{{ URL::signedRoute('finance-request_preview', $request->request_code) }}"
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
+                                                    
+                                                @endif
 
                                             </td>
                                         </tr>
@@ -128,7 +107,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $payrolls->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $requests->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                             </div>
                         </div>

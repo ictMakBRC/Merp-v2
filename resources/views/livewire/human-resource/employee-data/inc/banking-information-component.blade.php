@@ -37,12 +37,12 @@
             </div>
 
             <div class="mb-3 col-md-2">
-                <label for="currency" class="form-label required">Currency</label>
-                <select class="form-select select2" id="currency" wire:model.lazy='currency'>
+                <label for="currency_id" class="form-label required">Currency</label>
+                <select class="form-select select2" id="currency_id" wire:model.lazy='currency_id'>
                     <option selected value="">Select</option>
                     @include('layouts.currencies')
                 </select>
-                @error('currency')
+                @error('currency_id')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>

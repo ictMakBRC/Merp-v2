@@ -99,11 +99,11 @@
                                     @foreach ($currency_rates as $key => $currency)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $currency->currency_code ?? 'N/A' }}</td>
-                                            <td>{{ $currency->exchange_rate ?? 'N/A' }}</td>
+                                            <td>1 {{ $currency->currency_code ?? 'N/A' }}</td>
+                                            <td>{{ $currency->exchange_rate ?? 'N/A' }} {{ $baseCurrency->code??'UGX' }}</td>
                                             <td>{{ date('d-m-Y', strtotime($currency->created_at)) }}</td>
                                             <td class="table-action">
-                                                <button  wire:click="editData({{ $currency->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                <button disabled  wire:click="editData({{ $currency->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
                                             </td>
                                         </tr>

@@ -80,6 +80,45 @@ class FmsInternalTransferRequestsComponent extends Component
     public $ledger;
     public $to_ledger;
     public $toBudgetLines;
+    public $unit_type = 'department';
+    public $unit_id = 0;
+    public $requestable_type;
+    public $requestable_id;
+    public $requestable;
+    public function mount($type)
+    {
+        $this->budgetLines = collect([]);
+        $this->toBudgetLines = collect([]);
+        $this->ledger = [];
+        $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
+        $this->fiscal_year = $fiscal_year->id;
+        if ($type == 'all') {
+            $this->unit_type = 'all';
+            $this->unit_id = '0';
+        } else {
+            if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                $this->unit_id = session('unit_id');
+                $this->unit_type = session('unit_type');
+                $this->requestable = $requestable = Project::find($this->unit_id);
+                $this->project_id = $requestable->id??null;
+                $this->entry_type = 'Project';
+                $this->updatedProjectId();
+            } else {
+                $this->unit_id = auth()->user()->employee->department_id ?? 0;
+                $this->unit_type = 'department';
+                $this->entry_type = 'Department';
+                $this->requestable = $requestable = Department::find($this->unit_id);
+                $this->department_id = $requestable->id??null;
+                $this->updatedDepartmentId();
+            }
+            if ($requestable) {
+                $this->requestable_type = get_class($requestable);
+                $this->requestable_id = $this->unit_id;
+            }else{
+                abort(403, 'Unauthorized access or action.'); 
+            }
+        }
+    }
 
     public function updatedCreateNew()
     {
@@ -92,14 +131,6 @@ class FmsInternalTransferRequestsComponent extends Component
         $this->resetPage();
     }
 
-    public function mount()
-    {
-        $this->budgetLines = collect([]);
-        $this->toBudgetLines = collect([]);
-        $this->ledger = [];
-        $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
-        $this->fiscal_year = $fiscal_year->id;
-    }
 
     public function updated($fields)
     {
@@ -403,8 +434,8 @@ class FmsInternalTransferRequestsComponent extends Component
             'rate',
             'currency_id',
             'notice_text',
-            'department_id',
-            'project_id',
+            // 'department_id',
+            // 'project_id',
             'budget_line_id',
             'status',
         ]);
@@ -430,7 +461,9 @@ class FmsInternalTransferRequestsComponent extends Component
 
     public function mainQuery()
     {
-        $services = FmsPaymentRequest::search($this->search)->where(['request_type' => 'Internal Transfer'])
+        $services = FmsPaymentRequest::search($this->search)->when($this->requestable_id && $this->requestable_type, function ($query) {
+            $query->where(['requestable_id'=> $this->requestable_id,'requestable_type' => $this->requestable_type]);})
+        ->where(['request_type' => 'Internal Transfer'])
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

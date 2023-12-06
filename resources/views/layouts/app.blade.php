@@ -22,6 +22,8 @@
     <!-- iziToast CSS -->
     <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
 
+    <link href="{{ asset('assets/libs/starability/starability-css/starability-all.css') }}" rel="stylesheet" type="text/css" />
+
 
     @stack('css')
 

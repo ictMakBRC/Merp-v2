@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <form wire:submit.prevent="createPayroll()">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-5">
                                 <label for="month">Month:</label>
                                 <select class="form-select" wire:model="month" id="month">
                                     @for ($i = 1; $i <= 12; $i++)
@@ -27,28 +27,14 @@
                                 </select>
                             </div>
                             
-                            <div class="col-md-3">
+                            <div class="col-md-5">
                                 <label  for="year">Year:</label>
                                 <select class="form-select" wire:model="year" id="year">
                                     @for ($i = date('Y'); $i >= (date('Y') - 10); $i--)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
                                 </select>
-                            </div>     
-                            <div class="col-2">
-                                <label  for="year">Currency:</label>
-                                <select class="form-select" wire:model="currency_id" id="currency_id">
-                                    <option value="">select</option>
-                                    @foreach ($currencies as $currency)
-                                        <option value="{{ $currency->id }}">{{ $currency->code }}</option>
-                                    @endforeach
-                                </select>
-                            </div>    
-                            
-                            <div class="col-md-2">
-                                <label  for="year">Rate:</label>
-                                <input type="number" step="any" class="form-control" wire:model="rate" id="rate">
-                            </div>                
+                            </div>                    
 
                             <div class="col-2 pt-3 text-end">
                                 <button class="btn btn-primary" type="submit">Create Payroll</button>
@@ -117,6 +103,10 @@
                                                 <a href="{{ URL::signedRoute('finance-payroll_data', $payroll->payment_voucher) }}"
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a href="{{ URL::signedRoute('finance-payroll_generate', $payroll->payment_voucher) }}"
+                                                    class="btn btn-sm btn-outline-primary">
+                                                    <i class="fa fa-edit"></i>
                                                 </a>
 
                                             </td>
