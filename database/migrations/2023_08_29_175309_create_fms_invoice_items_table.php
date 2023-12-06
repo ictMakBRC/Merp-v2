@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('fms_invoice_items', function (Blueprint $table) {
             $table->id();           
             $table->foreignId('invoice_id')->nullable()->references('id')->on('fms_invoices')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
-            $table->foreignId('item_id')->nullable()->references('id')->on('fms_services')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
+            $table->foreignId('item_id')->nullable()->references('id')->on('fms_unit_services')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('tax_id')->nullable(); 
             $table->double('quantity'); 
             $table->double('unit_price',16,2); 

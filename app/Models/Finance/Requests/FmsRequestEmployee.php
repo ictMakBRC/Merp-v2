@@ -56,6 +56,13 @@ class FmsRequestEmployee extends Model
             'updated_by',      
             'status',
             'payroll_id',
+            'paye_rate',
+            'worker_nssf_rate',
+            'emp_nssf_rate',
+            'deductions',
+            'bonuses',
+            'net_salary', 
+            'schedule_id',
         ];
     
 }

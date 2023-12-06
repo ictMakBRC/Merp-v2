@@ -29,8 +29,8 @@
                             <td>{{$project->principalInvestigator->fullName}}</td>
                             <td>{{ ucfirst($project->progress_status)}}</td>
                             <td>
-                                <a href="{{ route('finance-unit_lines',[$project->id, 'project']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="budget-lines"><i class="fas fa-briefcase"></i></a>
-                                <a href="{{ route('finance-dashboard_unit',[$project->id, 'project']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="dashboard"><i class="fa fa-home"></i></a>
+                                {{-- <a href="{{ route('finance-unit_lines',[$project->id, 'project']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="budget-lines"><i class="fas fa-briefcase"></i></a> --}}
+                                <a href="javascript::void(0)" wire:click='selectUnit({{ $project->id }})' class="action-ico btn-sm btn btn-outline-success mx-1" title="dashboard"><i class="fa fa-home"></i></a>
                             </td>
                         </tr>
                     @empty

@@ -52,7 +52,8 @@
                                 <th>No.</th>
                                 <th>Name</th>
                                 <th>Quantity</th>
-                                <th>Ammount ({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Amount ({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Actual Amount ({{ $budget_data->currency->code??'N/A' }})</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -64,6 +65,7 @@
                                     <td>{{ $budget->name }}</td>
                                     <td>{{ $budget->quantity??1 }}</td>
                                     <td>@moneyFormat($budget->allocated_amount)</td>
+                                    <td>@moneyFormat($budget->primary_balance)</td>
                                     <td>{{ $budget->description }}</td>                                               
                                 </tr>
                                 @php $number++;@endphp
@@ -89,7 +91,9 @@
                                 <th>No.</th>
                                 <th>Name</th>
                                 <th>Quantity</th>
-                                <th>Ammount({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Amount Budgeted({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Actual Balance({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Amount Held({{ $budget_data->currency->code??'N/A' }})</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -101,6 +105,8 @@
                                     <td>{{ $budget->name }}</td>
                                     <td>{{ $budget->quantity??1 }}</td>
                                     <td>@moneyFormat($budget->allocated_amount)</td>
+                                    <td>@moneyFormat($budget->primary_balance)</td>
+                                    <td>@moneyFormat($budget->amount_held)</td>
                                     <td>{{ $budget->description }}</td>
                                 </tr>
                                 @php $number++;@endphp

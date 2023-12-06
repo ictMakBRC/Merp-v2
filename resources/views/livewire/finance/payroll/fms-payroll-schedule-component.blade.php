@@ -39,100 +39,118 @@
                 </form>
             </div>
             @foreach ($payroll_rates as $payroll_rate)
-                @if (count($employees->where('currency_id',$payroll_rate->currency_id))>0)
-                    
-                    <div class="card-body">
-                        @php
-                            $cur = $payroll_rate->currency->code ?? '';
-                        @endphp
-                         <h6 class="text-success text-center">Submitted Employee Salary list Earning in {{ $payroll_rate->currency?->code }}</h6>
-                        <table id="payrollTable" class="b-top-row" style="border-collapse:collapse;" width="100%"
-                            cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Unit</th>
-                                    <th>Employee</th>
-                                    <th>Month</th>
-                                    <th class="text-end">
-                                        Amount ({{ $cur }})
-                                    </th>
-                                    <th class="text-end">PAYE TAX({{ $cur }})</th>
-                                    <th class="text-end">NSSF 10%({{ $cur }})</th>
-                                    <th class="text-end">NSSF 5%({{ $cur }})</th>
-                                    <th class="text-end">NSSF 15%({{ $cur }})</th>
-                                    <th class="text-end">Net({{ $cur }})</th>
-                                    <th class="text-end">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody class="scrollable ">
-                                @forelse ($employees->where('currency_id',$payroll_rate->currency_id) as $key => $req_employee)
-                                    <tr>
-                                        <td>
-                                            <span class="badge bg-info  ms-auto">@ {{ $req_employee->requestable->name }}</span>
-                                        </td>
-                                        <td>
-                                            {{ $req_employee->employee->fullName ?? 'N/A' }} 
-                                        </td>
-                                        <td>
-                                            {{ $req_employee->month ?? 'N/A' }}/{{ $req_employee->year ?? 'N/A' }}
-                                        </td>
-                                        <td class="text-end">
-                                            @moneyFormat($req_employee->amount)
-                                            <input type="hidden" name="amount" value="{{ $req_employee->amount }} ">
-                                        </td>
-                                        <td class="text-end">
-                                            @php
-                                                $baseAmount = $payroll_rate->rate *  $req_employee->amount;
-                                                $payebase = calculatePAYE($baseAmount);
-                                                $paye =  $payebase/$payroll_rate->rate;
-                                            @endphp
-                                            @moneyFormat($paye)
-                                            <input type="hidden" name="paye" value="{{ $paye }}">
-                                        </td>
-                                        <td class="text-end">
-                                            @php
-                                                $employerNssf = getEmployeerNssf($req_employee->amount);
-                                            @endphp
-                                            @moneyFormat($employerNssf)
-                                            <input type="hidden" name="employeerNssf" value="{{ $employerNssf }}">
-                                        </td>
-                                        <td class="text-end">
-                                            @php
-                                                $employeNssf = getEmployeeNssf($req_employee->amount);
-                                            @endphp
-                                            @moneyFormat($employeNssf)
-                                            <input type="hidden" name="employeeNssf" value="{{ $employeNssf }}">
-                                        </td>
-                                        <td class="text-end">
-                                            @php
-                                                $totalNssf = $employeNssf + $employerNssf;
-                                            @endphp
-                                            @moneyFormat($totalNssf)
-                                            <input type="hidden" name="totalNssf" value="{{ $totalNssf }}">
-                                        </td>
-                                        <td class="text-end">
-                                            @php
-                                                $totalDeduction = $employeNssf + $paye;
-                                                $netSalary = $req_employee->amount - $totalDeduction;
-                                            @endphp
-                                            @moneyFormat($netSalary)
-                                            <input type="hidden" name="netIncome" value="{{ $netSalary }}">
-                                        </td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0)" wire:click="addEmployee({{ $payroll_rate->id }}, {{ $req_employee->id }})"
-                                            class="badge bg-success  align-items-center">
-                                            +</a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr class="btop">
-                                        <td colspan="8" class="text-center text-danger">No entries yet</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        <button wire:click="addAllEmployees({{ $payroll_rate->id }})" class="btn btn-primary btn-xs float-end m-2">Add All {{ $cur }} Employee salaries to payroll</button>
-                    </div>                
+                @if (count($employees->where('currency_id',$payroll_rate->currency_id))>0 && $payroll->status =='Pending')
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6>Submitted Units Under {{ $payroll_rate->currency->code }}</h6>
+                            <div class="scrollable list-group">
+                                <a href="javascript:void(0)" style="font-size: 10px" wire:click="setUnit({{ null }}, {{ null }})"
+                                    class="list-group-item active d-flex align-items-center mb-1">
+                                    <span>All Units</span>                            
+                                    <span class="badge bg-info  ms-auto">{{ $unit_groups->count()}}</span></a>
+                            @foreach ($unit_groups->where('currency_id',$payroll_rate->currency_id) as $unit)
+                                <a href="javascript:void(0)" style="font-size: 10px" wire:click='setUnit({{ $unit->requestable_id }}, "{{ $unit->requestable_type }}")'
+                                class="list-group-item active d-flex align-items-center mb-1">
+                                <span>{{$unit->requestable->name.' '.$unit->total_amount }}</span>                            
+                                <span class="badge bg-info  ms-auto">{{ $unit->submission_count}}</span></a>
+                            @endforeach
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                @php
+                                    $cur = $payroll_rate->currency->code ?? '';
+                                @endphp
+                                 <h6 class="text-success text-center">Submitted Employee Salary list Earning in {{ $payroll_rate->currency?->code }}</h6>
+                                <table id="payrollTable" class="b-top-row" style="border-collapse:collapse;" width="100%"
+                                    cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Unit</th>
+                                            <th>Employee</th>
+                                            <th>Month</th>
+                                            <th class="text-end">
+                                                Amount ({{ $cur }})
+                                            </th>
+                                            <th class="text-end">PAYE TAX({{ $cur }})</th>
+                                            <th class="text-end">NSSF 10%({{ $cur }})</th>
+                                            <th class="text-end">NSSF 5%({{ $cur }})</th>
+                                            <th class="text-end">NSSF 15%({{ $cur }})</th>
+                                            <th class="text-end">Net({{ $cur }})</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="scrollable ">
+                                        @forelse ($employees->where('currency_id',$payroll_rate->currency_id) as $key => $req_employee)
+                                            <tr>
+                                                <td>
+                                                    {{ $req_employee->requestable->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $req_employee->employee->fullName ?? 'N/A' }} 
+                                                </td>
+                                                <td>
+                                                    {{ $req_employee->month ?? 'N/A' }}/{{ $req_employee->year ?? 'N/A' }}
+                                                </td>
+                                                <td class="text-end">
+                                                    @moneyFormat($req_employee->amount)
+                                                    <input type="hidden" name="amount" value="{{ $req_employee->amount }} ">
+                                                </td>
+                                                <td class="text-end">
+                                                    @php
+                                                        $baseAmount = $payroll_rate->rate *  $req_employee->amount;
+                                                        $payebase = calculatePAYE($baseAmount);
+                                                        $paye =  $payebase/$payroll_rate->rate;
+                                                    @endphp
+                                                    @moneyFormat($paye)
+                                                    <input type="hidden" name="paye" value="{{ $paye }}">
+                                                </td>
+                                                <td class="text-end">
+                                                    @php
+                                                        $employerNssf = getEmployeerNssf($req_employee->amount);
+                                                    @endphp
+                                                    @moneyFormat($employerNssf)
+                                                    <input type="hidden" name="employeerNssf" value="{{ $employerNssf }}">
+                                                </td>
+                                                <td class="text-end">
+                                                    @php
+                                                        $employeNssf = getEmployeeNssf($req_employee->amount);
+                                                    @endphp
+                                                    @moneyFormat($employeNssf)
+                                                    <input type="hidden" name="employeeNssf" value="{{ $employeNssf }}">
+                                                </td>
+                                                <td class="text-end">
+                                                    @php
+                                                        $totalNssf = $employeNssf + $employerNssf;
+                                                    @endphp
+                                                    @moneyFormat($totalNssf)
+                                                    <input type="hidden" name="totalNssf" value="{{ $totalNssf }}">
+                                                </td>
+                                                <td class="text-end">
+                                                    @php
+                                                        $totalDeduction = $employeNssf + $paye;
+                                                        $netSalary = $req_employee->amount - $totalDeduction;
+                                                    @endphp
+                                                    @moneyFormat($netSalary)
+                                                    <input type="hidden" name="netIncome" value="{{ $netSalary }}">
+                                                </td>
+                                                <td class="text-end">
+                                                    <a href="javascript:void(0)" wire:click="addEmployee({{ $payroll_rate->id }}, {{ $req_employee->id }})"
+                                                    class="badge bg-success  align-items-center">
+                                                    +</a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr class="btop">
+                                                <td colspan="8" class="text-center text-danger">No entries yet</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                                <button wire:click="addAllEmployees({{ $payroll_rate->id }})" class="btn btn-primary btn-xs float-end m-2">Add All {{ $cur }} Employee salaries to payroll</button>
+                            </div> 
+                        </div>
+                    </div>               
                 @endif
                 <div class="card-body">
                     <div class="tab-content">
@@ -171,19 +189,19 @@
                                                 @php
                                                     $paye = calculatePAYE($emp_payroll->base_salary);
                                                 @endphp
-                                                @moneyFormat($paye)
+                                                @moneyFormat($emp_payroll->paye)
                                             </td>
                                             <td class="text-end">
                                                 @php
                                                     $employerNssf = getEmployeerNssf($emp_payroll->base_salary);
                                                 @endphp
-                                                @moneyFormat($employerNssf)
+                                                @moneyFormat($emp_payroll->emp_nssf)
                                             </td>
                                             <td class="text-end">
                                                 @php
                                                     $employeNssf = getEmployeeNssf($emp_payroll->base_salary);
                                                 @endphp
-                                                @moneyFormat($employeNssf)
+                                                @moneyFormat($emp_payroll->worker_nssf)
                                             </td>
                                             <td class="text-end">
                                                 @php
@@ -193,14 +211,14 @@
                                             </td>
                                             <td class="text-end">
                                                 @php
-                                                    $totalDeduction = $employeNssf + $paye;
+                                                    $totalDeduction = $emp_payroll->worker_nssf + $emp_payroll->paye;
                                                     $netSalary = $emp_payroll->base_salary - $totalDeduction;
                                                 @endphp
                                                 @moneyFormat($netSalary)
                                             </td>
                                             <td class="text-end">
                                                 @php
-                                                    $deductionForeign = getCurrencyRate($emp_payroll->currency_id, 'foreign', $totalDeduction);
+                                                    $deductionForeign = $totalDeduction/$payroll_rate->rate;
                                                     $netSalaryForeign = $emp_payroll->salary - $deductionForeign;
                                                 @endphp
                                                 @moneyFormat($netSalaryForeign)
@@ -208,13 +226,13 @@
     
                                             <td class="text-end">
                                                 @php
-                                                    $grossSalary = $emp_payroll->base_salary + $employerNssf;
+                                                    $grossSalary = $emp_payroll->base_salary + $emp_payroll->emp_nssf;
                                                 @endphp
                                                 @moneyFormat($grossSalary)
                                             </td>
                                             <td class="text-end">
                                                 @php
-                                                    $employerNssfForegine = getCurrencyRate($emp_payroll->currency_id, 'foreign', $employerNssf);
+                                                    $employerNssfForegine = $emp_payroll->emp_nssf/$payroll_rate->rate;
                                                     $grossSalaryForeign = $emp_payroll->salary - $employerNssfForegine;
                                                 @endphp
                                                 @moneyFormat($grossSalaryForeign)
@@ -252,6 +270,9 @@
                 </div> <!-- end card body-->
             @endforeach
         </div>
+        @if ($payroll->status =='Pending')            
+            <button wire:click='markPayrollComplete' class="btn-xs btn btn-outline-success">Mark as complete</button>
+        @endif
     </div>
     @include('livewire.finance.payroll.inc.payement-ref')
     @push('scripts')

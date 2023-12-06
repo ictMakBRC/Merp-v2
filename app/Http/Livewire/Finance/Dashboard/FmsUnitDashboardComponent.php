@@ -61,9 +61,9 @@ class FmsUnitDashboardComponent extends Component
     function mount($id, $type) {                
         $this->unitId = $id;
         if($type == 'department'){
+            $this->requestable = $requestable = Department::find($id);            
             $this->department_id =$id;
-            $this->requestable_type =  'App\Models\HumanResource\Settings\Department';
-            $this->requestable =  Department::find($id);
+            $this->requestable_type =  get_class($requestable);
         }elseif($type == 'project'){
             $this->project_id = $id;
             $this->requestable_type  = 'App\Models\Grants\Project\Project';
@@ -100,6 +100,8 @@ class FmsUnitDashboardComponent extends Component
     }
     public function render()
     {
+        
+    //   dd(auth()->user()->employee->department_id);
         DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
      
             $data['transactions_chart'] = $this->transactions()

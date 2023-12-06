@@ -104,6 +104,10 @@
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
+                                                <a href="{{ URL::signedRoute('finance-payroll_generate', $payroll->payment_voucher) }}"
+                                                    class="btn btn-sm btn-outline-primary">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
 
                                             </td>
                                         </tr>

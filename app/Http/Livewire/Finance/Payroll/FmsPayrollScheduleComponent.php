@@ -277,11 +277,30 @@ class FmsPayrollScheduleComponent extends Component
         ]);
         $this->dispatchBrowserEvent('close-modal');
     }
+    public $unit_id, $unit_type;
+    function setUnit($id, $type) {
+        $this->unit_id = $id;
+        $this->unit_type = $type;
+        dd($this->unit_type);
+    }
+    function markPayrollComplete() {
+        $payroll = FmsPayroll::where('id', $this->payroll->id)->update(['status'=>'Completed']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Payroll completed successfully!']);
+    }
     public function render()
     {
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['payroll_rates'] = FmsPayrollRates::where('payroll_id', $this->payroll->id)->with('currency')->get();
-        $data['employees'] = FmsRequestEmployee::where(['status' => 'Approved'])->with('employee', 'currency','requestable')->get();
+        $data['employees'] = FmsRequestEmployee::where(['status' => 'Approved'])->with('employee', 'currency','requestable')
+        ->when($this->unit_type != '' && $this->unit_id != '', function ($query) {
+            $query->where(['requestable_type'=>$this->unit_type, 'requestable_id'=>$this->unit_id]);
+        }, function ($query) {
+            return $query;
+        })->get();
+        DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+        $data['unit_groups'] = FmsRequestEmployee::select('status','currency_id','requestable_type', 'requestable_id', DB::raw('count(*) as submission_count'), DB::raw('SUM(amount) as total_amount'))
+        ->groupBy('requestable_type', 'requestable_id','currency_id')->where('status','Approved')->with('requestable')->get();
+        DB::statement("SET sql_mode=(SELECT CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY'));");
         $data['payroll_employees'] = FmsPayrollData::where('fms_payroll_id', $this->payroll->id)->with('employee', 'currency')->get();
         return view('livewire.finance.payroll.fms-payroll-schedule-component', $data);
     }
