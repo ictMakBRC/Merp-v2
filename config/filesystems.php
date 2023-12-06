@@ -42,6 +42,13 @@ return [
             'visibility' => 'public',
             'throw' => false,
         ],
+        'Finance' => [
+            'driver' => 'local',
+            'root' => env('STORAGE_PATH', storage_path()).'/app/Finance',
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
 
         'public' => [
             'driver' => 'local',

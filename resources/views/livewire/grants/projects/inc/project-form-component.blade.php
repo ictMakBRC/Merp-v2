@@ -19,7 +19,7 @@
 
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#project-departments" role="tab"
-                    aria-selected="false">Attach Departments/Labs</a>
+                    aria-selected="false">Facilities</a>
             </li>
         </ul>
 
@@ -88,7 +88,7 @@
                         </div>
 
 
-                        {{-- <div class="mb-3 col-md-3">
+                        <div class="mb-3 col-md-3">
                         <label for="grant_id" class="form-label">{{ __('Associated Grant') }}</label>
                         <select class="form-select" id="grant_id" wire:model.lazy="grant_id">
                             <option selected value="">Select</option>
@@ -96,7 +96,7 @@
                         @error('grant_id')
                             <div class="text-danger text-small">{{ $message }}</div>
                         @enderror
-                    </div> --}}
+                    </div>
 
                         <div class="mb-3 col-md-6">
                             <label for="funding_source" class="form-label">{{ __('Funding Source') }}</label>
@@ -117,12 +117,12 @@
                         </div>
 
                         <div class="mb-3 col-md-3">
-                            <label for="currency" class="form-label required">{{ __('Currency') }}</label>
-                            <select class="form-select" id="currency" wire:model.lazy="currency">
+                            <label for="currency_id" class="form-label required">{{ __('Currency') }}</label>
+                            <select class="form-select" id="currency_id" wire:model.lazy="currency_id">
                                 <option selected value="">Select</option>
                                 @include('layouts.currencies')
                             </select>
-                            @error('currency')
+                            @error('currency_id')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>

@@ -23,7 +23,7 @@ class GrievanceTypeFactory extends Factory
      */
     public function definition(): array
     {
-
+        return false;
         return [
             'name' => $name = $this->faker->unique()->words(3, true),
             'slug' => Str::slug($name),

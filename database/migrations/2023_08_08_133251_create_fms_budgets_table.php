@@ -27,6 +27,7 @@ return new class extends Migration
             $table->foreignId('account_id')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->tinyText('description')->nullable();
+            $table->morphs('requestable');
             $table->foreignId('created_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict');   
             $table->foreignId('updated_by')->nullable()->references('id')->on('users')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->string('status')->default('Pending');

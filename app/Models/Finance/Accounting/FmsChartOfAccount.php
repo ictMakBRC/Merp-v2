@@ -2,6 +2,7 @@
 
 namespace App\Models\Finance\Accounting;
 
+use App\Models\Finance\Budget\FmsBudgetLine;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -46,6 +47,11 @@ class FmsChartOfAccount extends Model
     public function subType()
     {
         return $this->belongsTo(FmsChartOfAccountsSubType::class, 'sub_account_type', 'id');
+    }
+
+    public function budgetLines()
+    {
+        return $this->hasMany(FmsBudgetLine::class, 'chat_of_account', 'id');
     }
 
   

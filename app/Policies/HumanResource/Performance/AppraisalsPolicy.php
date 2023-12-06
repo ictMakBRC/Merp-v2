@@ -22,7 +22,7 @@ class AppraisalsPolicy
      */
     public function view(User $user, Appraisal $appraisal): bool
     {
-        return $user->hasPermission('view_appraisals');
+        return $user->hasPermission('view_appraisal');
 
     }
 

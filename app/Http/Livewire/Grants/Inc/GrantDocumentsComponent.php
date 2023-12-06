@@ -55,7 +55,7 @@ class GrantDocumentsComponent extends Component
                 ]);
     
                 $documentName = date('YmdHis').$grant->grant_code.' '.$this->document_category.'.'.$this->document->extension();
-                $this->document_path = $this->document->storeAs('grant_documents/', $documentName);
+                $this->document_path = $this->document->storeAs('grant_documents', $documentName);
             } else {
                 $this->document_path = null;
             }

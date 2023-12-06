@@ -11,7 +11,7 @@ class GrantData extends Data
   public ?string $grant_type;
   public ?string $funding_source;
   public ?float $funding_amount;
-  public ?string $currency;
+  public ?string $currency_id;
   public ?string $start_date;
   public ?string $end_date;
   public ?string $proposal_submission_date;
@@ -37,12 +37,12 @@ class GrantData extends Data
       'grant_type' => 'required|string',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
-      'currency' => 'required|string',
+      'currency_id' => 'required|integer',
       'start_date' => 'nullable|date',
       'end_date' => 'nullable|date|after:start_date',
       'proposal_submission_date' => 'required|date',
       'pi' => 'required|integer',
-      'proposal_summary' => 'required|string|max:255',
+      'proposal_summary' => 'required|string',
       'award_status' => 'required|string',
     ];
   }

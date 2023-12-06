@@ -52,7 +52,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-3">
+                        <div class="mb-3 col-3 d-none">
                             <label for="account_type" class="form-label required">Account Type</label>
                             <select class="form-select select2" id="account_type" wire:model.defer="account_type">
                                 <option  value="">Select</option>
@@ -64,7 +64,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-2">
+                        <div class="mb-3 col-md-3">
                             <label for="as_of" class="form-label required">As of</label>
                             <input type="date" id="as_of" class="form-control" name="as_of" required
                                 wire:model.defer="as_of">
@@ -83,7 +83,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-8">
+                        <div class="mb-3 col">
                             <label for="countryName" class="form-label">Description</label>
                             <textarea  id="description" class="form-control"
                             name="description" wire:model.defer="description"></textarea>

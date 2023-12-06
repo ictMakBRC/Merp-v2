@@ -74,7 +74,7 @@ class Edit extends Component
 
     public function render()
     {
-        // $this->authorize('update', Resignation::class);
+        $this->authorize('update', Resignation::class);
         return view('livewire.human-resource.performance.resignations.edit');
     }
 }

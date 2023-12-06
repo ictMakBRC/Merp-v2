@@ -15,7 +15,7 @@ class WorkExperienceInformationComponent extends Component
     public $company;
     public $position_held;
     public $monthly_salary;
-    public $currency;
+    public $currency_id;
     public $employment_type;
     public $key_responsibilities;
 
@@ -54,7 +54,7 @@ class WorkExperienceInformationComponent extends Component
                     'company'=> $this->company,
                     'position_held'=> $this->position_held,
                     'monthly_salary'=> $this->monthly_salary,
-                    'currency'=> $this->currency,
+                    'currency_id'=> $this->currency_id,
                     'employment_type'=> $this->employment_type,
                     'key_responsibilities'=> $this->key_responsibilities,
                 ]

@@ -4,6 +4,7 @@ namespace App\Models\Finance\Invoice;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FmsInvoicePayment extends Model
@@ -13,6 +14,10 @@ class FmsInvoicePayment extends Model
     public function invoice()
     {
         return $this->belongsTo(FmsInvoice::class, 'invoice_id', 'id');
+    }
+    public function requestable(): MorphTo
+    {
+        return $this->morphTo();
     }
     public static function boot()
     {

@@ -111,7 +111,7 @@ class Index extends Component
 
     public function render()
     {
-        // $this->authorize('create', Grievance::class);
+        $this->authorize('viewAny', Grievance::class);
 
         $data['grievances'] = $this->filterGrievances()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')

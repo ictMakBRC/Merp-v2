@@ -34,8 +34,6 @@ class GeneratorService
         return $emp_number;
     }
 
-
-
     public static function providerNo()
     {
         $provider_code = '';
@@ -109,6 +107,7 @@ class GeneratorService
             }
         }
     }
+
     public static function budgetIdentifier()
     {
         $identifier = '';
@@ -118,7 +117,7 @@ class GeneratorService
         $latestIdentifier = FmsBudget::select('code')->orderBy('id', 'desc')->first();
 
         if ($latestIdentifier) {
-            $numberSplit = explode('-', $latestIdentifier->identifier);
+            $numberSplit = explode('-', $latestIdentifier->code);
             $numberYear = (int) filter_var($numberSplit[0], FILTER_SANITIZE_NUMBER_INT);
 
             if ($numberYear == $yearStart) {
@@ -183,11 +182,31 @@ class GeneratorService
       return 'MERP-RQ/'.$yearMonth.'-'.$randomGeneratedNumber.'-'.$l;
     }
 
-    public static function procurementRequestRef()
+    public static function procurementRequestRef($category)
     {
+        $categoryCode = '';
+
+        switch ($category) {
+            case 'Supplies':
+                $categoryCode = 'SUP';
+                break;
+            case 'Services':
+                $categoryCode = 'SVCS';
+                break;
+            case 'Works':
+                $categoryCode = 'WKS';
+                break;
+            case 'Consultancy':
+                $categoryCode = 'CONS';
+                break;
+            default:
+                // Handle invalid category
+                break;
+        }
+
         $requestRef = '';
         $yearStart = date('y');
-        $latestRef = ProcurementRequest::select('reference_no')->orderBy('id', 'desc')->first();;
+        $latestRef = ProcurementRequest::where('procurement_sector',$category)->select('reference_no')->orderBy('id', 'desc')->first();;
         $randomAlphabet = ucfirst(Str::random(1));
 
         if ($latestRef) {
@@ -197,13 +216,37 @@ class GeneratorService
             if ($refYear == $yearStart) {
                 $requestRef = $latestRefSplit[0].'-'.str_pad(((int) filter_var($latestRefSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT).$randomAlphabet;
             } else {
-                $requestRef = $yearStart.'PROC'.'-001'.$randomAlphabet;
+                $requestRef = $yearStart.$categoryCode.'-001'.$randomAlphabet;
             }
         } else {
-            $requestRef = $yearStart.'PROC'.'-001'.$randomAlphabet;
+            $requestRef = $yearStart.$categoryCode.'-001'.$randomAlphabet;
         }
 
         return $requestRef;
     }
+
+    public static function localPurchaseOrderNo()
+    {
+        $lpoNo = null;
+        $yearStart = date('y');
+
+        $latestLpoNo = ProcurementRequest::orderBy('id', 'desc')->first();
+
+        if ($latestLpoNo) {
+            $latestLpoNoSplit = explode('-', $latestLpoNo->lpo_no);
+            $lpoYear = (int) filter_var($latestLpoNoSplit[0], FILTER_SANITIZE_NUMBER_INT);
+
+            if ($lpoYear == $yearStart) {
+                $lpoNo = $yearStart.'-'.str_pad(((int) filter_var($latestLpoNoSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT);
+            } else {
+                $lpoNo = $yearStart.'-001';
+            }
+        } else {
+            $lpoNo = $yearStart.'-001';
+        }
+        
+        return $lpoNo;
+    }
+
 
 }

@@ -18,6 +18,22 @@
                     <p>Currency:{{ $budget_data->currency->code??'N/A' }}</p>
                 </div>
             </div>
+            <div class="row">
+                @php
+                    $total_revenues = $budget_lines->where('type','Revenue')->sum('allocated_amount');
+                    $total_expenses = $budget_lines->where('type','Expense')->sum('allocated_amount');
+                    $difference = $total_revenues-$total_expenses;
+                @endphp
+                <div class="col-4">
+                    <h5>Revenue: @moneyFormat($total_revenues)</h5>
+                </div>
+                <div class="col-4">
+                    <h5>Expenditure: @moneyFormat($total_expenses)</h5>
+                </div>
+                <div class="col-4">
+                    <h5 @if ($difference<0)class="text-danger" @endif>Difference: @moneyFormat($difference)</h5>
+                </div>
+            </div>
             
             
         </div>
@@ -25,9 +41,9 @@
             
             <h2 class="text-primary">Revenue</h2>
                 @foreach ($incomes as $income)  
+                @if (count($budget_lines->where('chat_of_account',$income->id))>0)
                 <hr class="hr-custom">           
                 <h5>{{ $income->name }}</h5> 
-                @if (count($budget_lines->where('chat_of_account',$income->id))>0)
                     
                 <div class="table-responsive-sm pt-2">
                     <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
@@ -36,7 +52,8 @@
                                 <th>No.</th>
                                 <th>Name</th>
                                 <th>Quantity</th>
-                                <th>Ammount ({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Amount ({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Actual Amount ({{ $budget_data->currency->code??'N/A' }})</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -48,6 +65,7 @@
                                     <td>{{ $budget->name }}</td>
                                     <td>{{ $budget->quantity??1 }}</td>
                                     <td>@moneyFormat($budget->allocated_amount)</td>
+                                    <td>@moneyFormat($budget->primary_balance)</td>
                                     <td>{{ $budget->description }}</td>                                               
                                 </tr>
                                 @php $number++;@endphp
@@ -63,10 +81,9 @@
         <div class="card p-2">
             <h2 class="text-info text-center">Expenses</h2>
                 @foreach ($expenses as $expense)  
+                @if (count($budget_lines->where('chat_of_account',$expense->id))>0)                    
                 <hr class="hr-custom">           
                 <h5>{{ $expense->name }}</h5> 
-                @if (count($budget_lines->where('chat_of_account',$expense->id))>0)
-                    
                 <div class="table-responsive-sm pt-2">
                     <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
                         <thead class="table-light">
@@ -74,7 +91,9 @@
                                 <th>No.</th>
                                 <th>Name</th>
                                 <th>Quantity</th>
-                                <th>Ammount({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Amount Budgeted({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Actual Balance({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Amount Held({{ $budget_data->currency->code??'N/A' }})</th>
                                 <th>Description</th>
                             </tr>
                         </thead>
@@ -86,6 +105,8 @@
                                     <td>{{ $budget->name }}</td>
                                     <td>{{ $budget->quantity??1 }}</td>
                                     <td>@moneyFormat($budget->allocated_amount)</td>
+                                    <td>@moneyFormat($budget->primary_balance)</td>
+                                    <td>@moneyFormat($budget->amount_held)</td>
                                     <td>{{ $budget->description }}</td>
                                 </tr>
                                 @php $number++;@endphp

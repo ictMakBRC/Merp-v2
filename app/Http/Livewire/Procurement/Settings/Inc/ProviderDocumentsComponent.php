@@ -16,8 +16,8 @@ class ProviderDocumentsComponent extends Component
     
     public $provider_id;
     public $document_category;
-    public $expires;
-    public $expiry_date;
+    public $expires=0;
+    public $expiry_date=null;
     public $document_name;
     public $document;
     public $document_path;
@@ -55,7 +55,7 @@ class ProviderDocumentsComponent extends Component
                 ]);
     
                 $documentName = date('YmdHis').$provider->name.' '.$this->document_category.'.'.$this->document->extension();
-                $this->document_path = $this->document->storeAs('provider_documents/', $documentName);
+                $this->document_path = $this->document->storeAs('provider_documents', $documentName);
             } else {
                 $this->document_path = null;
             }

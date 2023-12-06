@@ -16,8 +16,8 @@ class ProcurementRequestDocumentsComponent extends Component
     
     public $procurement_request_id;
     public $document_category;
-    public $expires;
-    public $expiry_date;
+    public $expires=0;
+    public $expiry_date=null;
     public $document_name;
     public $document;
     public $document_path;
@@ -67,7 +67,7 @@ class ProcurementRequestDocumentsComponent extends Component
                 ]);
     
                 $documentName = date('YmdHis').$procurementRequest->reference_no.' '.$this->document_category.'.'.$this->document->extension();
-                $this->document_path = $this->document->storeAs('procurement_request_documents/', $documentName);
+                $this->document_path = $this->document->storeAs('procurement_request_documents', $documentName);
             } else {
                 $this->document_path = null;
             }

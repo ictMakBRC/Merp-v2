@@ -30,6 +30,16 @@ class ProcurementRequestComponent extends Component
     public $filter = false;
 
     public $procurementRequestIds =[];
+    public $procurement_request_id;
+
+    protected $listeners = [
+        'procurementRequestCreated' => 'setprocurementRequestId',
+    ];
+
+    public function setprocurementRequestId($details)
+    {
+        $this->procurement_request_id = $details['procurementRequestId'];
+    }
 
     public function loadRequest(ProcurementRequest $procurementRequest):void
     {

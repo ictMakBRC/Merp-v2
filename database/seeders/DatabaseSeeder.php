@@ -28,20 +28,20 @@ class DatabaseSeeder extends Seeder
             $this->call(LaratrustSeeder::class);
 
         }
-        $this->withProgressBar(20, fn () => Employee::factory()->count(20)
-        ->sequence(
-            fn ($sequence) => [ 'designation_id' => Designation::factory(), 'station_id' => Station::factory(),'department_id' => Department::factory()]
-        )
-        ->has(User::factory()->count(rand(1, 3)))
-        ->create());
-        $this->command->info('Employees created.');
+        // $this->withProgressBar(20, fn () => Employee::factory()->count(20)
+        // ->sequence(
+        //     fn ($sequence) => [ 'designation_id' => Designation::factory(), 'station_id' => Station::factory(),'department_id' => Department::factory()]
+        // )
+        // ->has(User::factory()->count(rand(1, 3)))
+        // ->create());
+        // $this->command->info('Employees created.');
 
-        if (env('SEED_USERS', false)) {
-            $this->call(UserSeeder::class);
-        }
+        // if (env('SEED_USERS', false)) {
+        //     $this->call(UserSeeder::class);
+        // }
 
         //Grievance types
-        GrievanceType::factory()->count(50)->create();
+        // GrievanceType::factory()->count(50)->create();
     }
     /**
      * Status bar to show us the seeder completion status after running the seeder command
