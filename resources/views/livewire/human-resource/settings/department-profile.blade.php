@@ -1,14 +1,14 @@
 <div>
     <x-report-layout>
-        <h5 class="text-center">{{ $project->name ?? 'N/A' }}
-            @if ($project->is_active == 0)
-                <span class="badge bg-danger">Suspended</span>
+        <h5 class="text-center">{{ $department->name ?? 'N/A' }}
+            @if (!$department->is_active)
+                <span class="badge bg-danger">Inactive</span>
             @else
                 <span class="badge bg-success">Active</span>
             @endif
         </h5>
 
-        @include('livewire.grants.projects.inc.project-details')
+        @include('livewire.human-resource.settings.inc.department-details')
 
         <div class="row" x-data="{ active_tab: @entangle('activeTab') }">
             <div class="col-12">
@@ -71,42 +71,7 @@
 
                                     <div class="tab-pane p-3 @if ($activeTab == 'human-resource') active @endif"
                                         id="human-resource" role="tabpanel">
-                                        @if (!$project->departments->isEmpty())
-                                            <div class="card-header">
-                                                <div class="row align-items-center">
-                                                    <div class="col">
-                                                        <h4 class="card-title">{{ __('Associated Departments') }}</h4>
-                                                    </div><!--end col-->
-                                                </div> <!--end row-->
-                                            </div>
-
-                                            <div class="table-responsive">
-                                                <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No.</th>
-                                                            <th>Name</th>
-                                                            <th>Type</th>
-                                                            <th>Parent</th>
-                                                            <th>Description</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($project->departments as $key => $department)
-                                                            <tr>
-                                                                <td>{{ $key + 1 }}</td>
-                                                                <td>{{ $department->name }}</td>
-                                                                <td>{{ $department->type }}</td>
-                                                                <td>{{ $department->parent->name??'N/A' }}</td>
-                                                                <td>{{ $department->description ?? 'N/A' }}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div> <!-- end preview-->
-                                        @endif
-
-                                        @if (!$project->employees->isEmpty())
+                                        @if (!$department->employees->isEmpty())
                                             <div class="card-header">
                                                 <div class="row align-items-center">
                                                     <div class="col">
@@ -114,58 +79,52 @@
                                                     </div><!--end col-->
                                                 </div> <!--end row-->
                                             </div>
-
-                                            <div class="table-responsive">
-                                                <table id="datableButton"
-                                                    class="table table-striped mb-0 w-100 sortable">
+                                            <div class="table-responsiv">
+                                                <table class="table table-striped mb-0 w-100 ">
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>Employee Name</th>
-                                                            <th>Start Date</th>
-                                                            <th>End Date</th>
-                                                            <th>Gross Salary</th>
+                                                            <th>Emp-No</th>
+                                                            <th>Name</th>
+                                                            <th>Gender</th>
+                                                            <th>Contact</th>
+                                                            <th>Email</th>
+                                                            <th>Designation</th>
                                                             <th>Status</th>
-                                                            <th>FTE</th>
-                                                            <th>Contract Summary</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->employees as $key => $employee)
+                                                        @foreach ($department->employees as $key => $employee)
                                                             <tr>
                                                                 <td>{{ $key + 1 }}</td>
-                                                                <td>{{ $employee->fullname ?? 'N/A' }}</td>
-                                                                <td>@formatDate($employee->pivot->start_date)</td>
-                                                                <td>@formatDate($employee->pivot->end_date)</td>
-                                                                <td>{{ getCurrencyCode($project->currency_id) }}
-                                                                    {{ $employee->pivot->gross_salary ?? 'N/A' }}</td>
+                                                                <td><a href="{{ route('employee-details', $employee->id) }}"
+                                                                        class="action-icon">
+                                                                        {{ $employee->employee_number }}</a></td>
+                                                                <td>{{ $employee->fullName }}</td>
+                                                                <td>{{ $employee->gender }}</td>
+                                                                <td>{{ $employee->contact }}</td>
+                                                                <td>{{ $employee->email }}</td>
 
-                                                                @if ($employee->pivot->status == 'Running')
-                                                                    <td><span
-                                                                            class="badge bg-success">{{ $employee->pivot->status }}</span>
+                                                                <td>{{ $employee->designation ? $employee->designation->name : 'N/A' }}
+                                                                </td>
+                                                                @if (!$employee->is_active)
+                                                                    <td><span class="badge bg-danger">Inactive</span>
                                                                     </td>
                                                                 @else
-                                                                    <td><span
-                                                                            class="badge bg-warning">{{ $employee->pivot->status }}</span>
+                                                                    <td><span class="badge bg-success">Active</span>
                                                                     </td>
                                                                 @endif
-                                                                <td>
-                                                                    {{ $employee->pivot->fte ?? 'N/A' }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $employee->pivot->contract_summary }}
-                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
                                                 </table>
-                                            </div> <!-- end preview-->
+                                            </div>
                                         @endif
                                     </div>
 
                                     <div class="tab-pane p-3 @if ($activeTab == 'procurement') active @endif"
                                         id="procurement" role="tabpanel">
-                                        @if (!$project->procurementRequests->isEmpty())
+                                        @if (!$department->procurementRequests->isEmpty())
                                             <div class="card-header">
                                                 <div class="row align-items-center">
                                                     <div class="col">
@@ -190,7 +149,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($project->procurementRequests as $key => $procurementRequest)
+                                                        @foreach ($department->procurementRequests as $key => $procurementRequest)
                                                             <tr>
                                                                 <td>{{ $key + 1 }}</td>
                                                                 <td>
@@ -231,7 +190,7 @@
 
                                     <div class="tab-pane p-3 @if ($activeTab == 'documents') active @endif"
                                         id="documents" role="tabpanel">
-                                        @if (!$project->documents->isEmpty())
+                                        @if (!$department->documents->isEmpty())
                                             <div class="card-header">
                                                 <div class="row align-items-center">
                                                     <div class="col">
@@ -253,7 +212,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($project->documents as $key => $document)
+                                                            @foreach ($department->documents as $key => $document)
                                                                 <tr>
                                                                     <td>{{ $key + 1 }}</td>
                                                                     <td>{{ $document->document_category }}</td>
@@ -296,7 +255,7 @@
                 <div class="col-lg-12 col-xl-12">
                     <div class="float-end d-print-none mt-2 mt-md-0 mb-2">
                         <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
-                        <a href="{{ route('manage-projects') }}" class="btn btn-de-primary btn-sm">Back to list</a>
+                        {{-- <a href="{{ route('manage-departments') }}" class="btn btn-de-primary btn-sm">Back to list</a> --}}
                     </div>
                 </div><!--end col-->
             </div><!--end row-->

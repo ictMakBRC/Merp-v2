@@ -53,6 +53,18 @@ class ProjectComponent extends Component
         $this->resetPage();
     }
 
+    public function loadProject(Project $project):void
+    {
+        $loadingInfo = 'For '.$project->project_code;
+            $this->emit('loadProject', [
+                'projectId' => $project->id,
+                'info'=>$loadingInfo,
+            ]);
+           
+        $this->createNew = true;
+        $this->toggleForm = true;
+    }
+
     
     public function filterProjects()
     {

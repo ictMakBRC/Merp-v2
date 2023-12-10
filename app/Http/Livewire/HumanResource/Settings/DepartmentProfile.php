@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Livewire\Grants;
+namespace App\Http\Livewire\HumanResource\Settings;
 
 use Response;
 use Livewire\Component;
-use App\Models\Grants\Grant;
 use App\Models\Documents\FormalDocument;
+use App\Models\HumanResource\Settings\Department;
 
-class GrantProfileComponent extends Component
+class DepartmentProfile extends Component
 {
     public $activeTab='financials';
-    public $grant_id;
+    public $department_id;
 
     public function mount($id){
-        $this->grant_id=$id;
+        $this->department_id=$id;
     }
 
     public function downloadDocument(FormalDocument $formalDocument)
@@ -35,7 +35,7 @@ class GrantProfileComponent extends Component
 
     public function render()
     {
-        $data['grant'] = Grant::with('principalInvestigator','procurementRequests','currency')->findOrFail($this->grant_id);
-        return view('livewire.grants.grant-profile-component',$data);
+        $data['department'] = Department::with('employees','dept_supervisor','ast_supervisor','procurementRequests','projects')->findOrFail($this->department_id);
+        return view('livewire.human-resource.settings.department-profile',$data);
     }
 }
