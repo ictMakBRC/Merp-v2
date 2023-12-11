@@ -187,11 +187,11 @@
                 <!--end documents -->
 
                 <!--start inventory -->
-                <livewire:layouts.partials.inc.inventory.inventory-navigation-component />
+                {{-- <livewire:layouts.partials.inc.inventory.inventory-navigation-component /> --}}
                 <!--end inventory -->
 
                 <!--start assets -->
-                <livewire:layouts.partials.inc.assets.assets-navigation-component />
+                {{-- <livewire:layouts.partials.inc.assets.assets-navigation-component /> --}}
                 <!--end assets --> 
 
 

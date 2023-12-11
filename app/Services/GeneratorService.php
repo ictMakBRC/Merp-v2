@@ -179,7 +179,7 @@ class GeneratorService
       $l = $characters[rand(2, strlen($characters) - 4)];
       $randomGeneratedNumber = intval('0'.mt_rand(1, 9).mt_rand(0, 9).mt_rand(0, 9).mt_rand(0, 9));
 
-      return 'MERP-RQ/'.$yearMonth.'-'.$randomGeneratedNumber.'-'.$l;
+      return 'MERP-RQ_'.$yearMonth.'-'.$randomGeneratedNumber.'-'.$l;
     }
 
     public static function procurementRequestRef($category)

@@ -125,10 +125,12 @@ class DepartmentItemsComponent extends Component
       'brand' => 'required',
       ]);
 
+      $unitable = Department::find($this->department_id);
       $dept_item = new InvDepartmentItem();
       $dept_item->brand = $this->brand;
       $dept_item->inv_item_id = $this->item_id;
       $dept_item->department_id = $this->department_id;
+      $dept_item->unitable()->associate($unitable);
       $dept_item->save();
 
       $this->close();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\inventory;
+namespace App\Models\Inventory\Requisitions;
 
 use App\Models\Inventory\InvStockDocumentItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

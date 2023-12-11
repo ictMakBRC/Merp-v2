@@ -12,6 +12,8 @@ use App\Http\Livewire\Inventory\Settings\RejectionReasons;
 use App\Http\Livewire\Inventory\Manage\CommoditiesComponent;
 use App\Http\Livewire\Inventory\Manage\InvSuppliersComponent;
 use App\Http\Livewire\Inventory\Manage\DepartmentItemsComponent;
+use App\Http\Livewire\Inventory\Requests\InvRequestComponent;
+use App\Http\Livewire\Inventory\Requests\InvRequestsComponent;
 use App\Http\Livewire\Inventory\Requisitions\ForecastsComponent;
 use App\Http\Livewire\Inventory\Requisitions\GeneralRequisitionsComponent;
 use App\Http\Livewire\Inventory\Requisitions\ConsumptionBasedRequisitionsComponent;
@@ -51,6 +53,12 @@ Route::group(['prefix' => 'inventory','middleware' => ['permission:access_invent
     Route::get('general-requests', GeneralRequisitionsComponent::class)->name('general-requests');
     Route::get('incoming-requests', GeneralRequisitionsComponent::class)->name('incoming-requests');
     Route::get('consumption-based', ConsumptionBasedRequisitionsComponent::class)->name('consumption-based');
+  });
+
+  Route::group(['prefix' => 'requests'], function () {
+    Route::get('all', InvRequestsComponent::class)->name('inventory-requests');
+    Route::get('items/{code}/add', InvRequestComponent::class)->name('inventory-request_items');
+    Route::get('incoming', GeneralRequisitionsComponent::class)->name('inventory-requests-in');
   });
 
 });
