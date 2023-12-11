@@ -29,7 +29,7 @@
                         </a>
                         <div class="collapse " id="accounting">
                             <ul class="nav flex-column">
-                                @if (Auth::user()->hasPermission(['view_coa']))
+                                @if (Auth::user()->hasPermission(['view_charts_of_account']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-chart_of_accounts') }}" class="nav-link ">Chart Of
                                             Accounts</a>
