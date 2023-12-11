@@ -27,7 +27,16 @@
                         <td>@formatDate($grant->end_date)</td>
                         <td>{{$grant->principalInvestigator->fullName}}</td>
                         <td>{{ ucfirst($grant->award_status)}}</td>
-                        <td></td>
+                        <td>
+                            <div class="d-flex justify-content-between">
+                                    <button class="btn btn-sm btn-outline-success m-1"
+                                        wire:click="loadGrant({{ $grant->id }})"
+                                        title="{{ __('public.edit') }}">
+                                        <i class="ti ti-edit fs-18"></i></button>
+                                <a href="{{ route('grant-profile', $grant->id) }}"
+                                    class="btn btn-sm btn-outline-primary m-1"> <i class="ti ti-eye"></i></a>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                 @endforelse

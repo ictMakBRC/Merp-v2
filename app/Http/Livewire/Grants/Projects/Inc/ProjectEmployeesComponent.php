@@ -25,15 +25,27 @@ class ProjectEmployeesComponent extends Component
     public $contract_file;
     public $contract_file_path;
     public $status;
+    public $currencyCode;
 
     protected $listeners = [
         'projectCreated' => 'setProjectId',
+        'loadProject' => 'setProjectId',
     ];
 
     
     public function setProjectId($details)
     {
         $this->project_id = $details['projectId'];
+        $this->currencyCode = getCurrencyCode(Project::findOrFail($this->project_id)->currency_id);
+    }
+
+    public function updatedProjectId()
+    {
+        if($this->project_id){
+            $this->currencyCode = getCurrencyCode(Project::findOrFail($this->project_id)->currency_id);
+        }else{
+            $this->currencyCode='';
+        }
     }
 
     public function attachEmployee()

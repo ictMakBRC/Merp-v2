@@ -9,16 +9,21 @@ use App\Http\Livewire\Procurement\Requests\Stores\StoresPanelComponent;
 use App\Http\Livewire\Procurement\Requests\Finance\FinancePanelComponent;
 use App\Http\Livewire\Procurement\Settings\ProcurementSubcategoriesComponent;
 use App\Http\Livewire\Procurement\Dashboard\ProcurementMainDashboardComponent;
+use App\Http\Livewire\Procurement\Requests\ContractsManager\ContractsManagerPanelComponent;
+use App\Http\Livewire\Procurement\Requests\ContractsManager\ContractsManagerRequestManagementComponent;
+use App\Http\Livewire\Procurement\Requests\ContractsManager\ContractsManagerRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Finance\FinanceRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Md\MdRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\ProcurementRequestDetailsComponent;
 use App\Http\Livewire\Procurement\Requests\Operations\OperationsPanelComponent;
 use App\Http\Livewire\Procurement\Requests\Operations\OperationsRequestViewComponent;
+use App\Http\Livewire\Procurement\Requests\Procurement\Inc\LpoComponent;
+use App\Http\Livewire\Procurement\Requests\Procurement\Inc\RfqComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementBidManagementComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementOfficePanelComponent;
 use App\Http\Livewire\Procurement\Requests\Procurement\ProcurementRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Supervisor\SupervisorPanelComponent;
-use App\Http\Livewire\Procurement\Requests\Stores\ProcurementItemsReceptionComponent;
+use App\Http\Livewire\Procurement\Requests\Stores\StoresRequestManagementComponent;
 use App\Http\Livewire\Procurement\Requests\Stores\StoresRequestViewComponent;
 use App\Http\Livewire\Procurement\Requests\Supervisor\SupervisorRequestViewComponent;
 use App\Http\Livewire\Procurement\Settings\ProcurementCategorizationComponent;
@@ -46,11 +51,17 @@ Route::group(['prefix' => 'procurement'], function () {
     Route::get('proc-dept', ProcurementOfficePanelComponent::class)->name('procurement-office-panel');
     Route::get('proc-dept/request/{id}/details', ProcurementRequestViewComponent::class)->name('proc-dept-request-details');
     Route::get('proc-dept/request/{id}/bid-mgt', ProcurementBidManagementComponent::class)->name('proc-dept-bid-mgt');
+    Route::get('proc-dept/request/{id}/lpo', LpoComponent::class)->name('proc-lpo');
+    Route::get('proc-dept/request/{id}/rfq', RfqComponent::class)->name('proc-rfq');
     
 
     Route::get('stores', StoresPanelComponent::class)->name('procurement-stores-panel');
     Route::get('stores/request/{id}/details', StoresRequestViewComponent::class)->name('stores-procurement-request-details');
-    Route::get('stores/request/{id}/items-reception', ProcurementItemsReceptionComponent::class)->name('procurement-items-reception');
+    Route::get('stores/request/{id}/mgt', StoresRequestManagementComponent::class)->name('stores-request-mgt');
+
+    Route::get('contracts-manager', ContractsManagerPanelComponent::class)->name('contracts-manager-panel');
+    Route::get('contracts-manager/request/{id}/details', ContractsManagerRequestViewComponent::class)->name('contracts-manager-request-details');
+    Route::get('contracts-manager/request/{id}/mgt', ContractsManagerRequestManagementComponent::class)->name('contracts-manager-request-mgt');
     
 
     Route::group(['prefix' => 'settings'], function () {

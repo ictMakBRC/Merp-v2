@@ -115,7 +115,7 @@
                                          
                                             
                                         @endphp
-                                        <td>{{ $key + 1 }}
+                                        <td>{{ $key + 1 }} paye = {{ $paye}}
                                             <input class="form-check-input" type="checkbox" value="{{ $employee->id }}"
                                                 class="ms-2 float-end" wire:model.lazy="selectedEmployeeIds">
                                         </td>

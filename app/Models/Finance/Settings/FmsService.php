@@ -51,6 +51,9 @@ class FmsService extends Model
             });
         }
     }
+    function category() {
+        return $this->belongsTo(FmsServiceCategory::class, 'category_id', 'id');
+      }
 
     public static function search($search)
     {

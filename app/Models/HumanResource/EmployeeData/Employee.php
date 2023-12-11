@@ -81,6 +81,13 @@ class Employee extends Model
         );
     }
 
+    protected function empName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->first_name.' '.$this->other_name.' '.$this->surname,
+        );
+    }
+
     protected function employeeAge(): Attribute
     {
         return Attribute::make(
@@ -95,7 +102,7 @@ class Employee extends Model
 
     public function officialContract()
     {
-        return $this->hasOne(OfficialContract::class, 'employee_id', 'id')->where('status','Running');
+        return $this->hasOne(OfficialContract::class, 'employee_id', 'id')->where('status',1);
     }
 
     public static function boot()

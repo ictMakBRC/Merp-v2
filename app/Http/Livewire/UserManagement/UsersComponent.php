@@ -13,9 +13,11 @@ use App\Services\GeneratorService;
 use App\Services\User\UserService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Grants\Project\Project;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendPasswordNotification;
+use App\Models\HumanResource\EmployeeData\Employee;
 
 class UsersComponent extends Component
 {
@@ -54,7 +56,8 @@ class UsersComponent extends Component
 
     public $role_id;
 
-    public $roles_array = [];
+    public $user_roles = [];
+    public $funder_projects = [];
 
     public $is_active;
 
@@ -77,6 +80,9 @@ class UsersComponent extends Component
     public $filter = false;
 
     protected $user;
+    public $employee_number;
+    public $employee_matched=false;
+    public $employee_id;
 
     public function updatedCreateNew()
     {
@@ -95,8 +101,27 @@ class UsersComponent extends Component
 
     public function updatedCategory()
     {
-        if (! $this->toggleForm) {
+        if (! $this->toggleForm && $this->category!='') {
             $this->password = GeneratorService::password();
+        }
+
+        $this->user_roles = [];
+        $this->funder_projects = [];
+    }
+
+    public function updatedEmployeeNumber()
+    {
+        $employee = Employee::where('employee_number',$this->employee_number)->first();
+        if($employee){
+            $this->employee_id=$employee->id;
+            $this->name = $employee->first_name;
+            $this->email = $employee->email;
+            $this->employee_matched=true;
+        }else{
+            $this->employee_id=null;
+            $this->name = null;
+            $this->email = null;
+            $this->employee_matched=false;
         }
     }
 
@@ -106,11 +131,12 @@ class UsersComponent extends Component
             'name' => 'required|string',
             'email' => 'required|email:filter|unique:users',
             'category' => 'required|string',
+            'employee_number'=>'required_if:category,Normal-User',
             'is_active' => 'required|integer|max:3',
             'password' => ['required',
                 Password::min(8)
                     // ->mixedCase()
-                    ->numbers()
+                    // ->numbers()
                     ->symbols()
                     ->uncompromised(),],
         ]);
@@ -129,6 +155,7 @@ class UsersComponent extends Component
             }
 
             $userDTO = UserData::from([
+                'employee_id'=>$this->employee_id??null,
                 'name'=>$this->name,
                 'category'=>$this->category,
                 'email'=>$this->email,
@@ -255,7 +282,7 @@ class UsersComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['edit_id', 'password','category', 'email','is_active', 'generateToken','name','signature']);
+        $this->reset(['employee_id','edit_id', 'password','category', 'email','is_active', 'generateToken','name','signature']);
     }
 
     public function refresh()
@@ -267,8 +294,6 @@ class UsersComponent extends Component
     {
         $this->token = '';
     }
-
-
 
     public function export()
     {
@@ -309,12 +334,13 @@ class UsersComponent extends Component
 
     public function render()
     {
-        $roles = Role::orderBy('name', 'asc')->get();
+        $data['roles'] = Role::orderBy('name', 'asc')->get();
+        $data['projects'] = Project::orderBy('project_code', 'asc')->get();
 
-        $users = $this->filterUsers()
+        $data['users'] = $this->filterUsers()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
 
-        return view('livewire.user-management.users-component', compact('users','roles'))->layout('layouts.app');
+        return view('livewire.user-management.users-component', $data)->layout('layouts.app');
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Finance\Invoice;
 
-use App\Models\Finance\Invoice\FmsInvoice;
-use App\Models\Finance\Invoice\FmsInvoiceItem;
-use App\Models\Finance\Settings\FmsService;
 use Livewire\Component;
+use App\Models\Finance\Invoice\FmsInvoice;
+use App\Models\Finance\Settings\FmsService;
+use App\Models\Finance\Invoice\FmsInvoiceItem;
+use App\Models\Finance\Settings\FmsUnitService;
 
 class FmsInvoiceItemsComponent extends Component
 {
@@ -24,7 +25,11 @@ class FmsInvoiceItemsComponent extends Component
 
     public $confirmingDelete = false;
     public $itemToRemove;
+    public $subTotal = 0;
     public $totalAmount = 0;
+    public $biller;
+    public $billed;
+    public $adjustment = 0,$discount_type='Percent', $discount = 0,$discount_total = 0 ;
     public function updatedItemId()
     {
         $service = FmsService::where('id', $this->item_id)->first();
@@ -38,6 +43,36 @@ class FmsInvoiceItemsComponent extends Component
     {
         if ($this->quantity != "" && $this->unit_price != '') {
             $this->line_total = $this->unit_price * $this->quantity;
+        }
+    }
+    public function updatedUnitPrice()
+    {
+        if ($this->quantity != "" && $this->unit_price != '') {
+            $this->line_total = $this->unit_price * $this->quantity;
+        }
+    }
+    public function updatedDiscountType()
+    {
+        $this->updatedDiscount();
+    }
+    public function updatedDiscount()
+    {
+        if ($this->discount  ) {
+            if($this->discount_type =='Fixed'){
+                $this->discount_total = $this->discount;
+            }  if($this->discount_type =='Percent' && $this->discount > 0){
+                $this->discount_total =  ($this->discount/100)*$this->subTotal;
+            }
+            else{
+                $this->discount_total = 0;
+            }
+            $this->totalAmount = $this->adjustment + $this->subTotal - $this->discount_total;
+        }
+    }
+    public function updatedAdjustment()
+    {
+        if ($this->adjustment && $this->adjustment>=0 ) {
+            $this->totalAmount = $this->adjustment + $this->subTotal - $this->discount_total;
         }
     }
     public function mount($inv_no)
@@ -84,7 +119,13 @@ class FmsInvoiceItemsComponent extends Component
 
     public function submitInvoice($id)
     {
-        FmsInvoice::where(['invoice_no'=> $this->invoiceCode, 'id'=>$id])->update(['status'=>'Submitted','total_amount'=>$this->totalAmount]);
+       $invoice =  FmsInvoice::where(['invoice_no'=> $this->invoiceCode, 'id'=>$id])->first();
+       $invoice->total_amount = $this->totalAmount;
+       $invoice->discount_type = $this->discount_type;
+       $invoice->discount_total = $this->discount_total;
+       $invoice->discount = $this->discount;
+       $invoice->status = 'Submitted';
+       $invoice->update();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice created successfully!']);
         return redirect()->SignedRoute('finance-invoice_view', $this->invoiceData->invoice_no);
     }
@@ -99,16 +140,31 @@ class FmsInvoiceItemsComponent extends Component
     }
     public function render()
     {
-        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'biller', 'currency'])->first();
+        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'billedDepartment','billedProject', 'currency'])->first();
         if ($invoiceData) {
+            if($invoiceData->invoice_type =='External'){                
+                $this->billed = $invoiceData->customer;
+            }elseif($invoiceData->invoice_type =='Internal'){
+                if($invoiceData->billed_department){
+                    $this->billed = $invoiceData->billedDepartment;
+                }elseif($invoiceData->billed_project){
+                    $this->billed = $invoiceData->billedProject;
+                }
+            }
+            if($invoiceData->department_id){
+                $this->biller = $invoiceData->department;
+            }elseif($invoiceData->project_id){
+                $this->biller = $invoiceData->project;
+            }
             $this->invoiceData = $invoiceData;
             $this->currency = $invoiceData->currency->code??'UG';
-            $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['service'])->get();
+            $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['uintService','uintService.service'])->get();
         } else {
             $data['items'] = collect([]);
         }
-        $this->totalAmount = $data['items']->sum('line_total');
-        $data['services'] = FmsService::where('is_active', 1)->get();
+        $this->subTotal = $data['items']->sum('line_total');
+        $this->totalAmount = $this->adjustment + $this->subTotal - $this->discount_total;
+        $data['services'] = FmsUnitService::where('is_active', 1)->with('service')->where(['unitable_type'=>$invoiceData->requestable_type, 'unitable_id'=>$invoiceData->requestable_id])->get();
         return view('livewire.finance.invoice.fms-invoice-items-component', $data);
     }
 }

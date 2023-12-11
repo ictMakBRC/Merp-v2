@@ -28,6 +28,7 @@ class ProjectDocumentsComponent extends Component
 
     protected $listeners = [
         'projectCreated' => 'setProjectId',
+        'loadProject' => 'setProjectId',
     ];
 
     public function setProjectId($details)

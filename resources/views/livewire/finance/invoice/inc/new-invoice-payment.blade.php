@@ -62,17 +62,7 @@
                         @enderror
                     </div>
 
-
-                    <div class="mb-4 col-6">
-                        <label for="address" class="form-label">Description</label>
-                        <input type="text" id="description" class="form-control text-uppercase"
-                            wire:model.defer='description'>
-                        @error('description')
-                            <div class="text-danger text-small">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3 col-3">
+                    <div class="mb-3 col-4">
                         <label for="to_account" class="form-label required">Ledger</label>
                         <select id="to_account" class="form-control" name="to_account" required wire:model="to_account">
                             <option value="">Select</option>
@@ -88,6 +78,28 @@
                             <small class="text-info"><strong>Balance:</strong>{{exchangeCurrency($ledgerCur, 'base',  $ledgerBalance).' UGX' }}</small>
                         @endif
                     </div> 
+
+                    <div class="mb-3 col-5">
+                        <label for="to_budget_line_id" class="form-label required">Income Budget Line</label>
+                        <select id="to_budget_line_id" class="form-control" name="to_budget_line_id" required wire:model="to_budget_line_id">
+                            <option value="">Select</option>
+                            @foreach ($toBudgetLines as $line)
+                                <option value="{{$line->id}}">{{$line->name}}</option>
+                            @endforeach
+                        </select>
+                        @error('to_budget_line_id')
+                            <div class="text-danger text-small">{{ $message }}</div>
+                        @enderror
+                    </div> 
+                    
+                    <div class="mb-4 col-12">
+                        <label for="address" class="form-label">Description</label>
+                        <textarea  id="description" class="form-control text-uppercase"
+                            wire:model.defer='description'></textarea>
+                        @error('description')
+                            <div class="text-danger text-small">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                 </div>
                 <div class="modal-footer">

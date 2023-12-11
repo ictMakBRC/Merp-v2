@@ -30,6 +30,16 @@ class ProcurementRequestComponent extends Component
     public $filter = false;
 
     public $procurementRequestIds =[];
+    public $procurement_request_id;
+
+    protected $listeners = [
+        'procurementRequestCreated' => 'setprocurementRequestId',
+    ];
+
+    public function setprocurementRequestId($details)
+    {
+        $this->procurement_request_id = $details['procurementRequestId'];
+    }
 
     public function loadRequest(ProcurementRequest $procurementRequest):void
     {
@@ -38,15 +48,15 @@ class ProcurementRequestComponent extends Component
                 'procurementRequestId' => $procurementRequest->id,
                 'info'=>$loadingInfo,
             ]);
-
+           
         $this->createNew = true;
-
         $this->toggleForm = true;
     }
  
     public function filterProcurementRequests()
     {
         $procurementRequests = ProcurementRequest::search($this->search)
+            ->where('created_by',auth()->user()->id)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

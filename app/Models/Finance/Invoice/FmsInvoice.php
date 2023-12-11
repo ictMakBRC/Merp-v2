@@ -2,15 +2,16 @@
 
 namespace App\Models\Finance\Invoice;
 
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Grants\Project\Project;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
-use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class FmsInvoice extends Model
 {
@@ -26,6 +27,14 @@ class FmsInvoice extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
+    }
+    public function requestable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+    public function billtable(): MorphTo
+    {
+        return $this->morphTo();
     }
     public function payments()
     {
@@ -51,11 +60,15 @@ class FmsInvoice extends Model
         return $this->belongsTo(FmsCurrency::class, 'currency_id', 'id');
     }
 
-    public function biller()
+    public function billedDepartment()
     {
-        return $this->belongsTo(Department::class, 'invoice_from', 'id');
+        return $this->belongsTo(Department::class, 'billed_department', 'id');
     }
 
+    public function billedProject()
+    {
+        return $this->belongsTo(Department::class, 'billed_project', 'id');
+    }
     public static function boot()
     {
         parent::boot();
@@ -96,5 +109,27 @@ class FmsInvoice extends Model
         'reminder_sent_at',
         'billed_project',
         'billed_department',
+        'adjustment',  
+        'discount_type',
+        'discount',
+        'discount_total',  
+        'discount_percent',
+        'due_date',  
+        'adjustment', 
+        'discount_type',  
+        'discount',   
+        'discount_total',  
+        'discount_percent',
+        'invoice_type',
+        'billed_by',
+        'billed_to',
+        'approved_by',
+        'acknowledged_by',
+        'paid_by',
+        'approved_at',   
+        'acknowledged_at',   
+        'paid_at',  
+        'reviewed_at',
+        'reviewed_by'
     ];
 }

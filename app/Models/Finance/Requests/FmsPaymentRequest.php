@@ -12,6 +12,7 @@ use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Budget\FmsBudgetLine;
+use App\Models\Procurement\Request\ProcurementRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -29,13 +30,27 @@ class FmsPaymentRequest extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-     public function requestable(): MorphTo
+    
+    public function procurementRequest()
+    {
+        return $this->belongsTo(ProcurementRequest::class, 'procurement_request_id', 'id');
+    }
+    public function requestable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+    public function paytable(): MorphTo
     {
         return $this->morphTo();
     }
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+
+    public function toProject()
+    {
+        return $this->belongsTo(Project::class, 'to_project_id', 'id');
     }
 
     public function budgetLine()
@@ -45,7 +60,7 @@ class FmsPaymentRequest extends Model
 
     public function fromAccount()
     {
-        return $this->belongsTo(FmsLedgerAccount::class, 'from_account', 'id');
+        return $this->belongsTo(FmsLedgerAccount::class, 'ledger_account', 'id');
     }
 
     public function toAccount()
@@ -56,6 +71,11 @@ class FmsPaymentRequest extends Model
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    public function toDepartment()
+    {
+        return $this->belongsTo(Department::class, 'to_department_id', 'id');
     }
     function user() {
         return $this->belongsTo(User::class, 'created_by', 'id');
@@ -81,14 +101,16 @@ class FmsPaymentRequest extends Model
     {
         return empty($search) ? static::query()
         : static::query()
-            ->where('trx_ref', 'like', '%'.$search.'%')
-            ->where('trx_no', 'like', '%'.$search.'%');
+            ->where('request_code', 'like', '%'.$search.'%')
+            ->where('request_type', 'like', '%'.$search.'%');
     }
 
     protected $fillable =[
         'request_description',
         'request_type',
         'total_amount',
+        'ledger_amount',
+        'budget_amount',
         'amount_in_words',
         'requester_signature',
         'date_submitted', 
@@ -99,7 +121,7 @@ class FmsPaymentRequest extends Model
         'department_id',
         'project_id',
         'budget_line_id',
-        'from_account',
+        'ledger_account',
         'status',
         'created_by',   
         'updated_by',             

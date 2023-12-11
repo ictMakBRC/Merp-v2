@@ -11,7 +11,7 @@ class EmployeeBankingData extends Data
     public ?string $branch;
     public ?string $account_name;
     public ?string $account_number;
-    public ?string $currency; 
+    public ?string $currency_id; 
     public ?bool $is_default;
 
     // Validation rules for the properties
@@ -23,7 +23,7 @@ class EmployeeBankingData extends Data
           'branch' => 'required|string|max:100',
           'account_name' => 'required|string|max:100',
           'account_number' => 'required|max:255|unique:banking_information',
-          'currency' => 'required|string',
+          'currency_id' => 'required|integer',
           'is_default' => 'required|integer',
         ];
     }

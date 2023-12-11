@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        budgets (<span class="text-danger fw-bold">{{ $budgets->total() }}</span>)
+                                        Main Budgets (<span class="text-danger fw-bold">{{ $budgets->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
                                         Edit Customer
@@ -95,7 +95,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>fiscal_year</th>
+                                        <th>Fiscal Year</th>
                                         {{-- <th>Revenue</th>
                                         <th>Expenditure</th> --}}
                                         <th>Currency</th>

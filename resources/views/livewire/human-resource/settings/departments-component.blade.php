@@ -117,8 +117,12 @@
                                                 <td><span class="badge bg-success">Active</span></td>
                                             @endif
                                             <td class="table-action">
+                                                <div class="d-flex justify-content-between">
                                                 <button wire:click="editData({{ $department->id }})" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="action-ico btn-sm btn btn-outline-success mx-1">
                                                     <i class="fa fa-edit"></i></button>
+                                                    <a href="{{ route('department-profile', $department->id) }}"
+                                                        class="btn btn-sm btn-outline-primary m-1"> <i class="ti ti-eye"></i></a>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

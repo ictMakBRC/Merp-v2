@@ -20,7 +20,7 @@ class AssetCatalogData extends Data
     public ?string $procurement_type;
     public ?string $invoice_number;
     public ?float $cost;
-    public ?string $currency;
+    public ?string $currency_id;
     public ?int $supplier_id;
     public ?bool $has_service_contract;
     public ?string $service_contract_expiry_date;
@@ -50,7 +50,7 @@ class AssetCatalogData extends Data
             'procurement_type'=>'nullable|string',
             'invoice_number'=>'nullable|string',
             'cost'=>'nullable|numeric',
-            'currency'=>'nullable|string',
+            'currency_id'=>'nullable|integer',
             'supplier_id'=>'nullable|integer',
             'has_service_contract'=>'required|integer',
             'service_contract_expiry_date'=>'nullable|date|after_or_equal:today',

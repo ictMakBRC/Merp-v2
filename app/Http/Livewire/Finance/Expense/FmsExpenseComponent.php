@@ -60,8 +60,8 @@ class FmsExpenseComponent extends Component
     public $income_budget_line_id;
     public $to_account;
     public $trx_type;
-    public $entry_type;
-    public $from_account;
+    public $entry_type ='Department';
+    public $ledger_account;
     public $is_department;
     public $invoiceData;
     public $toAccountData;
@@ -105,7 +105,7 @@ class FmsExpenseComponent extends Component
             'budget_line_id' => 'nullable|integer',
             'income_budget_line_id' => 'nullable|integer',
             'to_account' => 'required|integer',
-            'from_account' => 'required|integer',
+            'ledger_account' => 'required|integer',
             'description' => 'required|string',
         ]);
     }
@@ -125,56 +125,63 @@ class FmsExpenseComponent extends Component
             'budgetExpense' => 'required',
             'ledgerExpense' => 'required',
             'budget_line_id' => 'nullable|integer',
-            'from_account' => 'required|integer',
+            'ledger_account' => 'required|integer',
             'description' => 'required|string',
         ]);
-
+        $requestable =null;
         if ($this->entry_type == 'Project') {
             $this->validate([
                 'project_id' => 'required|integer',
             ]);
-            $this->department_id = null;
+            $this->department_id = null;            
+            $requestable  = Project::find($this->project_id);
         } elseif ($this->entry_type == 'Department') {
             $this->validate([
                 'department_id' => 'required|integer',
             ]);
             $this->project_id = null;
+            $requestable  = Department::find($this->department_id);
+            
         }
 
         try{
-        DB::transaction(function () {
+        DB::transaction(function () use($requestable) {
             $total_amount = (float) str_replace(',', '', $this->total_amount);
+
+            $ledgerAccount = FmsLedgerAccount::find($this->ledger_account);
+            $ledgerAccount->current_balance -= $this->ledgerExpense;
+            $ledgerAccount->save();
+
+            $budget = FmsBudgetLine::find($this->budget_line_id);
+            $budget->primary_balance -= $this->budgetExpense;
+            $budget->save();
 
             $trans = new FmsTransaction();
             $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
             $trans->trx_ref = $this->trx_ref ?? 'TRF' . GeneratorService::getNumber(7);;
             $trans->trx_date = $this->as_of ?? date('Y-m-d');
+            $trans->line_balance = $budget->primary_balance;
+            $trans->line_amount = $this->budgetExpense;
+            $trans->account_amount = $this->ledgerExpense;
+            $trans->account_balance = $ledgerAccount->current_balance;
             $trans->total_amount = $total_amount;
-            $trans->from_account = $this->from_account;
+            $trans->ledger_account = $this->ledger_account;
             $trans->rate = $this->rate;
+            $trans->amount_local = $total_amount*$this->rate; 
             $trans->department_id = $this->department_id;
             $trans->project_id = $this->project_id;
             $trans->budget_line_id = $this->budget_line_id;
             $trans->currency_id = $this->currency_id;
             $trans->trx_type = 'Expense';
             $trans->status = 'Approved';
+            $trans->description =$this->description;
             $trans->entry_type = 'Internal';
             if ($this->project_id != null) {
                 $trans->is_department = false;
             }
+            $trans->requestable()->associate($requestable);
             $trans->save();
-            // FmsLedgerAccount::where('id', $this->from_account)->update(['current_balance' => DB::raw('current_balance - '.$this->ledgerExpense)]);
-           
-            $ledgerAccount = FmsLedgerAccount::find($this->from_account);
-            $ledgerAccount->current_balance -= $this->ledgerExpense;
-            $ledgerAccount->save();
-
-            // FmsBudgetLine::where('id', $this->budget_line_id)->update(['primary_balance' => DB::raw('primary_balance - '.$this->budgetExpense)]);
-
-            $budget = FmsBudgetLine::find($this->budget_line_id);
-            $budget->primary_balance -= $this->budgetExpense;
-            $budget->save();
-
+            
             $this->dispatchBrowserEvent('close-modal');
             $this->resetInputs();
             $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Transaction created successfully!']);
@@ -196,16 +203,16 @@ class FmsExpenseComponent extends Component
     {
         $this->budgetLineCur = 0;
         $this->budgetLineBalance = 0;
-        $data = FmsBudgetLine::Where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
+        $data = FmsBudgetLine::where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
         $this->budgetLineBalance = $data->primary_balance ?? 0 - $data->amount_held ?? 0;
         $this->budgetLineCur = $data->budget?->currency?->code ?? '';
     }
 
-    public function updatedFromAccount()
+    public function updatedLedgerAccount()
     {
         $this->ledgerCur = 0;
         $this->ledgerBalance = 0;
-        $data = FmsLedgerAccount::Where('id', $this->from_account)->with('currency')->first();
+        $data = FmsLedgerAccount::where('id', $this->ledger_account)->with('currency')->first();
         $this->ledgerBalance = $data->current_balance ?? 0 - $data->amount_held ?? 0;
         $this->ledgerCur = $data->currency->code ?? '';
     }
@@ -240,10 +247,10 @@ class FmsExpenseComponent extends Component
 
     public function updatedProjectId()
     {
-        $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
+        $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['project_id' => $this->project_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
-        $this->ledgers = FmsLedgerAccount::Where('project_id', $this->project_id)->with(['project', 'department', 'currency'])->get();
+        $this->ledgers = FmsLedgerAccount::where('project_id', $this->project_id)->with(['project', 'department', 'currency'])->get();
 
     }
     public function updatedCurrencyId()
@@ -258,7 +265,7 @@ class FmsExpenseComponent extends Component
 
     public function updatedDepartmentId()
     {
-        $this->budgetLines = FmsBudgetLine::with('budget')->WhereHas('budget', function ($query) {
+        $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['department_id' => $this->department_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
         $this->ledgers = FmsLedgerAccount::where('department_id', $this->department_id)->with(['project', 'department', 'currency'])->get();
@@ -304,7 +311,10 @@ class FmsExpenseComponent extends Component
             'entry_type',
             'description',
             'is_department',
+            'ledger_account',
+            'baseAmount',
         ]);
+        $this->viewSummary = false;
     }
 
     public function refresh()
@@ -341,7 +351,7 @@ class FmsExpenseComponent extends Component
 
     public function render()
     {
-        $data['expenses'] = $this->mainQuery()
+        $data['expenses'] = $this->mainQuery()->with('requestable')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();

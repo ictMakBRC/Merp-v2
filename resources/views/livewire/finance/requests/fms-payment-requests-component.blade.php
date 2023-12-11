@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    requests (<span class="text-danger fw-bold">{{ $requests->total() }}</span>)
+                                    Payement Requests (<span class="text-danger fw-bold">{{ $requests->total() }}</span>)
                                     @include('livewire.layouts.partials.inc.filter-toggle')
                                 </h5>
                                 @include('livewire.layouts.partials.inc.create-resource-alpine')
@@ -17,7 +17,8 @@
                 </div>
                 <div class="card-body">
                     @include('livewire.finance.requests.inc.new-request-form')
-                </div>
+                </div>               
+                @include('livewire.finance.requests.inc.request_counts')
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
@@ -58,9 +59,10 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>No.</th>
+                                        <th>Type</th>
                                         <th>Ref</th>
                                         <th>Date</th>
-                                        <th>From Account</th>
+                                        <th>From Unit</th>
                                         <th>Trx Amount</th>
                                         <th>Rate</th>
                                         <th>Currency</th>
@@ -72,8 +74,9 @@
                                     @foreach ($requests as $key => $request)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $request->trx_ref }}</td>
-                                            <td>{{ $request->trx_date ?? 'N/A' }}</td>
+                                            <td>{{ $request->request_type }}</td>
+                                            <td>{{ $request->request_code }}</td>
+                                            <td>{{ $request->created_at ?? 'N/A' }}</td>
                                             <td>{{ $request->project->name ?? ($request->department->name ?? 'N/A') }}</td>
                                             <td>@moneyFormat($request->total_amount)</td>
                                             <td>@moneyFormat($request->rate)</td>

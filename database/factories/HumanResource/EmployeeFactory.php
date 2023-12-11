@@ -22,6 +22,7 @@ class EmployeeFactory extends Factory
      */
     public function definition(): array
     {
+        return false;
         return [
             'entry_type' => $this->faker->randomElement(['official', 'project', 'volunteer', 'intern', 'trainee']),
             'employee_number' => $this->faker->unique()->randomNumber(6),

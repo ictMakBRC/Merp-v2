@@ -47,7 +47,7 @@ class EmployeeBankingInformationService
         $bankingInformation->branch = $bankingInformationDTO->branch;
         $bankingInformation->account_name = $bankingInformationDTO->account_name;
         $bankingInformation->account_number = $bankingInformationDTO->account_number;
-        $bankingInformation->currency = $bankingInformationDTO->currency;
+        $bankingInformation->currency_id = $bankingInformationDTO->currency_id;
         $bankingInformation->is_default = $bankingInformationDTO->is_default;
     }
 }
