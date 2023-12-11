@@ -7,34 +7,34 @@
         <!-- Navigation -->
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('assets-dashboard') }}">{{ __('public.dashboard') }}</a>
+                <a class="nav-link" href="{{ route('asset-dashboard') }}">{{ __('public.dashboard') }}</a>
             </li>
             <!--end nav-item-->
 
             <li class="nav-item">
-                <a class="nav-link" href="analytics-customers.html">{{ __('Assets Catalogue') }}</a>
+                <a class="nav-link" href="{{ route('asset-catalog') }}">{{ __('Assets Catalogue') }}</a>
             </li>
             <!--end nav-item-->
 
             <li class="nav-item">
-                <a class="nav-link" href="#sidebarAnalytics" data-bs-toggle="collapse" role="button"
-                    aria-expanded="false" aria-controls="sidebarAnalytics">
+                <a class="nav-link" href="#assetSettings" data-bs-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="assetSettings">
                     Settings
                 </a>
-                <div class="collapse " id="sidebarAnalytics">
+                <div class="collapse " id="assetSettings">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a href="analytics-customers.html" class="nav-link ">Classifications</a>
+                            <a href="{{route('asset-classification')}}" class="nav-link ">Classifications</a>
                         </li>
                         <!--end nav-item-->
                         <li class="nav-item">
-                            <a href="analytics-reports.html" class="nav-link ">Categories</a>
+                            <a href="{{route('asset-category')}}" class="nav-link ">Categories</a>
                         </li>
                         <!--end nav-item-->
                     </ul>
                     <!--end nav-->
                 </div>
-                <!--end sidebarAnalytics-->
+                <!--end assetSettings-->
             </li>
             <!--end nav-item-->
         </ul>

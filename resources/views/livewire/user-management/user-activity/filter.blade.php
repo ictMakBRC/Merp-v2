@@ -6,7 +6,7 @@
                 <select class="form-select select2" id="causer" wire:model.lazy="causer">
                     <option selected value="0">All</option>
                     @forelse ($users as $user)
-                        <option value='{{ $user->id }}'>{{ $user->fullName }}</option>
+                        <option value='{{ $user->id }}'>{{ $user->name }}</option>
                     @empty
                     @endforelse
                 </select>

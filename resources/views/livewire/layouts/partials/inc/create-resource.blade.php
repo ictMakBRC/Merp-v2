@@ -1,14 +1,7 @@
 <div class="ms-auto">
-    <a type="button" class="btn btn-outline-success me-2" wire:click="refresh()"><i class="ti ti-refresh"></i></a>
-    <a type="button" class="btn me-2
-    @if (!$createNew) btn-success
-    @else
-    btn-outline-danger @endif"
-        wire:click="$set('createNew',{{ !$createNew }})">
-        @if (!$createNew)
-            <i class="ti ti-plus"></i>New
-        @else
-            <i class="ti ti-caret-up"></i>
-        @endif
+    <a type="button" class="btn btn-sm btn-outline-primary me-2" wire:click="refresh()"><i
+            class="mdi mdi-refresh"></i></a>
+    <a type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" class="btn btn-sm me-2 btn-primary">
+        <i class="fa fa-plus"></i>New
     </a>
 </div>

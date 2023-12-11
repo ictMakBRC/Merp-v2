@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Finance\Settings\FmsCurrency;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use App\Models\Global\FacilityInformation;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +24,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        
+        if (Schema::hasTable('facility_information')) {
+            View::share('facilityInfo', FacilityInformation::first());
+        } else {
+            View::share('facilityInfo', []);
+        }
+        if (Schema::hasTable('fms_currencies')) {
+            View::share('baseCurrency', FmsCurrency::where('system_default',1)->first());
+        } else {
+            View::share('baseCurrency', []);
+        }
         Blade::directive('moneyFormat', function ($figure) {
             return "<?php echo number_format($figure,2); ?>";
         });

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Carbon\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
@@ -12,8 +13,10 @@ use Laratrust\Traits\LaratrustUserTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Procurement\Request\ProcurementRequestApproval;
 
 class User extends Authenticatable
 {
@@ -57,6 +60,16 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class,'employee_id','id');
+    }
+
+    public function procurement_request_approvals()
+    {
+        return $this->hasMany(ProcurementRequestApproval::class, 'approver_id');
+    }
+
     protected function passwordUpdatedAt(): Attribute
     {
         return new Attribute(
@@ -73,7 +86,12 @@ class User extends Authenticatable
             });
         }
     }
+  
 
+    /**
+     * Search query
+     * @param String $search
+     */
     public static function search($search)
     {
         return empty($search) ? static::query()
@@ -105,6 +123,15 @@ class User extends Authenticatable
         $this->two_factor_code = null;
         $this->two_factor_expires_at = null;
         $this->save();
+    }
+
+    /**
+     * Check if the user is administrator
+     */
+    public function isAdministrator(): bool
+    {
+
+        return $this->is_admin;
     }
 
 }

@@ -15,18 +15,19 @@ return new class extends Migration
     {
         Schema::create('family_backgrounds', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('member_type');
             $table->string('surname');
             $table->string('first_name');
-            $table->string('middle_name')->nullable();
-            $table->string('address');
-            $table->string('contact');
-            $table->string('occupation');
+            $table->string('other_name')->nullable();
+            $table->string('member_status');
+            $table->string('address')->nullable();
+            $table->string('contact')->nullable();
+            $table->string('occupation')->nullable();
             $table->string('employer')->nullable();
             $table->string('employer_address')->nullable();
             $table->string('employer_contact')->nullable();
-            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }
