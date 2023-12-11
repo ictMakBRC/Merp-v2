@@ -205,37 +205,37 @@
                                         <strong class="text-inverse">{{ __('Prepared By') }}:
                                         </strong><br>
                                         <strong class="text-inverse">{{ __('Signature') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Procurement')->first()->approver->employee->signature ?? 'N/A' }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Procurement')->first()->approver?->employee?->signature ?? 'N/A' }}<br>
                                         <strong class="text-inverse">{{ __('Date') }}:
                                         </strong>@formatDate($request->updated_at)<br>
                                         <strong class="text-inverse">{{ __('Name') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Procurement')->first()->approver->employee->fullName }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Procurement')->first()->approver?->employee?->fullName }}<br>
                                         <strong class="text-inverse">{{ __('Designation') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Procurement')->first()->approver->employee->designation->name }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Procurement')->first()->approver?->employee?->designation?->name }}<br>
                                     </td>
                                     <td colspan="2" class="text-start">
                                         <strong class="text-inverse">{{ __('Checked By') }}:
                                         </strong><br>
                                         <strong class="text-inverse">{{ __('Signature') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Department')->first()->approver->employee->signature ?? 'N/A' }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Department')->first()->approver?->employee?->signature ?? 'N/A' }}<br>
                                         <strong class="text-inverse">{{ __('Date') }}:
                                         </strong>@formatDate($request->updated_at)<br>
                                         <strong class="text-inverse">{{ __('Name') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Department')->first()->approver->employee->fullName }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Department')->first()->approver?->employee?->fullName }}<br>
                                         <strong class="text-inverse">{{ __('Designation') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Department')->first()->approver->employee->designation->name }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Department')->first()->approver?->employee?->designation?->name }}<br>
                                     </td>
                                     <td colspan="2" class="text-start">
                                         <strong class="text-inverse">{{ __('Approved By') }}:
                                         </strong><br>
                                         <strong class="text-inverse">{{ __('Signature') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Operations')->first()->approver->employee->signature ?? 'N/A' }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Operations')->first()->approver?->employee?->signature ?? 'N/A' }}<br>
                                         <strong class="text-inverse">{{ __('Date') }}:
                                         </strong>@formatDate($request->updated_at)<br>
                                         <strong class="text-inverse">{{ __('Name') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Operations')->first()->approver->employee->fullName }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Operations')->first()->approver?->employee?->fullName }}<br>
                                         <strong class="text-inverse">{{ __('Designation') }}:
-                                        </strong>{{ $request->approvals->where('step', 'Operations')->first()->approver->employee->designation->name }}<br>
+                                        </strong>{{ $request->approvals->where('step', 'Operations')->first()->approver?->employee?->designation?->name }}<br>
                                     </td>
                                 </tr>
                             </tbody>

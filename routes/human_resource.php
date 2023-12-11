@@ -50,6 +50,7 @@ use App\Http\Livewire\HumanResource\Performance\Resignations\Create as RegisterR
 use App\Http\Livewire\HumanResource\Performance\Terminations\Create as RegisterTermination;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Create as RegisterExitInterview;
 use App\Http\Livewire\HumanResource\EmployeeData\OfficialContracts\OfficialContractsListComponent;
+use App\Http\Livewire\HumanResource\Settings\DepartmentProfile;
 
 Route::group(['prefix' => 'human-resource'], function () {
     Route::get('dashboard', HumanResourceMainDashboardComponent::class)->name('human-resource-dashboard');
@@ -59,6 +60,7 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('company-profile', CompanyProfileComponent::class)->name('company-profile');
         Route::get('stations', StationsComponent::class)->name('human-resource-stations');
         Route::get('departments', DepartmentsComponent::class)->name('human-resource-departments');
+        Route::get('departments/{id}/profile', DepartmentProfile::class)->name('department-profile');
         Route::get('designations', DesignationsComponent::class)->name('human-resource-designations');
         Route::get('holidays', HolidaysComponent::class)->name('human-resource-holidays');
         Route::get('offices', OfficesComponent::class)->name('human-resource-offices');

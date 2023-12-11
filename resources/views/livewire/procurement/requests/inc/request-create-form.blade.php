@@ -1,11 +1,13 @@
-
-<form wire:submit.prevent="storeProcurementRequest">
+<form
+    @if ($editMode) wire:submit.prevent="updateProcurementRequest"
+@else
+wire:submit.prevent="storeProcurementRequest" @endif>
     <div class="row">
         <div class="mb-3 col-md-2">
             <label for="request_type" class="form-label required">{{ __('Request Type') }}</label>
             <select class="form-select" id="request_type" wire:model.lazy="request_type">
                 <option selected value="">Select</option>
-                <option value="Departmental">Departmental Request</option>
+                <option value="Department">Department Request</option>
                 <option value="Project">Project Request</option>
             </select>
             @error('request_type')
@@ -74,9 +76,9 @@
             <select class="form-select" id="subcategory_id" wire:model.lazy="subcategory_id">
                 <option selected value="">Select</option>
                 @forelse ($subcategories as $subcategory)
-                <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
-            @empty
-            @endforelse
+                    <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
+                @empty
+                @endforelse
             </select>
             @error('subcategory_id')
                 <div class="text-danger text-small">{{ $message }}</div>
@@ -99,8 +101,10 @@
 
         <div class="mb-3 col-md-4">
             <label for="budget_line_id" class="form-label required">{{ __('Budget Line') }} @if ($currency)
-            <strong class="text-info">Balance:</strong> {{$currency}} <strong class="text-danger">{{$budget_line_balance}}</strong>  
-            @endif</label>
+                    <strong class="text-info">Balance:</strong> {{ $currency }} <strong
+                        class="text-danger">{{ $budget_line_balance }}</strong>
+                @endif
+            </label>
             <select class="form-select" id="budget_line_id" wire:model.lazy="budget_line_id">
                 <option selected value="">Select</option>
                 @forelse ($budget_lines as $budget_line)
@@ -108,6 +112,8 @@
                 @empty
                 @endforelse
             </select>
+            <strong class="text-info">Ledger Balance: </strong>{{ $ledger->currency->code }} <strong
+                class="text-danger">{{ $ledger->current_balance }}</strong>
             @error('budget_line_id')
                 <div class="text-danger text-small">{{ $message }}</div>
             @enderror
@@ -124,14 +130,6 @@
             @enderror
         </div>
 
-        {{-- <div class="mb-3 col-md-4">
-            <label for="sequence_number" class="form-label">{{ __('Sequence Number') }}</label>
-            <input type="text" id="sequence_number" class="form-control" wire:model.defer="sequence_number">
-            @error('sequence_number')
-                <div class="text-danger text-small">{{ $message }}</div>
-            @enderror
-        </div> --}}
-
         <div class="mb-3 col-md-3">
             <label for="procurement_plan_ref" class="form-label">{{ __('Procurement Plan Reference') }}</label>
             <input type="text" id="procurement_plan_ref" class="form-control"
@@ -143,8 +141,13 @@
 
         <div class="mb-3 col-md-3">
             <label for="location_of_delivery" class="form-label">{{ __('Location of Delivery') }}</label>
-            <input type="text" id="location_of_delivery" class="form-control"
-                wire:model.defer="location_of_delivery">
+            <select class="form-select" id="location_of_delivery" wire:model.lazy="location_of_delivery">
+                <option selected value="">Select</option>
+                @forelse ($stations as $station)
+                    <option value="{{ $station->name }}">{{ $station->name }}</option>
+                @empty
+                @endforelse
+            </select>
             @error('location_of_delivery')
                 <div class="text-danger text-small">{{ $message }}</div>
             @enderror
@@ -152,14 +155,24 @@
 
         <div class="mb-3 col-md-3">
             <label for="date_required" class="form-label">{{ __('Date Required') }}</label>
-            <input type="date" id="date_required" class="form-control" wire:model.defer="date_required" min="{{ now()->toDateString() }}">
+            <input type="date" id="date_required" class="form-control" wire:model.defer="date_required"
+                min="{{ now()->toDateString() }}">
             @error('date_required')
                 <div class="text-danger text-small">{{ $message }}</div>
             @enderror
         </div>
     </div>
 
-    <div class="modal-footer">
-        <x-button type="submit" class="btn btn-success">{{ __('public.save') }}</x-button>
-    </div>
+    @if ($budget_line_id)
+        @if ($ledger->current_balance > 0 && $budget_line_balance > 0)
+            <div class="modal-footer">
+                <x-button type="submit" class="btn btn-success">{{ __('public.save') }}</x-button>
+            </div>
+        @else
+            <div class="alert alert-warning border-0 text-center" role="alert">
+                {{ __('The financial status of the project/department can not permit you to make this request!') }}
+            </div>
+        @endif
+    @endif
+
 </form>

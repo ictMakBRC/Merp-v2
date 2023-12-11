@@ -33,14 +33,16 @@ class Project extends Model
         // Chain fluent methods for configuration options
     }
 
-    public function requests(): MorphMany
-    {
-        return $this->morphMany(Request::class, 'requestable');
-    }
+    // public function requests(): MorphMany
+    // {
+    //     return $this->morphMany(Request::class, 'requestable');
+    // }
+
     public function ledger()
     {
         return $this->HasOne(FmsLedgerAccount::class, 'project_id', 'id');
     }
+    
     public function employees()
     {
         return $this->belongsToMany(Employee::class, 'employee_project', 'project_id', 'employee_id')

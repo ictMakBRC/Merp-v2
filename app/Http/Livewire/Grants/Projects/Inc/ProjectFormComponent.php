@@ -31,12 +31,13 @@ class ProjectFormComponent extends Component
     public $project;
     public $project_id;
     public $loadingInfo='';
+    public $editMode =false;
 
     protected $listeners = [
-        'switchProject' => 'setProjectId',
+        'loadProject',
     ];
 
-    public function setProjectId($details)
+    public function loadProject($details)
     {
         $this->project_id = $details['projectId'];
         $this->loadingInfo = $details['info'];
@@ -58,6 +59,8 @@ class ProjectFormComponent extends Component
         $this->end_date = $project->end_date;
         $this->project_summary = $project->project_summary;
         $this->progress_status = $project->progress_status;
+
+        $this->editMode=true;
     }
 
     public function storeProject()
@@ -104,7 +107,7 @@ class ProjectFormComponent extends Component
     public function updateProject()
     {
         $projectDTO = new ProjectData();
-        $this->validate($projectDTO->rules());
+        $this->validate($projectDTO->updateRules());
 
         DB::transaction(function (){
 

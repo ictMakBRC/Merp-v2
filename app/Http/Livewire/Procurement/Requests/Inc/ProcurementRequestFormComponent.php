@@ -5,11 +5,12 @@ namespace App\Http\Livewire\Procurement\Requests\Inc;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
+use App\Models\Finance\Budget\FmsBudgetLine;
+use App\Models\HumanResource\Settings\Station;
+use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Procurement\Request\ProcurementRequest;
 use App\Data\Procurement\Requests\ProcurementRequestData;
-use App\Models\Finance\Budget\FmsBudgetLine;
-use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\Procurement\Settings\ProcurementSubcategory;
 use App\Services\Procurement\Requests\ProcurementRequestService;
 
@@ -38,6 +39,8 @@ class ProcurementRequestFormComponent extends Component
     public $currency;
     public $subcategories;
 
+    public $editMode=false;
+
     protected $listeners = [
         'loadProcurementRequest'=>'loadProcurementRequest',
     ];
@@ -61,29 +64,35 @@ class ProcurementRequestFormComponent extends Component
     {
         $this->procurement_request_id = $details['procurementRequestId'];
         $this->loadingInfo = $details['info'];
-
         $procurementRequest=ProcurementRequest::findOrFail($this->procurement_request_id);
         $this->procurementRequest = $procurementRequest;
-        $this->budget_line_id = $procurementRequest->budget_line_id;
+
         $this->request_type = $procurementRequest->request_type;
-        $this->project_id = $procurementRequest->requestable->id;
-        // if ($this->request_type == 'Departmental') {
-        //     $this->project_id = $procurementRequest->requestable->id;
-        // } else {
-        //     $this->project_id = $procurementRequest->requestable->id;
-        // }
+        if ($this->request_type != 'Department') {
+            $this->project_id = $procurementRequest->requestable->id;
+        }
+
+        $this->financial_year_id = $procurementRequest->financial_year_id;
+        $this->currency_id = $procurementRequest->currency_id;
+        $this->budget_line_id = $procurementRequest->budget_line_id;
+        $budgetLine = FmsBudgetLine::with('budget','budget.currency')->findOrFail($this->budget_line_id);
+        $this->currency = $budgetLine->budget->currency->code;
+        $this->budget_line_balance = $budgetLine->primary_balance;
+        
         
         $this->subject = $procurementRequest->subject;
         $this->body = $procurementRequest->body;
         $this->procuring_entity_code = $procurementRequest->procuring_entity_code;
         $this->procurement_sector = $procurementRequest->procurement_sector;
+        $this->subcategories = ProcurementSubcategory::where('category',$this->procurement_sector)->get();
         $this->subcategory_id = $procurementRequest->subcategory_id;
-        $this->financial_year_id = $procurementRequest->financial_year_id;
-        $this->currency_id = $procurementRequest->currency_id;
+     
         // $this->sequence_number = $procurementRequest->sequence_number;
         $this->procurement_plan_ref = $procurementRequest->procurement_plan_ref;
         $this->location_of_delivery = $procurementRequest->location_of_delivery;
         $this->date_required = $procurementRequest->date_required;
+
+        $this->editMode=true;
 
     }
 
@@ -94,7 +103,7 @@ class ProcurementRequestFormComponent extends Component
 
         DB::transaction(function (){
 
-            if ($this->request_type == 'Departmental') {
+            if ($this->request_type == 'Department') {
                 // dd('TRUE');
                 $requestableModel = Department::findOrFail(auth()->user()->employee->department->id);
 
@@ -172,15 +181,25 @@ class ProcurementRequestFormComponent extends Component
         });
     }
 
-
     public function render()
     {
-        $data['projects'] = Project::all();
+        $data['projects'] = auth()->user()->employee->projects??Collect([]);
         $data['financial_years'] = FmsFinancialYear::where('is_budget_year',true)->get();
+        $data['stations'] = Station::where('is_active',true)->get();
 
         $data['budget_lines'] = FmsBudgetLine::where('type','Expense')->whereHas('budget', function ($query) {
             $query->where(['fiscal_year' => $this->financial_year_id,'department_id' => auth()->user()->employee->department_id]);
         })->latest()->get();
+        
+        if ($this->project_id) {
+            $data['budget_lines'] = FmsBudgetLine::where('type','Expense')->whereHas('budget', function ($query) {
+                $query->where(['fiscal_year' => $this->financial_year_id,'project_id' => $this->project_id]);
+            })->latest()->get();
+            
+            $data['ledger']=Project::findOrFail($this->project_id)->ledger;
+        }else{
+            $data['ledger']=auth()->user()->employee->department->ledger;
+        }
 
         return view('livewire.procurement.requests.inc.procurement-request-form-component',$data);
     }

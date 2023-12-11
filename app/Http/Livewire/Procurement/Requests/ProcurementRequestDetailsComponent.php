@@ -57,9 +57,20 @@ class ProcurementRequestDetailsComponent extends Component
                 ]);
             });
 
-            $users= User::whereHas('employee', function($query){
-                $query->where('department_id',auth()->user()->employee->department_id);
-            })->get();
+            if ($procurementRequest->request_type=='Project') {
+
+                $pi= $procurementRequest->requestable->principalInvestigator->id;
+                $copi= $procurementRequest->requestable->coInvestigator->id;
+                $users=User::whereIn('employee_id',[$pi,$copi])->get();
+                // dd($users);
+
+            } else {
+                $users= User::whereHas('employee', function($query){
+                    $query->where('department_id',auth()->user()->employee->department_id);
+                })->get();
+            }
+            
+ 
              // $users= User::whereHasPermission('approve_procurement_request_as_supervisor')->whereHas('employee'. function($query){
         //     $query->where('department_id',auth()->user()->employee->department_id);
         // })->get();

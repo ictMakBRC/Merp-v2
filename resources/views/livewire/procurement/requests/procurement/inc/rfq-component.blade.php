@@ -54,8 +54,14 @@
                                 <td>{!! nl2br(e($item->description)) !!}</td>
                                 <td>{{ $item->unit_of_measure }}</td>
                                 <td>{{ $item->quantity }}</td>
-                                <td>@moneyFormat($item->estimated_unit_cost)</td>
-                                <td>@moneyFormat($item->total_cost)</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    
+                                </td>
+                                {{-- <td>@moneyFormat($item->estimated_unit_cost)</td>
+                                <td>@moneyFormat($item->total_cost)</td> --}}
 
                             </tr>
                         @endforeach
@@ -79,7 +85,7 @@
                                 <strong class="text-inverse">{{ __('Name') }}:
                                 </strong>{{ $request->approvals->where('step', 'Department')->first()->approver->employee->fullName }}<br>
                                 <strong class="text-inverse">{{ __('Designation') }}:
-                                </strong>{{ $request->approvals->where('step', 'Department')->first()->approver->employee->designation->name }}<br>
+                                </strong>{{ $request->approvals->where('step', 'Department')->first()->approver?->employee?->designation?->name }}<br>
                             </td>
                         </tr>
                     </tbody>

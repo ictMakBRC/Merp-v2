@@ -17,6 +17,8 @@ class ProcurementRequestItemsComponent extends Component
     public float $estimated_unit_cost=0;
     public $total_cost;
 
+    public $procurementRequest;
+
     public $loadingInfo;
 
     protected $listeners = [
@@ -56,6 +58,25 @@ class ProcurementRequestItemsComponent extends Component
             return;
         }
 
+        $budgetLineBalance=getBudgetLineBalance($this->procurementRequest->budget_line_id);
+
+        if ($this->procurementRequest->request_type == 'Department') {
+            $ledgerBalance=getLedger($this->procurementRequest->request_type,auth()->user()->employee->department->id)->current_balance;
+        } else {
+            $ledgerBalance=getLedger($this->procurementRequest->request_type,$this->procurementRequest->requestable_id)->current_balance;
+        }
+
+        $totalContractValue = ($this->procurementRequest->contract_value + $this->total_cost);
+
+        if (($totalContractValue > $ledgerBalance) || ($totalContractValue > $budgetLineBalance)) {
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Insufficient funds',
+                'text' => 'Total value/cost of items exceeds available funds!',
+            ]);
+            return;
+        }
+
         $this->validate([
             'item_name' => 'required|string',
             'description' => 'required|string',
@@ -79,8 +100,8 @@ class ProcurementRequestItemsComponent extends Component
                 ]
             );
 
-            $procurementRequest=ProcurementRequest::findOrFail($this->procurement_request_id);
-            $procurementRequest->increment('contract_value',$this->total_cost);
+            // $this->procurementRequest=ProcurementRequest::findOrFail($this->procurement_request_id);
+            $this->procurementRequest->increment('contract_value',$this->total_cost);
 
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item created successfully']);
 
@@ -108,7 +129,16 @@ class ProcurementRequestItemsComponent extends Component
 
     public function render()
     {
-        $data['items'] = ProcurementRequestItem::where('procurement_request_id',$this->procurement_request_id)->get()??collect([]);
+        if($this->procurement_request_id){
+
+        $request = ProcurementRequest::with('items')->findOrFail($this->procurement_request_id)??null;
+        $this->procurementRequest = $request;
+        $data['items'] = $request?->items??collect([]);
+
+        }else{
+            $data['items'] = collect([]);
+        }
+
         return view('livewire.procurement.requests.inc.procurement-request-items-component',$data);
     }
 }

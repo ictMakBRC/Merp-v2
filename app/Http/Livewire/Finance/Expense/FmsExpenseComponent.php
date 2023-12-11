@@ -203,7 +203,7 @@ class FmsExpenseComponent extends Component
     {
         $this->budgetLineCur = 0;
         $this->budgetLineBalance = 0;
-        $data = FmsBudgetLine::Where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
+        $data = FmsBudgetLine::where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
         $this->budgetLineBalance = $data->primary_balance ?? 0 - $data->amount_held ?? 0;
         $this->budgetLineCur = $data->budget?->currency?->code ?? '';
     }
@@ -212,7 +212,7 @@ class FmsExpenseComponent extends Component
     {
         $this->ledgerCur = 0;
         $this->ledgerBalance = 0;
-        $data = FmsLedgerAccount::Where('id', $this->ledger_account)->with('currency')->first();
+        $data = FmsLedgerAccount::where('id', $this->ledger_account)->with('currency')->first();
         $this->ledgerBalance = $data->current_balance ?? 0 - $data->amount_held ?? 0;
         $this->ledgerCur = $data->currency->code ?? '';
     }
@@ -250,7 +250,7 @@ class FmsExpenseComponent extends Component
         $this->budgetLines = FmsBudgetLine::with('budget')->where('type', 'Expense')->WhereHas('budget', function ($query) {
             $query->where(['project_id' => $this->project_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
         })->get();
-        $this->ledgers = FmsLedgerAccount::Where('project_id', $this->project_id)->with(['project', 'department', 'currency'])->get();
+        $this->ledgers = FmsLedgerAccount::where('project_id', $this->project_id)->with(['project', 'department', 'currency'])->get();
 
     }
     public function updatedCurrencyId()

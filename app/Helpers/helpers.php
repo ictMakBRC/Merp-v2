@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\ProcurementRequestEnum;
+use App\Models\Grants\Project\Project;
 use App\Models\Global\FacilityInformation;
 use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Settings\FmsCurrency;
@@ -176,8 +177,16 @@ function exchangeRate($fmsCurrencyId)
 
 
 //BUDGETING HELPERS
-function getBudgetLineBalance(FmsBudgetLine $fmsBudgetLine){
-    return $fmsBudgetLine->primary_balance;
+function getBudgetLineBalance($fmsBudgetLineId){
+    return FmsBudgetLine::findOrFail($fmsBudgetLineId)->primary_balance;
+}
+
+function getLedger($ledgerable_type,$ledgerable_id){
+    if ($ledgerable_type=='Project') {
+        return Project::findOrFail($ledgerable_id)->ledger;
+    }else{
+        return auth()->user()->employee->department->ledger;
+    }
 }
 
 function getFinacialYear(FmsFinancialYear $fmsFinancialYear){

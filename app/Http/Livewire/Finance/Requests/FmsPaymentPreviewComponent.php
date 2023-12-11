@@ -263,7 +263,7 @@ class FmsPaymentPreviewComponent extends Component
                 'comment' => 'nullable|string',
             ]);
             DB::transaction(function () use ($id) {
-                $signed = FmsPaymentRequestAuthorization::Where(['request_id' => $id, 'approver_id' => auth()->user()->id, 'status' => 'Active'])->first();
+                $signed = FmsPaymentRequestAuthorization::where(['request_id' => $id, 'approver_id' => auth()->user()->id, 'status' => 'Active'])->first();
                 // dd($signed);
                 if ($signed) {
 
@@ -271,7 +271,7 @@ class FmsPaymentPreviewComponent extends Component
                     $signed->signature = generateInitials(auth()->user()->employee->empName ?? auth()->user()->name) . '_' . GeneratorService::getNumber(8);
                     $signed->signature_date = date('Y-m-d');
                     $signed->update();
-                    $signatory = FmsPaymentRequestAuthorization::Where(['request_id' => $id, 'status' => 'Pending'])
+                    $signatory = FmsPaymentRequestAuthorization::where(['request_id' => $id, 'status' => 'Pending'])
                         ->orderBy('level', 'asc')->first();
                     if ($signatory) {
                         $signatory->update(['status' => 'Active']);
@@ -299,7 +299,7 @@ class FmsPaymentPreviewComponent extends Component
                 'comment' => 'required|string',
             ]);
             DB::transaction(function () use ($id) {
-                $signed = FmsPaymentRequestAuthorization::Where(['request_id' => $id, 'approver_id' => auth()->user()->id, 'status' => 'Active'])->first();
+                $signed = FmsPaymentRequestAuthorization::where(['request_id' => $id, 'approver_id' => auth()->user()->id, 'status' => 'Active'])->first();
                 // dd($signed);
                 if ($signed) {
 

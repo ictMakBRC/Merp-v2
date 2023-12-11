@@ -230,7 +230,7 @@ class GeneratorService
         $lpoNo = null;
         $yearStart = date('y');
 
-        $latestLpoNo = ProcurementRequest::orderBy('id', 'desc')->first();
+        $latestLpoNo = ProcurementRequest::whereNotNull('lpo_no')->orderBy('id', 'desc')->first();
 
         if ($latestLpoNo) {
             $latestLpoNoSplit = explode('-', $latestLpoNo->lpo_no);

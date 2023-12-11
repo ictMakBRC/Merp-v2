@@ -47,6 +47,24 @@ class GrantData extends Data
     ];
   }
 
+  public function updateRules(): array
+  {
+    return [
+      'grant_code' => 'required|string',
+      'grant_name' => 'required|string',
+      'grant_type' => 'required|string',
+      'funding_source' => 'nullable|string',
+      'funding_amount' => 'nullable|numeric',
+      'currency_id' => 'required|integer',
+      'start_date' => 'nullable|date',
+      'end_date' => 'nullable|date|after:start_date',
+      'proposal_submission_date' => 'required|date',
+      'pi' => 'required|integer',
+      'proposal_summary' => 'required|string',
+      'award_status' => 'required|string',
+    ];
+  }
+
 
   // Validation rules for the properties
   public function resetInputs(): array

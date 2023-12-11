@@ -17,7 +17,10 @@
         <div class="tab-content">
             <div class="tab-pane p-3 active" id="general-information" role="tabpanel">
 
-                <form wire:submit.prevent="storeGrant">
+                <form
+                    @if ($editMode) wire:submit.prevent="updateGrant"
+                @else
+                wire:submit.prevent="storeGrant" @endif>
                     <div class="row">
                         <div class="mb-3 col-md-4">
                             <label for="grant_code" class="form-label required">{{ __('Grant Code') }}</label>

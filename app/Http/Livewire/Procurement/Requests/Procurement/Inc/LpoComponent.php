@@ -38,8 +38,9 @@ class LpoComponent extends Component
         }
     }
 
-    public function initiatePaymentRequest(FmsPaymentRequestService $paymentRequestService)
+    public function initiatePaymentRequest()
     {
+        // dd('YES');
         $requestable = null;
         $department_id = null;
         $project_id = null;
@@ -51,13 +52,14 @@ class LpoComponent extends Component
             $department_id = null;
             $requestable = Project::with('ledger')->find($this->procurementRequest->requestable_id);
             $ledger_account = $requestable->ledger->id;
-        } elseif ($this->procurementRequest->request_type == 'Departmental') {
+
+        } elseif ($this->procurementRequest->request_type == 'Department') {
             $project_id = null;
             $requestable = Department::with('ledger')->find($this->procurementRequest->requestable_id);
             $ledger_account = $requestable->ledger->id;
         }
 
-        $exists = FmsPaymentRequest::where('procurement_request_id', $this->procurementRrequest->id->id)->first();
+        $exists = FmsPaymentRequest::where('procurement_request_id', $this->procurementRequest->id)->first();
     
         if ($exists) {
 
@@ -80,14 +82,16 @@ class LpoComponent extends Component
                 'ledger_account'=>$ledger_account,
                 'budget_line_id'=>$budget_line_id,
                 'requestable'=>$requestable,
+                'procurement_request_id'=>$this->request_id,
                 'total_amount'=> $this->procurementRequest->contract_value,
                 'net_payment_terms'=> $this->procurementRequest->net_payment_terms,
             ];
 
+            $paymentRequestService= new FmsPaymentRequestService();
             // Call the service to create the payment request
             $saveData = $paymentRequestService->createPaymentRequest($requestData);  
     
-            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Upfront/Advance Payment Request sent successfully!']);      
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Upfront/Advance Payment Request initiated successfully!']);      
 
         } catch (\Exception $e) {
             $this->dispatchBrowserEvent('swal:modal', [

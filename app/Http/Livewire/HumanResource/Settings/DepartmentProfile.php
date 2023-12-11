@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Livewire\Procurement\Settings;
+namespace App\Http\Livewire\HumanResource\Settings;
 
 use Response;
 use Livewire\Component;
 use App\Models\Documents\FormalDocument;
-use App\Models\Procurement\Settings\Provider;
+use App\Models\HumanResource\Settings\Department;
 
-class ProviderProfileComponent extends Component
+class DepartmentProfile extends Component
 {
-    public $provider_id;
+    public $activeTab='financials';
+    public $department_id;
 
     public function mount($id){
-        $this->provider_id=$id;
+        $this->department_id=$id;
     }
 
     public function downloadDocument(FormalDocument $formalDocument)
@@ -34,7 +35,7 @@ class ProviderProfileComponent extends Component
 
     public function render()
     {
-        $data['provider'] = Provider::with('procurement_requests')->findOrFail($this->provider_id);
-        return view('livewire.procurement.settings.provider-profile-component',$data);
+        $data['department'] = Department::with('employees','dept_supervisor','ast_supervisor','procurementRequests','projects')->findOrFail($this->department_id);
+        return view('livewire.human-resource.settings.department-profile',$data);
     }
 }
