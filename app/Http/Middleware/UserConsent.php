@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 
-class PasswordExpired
+class UserConsent
 {
     /**
      * Handle an incoming request.
@@ -18,10 +17,8 @@ class PasswordExpired
     public function handle($request, Closure $next)
     {
         $user = $request->user();
-        $password_expires_at = new Carbon(($user->password_expires_at));
-
-        if (now() > $password_expires_at && !$request->is('user.account')) {
-            return redirect()->route('user.account')->with('password_change', 'Dear '.$user->name.', You need to change your password now as per the existing password policy!');
+        if (!$user->consented) {
+            return redirect()->route('home')->with('user_consent', 'Dear '.$user->name.', You must consent to the Privacy and Data Sharing Consent Agreement in order to use MERP');
         }
 
         return $next($request);

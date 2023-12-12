@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'password_expired' => \App\Http\Middleware\PasswordExpired::class,
         'suspended_user' => \App\Http\Middleware\SuspendedUser::class,
         'twofactor' => \App\Http\Middleware\TwoFactor::class,
+        'userConsent' => \App\Http\Middleware\UserConsent::class,
     ];
 }

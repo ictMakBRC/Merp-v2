@@ -7,27 +7,46 @@ use Livewire\Component;
 
 class DataPolicyConfirmationComponent extends Component
 {
-    public function acceptPolicy()
-    {
-        auth()->user()->update(['declaration' => true]);
+    // public function acceptPolicy()
+    // {
+    //     auth()->user()->update(['declaration' => true]);
 
-        $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('swal:modal', [
-            'type' => 'success',
-            'message' => 'Policy accepted!',
-            'text' => 'Welcome to MERP - The ultimate resource planner !',
+    //     $this->dispatchBrowserEvent('close-modal');
+    //     $this->dispatchBrowserEvent('swal:modal', [
+    //         'type' => 'success',
+    //         'message' => 'Policy accepted!',
+    //         'text' => 'Welcome to MERP - The ultimate resource planner !',
+    //     ]);
+    // }
+
+    // public function declinePolicy()
+    // {
+    //     auth()->user()->update(['declaration' => false]);
+
+    //     Auth::guard('web')->logout();
+    //     session()->invalidate();
+    //     session()->regenerateToken();
+
+    //     return redirect('/');
+    // }
+
+    public function consent($consentState){
+        auth()->user()->update([
+            'information_share_consent'=>$consentState,
+            // 'consent_date'=>now(),
         ]);
-    }
 
-    public function declinePolicy()
-    {
-        auth()->user()->update(['declaration' => false]);
+        if($consentState){
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'success',
+                'message' => 'Great!',
+                'text' => '...You are good to go....',
+            ]);
+        }else{
+            $authenticatedSession = new AuthenticatedSessionController();
+            $authenticatedSession->destroy(request());
+        }
 
-        Auth::guard('web')->logout();
-        session()->invalidate();
-        session()->regenerateToken();
-
-        return redirect('/');
     }
 
     public function render()
