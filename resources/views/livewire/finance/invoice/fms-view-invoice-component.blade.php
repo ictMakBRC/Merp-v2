@@ -6,7 +6,7 @@
                     <div class="row">
                         <div class="col-md-12 d-print-flex">
                             @include('livewire.partials.brc-header')
-                            <h4 class="text-center">Status {{ $invoice_data->status }}</h4>
+                            {{-- <h4 class="text-center">Status {{ $invoice_data->status }}</h4> --}}
                         </div>
                     </div><!--end row-->
                 </div><!--end card-body-->
@@ -156,12 +156,12 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Ref No.</th>
-                                        <th>Created By</th>
+                                        <th>Collected By</th>
                                         <th>Amount Paid</th>
-                                        <th>Total Balance</th>
+                                        {{-- <th>Total Balance</th> --}}
                                         <th>Date</th>
                                         <th>Description</th>
-                                        <th>Action</th>
+                                        {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -169,12 +169,12 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $payement->payment_reference }}</td>
-                                            <td>{{ $payement->biller->name??'N/A' }}</td>
+                                            <td>{{ $payement->user->name??'N/A' }}</td>
                                             <td>{{ $payement->payment_amount }}</td>
-                                            <td>{{ $payement->payment_balance }}</td>
+                                            {{-- <td>{{ $payement->payment_balance- }}</td> --}}
                                             <td>{{ $payement->as_of }}</td>
                                             <td>{{ $payement->description }}</td>
-                                            <td></td>
+                                            {{-- <td></td> --}}
                                         </tr>
                                     @endforeach
                                 </tbody>
