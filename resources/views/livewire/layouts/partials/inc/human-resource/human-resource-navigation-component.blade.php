@@ -1,4 +1,6 @@
-<div id="humanResourceManagement" class="main-icon-menu-pane tab-pane" role="tabpanel" aria-labelledby="apps-tab">
+<div id="humanResourceManagement"
+    class="main-icon-menu-pane tab-pane {{isLinkActive(['appraisals.show'], 'show')}}" role="tabpanel"
+    aria-labelledby="apps-tab">
     <div class="title-box">
         <h6 class="menu-title">Human Resource</h6>
     </div>
@@ -23,5 +25,3 @@
     </div>
     <!--end sidebarCollapse-->
 </div><!-- end finance -->
-
-

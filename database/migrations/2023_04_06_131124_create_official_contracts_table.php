@@ -15,14 +15,15 @@ return new class extends Migration
     {
         Schema::create('official_contracts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->longText('contract_summary')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->float('gross_salary', 12, 2);
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->string('contract_file')->nullable();
-            $table->string('status')->default('Running');
-            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('status')->default(1);
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }

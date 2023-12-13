@@ -1,9 +1,31 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Register/Capture new employee information</h4>
+            <div class="card-header pt-0">
+                <div class="row mb-1">
+                    <div class="col-sm-12 mt-1">
+                        <div class="d-sm-flex align-items-center">
+                            <h5 class="mb-2 mb-sm-0">
+                                Register new employee information <small class="text-success">{{$loadingInfo}}</small>
+                            </h5>
+                            <div class="ms-auto mb-2">
+                                <div class="row">
+                                    <label class="col-md-4 col-form-label text-end">Load Employee</label>
+                                    <div class="col-md-8">
+                                        <select class="form-select" aria-label="Default select" wire:model.lazy='employee_id'>
+                                            <option selected value="">Select</option>
+                                            @foreach ($employees as $employee)
+                                                <option value='{{ $employee->id }}'>{{ $employee->fullName }}</option>
+                                            @endforeach
+                                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <!--end card-header-->
             <div class="card-body p-0">
                 <!-- Nav tabs -->
@@ -45,6 +67,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="accordion-item">
                                 <h5 class="accordion-header m-0" id="flush-banking-information">
                                     <button class="accordion-button collapsed fw-semibold" type="button"
@@ -60,6 +83,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="accordion-item">
                                 <h5 class="accordion-header m-0" id="flush-family-info">
                                     <button class="accordion-button collapsed fw-semibold" type="button"
@@ -112,6 +136,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="accordion-item">
                                 <h5 class="accordion-header m-0" id="flush-training-history-information">
                                     <button class="accordion-button collapsed fw-semibold" type="button"
@@ -131,12 +156,15 @@
 
                         </div>
                     </div>
+
                     <div class="tab-pane p-3" id="working_experience" role="tabpanel">
                         <livewire:human-resource.employee-data.inc.work-experience-information-component />
                     </div>
+
                     <div class="tab-pane p-3" id="official_contract" role="tabpanel">
                         <livewire:human-resource.employee-data.inc.official-contract-component />
                     </div>
+
                 </div>
             </div>
             <!--end card-body-->

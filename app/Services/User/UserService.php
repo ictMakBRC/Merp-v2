@@ -10,6 +10,7 @@ class UserService
     public function createUser(UserData $userData): User
     {
         $user = new User([
+            'employee_id' => $userData->employee_id,
             'name' => $userData->name,
             'category' => $userData->category,
             'email' => $userData->email,

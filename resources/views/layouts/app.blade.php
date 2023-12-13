@@ -17,9 +17,12 @@
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/libs/mobius1-selectr/selectr.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Include Select2 library and CSS -->
+    <script src="{{ asset('assets/libs/select2/css/select2.min.css') }}"></script>
 
-     <!-- iziToast CSS -->
-     <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
+    <!-- iziToast CSS -->
+    <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
+
+    <link href="{{ asset('assets/libs/starability/starability-css/starability-all.css') }}" rel="stylesheet" type="text/css" />
 
 
     @stack('css')
@@ -62,14 +65,19 @@
     <script src="{{ asset('assets/libs/izitoast/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert/sweetalert.min.js') }}"></script>
     <!-- App js -->
-    <script src="{{ asset('assets/js/app.js') }}"></script>   
-    <script src="{{ asset('assets/libs/mobius1-selectr/selectr.min.js') }}"></script>
-    <script src="{{ asset('assets/js/index.js') }}"></script>   
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script src="{{ asset('assets/libs/select2/js/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/js/index.js') }}"></script>
+
     @livewireScripts
 
     @stack('scripts')
+    
+    
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+    
 </body>
 
 </html>

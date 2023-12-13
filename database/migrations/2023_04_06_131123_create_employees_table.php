@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -25,11 +24,10 @@ return new class extends Migration
             $table->string('gender');
             $table->string('nationality')->nullable();
             $table->date('birth_date')->nullable();
-            $table->integer('age');
             $table->string('birth_place')->nullable();
             $table->string('religious_affiliation')->nullable();
-            $table->string('height')->nullable();
-            $table->string('weight')->nullable();
+            $table->decimal('height', 5, 2)->nullable();
+            $table->decimal('weight', 5, 2)->nullable();
             $table->string('blood_type')->nullable();
             $table->string('civil_status')->nullable();
             $table->string('address')->nullable();
@@ -51,7 +49,6 @@ return new class extends Migration
             $table->string('cv')->nullable();
             $table->boolean('is_active')->default(true);
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
-
             $table->timestamps();
         });
     }

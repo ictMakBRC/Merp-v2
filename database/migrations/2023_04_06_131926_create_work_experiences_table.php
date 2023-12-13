@@ -15,16 +15,16 @@ return new class extends Migration
     {
         Schema::create('work_experiences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('cascade');
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->foreignId('employee_id')->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->string('company');
             $table->string('position_held');
             $table->string('employment_type');
-            $table->string('monthly_salary')->nullable();
-            $table->string('service_length');
-            $table->longText('job_description')->nullable();
-            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('cascade');
+            $table->float('monthly_salary',12,2)->nullable();
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->longText('key_responsibilities')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
         });
     }

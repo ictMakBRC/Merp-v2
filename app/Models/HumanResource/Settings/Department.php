@@ -2,18 +2,23 @@
 
 namespace App\Models\HumanResource\Settings;
 
-use App\Models\User;
+use App\Models\Assets\AssetsCatalog;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AssetsManagement\Asset;
-use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\HumanResource\EmployeeData\Employee;
+use App\Traits\DocumentableTrait;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory,LogsActivity, ProcurementRequestableTrait,DocumentableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -26,64 +31,60 @@ class Department extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-    protected $fillable =['asst_supervisor','supervisor','name','created_by','is_active'];
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
-    protected $guarded = ['id'];
+    protected $guarded =['id'];
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
+    protected $parentColumn = 'parent_department';
+
+    // public function requests(): MorphMany
+    // {
+    //     return $this->morphMany(Request::class, 'requestable');
+    // }
 
     public function parent()
     {
-        return $this->belongsTo(Department::class, 'parent_department', 'id');
+        return $this->belongsTo(Department::class,$this->parentColumn);
     }
 
-    public function child()
+    public function children()
     {
-        return $this->hasMany(Department::class, 'parent_department', 'id');
+        return $this->hasMany(Department::class, $this->parentColumn);
     }
-    public function supervisor()
+
+    public function allChildren()
     {
-        return $this->hasOne(Employee::class,'id', 'supervisor');
+        return $this->children()->with('allChildren');
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class, 'department_id','id');
+    }
+
+    public function dept_supervisor()
+    {
+        return $this->belongsTo(Employee::class,'supervisor','id');
     }
 
     public function ast_supervisor()
     {
-        return $this->hasOne(Employee::class, 'id', 'asst_supervisor');
+        return $this->belongsTo(Employee::class,'asst_supervisor','id');
     }
 
     public function assets()
     {
-        return $this->hasMany(Asset::class);
+        return $this->hasMany(AssetsCatalog::class);
     }
 
-    public function units()
+    public function projects()
     {
-        return $this->hasMany(DepartmentUnit::class, 'department_id', 'id');
+        return $this->belongsToMany(Project::class,'department_project','department_id','project_id')
+        ->withTimestamps();
     }
 
-    // protected $parentColumn = 'parent_id';
-
-    // public function parent()
-    // {
-    //     return $this->belongsTo(Test::class,$this->parentColumn);
-    // }
-
-    // public function children()
-    // {
-    //     return $this->hasMany(Test::class, $this->parentColumn);
-    // }
-
-    // public function allChildren()
-    // {
-    //     return $this->children()->with('allChildren');
-    // }
+    public function ledger()
+    {
+        return $this->HasOne(FmsLedgerAccount::class, 'department_id', 'id');
+    }
 
     public static function boot()
     {
@@ -94,12 +95,13 @@ class Department extends Model
             });
         }
     }
+
     public static function search($search)
     {
         return empty($search) ? static::query()
-            : static::query()           
+            : static::query()
                 ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('description', 'like', '%'.$search.'%');
-               
+
     }
 }

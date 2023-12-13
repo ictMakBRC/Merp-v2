@@ -16,6 +16,7 @@ class GeneralInformationComponent extends Component
 {
     use WithFileUploads;
     public $employee_id;
+
     public $entry_type;
     public $nin_number;
     public $title;
@@ -65,7 +66,7 @@ class GeneralInformationComponent extends Component
                 ]);
     
                 $cvName = date('YmdHis').$this->surname.'.'.$this->cv->extension();
-                $this->cvPath = $this->cv->storeAs('resumes', $cvName);
+                $this->cvPath = $this->cv->storeAs('employees/resumes', $cvName);
             } else {
                 $this->cvPath = null;
             }
@@ -76,7 +77,7 @@ class GeneralInformationComponent extends Component
                 ]);
     
                 $photoName = date('YmdHis').$this->surname.'.'.$this->photo->extension();
-                $this->photo = $this->photo->storeAs('photos', $photoName, 'public');
+                $this->photoPath = $this->photo->storeAs('employees/photos', $photoName, 'public');
             } else {
                 $this->photoPath = null;
             }
@@ -87,7 +88,7 @@ class GeneralInformationComponent extends Component
                 ]);
     
                 $signatureName = date('YmdHis').$this->surname.'.'.$this->signature->extension();
-                $this->signaturePath = $this->signature->storeAs('signatures', $signatureName, 'public');
+                $this->signaturePath = $this->signature->storeAs('employees/signatures', $signatureName, 'public');
             } else {
                 $this->signaturePath = null;
             }
@@ -111,7 +112,7 @@ class GeneralInformationComponent extends Component
                 'address' => $this->address,
                 'email' => $this->email,
                 'alt_email' => $this->alt_email,
-                'contact' => $this->entry_type,
+                'contact' => $this->contact,
                 'alt_contact' => $this->alt_contact,
                 'designation_id' => $this->designation_id,
                 'station_id' => $this->station_id,
@@ -127,17 +128,29 @@ class GeneralInformationComponent extends Component
                 
                 ]
             );
-
+  
             $employeeService = new GeneralEmployeeInformationService();
 
             $employee = $employeeService->createEmployee($employeeDTO);
+            $this->employee_id=$employee->id;
+
+            $loadingInfo = 'For '.$employee->fullName.' |'.$employee->employee_number;
+            $this->emit('switchEmployee', [
+                'employeeId' => $this->employee_id,
+                'info'=>$loadingInfo,
+            ]);
+
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Employee details created successfully']);
-            // dd($employee);
+
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'success',
+                'message' => 'Employee Created!',
+                'text' => $employee->fullName.'| Employee Number: '.$employee->employee_number,
+            ]);
+
+            $this->reset($employeeDTO->resetInputs());
 
         });
-
- 
-        // $this->resetInputs();
     }
 
     public function render()
