@@ -2,8 +2,9 @@
 
 namespace App\Http\Livewire\UserManagement;
 
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 class DataPolicyConfirmationComponent extends Component
 {
@@ -42,6 +43,9 @@ class DataPolicyConfirmationComponent extends Component
                 'message' => 'Great!',
                 'text' => '...You are good to go....',
             ]);
+        return redirect(request()->header('Referer'));
+
+
         }else{
             $authenticatedSession = new AuthenticatedSessionController();
             $authenticatedSession->destroy(request());

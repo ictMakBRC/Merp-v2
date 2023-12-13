@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\UserManagement;
 
+use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
-use Carbon\Carbon;
 use Livewire\Component;
 use App\Data\User\UserData;
 use App\Exports\UsersExport;
@@ -18,6 +18,7 @@ use App\Models\Grants\Project\Project;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendPasswordNotification;
+use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\EmployeeData\Employee;
 
 class UsersComponent extends Component

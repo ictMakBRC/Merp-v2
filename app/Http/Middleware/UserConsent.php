@@ -17,8 +17,8 @@ class UserConsent
     public function handle($request, Closure $next)
     {
         $user = $request->user();
-        if (!$user->consented) {
-            return redirect()->route('home')->with('user_consent', 'Dear '.$user->name.', You must consent to the Privacy and Data Sharing Consent Agreement in order to use MERP');
+        if (!$user->information_share_consent) {
+            return redirect()->route('home')->with('user_consent', 'Dear '.$user->name.', You must consent to the Privacy and Data Sharing Agreement in order to use MERP');
         }
 
         return $next($request);

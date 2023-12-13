@@ -1,19 +1,20 @@
-{{--   --}}
+
 <div>
     <div class="card">
         <div class="card-header">
-            <h6 class="mb-2 mt-3 text-primary">{{ __('Privacy and Data Sharing Consent Agreement') }}
-            </h6>
+            <h4 class="mb-2 mt-3 text-primary text-center">{{ __('Privacy and Data Sharing Agreement') }}
+            </h4>
             <p>
                 Welcome to MERP.
                 We are committed to safeguarding your privacy and ensuring the security of your personal information.
                 Before you share sensitive data with us, it's important that you understand
                 and consent to how we collect, use, and protect your information.
-                This Privacy and Data Sharing Consent Agreement ("Agreement") outlines the terms
+                This Privacy and Data Sharing Consent ("Agreement") outlines the terms
                 and conditions of data sharing and processing.
                 By providing your information, you are agreeing to the terms described below.
             </p>
         </div>
+
         <div class="card-body">
             <div class="d-flex align-items-center">
                 <div class="flex-grow-1 ms-3">
@@ -101,16 +102,29 @@
             </div>
             <hr>
             <div class="d-flex align-items-center">
-                <div class="flex-grow-1 ms-3 text-primary fw-bold">
+                <div class="flex-grow-1 ms-3 text-danger fw-bold">
                     <p>By sharing your personal information with us, you acknowledge that you have read, understood, and
                         agreed
                         to the
                         terms outlined in this Privacy and Data Sharing Consent Agreement.</p>
                 </div>
             </div>
+            <div class="text-center bg-light">
+                <i class=" bx bx-info-circle h1 text-warning"></i>
+                <h4 class="mt-2">Declaration!</h4>
+                <hr>
+                <p class="mt-3">I <strong class="text-danger">{{ auth()->user()->name }}</strong> hereby
+                    state
+                    that the information i will be providing to <strong class="text-success">{{organizationInfo()->facility_name??'MERP'}}</strong> using this System is truthful and
+                    that <strong class="text-success">{{organizationInfo()->facility_name??'MERP'}}</strong> reserves the right to check the authenticity of the information
+                    provided. <strong class="text-success">{{organizationInfo()->facility_name??'MERP'}}</strong> shall not be held liable for any wrong information provided by
+                    <strong class="text-danger">{{ auth()->user()->name }}</strong> and
+                    which is used as such.
+                </p>
+            </div>
             <div class="modal-footer">
-                <x-button class="btn-success" wire:click='consent(1)'>{{ __('I Agree') }}</x-button>
-                <x-button class="btn-danger" wire:click='consent(0)'>{{ __('I Decline') }}</x-button>
+                <x-button class="btn-success me-2" wire:click='consent(1)'>{{ __('Agree') }}</x-button>
+                <x-button class="btn-danger" wire:click='consent(0)'>{{ __('Decline') }}</x-button>
 
             </div>
         </div>
