@@ -323,17 +323,17 @@
                                 {{-- @endif --}}
                                 @if (Auth::user()->hasPermission(['view_services']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-categories') }}" class="nav-link ">Service
-                                            Categories</a>
+                                        <a href="{{ route('finance-categories') }}" class="nav-link ">Reveune
+                                            Sub-Categories</a>
                                     </li>
                                     <!--end nav-item-->
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-services') }}" class="nav-link ">Services</a>
+                                        <a href="{{ route('finance-services') }}" class="nav-link ">Revenues</a>
                                     </li>
                                     <!--end nav-item-->
                                     <!--end nav-item-->
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit Services</a>
+                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit Revenues</a>
                                     </li>
                                     <!--end nav-item-->
                                 @endif
