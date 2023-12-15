@@ -10,7 +10,7 @@
                             </h5>
                             <div class="ms-auto mb-2">
                                 <div class="row">
-                                    <label class="col-md-4 col-form-label text-end">Load Employee</label>
+                                    <label class="col-md-4 col-form-label text-end">Load</label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select" wire:model.lazy='employee_id'>
                                             <option selected value="">Select</option>

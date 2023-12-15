@@ -30,7 +30,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white rounded fixed-to rounded-0 shadow-sm">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ route('home') }}">
-                    <img src="{{ asset('assets/images/logos/fav-icon.png') }}" alt="logo-banner"
+                    <img src="{{ asset('assets/images/logos/merp-logo.png') }}" alt="logo-banner"
                         style="height: 50px; width: 100%; display: block;">
                 </a>
 

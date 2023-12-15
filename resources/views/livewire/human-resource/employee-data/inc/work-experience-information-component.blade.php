@@ -1,7 +1,10 @@
 <div>
     @include('livewire.human-resource.employee-data.inc.loading-info')
 
-    <form wire:submit.prevent="storeWorkingExperienceInformation">
+    <form
+        @if (!$toggleForm) wire:submit.prevent="storeWorkingExperienceInformation"
+    @else
+    wire:submit.prevent="updateWorkingExperienceInformation" @endif>
         <div class="row">
 
             <div class="mb-3 col-md-3">
@@ -68,16 +71,79 @@
 
             <div class="mb-3 col-md-12">
                 <label for="key_responsibilities" class="form-label">Key Responsibilities</label>
-                <textarea type="text" id="key_responsibilities" rows="4" class="form-control" wire:model.defer="key_responsibilities"
-                    placeholder="List Key Responsibilities"></textarea>
-                    @error('key_responsibilities')
+                <textarea type="text" id="key_responsibilities" rows="4" class="form-control"
+                    wire:model.defer="key_responsibilities" placeholder="List Key Responsibilities"></textarea>
+                @error('key_responsibilities')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
         </div>
         <div class="modal-footer">
-            <x-button class="btn-success">{{ __('public.save') }}</x-button>
+            <x-button class="btn btn-success">
+                @if (!$toggleForm)
+                    {{ __('public.save') }}
+                @else
+                    {{ __('public.update') }}
+                @endif
+            </x-button>
         </div>
     </form>
+
+     <!--EXPERIENCE BACKGROUND-->
+ @if (!$workExperienceInformation->isEmpty())
+     <div class="row">
+         <div class="col-lg-12">
+             <hr>
+             <div class="table-responsive">
+                 <table
+                     class="table w-100 mb-0 table-striped text-center">
+                     <thead>
+                         <tr>
+                             <th>Organisation</th>
+                             <th>From</th>
+                             <th>To</th>
+                             <th>Position</th>
+                             <th>Emp-Type</th>
+                             <th>Responsibility</th>
+                             <th>Action</th>
+                         </tr>
+                     </thead>
+                     @foreach ($workExperienceInformation as $experience)
+                         <tr>
+                             <td>
+                                 {{ $experience->company }}
+                             </td>
+                             <td>
+                                 @formatDate($experience->start_date)
+                             </td>
+                             <td>
+                                 @formatDate($experience->end_date)
+                             </td>
+                             <td>
+                                 {{ $experience->position_held }}
+
+                             </td>
+
+                             <td>
+                                 {{ $experience->employment_type }}
+                             </td>
+                             <td>
+                                 {{ $experience->key_responsibilities }}
+                             </td>
+                             <td>
+                                <button class="btn btn btn-sm btn-outline-success"
+                                    wire:click="editData({{ $experience->id }})"
+                                    title="{{ __('public.edit') }}">
+                                    <i class="ti ti-edit fs-18"></i></button>
+                            </td>
+                         </tr>
+                     @endforeach
+
+                 </table>
+             </div> <!-- end preview-->
+         </div>
+     </div>
+ @endif
+ <!-- end WORK EXPERIENCE-->
 
 </div>

@@ -91,7 +91,7 @@ class ProjectEmployeesComponent extends Component
 
     public function render()
     {
-        $data['projects'] = Project::where('end_date','>',today())->get();
+        $data['projects'] = Project::where('end_date','<',today())->get();
         $data['designations'] = Designation::where('is_active',true)->get();
         $data['employees'] = Employee::where('is_active',true)->get();
         return view('livewire.grants.projects.inc.project-employees-component',$data);
