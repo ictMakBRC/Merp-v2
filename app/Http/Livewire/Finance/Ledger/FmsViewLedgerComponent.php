@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Finance\Ledger;
 
+use Livewire\Component;
+use App\Models\Finance\Budget\FmsUnitBudgetLine;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Transactions\FmsTransaction;
-use Livewire\Component;
+use App\Models\Finance\Accounting\FmsChartOfAccount;
 
 class FmsViewLedgerComponent extends Component
 {
@@ -27,6 +29,8 @@ class FmsViewLedgerComponent extends Component
 
     public $edit_id;
 
+    public $transaction_type;
+
     protected $paginationTheme = 'bootstrap';
 
     public $createNew = false;
@@ -41,7 +45,10 @@ class FmsViewLedgerComponent extends Component
     }
     public function render()
     {
-        $data['ledger_account']= FmsLedgerAccount::where('id', $this->ledger_id)->with('currency','requestable')->first();
+     
+        $data['ledger_account']=  $ledger_account = FmsLedgerAccount::where('id', $this->ledger_id)->with('currency','requestable')->first();
+        $data['transaction_types'] = FmsUnitBudgetLine::search($this->search)->where('requestable_id', $ledger_account?->requestable_id)
+        ->where('requestable_type', $ledger_account?->requestable_type)->get();
         $data['transactions'] = FmsTransaction::where('ledger_account', $this->ledger_id)->when($this->from_date != '' && $this->to_date != '', function ($query) {
             $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
         }, function ($query) {

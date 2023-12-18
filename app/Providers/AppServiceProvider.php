@@ -27,8 +27,10 @@ class AppServiceProvider extends ServiceProvider
         
         if (Schema::hasTable('facility_information')) {
             View::share('facilityInfo', FacilityInformation::first());
+            View::share('organizationInfo', FacilityInformation::first());
         } else {
             View::share('facilityInfo', []);
+            View::share('organizationInfo', []);
         }
         if (Schema::hasTable('fms_currencies')) {
             View::share('baseCurrency', FmsCurrency::where('system_default',1)->first());

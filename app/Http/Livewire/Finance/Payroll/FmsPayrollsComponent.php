@@ -68,7 +68,7 @@ class FmsPayrollsComponent extends Component
             'month' => 'required',
             'year' => 'required',
         ]);
-        $record = FmsPayroll::where([ 'month' => $this->month, 'year' => $this->year])->first();
+        $record = FmsPayroll::where([ 'month' => $this->month, 'year' => $this->year, 'status'=>'Pending'])->first();
         if($record){
 
             $this->dispatchBrowserEvent('swal:modal', [

@@ -78,6 +78,17 @@ class FmsInvoiceListsComponent extends Component
 
     public $billed_by;
     public $billed_to;
+    public $unit_type ='department';
+    public $unit_id=0;
+    public function mount(){
+        if (session()->has('unit_type') && session()->has('unit_id')) {
+            $this->unit_id = session('unit_id');
+            $this->unit_type = session('unit_type');
+        }else{
+            $this->unit_id = auth()->user()->employee->department_id??0;
+            $this->unit_type = 'department';
+        }
+    }
 
     public function updatedCreateNew()
     {

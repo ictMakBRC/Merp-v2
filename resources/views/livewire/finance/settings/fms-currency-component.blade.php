@@ -108,8 +108,8 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $currency->name }}</td>
-                                            <td>{{ $currency->code ?? 'N/A' }}</td>
-                                            <td>{{ $currency->exchange_rate ?? 'N/A' }}</td>
+                                            <td>1 {{ $currency->code ?? 'N/A' }}</td>
+                                            <td>{{ $currency->exchange_rate ?? 'N/A' }} {{ $baseCurrency->code??'UGX' }}</td>
                                             @if ($currency->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else

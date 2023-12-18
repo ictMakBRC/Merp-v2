@@ -14,10 +14,14 @@
                     @error('request_type')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
-                </div>
-                @include('livewire.partials.project-department-toggle')           
+                </div> 
+                @if ($unit_type == 'all')
+                    @include('livewire.partials.project-department-toggle')
+                @else
+                    @include('livewire.partials.single-project-department-toggle')
+                @endif            
              
-                <div class="mb-3 col-2">
+                <div class="mb-3 col-3">
                     <label for="ledger_account" class="form-label required">Ledger</label>
                     <select id="ledger_account" class="form-control" name="ledger_account" required wire:model="ledger_account">
                         <option value="">Select</option>
@@ -33,7 +37,7 @@
                         <small class="text-info"><strong>Balance:</strong>{{exchangeCurrency($ledgerCur, 'base',  $ledgerBalance).' UGX' }}</small>
                     @endif
                 </div>   
-                <div class="mb-3 col-2">
+                <div class="mb-3 col-3">
                     <label for="budget_line_id" class="form-label required">Budget Line to charge</label>
                     <select id="budget_line_id" class="form-control" name="budget_line_id" required wire:model="budget_line_id">
                         <option value="">Select</option>

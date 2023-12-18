@@ -43,8 +43,7 @@
                                             <div class="accordion-body ml-4">
                                                 @if ($departMentBudgets || $projecttBudgets)
                                                     <div class="table-responsive-sm pt-2">
-                                                        <table
-                                                            class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
+                                                        <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
                                                             <thead class="table-light">
                                                                 <tr>
                                                                     <th>No.</th>
@@ -67,7 +66,7 @@
                                                                     <tr>
                                                                         <td>{{ $number }}</td>
                                                                         <td>{{ $projectBudget['project'] }}</td>
-                                                                        <td class="float-end">@moneyFormat($projectBudget['project_amount'])</td>
+                                                                        <td class="text-end">@moneyFormat($projectBudget['project_amount'])</td>
 
                                                                     </tr>
                                                                     @php $number++; @endphp
@@ -153,8 +152,7 @@
                                                                     <tr>
                                                                         <td>{{ $number }}</td>
                                                                         <td>{{ $projectBudget['project'] }}</td>
-                                                                        <td class="float-end">@moneyFormat($projectBudget['project_amount'])</td>
-
+                                                                        <td class="text-end">@moneyFormat($projectBudget['project_amount'])</td>
                                                                     </tr>
                                                                     @php $number++; @endphp
                                                                 @endforeach

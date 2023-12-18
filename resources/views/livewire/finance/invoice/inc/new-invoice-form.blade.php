@@ -3,7 +3,7 @@
         @if ($toggleForm) wire:submit.prevent="updateInvoice" @else wire:submit.prevent="storeInvoice" @endif>
 
         <div class="row">
-            @include('livewire.partials.project-department-toggle')
+            @include('livewire.partials.single-project-department-toggle')
             
             <div class="mb-3 col col-12 col col-sm-4">
                 <label for="invoice_to" class="form-label required">Billed To</label>
@@ -106,6 +106,7 @@
                     <label for="recurring" class="form-label required">
                         Recurring Invoice? </label>
                     <select class="form-select" data-width="100%" name="recurring" wire:model='recurring'>
+                        <option value="">Select</option>
                         <option value="0">No</option>
                         <option value="1">Every 1 month</option>
                         <option value="2">Every 2 months</option>
