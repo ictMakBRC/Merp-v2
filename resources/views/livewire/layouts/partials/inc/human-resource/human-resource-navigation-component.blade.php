@@ -17,7 +17,7 @@
             @include('livewire.layouts.partials.inc.human-resource.inc.performance-nav')
             @include('livewire.layouts.partials.inc.human-resource.inc.leaves-nav')
             @include('livewire.layouts.partials.inc.human-resource.inc.grievances-nav')
-            @include('livewire.layouts.partials.inc.human-resource.inc.reports-nav')
+            {{-- @include('livewire.layouts.partials.inc.human-resource.inc.reports-nav') --}}
             @include('livewire.layouts.partials.inc.human-resource.inc.settings-nav')
             <!--end nav-item-->
         </ul>

@@ -48,10 +48,58 @@ class ProjectService
     }
 
     //ATTACH EMPLOYEE
-    public function attachEmployee(ProjectData $projectDocumentDTO):Employee
+    // public function attachEmployee(ProjectData $projectDocumentDTO):Employee
+    // {
+    //     $employee = Employee::findOrFail($projectDocumentDTO->employee_id);
+        
+    //     $employee->projects()->attach($projectDocumentDTO->project_id, [
+    //         'designation_id' => $projectDocumentDTO->designation_id,
+    //         'contract_summary' => $projectDocumentDTO->contract_summary,
+    //         'start_date' => $projectDocumentDTO->contract_start_date,
+    //         'end_date' => $projectDocumentDTO->contract_end_date,
+    //         'fte' => $projectDocumentDTO->fte,
+    //         'gross_salary' => $projectDocumentDTO->gross_salary,
+    //         'contract_file_path' => $projectDocumentDTO->contract_file_path,
+    //         'status' => $projectDocumentDTO->status,
+    //     ]);
+
+    //     $employee->projects()->where(['status' => 'Running'])
+    //     ->where('id','!=',$contractInformation->id)
+    //     ->update(['status'=>0]);
+
+    //     return $employee;
+    // }
+
+    public function attachEmployee(ProjectData $projectDocumentDTO): Employee
     {
         $employee = Employee::findOrFail($projectDocumentDTO->employee_id);
-        
+
+        // Check if there is any running contract for the employee on the project
+        $runningContract = $employee->projects()
+            ->where('projects.id', $projectDocumentDTO->project_id)
+            ->wherePivot('status', '!=', 'Terminated')
+            ->wherePivot('end_date', '>=', now())
+            // ->orWhereNull('projects.end_date')
+            ->first();
+
+        // Mark the status as terminated for the running contract (if it exists)
+        if ($runningContract) {
+            $employee->projects()->updateExistingPivot(
+                $runningContract->id,
+                ['status' => 'Terminated']
+            );
+        }
+
+        // Mark existing contracts related to the project for the employee as expired
+        $employee->projects()
+        ->where('projects.id', $projectDocumentDTO->project_id)
+        ->wherePivot('status', '!=', 'Terminated')
+        ->each(function ($project) {
+            $project->pivot->update(['status' => 'Expired']);
+        });
+
+
+        // Attach the new contract details
         $employee->projects()->attach($projectDocumentDTO->project_id, [
             'designation_id' => $projectDocumentDTO->designation_id,
             'contract_summary' => $projectDocumentDTO->contract_summary,
