@@ -14,6 +14,7 @@ class UserService
             'name' => $userData->name,
             'category' => $userData->category,
             'email' => $userData->email,
+            'contact' => $userData->contact,
             'password' => $userData->password,
             'is_active' => $userData->is_active,
             'signature' => $userData->signature,
@@ -32,6 +33,7 @@ class UserService
         $user->name = $userData->name ?? $user->name;
         $user->category = $userData->category ?? $user->category;
         $user->email = $userData->email ?? $user->email;
+        $user->contact = $userData->contact ?? $user->contact;
         $user->is_active = $userData->is_active ?? $user->is_active;
         $user->signature = $userData->signature ?? $user->signature;
 

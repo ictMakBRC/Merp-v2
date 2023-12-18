@@ -29,6 +29,13 @@ class EmployeeFamilyData extends Data
           'surname' => 'required|string|max:100',
           'first_name' => 'required|string|max:100',
           'member_status' => 'required|string',
+          'other_name'=>'nullable|string',
+          'address'=>'nullable|string',
+          'contact'=>'nullable|string',
+          'occupation'=>'nullable|string',
+          'employer'=>'nullable|string',
+          'employer_contact'=>'nullable|string',
+          'employer_address'=>'nullable|string',
         ];
     }
 
