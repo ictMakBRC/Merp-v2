@@ -50,7 +50,6 @@ use App\Http\Livewire\HumanResource\Performance\Resignations\Create as RegisterR
 use App\Http\Livewire\HumanResource\Performance\Terminations\Create as RegisterTermination;
 use App\Http\Livewire\HumanResource\Performance\ExitInterviews\Create as RegisterExitInterview;
 use App\Http\Livewire\HumanResource\EmployeeData\OfficialContracts\OfficialContractsListComponent;
-use App\Http\Livewire\HumanResource\Requests\Leave\HrLeaveRequestsComponent;
 use App\Http\Livewire\HumanResource\Settings\DepartmentProfile;
 
 Route::group(['prefix' => 'human-resource'], function () {
@@ -76,7 +75,6 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('{id}/details', EmployeeDetailsComponent::class)->name('employee-details');
     });
     Route::group(['prefix' => 'leaves'], function () {
-        Route::get('requests/{{type}}', HrLeaveRequestsComponent::class)->name('hr-leave_requests');
         Route::get('new-request/new', NewLeaveRequest::class)->name('leave.new-request');
         Route::get('requests/{leaveRequest}/update', EditLeaveRequest::class)->name('leaves.edit-request');
         Route::get('requests', LeaveRequests::class)->name('leave.requests');

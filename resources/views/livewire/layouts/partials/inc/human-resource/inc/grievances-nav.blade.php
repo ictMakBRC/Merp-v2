@@ -8,16 +8,31 @@
             <li class="nav-item">
                 <a href="{{route('my-grievances')}}" class="nav-link ">My Grievances</a>
             </li>
-            @permission('view_grievances')
-            <li class="nav-item">
-                <a href="/human-resource/grievances" class="nav-link ">Grievances</a>
-            </li>
-            @endpermission
-            @permission('view_grievance_types')
-            <li class="nav-item">
-                <a href="/human-resource/grievance-types" class="nav-link ">Types</a>
-            </li>
-            @endpermission
+            @if (Auth::user()->hasPermission(['view_grievances']))
+                <li class="nav-item">
+                    <a href="/human-resource/grievances" class="nav-link ">Grievances</a>
+                </li>
+            @endif
+            @if (Auth::user()->hasPermission(['view_grievance_types']))
+                <li class="nav-item">
+                    <a href="/human-resource/grievance-types" class="nav-link ">Types</a>
+                </li>
+            @endif
+            @if (Auth::user()->hasPermission(['create_grievance']))
+                <li class="nav-item">
+                    <a href="{{ route('hr_grievances-user') }}" class="nav-link ">My</a>
+                </li>
+            @endif
+            @if (Auth::user()->hasPermission(['view_grievances']))
+                <li class="nav-item">
+                    <a href="{{ route('hr_grievances-list','all') }}" class="nav-link ">All</a>
+                </li>
+            @endif
+            @if (Auth::user()->hasPermission(['view_department_grievances']))
+                <li class="nav-item">
+                    <a href="{{ route('hr_grievances-list','unit') }}" class="nav-link ">Unit</a>
+                </li>
+            @endif
         </ul>
         <!--end nav-->
     </div>

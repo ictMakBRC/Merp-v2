@@ -35,10 +35,9 @@
             <li class="nav-item">
                 <a href="{{route('human-resource.settings.performances')}}" class="nav-link ">Performance
                     Configurations</a>
-            </li>
-
+            </li>            
             <li class="nav-item">
-                <a href="#" class="nav-link ">Currencies & rates</a>
+                <a href="{{ route('hr_grievances-types') }}" class="nav-link ">Grievance Types</a>
             </li>
 
         </ul>
