@@ -2,6 +2,7 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
+use App\Traits\CurrencyTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class BankingInformation extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory,LogsActivity,CurrencyTrait;
 
     public function getActivitylogOptions(): LogOptions
     {

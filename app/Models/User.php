@@ -58,6 +58,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'funder_projects' => 'array',
+        'monitored_departments' => 'array',
     ];
 
     public function employee()

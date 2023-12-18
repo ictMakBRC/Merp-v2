@@ -62,7 +62,7 @@ class ProcurementCategorizationComponent extends Component
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'info',
                 'message' => 'Oops! Operation Failed!',
-                'text' => 'There can only be procurement categorization',
+                'text' => 'There can only be two procurement categorization',
             ]);
             return;
         }

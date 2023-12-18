@@ -20,7 +20,7 @@ class OfficialContractData extends Data
         return [
           'employee_id' => 'required|integer',
           'contract_summary' => 'required|string',
-          'gross_salary' => 'required|string',
+          'gross_salary' => 'required|numeric',
           'currency_id' => 'required|integer',
           'start_date' => 'required|date',
           'end_date' => 'required|date|after:start_date',
