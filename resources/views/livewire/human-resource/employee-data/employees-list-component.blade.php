@@ -11,14 +11,14 @@
                                         class="text-danger fw-bold">{{ $employees->total() }}</span>)
                                     @include('livewire.layouts.partials.inc.filter-toggle-alpine')
                                 </h5>
-                                @include('livewire.layouts.partials.inc.create-resource-alpine')
+                                {{-- @include('livewire.layouts.partials.inc.create-resource-alpine') --}}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     
-                    @include('livewire.human-resource.employee-data.inc.register-employee-form')
+                    {{-- @include('livewire.human-resource.employee-data.inc.register-employee-form') --}}
 
                     @include('livewire.human-resource.employee-data.inc.employees-list-table')
 

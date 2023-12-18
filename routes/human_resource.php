@@ -138,7 +138,8 @@ Route::group(['prefix' => 'human-resource'], function () {
     });
 
     Route::group(['prefix' => 'contracts'], function () {
-        Route::get('official', HrOfficialContractsComponent::class)->name('human-resource-official_contracts');
+        Route::get('official', OfficialContractsListComponent::class)->name('human-resource-official_contracts');
+        // Route::get('official', HrOfficialContractsComponent::class)->name('human-resource-official_contracts');
         Route::get('official/employee', OfficialContractsListComponent::class)->name('human-resource-my_official_contracts');
     });
 

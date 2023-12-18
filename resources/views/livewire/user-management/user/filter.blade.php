@@ -5,9 +5,11 @@
         <label for="user_category" class="form-label">{{ __('user-mgt.user_category') }}</label>
         <select class="form-select select2" id="user_category" wire:model='user_category'>
             <option selected value="">All</option>
-            <option value='Normal-User'>Normal User</option>
-            <option value='System-Admin'>System Admin</option>
-            <option value='External-Application'>External Application</option>
+               <option value='Normal-User'>Normal User</option>
+                <option value='Funder'>Project/Study Funder</option>
+                <option value='External-Monitor'>External Monitor</option>
+                <option value='System-Admin'>System Admin</option>
+                <option value='External-Application'>External Application</option>
         </select>
         <div class="text-info" wire:loading wire:target='user_category'>
             <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
