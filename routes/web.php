@@ -27,7 +27,7 @@ Route::get('lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang');
 
-Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user','twofactor']], function () {
+Route::group(['middleware' => ['auth',  'suspended_user','twofactor']], function () {
     Route::get('/home', function () {
         return view('home');
     })->middleware(['auth', 'verified'])->name('home');

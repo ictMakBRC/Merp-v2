@@ -45,6 +45,7 @@ use App\Http\Livewire\Finance\Requests\FmsPaymentRequestDetailsComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestSettingComponent;
 use App\Http\Livewire\Finance\Requests\Internal\FmsInternalTransferRequestsComponent;
 use App\Http\Livewire\Finance\Settings\FmsCurrencyUpdatesComponent;
+use App\Http\Livewire\Finance\Settings\FmsFinanceInstitutionsComponent;
 use App\Http\Livewire\Finance\Settings\FmsUnitServicesComponent;
 
 Route::group(['prefix' => 'finance'], function () {
@@ -96,6 +97,7 @@ Route::group(['prefix' => 'finance'], function () {
         Route::get('years', FmsFinancialYearsComponent::class)->name('finance-years');
         Route::get('positions', FmsPaymentRequestSettingComponent::class)->name('finance-req_settings');
         Route::get('banks', FmsBanksComponent::class)->name('finance-banks');
+        Route::get('institutions', FmsFinanceInstitutionsComponent::class)->name('finance-institutions');
     });
     Route::group(['prefix' => 'lists'], function () {
         Route::get('departments', FmsDepartmentsComponent::class)->name('finance-department_list');

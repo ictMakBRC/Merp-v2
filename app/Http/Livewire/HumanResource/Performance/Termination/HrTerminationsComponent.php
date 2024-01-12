@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Performance\Warnings;
+namespace App\Http\Livewire\HumanResource\Performance\Termination;
 
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Performance\Warning;
 use App\Models\HumanResource\EmployeeData\Employee;
-use App\Models\HumanResource\Performance\Warnings\HrEmployeeWarning;
+use App\Models\HumanResource\Performance\Termination\HrEmployeeTermination;
 
-class HrWarningsComponent extends Component
+class HrTerminationsComponent extends Component
 {
     use WithFileUploads, WithPagination;
     //Filters
@@ -52,6 +51,9 @@ class HrWarningsComponent extends Component
         $this->show = $type;
         $this->employee_id = auth()->user()->employee_id;
         $this->department_id = auth()->user()->employee?->department_id;
+        if (!auth()->user()->hasPermission(['create_termination']) && $type =='all') {
+            $this->show = 'personal';
+        }
     }
 
     public function updatedCreateNew()
@@ -88,11 +90,12 @@ class HrWarningsComponent extends Component
             'subject' => 'required|string',
             'letter' => 'required|string',
         ]);
-        $warning = new HrEmployeeWarning();
+        $warning = new HrEmployeeTermination();
         $warning->employee_id = $this->employee_id;
         $warning->reason = $this->reason;
         $warning->subject = $this->subject;
         $warning->letter = $this->letter;
+        // dd($warning);
         $warning->save();        
         if ($this->file_upload) {
             $warning->addMedia($this->file_upload)->toMediaCollection();
@@ -102,7 +105,7 @@ class HrWarningsComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Warning created successfully!']);
     }
 
-    public function editData(HrEmployeeWarning $warning)
+    public function editData(HrEmployeeTermination $warning)
     {
         $this->edit_id = $warning->id;
         $this->subject = $warning->subject;
@@ -135,7 +138,7 @@ class HrWarningsComponent extends Component
     }
 
     public function submitwarning($id){
-        $warning = HrEmployeeWarning::find($id);
+        $warning = HrEmployeeTermination::find($id);
         $warning->status = 'Submitted';
         $warning->update();
         $this->resetInputs();
@@ -157,7 +160,7 @@ class HrWarningsComponent extends Component
             'comment' => 'nullable|string',
         ]);
 
-        $warning = HrEmployeeWarning::find($this->edit_id);
+        $warning = HrEmployeeTermination::find($this->edit_id);
         $warning->comment = $this->comment;
         // $warning->employee_id = $this->employee_id;
         $warning->reason = $this->reason;
@@ -194,7 +197,7 @@ class HrWarningsComponent extends Component
 
     public function mainQuery()
     {
-        $warnings = HrEmployeeWarning::search($this->search)
+        $warnings = HrEmployeeTermination::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -212,10 +215,10 @@ class HrWarningsComponent extends Component
 
     public function render()
     {
-        $data['warnings'] = $this->mainQuery()->with(['employee', 'comments','createdBy'])
+        $data['terminations'] = $this->mainQuery()->with(['employee','createdBy'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         $data['employees'] = Employee::all();
-        return view('livewire.human-resource.performance.warnings.hr-warnings-component', $data);
+        return view('livewire.human-resource.performance.termination.hr-terminations-component', $data);
     }
 }

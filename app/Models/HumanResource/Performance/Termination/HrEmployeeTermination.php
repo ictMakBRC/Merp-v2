@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\HumanResource\Performance;
+namespace App\Models\HumanResource\Performance\Termination;
 
 use App\Models\User;
 use App\Models\Comment;
@@ -9,23 +9,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\HumanResource\EmployeeData\Employee;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Warning extends Model implements HasMedia
+class HrEmployeeTermination extends Model implements HasMedia
 {
-    use HasFactory;
-    use  InteractsWithMedia;
-
-    protected $table = 'hr_pf_warnings';
+    use HasFactory;use InteractsWithMedia;
 
     protected $fillable = [
         'employee_id',
         'subject',
         'reason',
-        'tags',
+        'status',
         'letter',
         'created_by',
+        'updated_by',
         'acknowledged_at'
     ];
 
@@ -39,6 +38,9 @@ class Warning extends Model implements HasMedia
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
             });
+            self::updating(function ($model) {
+                $model->updated_by = auth()->id();
+            });
         }
     }
 
@@ -50,6 +52,12 @@ class Warning extends Model implements HasMedia
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    
+    public function commentable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
@@ -58,7 +66,10 @@ class Warning extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
     /**
      * Search the appraisal by department

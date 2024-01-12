@@ -2,7 +2,7 @@
     <form wire:submit.prevent='storeData'>
         <div class="card">
             <div class="card-header header-elements-inline">
-                <h5 class="card-title">Create Employee Warning Letter</h5>
+                <h5 class="card-title">Create Employee Termination Letter</h5>
                 <div class="header-elements">
                     <div class="list-icons">
                         <a class="list-icons-item" data-action="collapse"></a>
@@ -32,10 +32,19 @@
                         <select class="form-select select2" data-toggle="select2" wire:model.defer='reason' id="reason" name="reason"
                             required>
                             <option selected value="">Select</option>
-                            <option value='Misconduct'>Misconduct</option>
-                            <option value='Corruption'>Corruption</option>
-                            <option value='Absecondment'>Absecondment</option>
-                            <option value='Sexual Harrasment'>Sexual Harrasment</option>
+                            <option value='Gross Misconduct'>Gross Misconduct</option>
+                            <option value='Contract Expiry'>Contract Expiry</option>
+                            <option value='Redundancy'>Redundancy</option>
+                            <option value='Resignation'>Resignation</option>
+                            <option value='Retirement'>Retirement</option>
+                            <option value='Medical Grounds'>Medical Grounds</option>
+                            <option value='Death'>Death</option>
+                            <option value='Poor Performance during probation period'>Poor Performance during
+                                probation period</option>
+                            <option value='Failure to perform after confirmation'>Failure to perform after
+                                confirmation</option>
+                            <option value='Organisation/Company Restructuring'>Organisation/Company
+                                Restructuring</option>
                         </select>
                         @error('reason')
                         <div class="text-danger text-small">{{ $message }}</div>
@@ -71,16 +80,4 @@
             </div>
         </div>
     </form>
-    <script>
-        ClassicEditor
-            .create( document.querySelector( '#editor' ), {
-                // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
-            } )
-            .then( editor => {
-                window.editor = editor;
-            } )
-            .catch( err => {
-                console.error( err.stack );
-            } );
-    </script>
 </div>

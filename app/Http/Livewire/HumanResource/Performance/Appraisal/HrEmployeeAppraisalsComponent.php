@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Performance\Warnings;
+namespace App\Http\Livewire\HumanResource\Performance\Appraisal;
 
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Performance\Warning;
 use App\Models\HumanResource\EmployeeData\Employee;
-use App\Models\HumanResource\Performance\Warnings\HrEmployeeWarning;
+use App\Models\HumanResource\Performance\Appraisal\HrEmployeeAppraisal;
 
-class HrWarningsComponent extends Component
+class HrEmployeeAppraisalsComponent extends Component
 {
     use WithFileUploads, WithPagination;
     //Filters
@@ -17,7 +16,7 @@ class HrWarningsComponent extends Component
 
     public $to_date;
 
-    public $warningIds;
+    public $appraisalIds;
 
     public $perPage = 10;
 
@@ -41,10 +40,11 @@ class HrWarningsComponent extends Component
 
     public $file_upload;
     public $employee_id;
-    public $reason;
-    public $subject;
-    public $letter;
     public $department_id;
+    public $app_from_date;
+    public $app_to_date;
+    public $comment;
+    public $consent;
     public $show = 'personal';
 
     public function mount($type)
@@ -69,45 +69,59 @@ class HrWarningsComponent extends Component
 
     public function updated($fields)
     {
-        $this->dispatchBrowserEvent('initializeEditor');
         $this->validateOnly($fields, [
             'file_upload' => 'nullable|mimes:jpg,png,pdf|max:10240|file|min:1',
             'employee_id' => 'required|numeric',
-            'reason' => 'required',
-            'subject' => 'required|string',
-            'letter' => 'required|string',
+            'department_id' => 'required',
+            'from_date' => 'required|date',
+            'to_date' => 'required|date',
+            'comment' => 'required|string',
         ]);
     }
+
+    public function updatedEmployeeId()
+    {
+        $data = Employee::where('id', $this->employee_id)->first(); 
+        $this->department_id = $data?->department_id;
+    }
+
 
     public function storeData()
     {
+        
+       $data = Employee::where('id', $this->employee_id)->first(); 
+       $this->department_id = $data?->department_id;
+        // dd($this->department_id );
         $this->validate([
             'file_upload' => 'nullable|mimes:jpg,png,pdf|max:10240|file|min:1',
             'employee_id' => 'required|numeric',
-            'reason' => 'required|string',
-            'subject' => 'required|string',
-            'letter' => 'required|string',
+            'department_id' => 'required|numeric', 
+            'app_from_date' => 'required|date',
+            'app_to_date' => 'required|date',
+            'comment' => 'required|string',
         ]);
-        $warning = new HrEmployeeWarning();
-        $warning->employee_id = $this->employee_id;
-        $warning->reason = $this->reason;
-        $warning->subject = $this->subject;
-        $warning->letter = $this->letter;
-        $warning->save();        
+        $appraisal = new HrEmployeeAppraisal();
+        $appraisal->employee_id = $this->employee_id;
+        $appraisal->department_id = $this->department_id;
+        $appraisal->from_date = $this->app_from_date;        
+        $appraisal->to_date = $this->app_to_date;
+        $appraisal->comment = $this->comment;
+        $appraisal->save();        
         if ($this->file_upload) {
-            $warning->addMedia($this->file_upload)->toMediaCollection();
+            $appraisal->addMedia($this->file_upload)->toMediaCollection();
         } 
         $this->dispatchBrowserEvent('close-modal');
         $this->close();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Warning created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'appraisal created successfully!']);
     }
 
-    public function editData(HrEmployeeWarning $warning)
+    public function editData(HrEmployeeAppraisal $appraisal)
     {
-        $this->edit_id = $warning->id;
-        $this->subject = $warning->subject;
-        $this->reason = $warning->reason;
-        $this->letter = $warning->letter;
+        $this->edit_id = $appraisal->id;
+        $this->from_date = $appraisal->app_from_date;
+        $this->to_date = $appraisal->app_to_date;
+        $this->department_id = $appraisal->department_id;
+        $this->comment = $appraisal->comment;
         $this->createNew = true;
         $this->toggleForm = true;
     }
@@ -126,18 +140,19 @@ class HrWarningsComponent extends Component
     {
         $this->reset([
             'file_upload',
-            'reason',
-            'subject',
-            'letter',
+            'department_id',
+            'app_from_date',
+            'app_to_date',
+            'comment',
             'edit_id',
         'employee_id'
     ]);
     }
 
-    public function submitwarning($id){
-        $warning = HrEmployeeWarning::find($id);
-        $warning->status = 'Submitted';
-        $warning->update();
+    public function submitappraisal($id){
+        $appraisal = HrEmployeeAppraisal::find($id);
+        $appraisal->status = 'Submitted';
+        $appraisal->update();
         $this->resetInputs();
         $this->createNew = false;
         $this->toggleForm = false;
@@ -148,23 +163,23 @@ class HrWarningsComponent extends Component
 
     public function updateData()
     {
+     
         $this->validate([
-            'is_active' => 'required|numeric',
-            'employee_id' => 'required|numeric',
-            'reason' => 'required|numeric',
-            'subject' => 'required|string',
-            'letter' => 'required|string',
-            'comment' => 'nullable|string',
+            'file_upload' => 'nullable|mimes:jpg,png,pdf|max:10240|file|min:1',
+            // 'employee_id' => 'required|numeric',
+            'app_from_date' => 'required|date',
+            'app_to_date' => 'required|date',
+            'comment' => 'required|string',
         ]);
-
-        $warning = HrEmployeeWarning::find($this->edit_id);
-        $warning->comment = $this->comment;
-        // $warning->employee_id = $this->employee_id;
-        $warning->reason = $this->reason;
-        $warning->subject = $this->subject;
-        // $warning->department_id = $this->department_id;
-        $warning->letter = $this->letter;
-        $warning->update();
+        $appraisal = HrEmployeeAppraisal::find($this->edit_id);
+        $appraisal->comment = $this->comment;
+        // $appraisal->employee_id = $this->employee_id;
+        $appraisal->department_id = $this->department_id;
+        $appraisal->to_date = $this->app_to_date;
+        $appraisal->from_date = $this->app_from_date;
+        // $appraisal->department_id = $this->department_id;
+        $appraisal->comment = $this->comment;
+        $appraisal->update();
 
         $this->resetInputs();
         $this->createNew = false;
@@ -185,7 +200,7 @@ class HrWarningsComponent extends Component
             // return (new budgetsExport($this->exportIds))->download('budgets_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('swal:modal', [
-                'type' => 'warning',
+                'type' => 'appraisal',
                 'message' => 'Oops! Not Found!',
                 'text' => 'No budgets selected for export!',
             ]);
@@ -194,7 +209,7 @@ class HrWarningsComponent extends Component
 
     public function mainQuery()
     {
-        $warnings = HrEmployeeWarning::search($this->search)
+        $appraisals = HrEmployeeAppraisal::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
@@ -205,17 +220,18 @@ class HrWarningsComponent extends Component
                 return $query;
             });
 
-        $this->exportIds = $warnings->pluck('id')->toArray();
+        $this->exportIds = $appraisals->pluck('id')->toArray();
 
-        return $warnings;
+        return $appraisals;
     }
 
     public function render()
     {
-        $data['warnings'] = $this->mainQuery()->with(['employee', 'comments','createdBy'])
+        $data['appraisals'] = $this->mainQuery()->with(['employee', 'comments','createdBy'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         $data['employees'] = Employee::all();
-        return view('livewire.human-resource.performance.warnings.hr-warnings-component', $data);
+   
+        return view('livewire.human-resource.performance.appraisal.hr-employee-appraisals-component', $data);
     }
 }

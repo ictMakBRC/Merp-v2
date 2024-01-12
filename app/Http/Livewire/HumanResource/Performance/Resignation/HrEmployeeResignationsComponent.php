@@ -1,23 +1,25 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\Performance\Warnings;
+namespace App\Http\Livewire\HumanResource\Performance\Resignation;
 
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use App\Models\HumanResource\Performance\Warning;
+use Illuminate\Support\Carbon;
 use App\Models\HumanResource\EmployeeData\Employee;
-use App\Models\HumanResource\Performance\Warnings\HrEmployeeWarning;
+use App\Models\HumanResource\Performance\Resigination\HrEmployeeResignation;
 
-class HrWarningsComponent extends Component
+class HrEmployeeResignationsComponent extends Component
 {
+
     use WithFileUploads, WithPagination;
     //Filters
     public $from_date;
 
     public $to_date;
+    public $min_date;
 
-    public $warningIds;
+    public $resignationIds;
 
     public $perPage = 10;
 
@@ -40,10 +42,22 @@ class HrWarningsComponent extends Component
     public $filter = false;
 
     public $file_upload;
+
     public $employee_id;
-    public $reason;
+    public $contact;
+    public $email;
+    public $consent;
     public $subject;
+    public $reason;
+    public $status;
     public $letter;
+    public $created_by;
+    public $updated_by;
+    public $approved_by;
+    public $approved_at;
+    public $handover_to;
+    public $notice_period;
+    public $last_working_day;
     public $department_id;
     public $show = 'personal';
 
@@ -52,6 +66,10 @@ class HrWarningsComponent extends Component
         $this->show = $type;
         $this->employee_id = auth()->user()->employee_id;
         $this->department_id = auth()->user()->employee?->department_id;
+        if (!auth()->user()->hasPermission(['create_termination']) && $type == 'all') {
+            $this->show = 'personal';
+        }
+        $this->min_date = Carbon::now()->addDays(30);
     }
 
     public function updatedCreateNew()
@@ -65,7 +83,6 @@ class HrWarningsComponent extends Component
     {
         $this->resetPage();
     }
-
 
     public function updated($fields)
     {
@@ -81,38 +98,53 @@ class HrWarningsComponent extends Component
 
     public function storeData()
     {
+        $this->employee_id = auth()->user()->employee_id;
+        $this->department_id = auth()->user()->employee?->department_id;
         $this->validate([
-            'file_upload' => 'nullable|mimes:jpg,png,pdf|max:10240|file|min:1',
+            // 'file_upload' => 'nullable|mimes:jpg,png,pdf|max:10240|file|min:1',
             'employee_id' => 'required|numeric',
-            'reason' => 'required|string',
+            'contact' => 'required',
+            'email' => 'required|email',
+            'consent' => 'required',
             'subject' => 'required|string',
+            'reason' => 'required|string',
             'letter' => 'required|string',
+            'handover_to' => 'required|numeric',
+            'notice_period' => 'required',
+            'last_working_day' => 'required|date',
+            'department_id' => 'required|integer',
         ]);
-        $warning = new HrEmployeeWarning();
-        $warning->employee_id = $this->employee_id;
-        $warning->reason = $this->reason;
-        $warning->subject = $this->subject;
-        $warning->letter = $this->letter;
-        $warning->save();        
+        $resignation = new HrEmployeeResignation();
+        $resignation->employee_id = $this->employee_id;
+        $resignation->contact = $this->contact;
+        $resignation->email = $this->email;
+        $resignation->consent = $this->consent;
+        $resignation->subject = $this->subject;
+        $resignation->reason = $this->reason;
+        $resignation->letter = $this->letter;
+        $resignation->handover_to = $this->handover_to;
+        $resignation->notice_period = $this->notice_period;
+        $resignation->last_working_day = $this->last_working_day;
+        $resignation->department_id = $this->department_id;
+        // dd($resignation);
+        $resignation->save();
         if ($this->file_upload) {
-            $warning->addMedia($this->file_upload)->toMediaCollection();
-        } 
+            $resignation->addMedia($this->file_upload)->toMediaCollection();
+        }
         $this->dispatchBrowserEvent('close-modal');
         $this->close();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Warning created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'resignation created successfully!']);
     }
 
-    public function editData(HrEmployeeWarning $warning)
+    public function editData(HrEmployeeResignation $resignation)
     {
-        $this->edit_id = $warning->id;
-        $this->subject = $warning->subject;
-        $this->reason = $warning->reason;
-        $this->letter = $warning->letter;
+        $this->edit_id = $resignation->id;
+        $this->subject = $resignation->subject;
+        $this->reason = $resignation->reason;
+        $this->letter = $resignation->letter;
         $this->createNew = true;
         $this->toggleForm = true;
     }
-
-   
 
     public function close()
     {
@@ -121,23 +153,34 @@ class HrWarningsComponent extends Component
         $this->resetInputs();
     }
 
-
     public function resetInputs()
     {
         $this->reset([
             'file_upload',
-            'reason',
+            'employee_id',
+            'contact',
+            'email',
+            'consent',
             'subject',
+            'reason',
+            'status',
             'letter',
-            'edit_id',
-        'employee_id'
-    ]);
+            'created_by',
+            'updated_by',
+            'approved_by',
+            'approved_at',
+            'handover_to',
+            'notice_period',
+            'last_working_day',
+            'department_id',
+        ]);
     }
 
-    public function submitwarning($id){
-        $warning = HrEmployeeWarning::find($id);
-        $warning->status = 'Submitted';
-        $warning->update();
+    public function submitResignation($id)
+    {
+        $resignation = HrEmployeeResignation::find($id);
+        $resignation->status = 'Submitted';
+        $resignation->update();
         $this->resetInputs();
         $this->createNew = false;
         $this->toggleForm = false;
@@ -157,14 +200,14 @@ class HrWarningsComponent extends Component
             'comment' => 'nullable|string',
         ]);
 
-        $warning = HrEmployeeWarning::find($this->edit_id);
-        $warning->comment = $this->comment;
-        // $warning->employee_id = $this->employee_id;
-        $warning->reason = $this->reason;
-        $warning->subject = $this->subject;
-        // $warning->department_id = $this->department_id;
-        $warning->letter = $this->letter;
-        $warning->update();
+        $resignation = HrEmployeeResignation::find($this->edit_id);
+        $resignation->comment = $this->comment;
+        // $resignation->employee_id = $this->employee_id;
+        $resignation->reason = $this->reason;
+        $resignation->subject = $this->subject;
+        // $resignation->department_id = $this->department_id;
+        $resignation->letter = $this->letter;
+        $resignation->update();
 
         $this->resetInputs();
         $this->createNew = false;
@@ -185,7 +228,7 @@ class HrWarningsComponent extends Component
             // return (new budgetsExport($this->exportIds))->download('budgets_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('swal:modal', [
-                'type' => 'warning',
+                'type' => 'resignation',
                 'message' => 'Oops! Not Found!',
                 'text' => 'No budgets selected for export!',
             ]);
@@ -194,28 +237,28 @@ class HrWarningsComponent extends Component
 
     public function mainQuery()
     {
-        $warnings = HrEmployeeWarning::search($this->search)
+        $resignations = HrEmployeeResignation::search($this->search)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
-            })->when($this->show != 'all' , function ($query) {
-                $query->where('employee_id', auth()->user()->employee_id);
-            }, function ($query) {
-                return $query;
-            });
+            })->when($this->show != 'all', function ($query) {
+            $query->where('employee_id', auth()->user()->employee_id);
+        }, function ($query) {
+            return $query;
+        });
 
-        $this->exportIds = $warnings->pluck('id')->toArray();
+        $this->exportIds = $resignations->pluck('id')->toArray();
 
-        return $warnings;
+        return $resignations;
     }
 
     public function render()
     {
-        $data['warnings'] = $this->mainQuery()->with(['employee', 'comments','createdBy'])
+        $data['resignations'] = $this->mainQuery()->with(['employee', 'createdBy'])
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         $data['employees'] = Employee::all();
-        return view('livewire.human-resource.performance.warnings.hr-warnings-component', $data);
+        return view('livewire.human-resource.performance.resignation.hr-employee-resignations-component', $data);
     }
 }

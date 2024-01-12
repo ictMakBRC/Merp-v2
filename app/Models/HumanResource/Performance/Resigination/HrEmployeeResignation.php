@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\HumanResource\Performance;
+namespace App\Models\HumanResource\Performance\Resigination;
 
 use App\Models\User;
 use App\Models\Comment;
@@ -9,24 +9,31 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\HumanResource\EmployeeData\Employee;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Warning extends Model implements HasMedia
+class HrEmployeeResignation extends Model implements HasMedia
 {
-    use HasFactory;
-    use  InteractsWithMedia;
-
-    protected $table = 'hr_pf_warnings';
+    use HasFactory;use InteractsWithMedia;
 
     protected $fillable = [
         'employee_id',
+        'contact',
+        'email',
+        'consent',
         'subject',
         'reason',
-        'tags',
+        'status',
         'letter',
         'created_by',
-        'acknowledged_at'
+        'updated_by',
+        'approved_by',
+        'approved_at',
+        'handover_to',
+        'notice_period',
+        'last_working_day',
+        'department_id',
     ];
 
     /**
@@ -39,6 +46,9 @@ class Warning extends Model implements HasMedia
             self::creating(function ($model) {
                 $model->created_by = auth()->id();
             });
+            self::updating(function ($model) {
+                $model->updated_by = auth()->id();
+            });
         }
     }
 
@@ -50,6 +60,11 @@ class Warning extends Model implements HasMedia
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function commentable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
@@ -58,7 +73,10 @@ class Warning extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
     /**
      * Search the appraisal by department
@@ -67,4 +85,5 @@ class Warning extends Model implements HasMedia
     {
         return  static::query();
     }
+
 }
