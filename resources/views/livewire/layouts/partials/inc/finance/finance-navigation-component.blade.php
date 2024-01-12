@@ -314,6 +314,9 @@
                                     <li class="nav-item">
                                         <a href="{{ route('finance-currency_rates') }}" class="nav-link ">Ex Rates</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-institutions') }}" class="nav-link ">Institutions</a>
+                                    </li>
                                 @endif
                                 {{-- @if (Auth::user()->hasPermission(['finance-services'])) --}}
                                 <li class="nav-item">

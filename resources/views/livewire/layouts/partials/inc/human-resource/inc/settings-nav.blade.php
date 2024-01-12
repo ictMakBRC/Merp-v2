@@ -32,6 +32,10 @@
             {{-- <li class="nav-item">
                 <a href="{{route('human-resource.settings.performances')}}" class="nav-link ">Performance
                     Configurations</a>
+            </li>            
+            <li class="nav-item">
+                <a href="{{ route('hr_grievances-types') }}" class="nav-link ">Grievance Types</a>
+            </li>
             </li> --}}
 
         </ul>
