@@ -89,5 +89,8 @@ class FmsBudget extends Model
         'created_by',
         'updated_by',
         'is_active',
+        'estimated_income_local',
+        'estimated_expense_local',
+        'rate'
     ];
 }

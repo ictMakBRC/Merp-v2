@@ -74,7 +74,7 @@ Route::group(['prefix' => 'human-resource'], function () {
         Route::get('list', EmployeesListComponent::class)->name('human-resource-employees-list');
         Route::get('{id}/details', EmployeeDetailsComponent::class)->name('employee-details');
     });
-    Route::group(['prefix' => 'leave'], function () {
+    Route::group(['prefix' => 'leaves'], function () {
         Route::get('new-request/new', NewLeaveRequest::class)->name('leave.new-request');
         Route::get('requests/{leaveRequest}/update', EditLeaveRequest::class)->name('leaves.edit-request');
         Route::get('requests', LeaveRequests::class)->name('leave.requests');
