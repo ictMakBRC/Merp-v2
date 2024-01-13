@@ -43,7 +43,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="start_date" class="form-label required">{{ __('Start Date') }}</label>
                 <input type="date" id="start_date" class="form-control" wire:model.defer="contract_start_date">
                 @error('contract_start_date')
@@ -51,7 +51,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="end_date" class="form-label required">{{ __('End Date') }}</label>
                 <input type="date" id="end_date" class="form-control" wire:model.defer="contract_end_date">
                 @error('contract_end_date')
@@ -59,8 +59,24 @@
                 @enderror
             </div>
 
+            <div class="mb-3 col-md-2">
+                <label for="fte" class="form-label required">{{ __('FTE') }}</label>
+                <input type="number" id="fte" class="form-control" wire:model.defer="fte" step="0.01">
+                @error('fte')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
+                <label for="gross_salary" class="form-label required">{{ __('Gloss Salary in') }} <strong class="badge bg-warning">{{$currencyCode}}</strong></label>
+                <input type="number" id="gross_salary" class="form-control" wire:model.defer="gross_salary" step="0.01">
+                @error('gross_salary')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+
+
+            <div class="mb-3 col-md-4">
                 <label for="contract_file" class="form-label">{{ __('Contract file') }}</label>
                 <input type="file" id="contract_file" class="form-control" wire:model.defer="contract_file">
                 <div class="text-success text-small" wire:loading wire:target="contract_file">Uploading contract...</div>
@@ -82,7 +98,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-12">
+            <div class="mb-3 col-md-9">
                 <label for="contract_summary" class="form-label">{{ __('Contract Summary') }}</label>
                 <textarea id="contract_summary" class="form-control" wire:model.defer="contract_summary"></textarea>
                 @error('contract_summary')

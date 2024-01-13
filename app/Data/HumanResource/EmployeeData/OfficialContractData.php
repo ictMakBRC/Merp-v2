@@ -9,7 +9,7 @@ class OfficialContractData extends Data
     public ?int $employee_id;
     public ?string $contract_summary;
     public ?float $gross_salary;
-    public ?string $currency;
+    public ?string $currency_id;
     public ?string $start_date;
     public ?string $end_date;
     public ?string $contractFilePath;
@@ -20,8 +20,8 @@ class OfficialContractData extends Data
         return [
           'employee_id' => 'required|integer',
           'contract_summary' => 'required|string',
-          'gross_salary' => 'required|string',
-          'currency' => 'required|string|max:100',
+          'gross_salary' => 'required|numeric',
+          'currency_id' => 'required|integer',
           'start_date' => 'required|date',
           'end_date' => 'required|date|after:start_date',
           'contract_file' => 'nullable|mimes:pdf|max:10000',

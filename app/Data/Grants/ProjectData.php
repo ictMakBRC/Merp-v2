@@ -14,7 +14,7 @@ class ProjectData extends Data
   public ?int $grant_id;
   public ?string $funding_source;
   public ?float $funding_amount;
-  public ?string $currency;
+  public ?string $currency_id;
   public ?int $pi;
   public ?int $co_pi;
   public ?string $start_date;
@@ -54,12 +54,33 @@ class ProjectData extends Data
       // 'grant_id' => 'nullable|integer',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
-      'currency' => 'required|string',
+      'currency_id' => 'required|integer',
       'pi' => 'required_if:project_category,Primary|integer',
       'co_pi' => 'nullable|integer',
       'start_date' => 'required|date',
       'end_date' => 'required|date|after:start_date',
-      'project_summary' => 'required|string|max:255',
+      'project_summary' => 'required|string',
+      'progress_status' => 'required|string',
+    ];
+  }
+
+  public function updateRules(): array
+  {
+    return [
+      'project_category' => 'required|string',
+      'project_type' => 'required|string',
+      'associated_institution' => 'required|integer',
+      'project_code' => 'required|string',
+      'name' => 'required|string',
+      // 'grant_id' => 'nullable|integer',
+      'funding_source' => 'nullable|string',
+      'funding_amount' => 'nullable|numeric',
+      'currency_id' => 'required|integer',
+      'pi' => 'required_if:project_category,Primary|integer',
+      'co_pi' => 'nullable|integer',
+      'start_date' => 'required|date',
+      'end_date' => 'required|date|after:start_date',
+      'project_summary' => 'required|string',
       'progress_status' => 'required|string',
     ];
   }
@@ -76,11 +97,10 @@ class ProjectData extends Data
       'contract_end_date' => 'required|date|after:contract_start_date',
       'fte' => 'nullable|numeric',
       'contract_file' => 'nullable|mimes:pdf|max:10000',
+      'gross_salary' => 'required|numeric',
       'status' => 'required|string',
     ];
   }
-
-
 
   // Validation rules for the properties
   public function resetInputs(): array

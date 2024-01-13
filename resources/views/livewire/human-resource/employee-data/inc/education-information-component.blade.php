@@ -1,6 +1,9 @@
 <div>
     @include('livewire.human-resource.employee-data.inc.loading-info')
-    <form wire:submit.prevent="storeEducationHistory">
+    <form
+        @if (!$toggleForm) wire:submit.prevent="storeEducationHistory"
+                        @else
+                        wire:submit.prevent="updateEducationHistory" @endif>
         <div class="row">
             <div class="mb-3 col-md-6">
                 <label for="level" class="form-label required">Education Level</label>
@@ -64,8 +67,74 @@
             </div>
         </div>
         <div class="modal-footer">
-            <x-button class="btn-success">{{ __('public.save') }}</x-button>
+            <x-button class="btn btn-success">
+                @if (!$toggleForm)
+                    {{ __('public.save') }}
+                @else
+                    {{ __('public.update') }}
+                @endif
+            </x-button>
         </div>
     </form>
+
+    <!--EDUCATION BACKGROUND-->
+    @if (!$educationInformation->isEmpty())
+
+        <div class="row">
+            <div class="col-lg-12">
+                <hr>
+                <div class="table-responsive">
+                    <table class="table w-100 mb-0 table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Institution</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Award</th>
+                                <th>File</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @foreach ($educationInformation as $award)
+                            <tr>
+                                <td>
+                                    {{ $award->level }}
+                                </td>
+                                <td>
+                                    {{ $award->school }}
+
+                                </td>
+                                <td>
+                                    @formatDate($award->start_date)
+                                </td>
+                                <td>
+                                    @formatDate($award->end_date)
+                                </td>
+                                <td>
+                                    {{ $award->award }}
+                                </td>
+                                <td class="table-action text-center">
+                                    @if ($award->award_document != null)
+                                        <a href="#" class="btn-outline-success"><i class="ti ti-download"></i></a>
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
+
+                                <td>
+                                    <button class="btn btn btn-sm btn-outline-success"
+                                        wire:click="editData({{ $award->id }})"
+                                        title="{{ __('public.edit') }}">
+                                        <i class="ti ti-edit fs-18"></i></button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div> <!-- end preview-->
+            </div>
+        </div>
+    @endif
+    <!-- end EDUCATION BACKGROUND-->
 
 </div>

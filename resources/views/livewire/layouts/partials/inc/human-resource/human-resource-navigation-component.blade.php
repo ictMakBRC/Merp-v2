@@ -1,5 +1,5 @@
 <div id="humanResourceManagement"
-    class="main-icon-menu-pane tab-pane {{isLinkActive(['appraisals.show'], 'show')}}" role="tabpanel"
+    class="main-icon-menu-pane tab-pane {{ request()->segment(1) == 'human-resource' ? 'active menuitem-active' : '' }}" role="tabpanel"
     aria-labelledby="apps-tab">
     <div class="title-box">
         <h6 class="menu-title">Human Resource</h6>
@@ -17,7 +17,7 @@
             @include('livewire.layouts.partials.inc.human-resource.inc.performance-nav')
             @include('livewire.layouts.partials.inc.human-resource.inc.leaves-nav')
             @include('livewire.layouts.partials.inc.human-resource.inc.grievances-nav')
-            @include('livewire.layouts.partials.inc.human-resource.inc.reports-nav')
+            {{-- @include('livewire.layouts.partials.inc.human-resource.inc.reports-nav') --}}
             @include('livewire.layouts.partials.inc.human-resource.inc.settings-nav')
             <!--end nav-item-->
         </ul>

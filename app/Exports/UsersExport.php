@@ -45,7 +45,7 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
 
     public function collection()
     {
-        return User::with('institution', 'institution.country', 'institution.country.region')->whereIn('id', $this->userIds)->latest()->get();
+        return User::whereIn('id', $this->userIds)->latest()->get();
     }
 
     public function map($user): array
@@ -54,14 +54,10 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
 
         return [
             $this->count,
-            $user->fullName,
             $user->name,
             $user->category ?? 'N/A',
-            $user->institution->country->region->name ?? 'N/A',
-            $user->institution->country->name ?? 'N/A',
-            $user->institution->name ?? 'N/A',
             $user->email ?? 'N/A',
-            str_replace('-', '', $user->contact ?? 'N/A'),
+            $user->contact ?? 'N/A',
             $user->is_active === 1 ? 'Active' : 'Suspended',
         ];
     }
@@ -73,9 +69,6 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
             'Name',
             'Username',
             'Category',
-            'Region',
-            'Country',
-            'Institution',
             'Email',
             'Contact',
             'Status',

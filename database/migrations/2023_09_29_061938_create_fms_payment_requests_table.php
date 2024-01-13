@@ -42,7 +42,7 @@ return new class extends Migration
             $table->foreignId('to_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('invoice_id')->nullable()->references('id')->on('fms_invoices')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('procurement_request_id')->nullable()->constrained('procurement_requests', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->string('payment_method')->nullable();
+            $table->string('net_payment_terms')->nullable();
             $table->enum('status',['Pending','Submitted','Rejected','Approved','Completed','Paid','Ongoing'])->default('Pending'); 
             $table->integer('month')->nullable();
             $table->integer('year')->nullable();           

@@ -283,7 +283,7 @@ class FmsViewInvoiceComponent extends Component
     {
         $this->budgetLineCur = 0;
         $this->budgetLineBalance = 0;
-        $data = FmsBudgetLine::Where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
+        $data = FmsBudgetLine::where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
         $this->budgetLineAmtHeld = $data->amount_held ?? 0;
         $this->budgetLineBalance = $data->primary_balance ?? 0 - $this->budgetLineAmtHeld;
         $this->budgetLineCur = $data->budget?->currency?->code ?? '';
@@ -383,7 +383,7 @@ class FmsViewInvoiceComponent extends Component
                 $p_request->save();
                 // dd($p_request);
                 // if($p_request){
-                $dataBudget = FmsBudgetLine::Where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
+                $dataBudget = FmsBudgetLine::where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
                 if ($dataBudget) {
                     $budgetAmountHeld = $dataBudget->amount_held;
                     $newBudgetAmountHeld = $budgetAmountHeld + $this->budgetExpense;
@@ -391,7 +391,7 @@ class FmsViewInvoiceComponent extends Component
                     $dataBudget->update();
                 }
 
-                $dataLeger = FmsLedgerAccount::Where('id', $this->ledger_account)->with('currency')->first();
+                $dataLeger = FmsLedgerAccount::where('id', $this->ledger_account)->with('currency')->first();
 
                 if ($dataLeger) {
                     $currentAmountHeld = $dataLeger->amount_held;
@@ -477,7 +477,7 @@ class FmsViewInvoiceComponent extends Component
                 $this->toBudgetLines = FmsBudgetLine::with('budget')->where('type', 'Revenue')->WhereHas('budget', function ($query) use ($invoiceData) {
                     $query->where(['project_id' => $invoiceData->project_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
                 })->get();
-                $this->to_ledger = FmsLedgerAccount::Where('project_id', $invoiceData->project_id)->first();
+                $this->to_ledger = FmsLedgerAccount::where('project_id', $invoiceData->project_id)->first();
                 $this->biller = $invoiceData->project;
                 $this->to_account = $this->to_ledger->id;
                 $this->to_ledgerCur = $this->to_ledger->currency->code ?? '';
@@ -494,7 +494,7 @@ class FmsViewInvoiceComponent extends Component
             // $this->payment_amount = $this->amount - $this->balance;
 
             $data['ledgers'] = FmsLedgerAccount::where('department_id', $invoiceData->department_id)->get();
-            $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['service'])->get();
+            $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['uintService.service'])->get();
         } else {
             $data['items'] = collect([]);
             $data['ledgers'] = collect([]);

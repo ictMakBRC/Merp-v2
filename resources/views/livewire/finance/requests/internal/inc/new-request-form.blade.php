@@ -3,9 +3,13 @@
         @include('layouts.messages')
             <div class="row">          
 
-                @include('livewire.partials.project-department-toggle')           
+                @if ($unit_type == 'all')
+                    @include('livewire.partials.project-department-toggle')
+                @else
+                    @include('livewire.partials.single-project-department-toggle')
+                @endif           
              
-                <div class="mb-3 col-2">
+                <div class="mb-3 col-3">
                     <label for="ledger_account" class="form-label required">Ledger</label>
                     <select id="ledger_account" class="form-control" name="ledger_account" required wire:model="ledger_account">
                         <option value="">Select</option>
@@ -143,7 +147,7 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div> 
-                <div class="mb-3 col-3">
+                <div class="mb-3 col-2">
                     <label for="to_budget_line_id" class="form-label required">Budget Line to credit</label>
                     <select id="to_budget_line_id" class="form-control" name="to_budget_line_id" required wire:model="to_budget_line_id">
                         <option value="">Select</option>

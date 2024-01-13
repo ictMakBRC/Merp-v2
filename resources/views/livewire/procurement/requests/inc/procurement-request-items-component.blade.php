@@ -7,6 +7,14 @@
                 <div class="row">
 
                     <div class="mb-3 col-md-12">
+                        <label for="item_name" class="form-label required">{{ __('Item Name') }}</label>
+                        <input type="text" id="item_name" class="form-control" wire:model.defer="item_name">
+                        @error('item_name')
+                            <div class="text-danger text-small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-12">
                         <label for="description" class="form-label required">{{ __('Description') }}</label>
                         <textarea type="text" id="description" class="form-control" wire:model.defer="description" rows="3"></textarea>
                         @error('description')
@@ -65,6 +73,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>{{ __('Item Name') }}</th>
                                     <th>{{ __('Description') }}</th>
                                     <th>{{ __('Quantity') }}</th>
                                     <th>{{ __('Estimated Unit Cost') }}</th>
@@ -76,25 +85,25 @@
                                 @foreach ($items as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
+                                        <td>{{ $item->item_name??'N/A' }}</td>
                                         <td>{!! nl2br(e($item->description)) !!}</td>
                                         <td>{{ $item->quantity }}</td>
                                         <td>@moneyFormat($item->estimated_unit_cost)</td>
                                         <td>@moneyFormat($item->total_cost)</td>
 
                                         <td>
-                                            <button class="btn btn btn-sm btn-outline-danger"
-                                                wire:click="deleteItem({{ $item->id }})" data-bs-toggle="tooltip"
-                                                data-bs-placement="right" title="{{ __('public.delete') }}"
-                                                data-bs-trigger="hover">
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                wire:click="deleteItem({{ $item->id }})" title="{{ __('public.delete') }}">
                                                 <i class="ti ti-x fs-18"></i></button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="4" class="text-end">Total</td>
-                                        <td>@moneyFormat($items->sum('total_cost'))</td>
-
-                                    </tr>
+                                    
                                 @endforeach
+                                <tr>
+                                    <td colspan="5" class="text-end">Total ({{ $procurementRequest->currency->code }})</td>
+                                    <td>@moneyFormat($items->sum('total_cost'))</td>
+
+                                </tr>
                             </tbody>
                         </table>
                     </div> <!-- end preview-->

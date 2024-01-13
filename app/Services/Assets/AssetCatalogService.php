@@ -40,7 +40,7 @@ class AssetCatalogService
         $assetCatalog->procurement_type = $assetCatalogDTO->procurement_type;
         $assetCatalog->invoice_number = $assetCatalogDTO->invoice_number;
         $assetCatalog->cost = $assetCatalogDTO->cost;
-        $assetCatalog->currency = $assetCatalogDTO->currency;
+        $assetCatalog->currency_id = $assetCatalogDTO->currency_id;
         $assetCatalog->supplier_id = $assetCatalogDTO->supplier_id;
         $assetCatalog->has_service_contract = $assetCatalogDTO->has_service_contract;
         $assetCatalog->service_contract_expiry_date = $assetCatalogDTO->service_contract_expiry_date;

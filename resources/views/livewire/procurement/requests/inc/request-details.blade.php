@@ -1,3 +1,6 @@
+<?php
+use App\Enums\ProcurementRequestEnum;
+?>
 <div class="bg-light">
     <table class="table">
         <tr>
@@ -14,22 +17,25 @@
                     <strong class="text-inverse">{{ __('Sector') }}:
                     </strong>{{ $request->procurement_sector ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Categorization') }}:
-                    </strong>{{ getProcurementCategorization($request->contract_value)->categorization }}<br>
+                    </strong>{{ getProcurementCategorization(exchangeToDefaultCurrency($request->currency_id, $request->contract_value))->categorization }}<br>
                 </div>
             </td>
 
             <td>
                 <div>
                     <strong class="text-inverse">{{ __('Financial Year') }}: </strong>
-                    {{ $request->financial_year }}<br>
-                    <strong class="text-inverse">{{ __('Currency') }}:
-                    </strong>{{ $request->currency ?? 'N/A' }}<br>
+                    {{ $request->financial_year->name }}<br>
                     <strong class="text-inverse">{{ __('Budget Line') }}:
-                    </strong>{{ $request->budget_line ?? 'N/A' }}<br>
+                    </strong>{{ $request->budget_line->name ?? 'N/A' }}<br>
+                    <strong class="text-inverse text-info">{{ __('Line Balance') }}:
+                    </strong>{{ $request->currency->code }} <strong
+                        class="text-danger">{{ $request->budget_line->primary_balance }}</strong><br>
                     <strong class="text-inverse">{{ __('Sequence No') }}:
                     </strong>{{ $request->sequence_number ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Procurement Plan Reference') }}:
-                    </strong>{{ $request->procurement_plan_ref ?? 'N/A' }}
+                    </strong>{{ $request->procurement_plan_ref ?? 'N/A' }}<br>
+                    <strong class="text-inverse">{{ __('Contracts Manager') }}:
+                    </strong>{{ $request->contracts_manager->employee->fullName ?? 'N/A' }}
                 </div>
             </td>
 
@@ -39,14 +45,20 @@
                     </strong>{{ $request->location_of_delivery ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Date Required') }}:
                     </strong>@formatDate($request->date_required ?? now())<br>
-                    <strong class="text-inverse">{{ __('Contract Value') }} ({{ $request->currency }}):
+                    <strong class="text-inverse">{{ __('Contract Value') }} ({{ $request->currency->code }}):
                     </strong>@moneyFormat($request->contract_value)<br>
                     <strong class="text-inverse">{{ __('Requested By') }}:
                     </strong>{{ $request->requester->name ?? 'N/A' }}<br>
                     <strong class="text-inverse">{{ __('Status') }}:
                     </strong><span
-                        class="badge bg-{{ getProcurementRequestStatusColor($request->status) }}">{{ $request->status }}</span> {{getProcurementRequestStep($request->step_order)}}
+                        class="badge bg-{{ getProcurementRequestStatusColor($request->status) }}">{{ $request->status }}</span>
+                    {{ getProcurementRequestStep($request->step_order) }}
                 </div>
+            </td>
+        </tr>
+        <tr>
+            <td><strong class="text-inverse">{{ __('Subcategory') }}:
+                </strong>{{ $request->subcategory->code ?? 'N/A' }} || {{ $request->subcategory->name }}
             </td>
         </tr>
     </table>
@@ -55,59 +67,69 @@
         <p class="px-2">{{ $request->body ?? 'N/A' }}</p>
     </div>
 
-    <div>
-        <h5 class="px-2">Items</h5>
-    </div>
-
-    @if (!$request->items->isEmpty())
-        <div class="tab-content scrollable-di">
+    @if (!$request->items->isEmpty() && !$request->items->where('received_status', false)->isEmpty())
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="card-title">{{ __('Items') }}</h4>
+                </div><!--end col-->
+            </div> <!--end row-->
+        </div>
+        <div class="tab-content">
             <div class="table-responsive">
-                <table class="table table-striped mb-0 w-100 sortable border">
+                <table class="table table-striped mb-0 w-100 table-bordered">
                     <thead>
                         <tr>
                             <th>No.</th>
+                            <th>{{__('Item Name')}}</th>
                             <th>{{ __('Description') }}</th>
-                            <th>{{ __('Quantity') }}</th>
-                            <th>{{ __('Estimated Unit Cost') }}</th>
-                            <th>{{ __('Total Cost') }}</th>
+                            <th>{{ __('Quantity Requested') }}</th>
+                            <th>{{ __('Estimated Unit Price') }}</th>
+                            <th>{{ __('Estimated Total') }}</th>
+                            <th>{{ __('Quantity Delivered') }}</th>
+                            <th>{{ __('Bidder Unit Price') }}</th>
+                            <th>{{ __('Bidder Total') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($request->items as $key => $item)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
+                                <td>{{ $item->item_name??'N/A' }}</td>
                                 <td>{!! nl2br(e($item->description)) !!}</td>
                                 <td>{{ $item->quantity }}</td>
                                 <td>@moneyFormat($item->estimated_unit_cost)</td>
                                 <td>@moneyFormat($item->total_cost)</td>
+                                <td>{{ $item->quantity_delivered ?? 'N/A' }}</td>
+                                <td>@moneyFormat($item->bidder_unit_cost)</td>
+                                <td>@moneyFormat($item->bidder_total_cost)</td>
                             </tr>
                         @endforeach
                         <tr>
-                            <td colspan="4" class="text-end">Total ({{ $request->currency }})</td>
+                            <td colspan="5" class="text-end">Total: ({{ $request->currency->code }})</td>
                             <td>@moneyFormat($request->items->sum('total_cost'))</td>
-
+                            <td colspan="2"></td>
+                            <td>@moneyFormat($request->items->sum('bidder_total_cost'))</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    @else<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-            <div class="d-flex align-items-center">
-                <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0 text-warning">{{ __('Items') }}</h6>
-                    <div>{{ __('public.not_found') }}
-                    </div>
-                </div>
-            </div>
-        </div>
     @endif
 
-    <div>
-        <h5 class="px-2 text-cente">Supporting Documents</h5>
-    </div>
+    @if ($request->items->where('received_status', false)->isEmpty())
+        @include('livewire.procurement.requests.stores.inc.items-received')
+    @endif
+
     @if (!$request->documents->isEmpty())
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="card-title">{{ __('Supporting Documents') }}</h4>
+                </div><!--end col-->
+            </div> <!--end row-->
+        </div>
+
         <div class="tab-content scrollable-di">
             <div class="table-responsive">
                 <table class="table table-striped mb-0 w-100 sortable border">
@@ -144,23 +166,17 @@
                 </table>
             </div>
         </div>
-    @else<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-            <div class="d-flex align-items-center">
-                <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0 text-warning">{{ __('Items') }}</h6>
-                    <div>{{ __('public.not_found') }}
-                    </div>
-                </div>
-            </div>
-        </div>
     @endif
 
-    <div>
-        <h5 class="px-2 text-cente">Chain of Custody</h5>
-    </div>
     @if (!$request->approvals->isEmpty())
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="card-title">{{ __('Chain of Custody') }}</h4>
+                </div><!--end col-->
+            </div> <!--end row-->
+        </div>
+
         <div class="tab-content scrollable-di">
             <div class="table-responsive">
                 <table class="table table-striped mb-0 w-100 sortable border">
@@ -186,19 +202,36 @@
                             </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
         </div>
-    @else<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-            <div class="d-flex align-items-center">
-                <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
-                </div>
-                <div class="ms-3">
-                    <h6 class="mb-0 text-warning">{{ __('Approvals') }}</h6>
-                    <div>{{ __('public.not_found') }}
-                    </div>
-                </div>
-            </div>
+    @endif
+
+    @if (!$request->decisions->isEmpty())
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h4 class="card-title">{{ __('Procurement Method Approval') }}</h4>
+                </div><!--end col-->
+            </div> <!--end row-->
         </div>
+        @include('livewire.procurement.requests.procurement.inc.procurement-method-approval')
+
+        @if (checkProcurementEvaluationApproval($request->id))
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h4 class="card-title">{{ __('Evaluation Report Approval') }}</h4>
+                    </div><!--end col-->
+                </div> <!--end row-->
+            </div>
+            @include('livewire.procurement.requests.procurement.inc.evaluation-approval-information')
+        @endif
+
+    @endif
+
+    @if ($request?->bestBidders?->first()?->pivot->average_rating)
+        @include('livewire.procurement.requests.contracts-manager.inc.provider-rating')
     @endif
 </div>

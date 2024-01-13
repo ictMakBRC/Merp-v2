@@ -17,6 +17,7 @@ use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Invoice\FmsInvoicePayment;
 use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Banking\FmsBank;
 use App\Models\Finance\Requests\FmsRequestEmployee;
 use App\Models\Finance\Transactions\FmsTransaction;
 use App\Models\Finance\Requests\FmsPaymentRequestDetail;
@@ -87,7 +88,7 @@ class FmsPaymentPreviewComponent extends Component
 
                     $trans = new FmsTransaction();
                     $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
-                    $trans->trx_ref = 'Request Payment' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
+                    $trans->trx_ref = 'RQP #' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
                     $trans->trx_date = date('Y-m-d');
                     $trans->total_amount = $requestData->total_amount;                    
                     $trans->amount_local = $requestData->total_amount*$requestData->rate; 
@@ -97,6 +98,7 @@ class FmsPaymentPreviewComponent extends Component
                     $trans->account_balance = $ledgerAccount->current_balance;
                     $trans->ledger_account = $requestData->ledger_account;
                     $trans->rate = $requestData->rate;
+                    $trans->bank_id = $requestData->bank_id;
                     $trans->department_id = $requestData->department_id;
                     $trans->project_id = $requestData->project_id;
                     $trans->budget_line_id = $requestData->budget_line_id;
@@ -129,7 +131,7 @@ class FmsPaymentPreviewComponent extends Component
 
                         $incomeTrans = new FmsTransaction();
                         $incomeTrans->trx_no = 'TRI' . GeneratorService::getNumber(7);
-                        $incomeTrans->trx_ref = 'Internal transfer for' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
+                        $incomeTrans->trx_ref = 'INT #' . $requestData->request_code ?? 'TRF' . GeneratorService::getNumber(7);;
                         $incomeTrans->trx_date = date('Y-m-d');
                         $incomeTrans->total_amount = $requestData->total_amount;
                         $trans->amount_local = $requestData->total_amount*$requestData->rate; 
@@ -145,7 +147,7 @@ class FmsPaymentPreviewComponent extends Component
                         $incomeTrans->currency_id = $requestData->currency_id;
                         $incomeTrans->trx_type = 'Income';
                         $incomeTrans->status = 'Approved';
-                        $incomeTrans->description = 'Internal Transfer payment';
+                        $incomeTrans->description = 'Received an Internal Transfer payment';
                         $incomeTrans->entry_type = 'Internal';
                         if ($requestData->to_project_id != null) {
                             $incomeTrans->is_department = false;
@@ -261,7 +263,7 @@ class FmsPaymentPreviewComponent extends Component
                 'comment' => 'nullable|string',
             ]);
             DB::transaction(function () use ($id) {
-                $signed = FmsPaymentRequestAuthorization::Where(['request_id' => $id, 'approver_id' => auth()->user()->id, 'status' => 'Active'])->first();
+                $signed = FmsPaymentRequestAuthorization::where(['request_id' => $id, 'approver_id' => auth()->user()->id, 'status' => 'Active'])->first();
                 // dd($signed);
                 if ($signed) {
 
@@ -269,7 +271,7 @@ class FmsPaymentPreviewComponent extends Component
                     $signed->signature = generateInitials(auth()->user()->employee->empName ?? auth()->user()->name) . '_' . GeneratorService::getNumber(8);
                     $signed->signature_date = date('Y-m-d');
                     $signed->update();
-                    $signatory = FmsPaymentRequestAuthorization::Where(['request_id' => $id, 'status' => 'Pending'])
+                    $signatory = FmsPaymentRequestAuthorization::where(['request_id' => $id, 'status' => 'Pending'])
                         ->orderBy('level', 'asc')->first();
                     if ($signatory) {
                         $signatory->update(['status' => 'Active']);
@@ -297,7 +299,7 @@ class FmsPaymentPreviewComponent extends Component
                 'comment' => 'required|string',
             ]);
             DB::transaction(function () use ($id) {
-                $signed = FmsPaymentRequestAuthorization::Where(['request_id' => $id, 'approver_id' => auth()->user()->id, 'status' => 'Active'])->first();
+                $signed = FmsPaymentRequestAuthorization::where(['request_id' => $id, 'approver_id' => auth()->user()->id, 'status' => 'Active'])->first();
                 // dd($signed);
                 if ($signed) {
 
@@ -365,9 +367,12 @@ class FmsPaymentPreviewComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'Success', 'message' => 'Document has been successfully marked complete! ']);
     }
 
+    public $bank_id;
+    public $amount_paid;
+    public $amount_to_pay;
     public function render()
     {
-        $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'currency', 'requestable', 'budgetLine', 'fromAccount'])->first();
+        $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'currency', 'requestable', 'budgetLine', 'fromAccount','procurementRequest'])->first();
         if ($requestData) {
             $this->requestData = $requestData;
             $this->currency = $requestData->currency->code ?? 'UG';
@@ -382,6 +387,8 @@ class FmsPaymentPreviewComponent extends Component
                 $data['authorizations'] = collect([]);
         }
         $this->totalAmount = $data['items']->sum('amount');
+        $this->amount_paid = $requestData->total_amount;
+        $data['banks']=FmsBank::where('is_active',1)->get();
         return view('livewire.finance.requests.fms-payment-preview-component', $data);
     }
 }

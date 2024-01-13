@@ -12,7 +12,7 @@ class WorkingExperienceData extends Data
     public ?string $company;
     public ?string $position_held;
     public ?float $monthly_salary;
-    public ?string $currency;
+    public ?string $currency_id;
     public ?string $employment_type;
     public ?string $key_responsibilities;
 
@@ -27,7 +27,7 @@ class WorkingExperienceData extends Data
           'position_held' => 'required|string',
           'employment_type' => 'required|string',
           'monthly_salary' => 'nullable|numeric',
-          'currency' => 'nullable|string',
+          'currency_id' => 'nullable|integer',
           'key_responsibilities' => 'nullable|string',
         ];
     }

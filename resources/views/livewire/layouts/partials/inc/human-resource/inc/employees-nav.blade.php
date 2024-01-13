@@ -6,7 +6,7 @@
     <div class="collapse " id="employeeDataMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a href="{{route('human-resource-capture-new-info')}}" class="nav-link ">Register Employee Info</a>
+                <a href="{{route('human-resource-capture-new-info')}}" class="nav-link ">Employee Centre</a>
             </li>
             <!--end nav-item-->
             <li class="nav-item">
@@ -24,16 +24,16 @@
                             <a class="nav-link" href="{{ route('human-resource-official_contracts') }}">Official Contracts</a>
                         </li>
                         <!--end nav-item-->
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('human-resource-my_official_contracts') }}">My Contracts</a>
-                        </li>
+                        </li> --}}
                         <!--end nav-item-->
                     </ul>
                     <!--end nav-->
                 </div>
             </li>
 
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="#payRoll" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"
                     aria-controls="payRoll">
                     Payroll
@@ -51,7 +51,7 @@
                     </ul>
                     <!--end nav-->
                 </div>
-            </li>
+            </li> --}}
         </ul>
         <!--end nav-->
     </div>
