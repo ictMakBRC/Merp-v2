@@ -27,7 +27,11 @@ Route::get('lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang');
 
+<<<<<<< Updated upstream
 Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user']], function () {
+=======
+Route::group(['middleware' => ['auth',  'twofactor']], function () {
+>>>>>>> Stashed changes
     Route::get('/home', function () {
         return view('home');
     })->middleware(['auth', 'verified'])->name('home');
