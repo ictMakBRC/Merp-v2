@@ -14,10 +14,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>                
+                @include('livewire.finance.requests.inc.request_counts')
                 <div class="card-body">
                     @include('livewire.finance.requests.internal.inc.new-request-form')
                 </div>
+
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>

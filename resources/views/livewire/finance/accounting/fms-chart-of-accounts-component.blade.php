@@ -98,9 +98,9 @@
                                         <th>Name</th>
                                         <th>Type</th>
                                         <th>Detail Type</th>
-                                        <th>Tax Rate</th>
+                                        {{-- <th>Tax Rate</th>
                                         <th>Balance</th>
-                                        <th>Bank Balance</th>
+                                        <th>Bank Balance</th> --}}
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -111,9 +111,9 @@
                                             <td>{{ $account->name }}</td>
                                             <td>{{ $account->type->name??'N/A' }}</td>
                                             <td>{{ $account->subType->name??'N/A' }}</td>
-                                            <td>{{ $account->type_id }}</td>
+                                            {{-- <td>{{ $account->type_id }}</td>
                                             <td>{{ $account->primary_balance }}</td>
-                                            <td>{{ $account->bank_balance }}</td>
+                                            <td>{{ $account->bank_balance }}</td> --}}
                                             <td class="table-action">                                                  
                                                     {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
                                                     <div class="btn-group btn-sm">

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->date('invoice_date');
             $table->date('due_date');
             $table->double('total_amount',16,2)->default(0.00);
+            $table->double('amount_local',16,2)->default(0.00);
             $table->double('total_paid',16,2)->default(0.00);   
             $table->double('adjustment',16,2)->default(0.00);    
             $table->enum('discount_type',['Percent','Fixed'])->default('Percent');   
@@ -36,7 +37,8 @@ return new class extends Migration
             $table->foreignId('billed_department')->nullable()->constrained('departments','id')->onUpdate('cascade')->onDelete('restrict');    
             $table->foreignId('billed_project')->nullable()->constrained('projects','id')->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('customer_id')->nullable()->references('id')->on('fms_customers')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
-            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');             
+            $table->double('rate')->default(1.00); 
             $table->foreignId('tax_id')->nullable(); 
             $table->foreignId('terms_id')->nullable(); 
             $table->tinyText('description')->nullable();

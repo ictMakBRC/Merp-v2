@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\UserManagement;
 
+use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
 use Livewire\Component;
@@ -13,9 +14,12 @@ use App\Services\GeneratorService;
 use App\Services\User\UserService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Grants\Project\Project;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendPasswordNotification;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\EmployeeData\Employee;
 
 class UsersComponent extends Component
 {
@@ -49,12 +53,15 @@ class UsersComponent extends Component
     public $category;
 
     public $email;
+    public $contact;
     public $signaturePath;
     public $signature;
 
     public $role_id;
 
-    public $roles_array = [];
+    public $user_roles = [];
+    public $funder_projects = [];
+    public $monitored_departments = [];
 
     public $is_active;
 
@@ -77,6 +84,9 @@ class UsersComponent extends Component
     public $filter = false;
 
     protected $user;
+    public $employee_number;
+    public $employee_matched=false;
+    public $employee_id;
 
     public function updatedCreateNew()
     {
@@ -95,8 +105,28 @@ class UsersComponent extends Component
 
     public function updatedCategory()
     {
-        if (! $this->toggleForm) {
+        if (! $this->toggleForm && $this->category!='') {
             $this->password = GeneratorService::password();
+        }
+        $this->reset(['email','contact','name',]);
+        $this->funder_projects=[];
+        $this->user_roles=[];
+    }
+
+    public function updatedEmployeeNumber()
+    {
+        $employee = Employee::where('employee_number',$this->employee_number)->first();
+        if($employee){
+            $this->employee_id=$employee->id;
+            $this->name = $employee->first_name;
+            $this->email = $employee->email;
+            $this->contact = $employee->contact;
+            $this->employee_matched=true;
+        }else{
+            $this->employee_id=null;
+            $this->name = null;
+            $this->email = null;
+            $this->employee_matched=false;
         }
     }
 
@@ -106,11 +136,12 @@ class UsersComponent extends Component
             'name' => 'required|string',
             'email' => 'required|email:filter|unique:users',
             'category' => 'required|string',
+            'employee_number'=>'required_if:category,Normal-User',
             'is_active' => 'required|integer|max:3',
             'password' => ['required',
                 Password::min(8)
                     // ->mixedCase()
-                    ->numbers()
+                    // ->numbers()
                     ->symbols()
                     ->uncompromised(),],
         ]);
@@ -129,9 +160,11 @@ class UsersComponent extends Component
             }
 
             $userDTO = UserData::from([
+                'employee_id'=>$this->employee_id??null,
                 'name'=>$this->name,
                 'category'=>$this->category,
                 'email'=>$this->email,
+                'contact' => $this->contact,
                 'password'=>Hash::make($this->password),
                 'is_active'=>$this->is_active,
                 'signature'=>$this->signaturePath,]
@@ -140,10 +173,22 @@ class UsersComponent extends Component
             $userService = new UserService();
 
             $this->user = $userService->createUser($userDTO);
-            if ($this->role_id) {
-                $this->user->attachRole($this->role_id);
+            // if ($this->role_id) {
+            //     $this->user->attachRole($this->role_id);
+            // }
+            // $this->role_id = null;
+            
+            if (count($this->user_roles) > 0) {
+                $this->user->syncRoles($this->user_roles);
             }
-            $this->role_id = null;
+
+            $this->user_roles = [];
+            $this->user->update([
+                'funder_projects'=>count($this->funder_projects) > 0? $this->funder_projects:null,
+                'monitored_departments'=>count($this->monitored_departments) > 0? $this->monitored_departments:null,
+                'password_expires_at' => Carbon::now()->addDays(config('auth.password_expires_days')),
+            ]);
+
         });
 
         if ($this->category == 'External-Application') {
@@ -194,7 +239,12 @@ class UsersComponent extends Component
         $this->name = $user->name;
         $this->category = $user->category;
         $this->email = $user->email;
+        $this->contact = $user->contact;
         $this->is_active = $user->is_active;
+
+        $this->funder_projects = $user->funder_projects??[];
+        $this->monitored_departments = $user->monitored_departments??[];
+        $this->user_roles = $user->roles->pluck('id')->toArray()??[];
 
         $this->createNew = true;
         $this->toggleForm = true;
@@ -210,7 +260,7 @@ class UsersComponent extends Component
         ]);
         
         $user = User::findOrFail($this->edit_id);
-        // dd($user);
+
         try {
             DB::transaction(function () use ($user) {
                 $user->name = $this->name;
@@ -233,8 +283,13 @@ class UsersComponent extends Component
                     $this->signaturePath = $user->signature;
                 }
                 $user->signature = $this->signaturePath;
-        
-                $user->update();;
+                $user->funder_projects=count($this->funder_projects) > 0? $this->funder_projects:null;
+                $user->monitored_departments=count($this->monitored_departments) > 0? $this->monitored_departments:null;
+                $user->update();
+
+                if (count($this->user_roles) > 0) {
+                    $user->syncRoles($this->user_roles);
+                }
 
                 $this->resetInputs();
                 $this->createNew = false;
@@ -255,7 +310,9 @@ class UsersComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['edit_id', 'password','category', 'email','is_active', 'generateToken','name','signature']);
+        $this->reset(['employee_id','edit_id', 'password','category', 'email','is_active', 'generateToken','name','signature']);
+        $this->funder_projects=[];
+        $this->user_roles=[];
     }
 
     public function refresh()
@@ -267,8 +324,6 @@ class UsersComponent extends Component
     {
         $this->token = '';
     }
-
-
 
     public function export()
     {
@@ -309,12 +364,14 @@ class UsersComponent extends Component
 
     public function render()
     {
-        $roles = Role::orderBy('name', 'asc')->get();
+        $data['roles'] = Role::orderBy('name', 'asc')->get();
+        $data['projects'] = Project::orderBy('project_code', 'asc')->get();
+        $data['departments'] = Department::orderBy('name', 'asc')->get();
 
-        $users = $this->filterUsers()
+        $data['users'] = $this->filterUsers()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
 
-        return view('livewire.user-management.users-component', compact('users','roles'))->layout('layouts.app');
+        return view('livewire.user-management.users-component', $data)->layout('layouts.app');
     }
 }

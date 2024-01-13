@@ -91,7 +91,7 @@ class Employee extends Model
     protected function employeeAge(): Attribute
     {
         return Attribute::make(
-            get: fn () => Carbon::createFromFormat('Y-m-d', $this->birth_date)->diffInYears(Carbon::today()),
+            get: fn () => $this->birth_date? Carbon::createFromFormat('Y-m-d', $this->birth_date)->diffInYears(Carbon::today()):1,
         );
     }
 
@@ -102,7 +102,7 @@ class Employee extends Model
 
     public function officialContract()
     {
-        return $this->hasOne(OfficialContract::class, 'employee_id', 'id')->where('status','Running');
+        return $this->hasOne(OfficialContract::class, 'employee_id', 'id')->where('status',1);
     }
 
     public static function boot()
@@ -126,7 +126,26 @@ class Employee extends Model
         return empty($search) ? static::query()
             : static::query()
                 ->where('surname', 'like', '%'.$search.'%')
-                ->orWhere('first_name', 'like', '%'.$search.'%');
+                ->orWhere('first_name', 'like', '%'.$search.'%')
+                ->orWhere('other_name', 'like', '%'.$search.'%')
+                ->orWhere('entry_type', 'like', '%'.$search.'%')
+                ->orWhere('employee_number', 'like', '%'.$search.'%')
+                ->orWhere('nin_number', 'like', '%'.$search.'%')
+                ->orWhere('title', 'like', '%'.$search.'%')
+                ->orWhere('nationality', 'like', '%'.$search.'%')
+                ->orWhere('gender', 'like', '%'.$search.'%')
+                ->orWhere('birth_place', 'like', '%'.$search.'%')
+                ->orWhere('religious_affiliation', 'like', '%'.$search.'%')
+                ->orWhere('blood_type', 'like', '%'.$search.'%')
+                ->orWhere('civil_status', 'like', '%'.$search.'%')
+                ->orWhere('address', 'like', '%'.$search.'%')
+                ->orWhere('email', 'like', '%'.$search.'%')
+                ->orWhere('contact', 'like', '%'.$search.'%')
+                ->orWhere('alt_email', 'like', '%'.$search.'%')
+                ->orWhere('alt_contact', 'like', '%'.$search.'%')
+                ->orWhere('work_type', 'like', '%'.$search.'%')
+                ->orWhere('tin_number', 'like', '%'.$search.'%')
+                ->orWhere('nssf_number', 'like', '%'.$search.'%');
     }
 
     /**

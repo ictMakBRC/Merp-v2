@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -39,6 +41,14 @@ class Grievance extends Model implements HasMedia
     public function employee()
     {
         return $this->belongsTo(Employee::class, 'employee_id');
+    }
+    public function acknowledgedBy()
+    {
+        return $this->belongsTo(User::class, 'acknowledged_by');
+    }
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
     /**
      * Get the Employee that created this grievance

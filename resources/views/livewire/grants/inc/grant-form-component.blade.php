@@ -17,7 +17,10 @@
         <div class="tab-content">
             <div class="tab-pane p-3 active" id="general-information" role="tabpanel">
 
-                <form wire:submit.prevent="storeGrant">
+                <form
+                    @if ($editMode) wire:submit.prevent="updateGrant"
+                @else
+                wire:submit.prevent="storeGrant" @endif>
                     <div class="row">
                         <div class="mb-3 col-md-4">
                             <label for="grant_code" class="form-label required">{{ __('Grant Code') }}</label>
@@ -80,12 +83,12 @@
                         </div>
 
                         <div class="mb-3 col-md-2">
-                            <label for="currency" class="form-label">{{ __('Currency') }}</label>
-                            <select class="form-select" id="currency" wire:model.lazy="currency">
+                            <label for="currency_id" class="form-label">{{ __('Currency') }}</label>
+                            <select class="form-select" id="currency_id" wire:model.lazy="currency_id">
                                 <option selected value="">Select</option>
                                 @include('layouts.currencies')
                             </select>
-                            @error('currency')
+                            @error('currency_id')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>

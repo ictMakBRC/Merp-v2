@@ -27,7 +27,22 @@
                         <td>@formatDate($project->end_date)</td>
                         <td>{{$project->principalInvestigator->fullName}}</td>
                         <td>{{ ucfirst($project->progress_status)}}</td>
-                        <td></td>
+                        @if ($project->is_active == 0)
+                        <td><span class="badge bg-danger">Suspended</span></td>
+                        @else
+                            <td><span class="badge bg-success">Active</span></td>
+                        @endif
+                        
+                        <td>
+                            <div class="d-flex justify-content-between">
+                                    <button class="btn btn-sm btn-outline-success m-1"
+                                        wire:click="loadProject({{ $project->id }})"
+                                        title="{{ __('public.edit') }}">
+                                        <i class="ti ti-edit fs-18"></i></button>
+                                <a href="{{ route('project-profile', $project->id) }}"
+                                    class="btn btn-sm btn-outline-primary m-1"> <i class="ti ti-eye"></i></a>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                 @endforelse

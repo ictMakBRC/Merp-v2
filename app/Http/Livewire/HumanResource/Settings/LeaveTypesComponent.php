@@ -87,7 +87,7 @@ class LeaveTypesComponent extends Component
             'is_payable' => 'required|string',
             'carriable' => 'required|string',
             'given_to' => 'required|string',
-            'details' => 'nullable|integer',
+            'details' => 'nullable|string',
             'notice_days' => 'required|integer',
             'payment_type' => 'required|string',
 

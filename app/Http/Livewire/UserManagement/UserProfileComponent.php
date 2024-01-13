@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\UserManagement;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
@@ -145,7 +146,7 @@ class UserProfileComponent extends Component
                 ]);
                 $currentUser->update([
                     'password' => Hash::make($this->password),
-                    'password_updated_at' => now(),
+                    'password_expires_at' => Carbon::now()->addDays(config('auth.password_expires_days')),
                 ]);
 
                 Auth::guard('web')->logout();

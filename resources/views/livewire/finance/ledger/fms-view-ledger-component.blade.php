@@ -9,13 +9,22 @@
                             <h4 class="text-center"> Ledger Account for: <span>{{ $ledger_account->requestable->name }}</span> Unit</h4>
                             <h5>Account Name: {{ $ledger_account->name }}({{ $ledger_account->currency->code ?? 'UG' }})</h5>
                         </div>
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
+                                <label for="from_date" class="form-label">Transaction</label>
+                                <select class="form-select" name="transaction_type" id="transaction_type" wire:model='transaction_type'>
+                                    <option value="0">All</option>
+                                    @foreach ($transaction_types as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-4">
                                 <label for="from_date" class="form-label">From Date</label>
                                 <input id="from_date" type="date" class="form-control"
                                     wire:model.lazy="from_date">
                             </div>
 
-                            <div class="mb-3 col-md-6">
+                            <div class="mb-3 col-md-4">
                                 <label for="to_date" class="form-label">To Date</label>
                                 <input id="to_date" type="date" class="form-control" wire:model.lazy="to_date">
                             </div>

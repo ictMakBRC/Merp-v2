@@ -54,6 +54,18 @@ class GrantsComponent extends Component
         $this->resetPage();
     }
 
+    public function loadGrant(Grant $grant):void
+    {
+        $loadingInfo = 'For '.$grant->grant_code;
+            $this->emit('loadGrant', [
+                'grantId' => $grant->id,
+                'info'=>$loadingInfo,
+            ]);
+           
+        $this->createNew = true;
+        $this->toggleForm = true;
+    }
+
     
     public function filterGrants()
     {

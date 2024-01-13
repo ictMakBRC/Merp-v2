@@ -27,15 +27,17 @@
                         <td>{{ $procurementRequest->requestable->name }}</td>
                         <td>{{ $procurementRequest->subject }}</td>
                         <td>{{ $procurementRequest->procurement_sector ?? 'N/A' }}</td>
-                        <td>{{ $procurementRequest->currency }} @moneyFormat($procurementRequest->contract_value)</td>
+                        <td>{{ $procurementRequest->currency->code }} @moneyFormat($procurementRequest->contract_value)</td>
                         <td>@formatDate($procurementRequest->date_required)</td>
                         <td><span
                                 class="badge bg-{{ getProcurementRequestStatusColor($procurementRequest->status) }}">{{ $procurementRequest->status }}</span>
                         </td>
                         <td>{{ getProcurementRequestStep($procurementRequest->step_order) }}</td>
                         <td>
+                            <div class="d-flex justify-content-between">
                             <a href="{{ route('operations-procurement-request-details', $procurementRequest->id) }}"
-                                class="btn btn btn-sm btn-outline-primary action-icon"> <i class="ti ti-eye"></i></a>
+                                class="btn btn btn-sm btn-outline-primary m-1"> <i class="ti ti-eye"></i></a>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

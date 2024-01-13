@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Finance\Invoice;
 
-use App\Models\Finance\Invoice\FmsInvoice;
-use App\Models\Finance\Invoice\FmsInvoiceItem;
-use App\Models\Finance\Settings\FmsService;
 use Livewire\Component;
+use App\Models\Finance\Invoice\FmsInvoice;
+use App\Models\Finance\Settings\FmsService;
+use App\Models\Finance\Invoice\FmsInvoiceItem;
+use App\Models\Finance\Settings\FmsUnitService;
 
 class FmsInvoiceItemsComponent extends Component
 {
@@ -157,13 +158,13 @@ class FmsInvoiceItemsComponent extends Component
             }
             $this->invoiceData = $invoiceData;
             $this->currency = $invoiceData->currency->code??'UG';
-            $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['service'])->get();
+            $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['uintService','uintService.service'])->get();
         } else {
             $data['items'] = collect([]);
         }
         $this->subTotal = $data['items']->sum('line_total');
         $this->totalAmount = $this->adjustment + $this->subTotal - $this->discount_total;
-        $data['services'] = FmsService::where('is_active', 1)->get();
+        $data['services'] = FmsUnitService::where('is_active', 1)->with('service')->where(['unitable_type'=>$invoiceData->requestable_type, 'unitable_id'=>$invoiceData->requestable_id])->get();
         return view('livewire.finance.invoice.fms-invoice-items-component', $data);
     }
 }

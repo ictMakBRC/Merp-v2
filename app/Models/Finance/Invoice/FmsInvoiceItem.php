@@ -10,6 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\Finance\Settings\FmsService;
+use App\Models\Finance\Settings\FmsUnitService;
 use App\Models\HumanResource\Settings\Department;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -29,9 +30,9 @@ class FmsInvoiceItem extends Model
         // Chain fluent methods for configuration options
     }
 
-        public function service()
+        public function uintService()
     {
-        return $this->belongsTo(FmsService::class, 'item_id', 'id');
+        return $this->belongsTo(FmsUnitService::class, 'item_id', 'id');
     }
     public function invoice()
     {

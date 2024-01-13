@@ -38,7 +38,7 @@ class ProjectService
         $project->grant_id = $projectDTO->grant_id;
         $project->funding_source = $projectDTO->funding_source;
         $project->funding_amount = $projectDTO->funding_amount;
-        $project->currency = $projectDTO->currency;
+        $project->currency_id = $projectDTO->currency_id;
         $project->pi = $projectDTO->pi;
         $project->co_pi = $projectDTO->co_pi;
         $project->start_date = $projectDTO->start_date;
@@ -47,40 +47,59 @@ class ProjectService
         $project->progress_status = $projectDTO->progress_status;
     }
 
-    //PROJECT DOCUMENTS
-    public function createProjectDocument(ProjectData $projectDocumentDTO):ProjectDocument
-    {
-        $projectDocument = new ProjectDocument();
-        $this->fillProjectDocumentFromDTO($projectDocument, $projectDocumentDTO);
-        $projectDocument->save();
-
-        return $projectDocument;
-    }
-
-    public function updateProjectDocument(ProjectDocument $projectDocument, ProjectData $projectDocumentDTO):ProjectDocument
-    {
-        $this->fillProjectDocumentFromDTO($projectDocument, $projectDocumentDTO);
-        $projectDocument->save();
-
-        return $projectDocument;
-    }
-
-    private function fillProjectDocumentFromDTO(ProjectDocument $projectDocument, ProjectData $projectDocumentDTO)
-    {
-        $projectDocument->project_id = $projectDocumentDTO->project_id;
-        $projectDocument->document_category = $projectDocumentDTO->document_category;
-        $projectDocument->expires = $projectDocumentDTO->expires;
-        $projectDocument->expiry_date = $projectDocumentDTO->expiry_date;
-        $projectDocument->document_name = $projectDocumentDTO->document_name;
-        $projectDocument->document_path = $projectDocumentDTO->document_path;
-        $projectDocument->description = $projectDocumentDTO->description;
-    }
-
     //ATTACH EMPLOYEE
-    public function attachEmployee(ProjectData $projectDocumentDTO):Employee
+    // public function attachEmployee(ProjectData $projectDocumentDTO):Employee
+    // {
+    //     $employee = Employee::findOrFail($projectDocumentDTO->employee_id);
+        
+    //     $employee->projects()->attach($projectDocumentDTO->project_id, [
+    //         'designation_id' => $projectDocumentDTO->designation_id,
+    //         'contract_summary' => $projectDocumentDTO->contract_summary,
+    //         'start_date' => $projectDocumentDTO->contract_start_date,
+    //         'end_date' => $projectDocumentDTO->contract_end_date,
+    //         'fte' => $projectDocumentDTO->fte,
+    //         'gross_salary' => $projectDocumentDTO->gross_salary,
+    //         'contract_file_path' => $projectDocumentDTO->contract_file_path,
+    //         'status' => $projectDocumentDTO->status,
+    //     ]);
+
+    //     $employee->projects()->where(['status' => 'Running'])
+    //     ->where('id','!=',$contractInformation->id)
+    //     ->update(['status'=>0]);
+
+    //     return $employee;
+    // }
+
+    public function attachEmployee(ProjectData $projectDocumentDTO): Employee
     {
         $employee = Employee::findOrFail($projectDocumentDTO->employee_id);
-        
+
+        // Check if there is any running contract for the employee on the project
+        $runningContract = $employee->projects()
+            ->where('projects.id', $projectDocumentDTO->project_id)
+            ->wherePivot('status', '!=', 'Terminated')
+            ->wherePivot('end_date', '>=', now())
+            // ->orWhereNull('projects.end_date')
+            ->first();
+
+        // Mark the status as terminated for the running contract (if it exists)
+        if ($runningContract) {
+            $employee->projects()->updateExistingPivot(
+                $runningContract->id,
+                ['status' => 'Terminated']
+            );
+        }
+
+        // Mark existing contracts related to the project for the employee as expired
+        $employee->projects()
+        ->where('projects.id', $projectDocumentDTO->project_id)
+        ->wherePivot('status', '!=', 'Terminated')
+        ->each(function ($project) {
+            $project->pivot->update(['status' => 'Expired']);
+        });
+
+
+        // Attach the new contract details
         $employee->projects()->attach($projectDocumentDTO->project_id, [
             'designation_id' => $projectDocumentDTO->designation_id,
             'contract_summary' => $projectDocumentDTO->contract_summary,

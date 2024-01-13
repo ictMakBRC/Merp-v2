@@ -25,6 +25,7 @@ class GrantDocumentsComponent extends Component
 
     protected $listeners = [
         'grantCreated' => 'setGrantId',
+        'loadGrant' => 'setGrantId',
     ];
 
     public function setGrantId($details)

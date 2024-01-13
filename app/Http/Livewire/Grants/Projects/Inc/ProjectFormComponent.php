@@ -20,7 +20,7 @@ class ProjectFormComponent extends Component
     public $grant_id;
     public $funding_source;
     public $funding_amount;
-    public $currency;
+    public $currency_id;
     public $start_date;
     public $end_date;
     public $pi;
@@ -31,12 +31,13 @@ class ProjectFormComponent extends Component
     public $project;
     public $project_id;
     public $loadingInfo='';
+    public $editMode =false;
 
     protected $listeners = [
-        'switchProject' => 'setProjectId',
+        'loadProject',
     ];
 
-    public function setProjectId($details)
+    public function loadProject($details)
     {
         $this->project_id = $details['projectId'];
         $this->loadingInfo = $details['info'];
@@ -51,13 +52,15 @@ class ProjectFormComponent extends Component
         $this->grant_id = $project->grant_id??null;
         $this->funding_source = $project->funding_source;
         $this->funding_amount = $project->funding_amount;
-        $this->currency = $project->currency;
+        $this->currency_id = $project->currency_id;
         $this->pi = $project->pi??null;
         $this->co_pi = $project->co_pi??null;
         $this->start_date = $project->start_date;
         $this->end_date = $project->end_date;
         $this->project_summary = $project->project_summary;
         $this->progress_status = $project->progress_status;
+
+        $this->editMode=true;
     }
 
     public function storeProject()
@@ -78,7 +81,7 @@ class ProjectFormComponent extends Component
                 // 'grant_id' => $this->grant_id??null,
                 'funding_source' => $this->funding_source,
                 'funding_amount' => $this->funding_amount,
-                'currency' => $this->currency,
+                'currency_id' => $this->currency_id,
                 'pi' => $this->pi??null,
                 'co_pi' => $this->co_pi??null,
                 'start_date' => $this->start_date,
@@ -104,7 +107,7 @@ class ProjectFormComponent extends Component
     public function updateProject()
     {
         $projectDTO = new ProjectData();
-        $this->validate($projectDTO->rules());
+        $this->validate($projectDTO->updateRules());
 
         DB::transaction(function (){
 
@@ -117,7 +120,7 @@ class ProjectFormComponent extends Component
                 'grant_id' => $this->grant_id??null,
                 'funding_source' => $this->funding_source,
                 'funding_amount' => $this->funding_amount,
-                'currency' => $this->currency,
+                'currency_id' => $this->currency_id,
                 'pi' => $this->pi??null,
                 'co_pi' => $this->co_pi??null,
                 'start_date' => $this->start_date,

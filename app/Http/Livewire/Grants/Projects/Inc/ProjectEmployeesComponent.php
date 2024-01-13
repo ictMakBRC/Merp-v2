@@ -25,15 +25,27 @@ class ProjectEmployeesComponent extends Component
     public $contract_file;
     public $contract_file_path;
     public $status;
+    public $currencyCode;
 
     protected $listeners = [
         'projectCreated' => 'setProjectId',
+        'loadProject' => 'setProjectId',
     ];
 
     
     public function setProjectId($details)
     {
         $this->project_id = $details['projectId'];
+        $this->currencyCode = getCurrencyCode(Project::findOrFail($this->project_id)->currency_id);
+    }
+
+    public function updatedProjectId()
+    {
+        if($this->project_id){
+            $this->currencyCode = getCurrencyCode(Project::findOrFail($this->project_id)->currency_id);
+        }else{
+            $this->currencyCode='';
+        }
     }
 
     public function attachEmployee()
@@ -79,7 +91,7 @@ class ProjectEmployeesComponent extends Component
 
     public function render()
     {
-        $data['projects'] = Project::where('end_date','>',today())->get();
+        $data['projects'] = Project::where('end_date','<',today())->get();
         $data['designations'] = Designation::where('is_active',true)->get();
         $data['employees'] = Employee::where('is_active',true)->get();
         return view('livewire.grants.projects.inc.project-employees-component',$data);

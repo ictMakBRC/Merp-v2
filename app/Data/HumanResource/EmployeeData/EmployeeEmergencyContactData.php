@@ -22,6 +22,7 @@ class EmployeeEmergencyContactData extends Data
           'contact_relationship' => 'required|string',
           'contact_address' => 'required|string|max:100',
           'contact_phone' => 'required|string|max:100',
+          'contact_email' => 'nullable|string|max:100',
         ];
     }
 
