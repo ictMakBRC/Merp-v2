@@ -2,7 +2,12 @@
     <form wire:submit.prevent="storePaymentRequest" >             
         @include('layouts.messages')
             <div class="row">     
-                @include('livewire.partials.project-department-toggle')           
+                
+            @if ($unit_type == 'all')
+                @include('livewire.partials.project-department-toggle')
+            @else
+                @include('livewire.partials.single-project-department-toggle')
+            @endif         
              
                 <div class="mb-3 col-2">
                     <label for="ledger_account" class="form-label required">Ledger</label>

@@ -2,9 +2,9 @@
 
 namespace App\Http\Livewire\Finance\Lists;
 
+use App\Models\Grants\Project\Project;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Grants\Project\Project;
 
 class FmsProjectsComponent extends Component
 {
@@ -36,7 +36,7 @@ class FmsProjectsComponent extends Component
     public $delete_id;
 
     public $edit_id;
-    
+
     public $parent_department;
 
     public $type;
@@ -54,6 +54,7 @@ class FmsProjectsComponent extends Component
     public $toggleForm = false;
 
     public $filter = false;
+    public $active_unit;
 
     public function updatedCreateNew()
     {
@@ -66,6 +67,25 @@ class FmsProjectsComponent extends Component
         $this->resetPage();
     }
 
+    public function selectUnit($id)
+    {
+        $this->active_unit = $id;
+        if (session()->has('unit')) {
+            session()->forget('unit');
+        }
+        $this->validate([
+            'active_unit' => 'required',
+        ]);
+        $unit = Project::where('id', $this->active_unit)->first();
+        if ($unit) {
+            session(['unit' => $unit->name]);
+            session(['unit_type' => 'project']);
+            session(['unit_id' => $unit->id]);
+            if (session()->has('unit')) {
+                return to_route('finance-dashboard_unit', [session('unit_id'), session('unit_type')]);
+            }
+        }
+    }
 
     public function refresh()
     {
@@ -102,9 +122,8 @@ class FmsProjectsComponent extends Component
     public function render()
     {
         $data['projects'] = $this->filterProjects()
-        ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
-
+            ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+            ->paginate($this->perPage);
         return view('livewire.finance.lists.fms-projects-component', $data);
     }
 }

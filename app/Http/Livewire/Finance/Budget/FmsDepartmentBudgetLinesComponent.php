@@ -54,22 +54,49 @@ class FmsDepartmentBudgetLinesComponent extends Component
             public $requestable = null;
             public $department_id;
             public $project_id;
-
+            public $entry_type = 'Department';
+            public $unit_type = 'department';
+            public $unit_id = 0;
+            public $requestable_id;
             public $unitId;
 
-            function mount($id, $type) {                
-                $this->unitId = $id;
-                if($type == 'department'){
-                    $this->department_id =$id;
-                    $this->requestable_type =  'App\Models\HumanResource\Settings\Department';
-                    $this->requestable =  Department::find($id);
-                }elseif($type == 'project'){
-                    $this->project_id = $id;
-                    $this->requestable_type  = 'App\Models\Grants\Project\Project';
-                    $this->requestable =  Project::find($id);
-                }
+            // function mount($id, $type) {                
+            //     $this->unitId = $id;
+            //     if($type == 'department'){
+            //         $this->department_id =$id;
+            //         $this->requestable_type =  'App\Models\HumanResource\Settings\Department';
+            //         $this->requestable =  Department::find($id);
+            //     }elseif($type == 'project'){
+            //         $this->project_id = $id;
+            //         $this->requestable_type  = 'App\Models\Grants\Project\Project';
+            //         $this->requestable =  Project::find($id);
+            //     }
 
-            }
+            // }
+
+            public function mount(){
+       
+                if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                    $this->unit_id = session('unit_id');
+                    $this->unit_type = session('unit_type');
+                    $this->requestable = $requestable = Project::find($this->unit_id);
+                    $this->project_id = $requestable->id??null;
+                    $this->entry_type = 'Project';
+                } else {
+                    $this->unit_id = auth()->user()->employee->department_id ?? 0;
+                    $this->unit_type = 'department';
+                    $this->entry_type = 'Department';
+                    $this->requestable = $requestable = Department::find($this->unit_id);
+                    $this->department_id = $requestable->id??null;
+                }
+                if ($requestable) {
+                    $this->requestable_type = get_class($requestable);
+                    $this->requestable_id = $this->unit_id;
+                }else{
+                    abort(403, 'Unauthorized access or action.'); 
+                }
+            
+        }
         
             public function updatedCreateNew()
             {
@@ -185,7 +212,7 @@ class FmsDepartmentBudgetLinesComponent extends Component
         
             public function filterCategories()
             {
-                $lines = FmsUnitBudgetLine::search($this->search)->where('requestable_id', $this->unitId)
+                $lines = FmsUnitBudgetLine::search($this->search)->where('requestable_id', $this->requestable_id)
                 ->where('requestable_type', $this->requestable_type)
                     ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                         $query->whereBetween('created_at', [$this->from_date, $this->to_date]);

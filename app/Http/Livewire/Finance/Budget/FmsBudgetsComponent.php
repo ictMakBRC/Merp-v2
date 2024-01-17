@@ -55,12 +55,46 @@ class FmsBudgetsComponent extends Component
     public $filter = false;
 
     public $entry_type = 'Department';
+    public $unit_type = 'department';
+    public $unit_id = 0;
+    public $requestable_type;
+    public $requestable_id;
+    public $requestable;
+    public function mount($type)
+    {
+        if ($type == 'all') {
+            $this->unit_type = 'all';
+            $this->unit_id = '0';
+        } else {
+            if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                $this->unit_id = session('unit_id');
+                $this->unit_type = session('unit_type');
+                $this->requestable = $requestable = Project::find($this->unit_id);
+                $this->project_id = $this->unit_id;
+                $this->entry_type = 'Project';
+            } else {
+                $this->unit_id = auth()->user()->employee->department_id ?? 0;
+                $this->unit_type = 'department';
+                $this->requestable = $requestable = Department::find($this->unit_id);
+                $this->department_id = $this->unit_id;
+                $this->entry_type = 'Department';
+            }
+            if ($requestable) {
+                $this->requestable_type = get_class($requestable);
+                $this->requestable_id = $this->unit_id;
+            }else{
+                abort(403, 'Unauthorized access or action.'); 
+            }
+        }
+    }
 
     public function updatedCreateNew()
     {
         $this->resetInputs();
         $this->toggleForm = false;
         $this->createNew = false;
+        $this->updatedDepartmentId();
+        $this-> updatedProjectId();
     }
 
     public function updatingSearch()
@@ -92,10 +126,12 @@ class FmsBudgetsComponent extends Component
         if($record && $record->name){
             
         $this->year_name = 'Budget '.$record->name;
-        $this->project_id = '';
-        $this->department_id = '';
+        // $this->project_id = '';
+        // $this->department_id = '';
         $this->name = '';
         }
+        $this->updatedDepartmentId();
+        $this-> updatedProjectId();
     }
 
     public function updatedEntryType()
@@ -209,8 +245,8 @@ class FmsBudgetsComponent extends Component
             'esitmated_income',
             'estimated_expenditure',
             'fiscal_year',
-            'department_id',
-            'project_id',
+            // 'department_id',
+            // 'project_id',
             'account_id',
             'description',
             'is_active',
@@ -274,7 +310,9 @@ class FmsBudgetsComponent extends Component
 
     public function mainQuery()
     {
-        $budgets = FmsBudget::search($this->search)
+        $budgets = FmsBudget::search($this->search)->when($this->requestable_id && $this->requestable_type, function ($query) {
+            $query->where(['requestable_id'=> $this->requestable_id,'requestable_type' => $this->requestable_type]);
+        })
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

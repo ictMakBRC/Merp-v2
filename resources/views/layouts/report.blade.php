@@ -12,15 +12,15 @@
                         <div class="w-100 overflow-hidde">
                             <h4 style="text-indent: 0pt;text-align: center;" class="t-bold text-upper"><a
                                     name="bookmark0">
-                                    {{ $organizationInfo->company_name }}</a></h4>
-                            <p style="text-align: center;">{{ $organizationInfo->address2 ?? 'N/A' }}
-                                <span> || {{ $organizationInfo->physical_address }}</span> <br>
-                                <span><strong>Tel:</strong> {{ $organizationInfo->contact ?? 'N/A' }}
+                                    {{ $facilityInfo?->company_name }}</a></h4>
+                            <p style="text-align: center;">{{ $facilityInfo?->address2 ?? 'N/A' }}
+                                <span> || {{ $facilityInfo?->physical_address }}</span> <br>
+                                <span><strong>Tel:</strong> {{ $facilityInfo?->contact ?? 'N/A' }}
                                 </span>
                                 ||
-                                <span><strong>Email:</strong> {{ $organizationInfo->email ?? 'N/A' }}</span>
+                                <span><strong>Email:</strong> {{ $facilityInfo?->email ?? 'N/A' }}</span>
                                 ||
-                                <span><strong>Web:</strong> {{ $organizationInfo->website ?? 'N/A' }}</span>
+                                <span><strong>Web:</strong> {{ $facilityInfo?->website ?? 'N/A' }}</span>
                             </p>
                         </div>
                     </td>

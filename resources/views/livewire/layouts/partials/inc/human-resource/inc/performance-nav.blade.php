@@ -3,7 +3,7 @@
         aria-controls="performanceMenu"><i class="ti ti-file-analytics me-2"></i>
         Performance
     </a>
-    <div class="collapse {{isLinkActive(['appraisals.show', 'warnings.show', 'terminations.show','exit-interviews.show', 'resignations.show' ], 'show' )}}"
+    <div class="collapse"
         id="performanceMenu">
         <ul class="nav flex-column">
             <li class="nav-item">
@@ -11,7 +11,20 @@
                     aria-controls="appraisalsMenu">
                     Appraisals
                 </a>
-                <div class="collapse {{isLinkActive(['appraisals.show'], 'show')}}" id="appraisalsMenu">
+                
+                <div class="collapse" id="appraisalsMenu">
+                    <ul class="nav flex-column">                             
+                        @if (Auth::user()->hasPermission(['create_appraisals']))                   
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hr_appraisals','all')}}">All Appraisals</a>
+                        </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hr_appraisals','personal')}}">My Appraisals</a>
+                        </li>
+                    </ul>
+                </div>
+                {{-- <div class="collapse {{isLinkActive(['appraisals.show'], 'show')}}" id="appraisalsMenu">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('my.appraisals')}}">My Appraisals</a>
@@ -38,17 +51,17 @@
 
                     </ul>
                     <!--end nav-->
-                </div>
+                </div> --}}
             </li>
             <!--end nav-item-->
-            <li class="nav-item">
+            <li class="nav-item {{ request()->segment(3) == 'warnings' ? 'menuitem-active' : '' }}">
                 <a href="#warningsMenu" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false"
                     aria-controls="warningsMenu">
                     Warning
                 </a>
-                <div class="collapse {{isLinkActive(['warnings.show'], 'show')}}" id="warningsMenu">
+                <div class="collapse" id="warningsMenu">
                     <ul class="nav flex-column">
-                        @permission('create_warning')
+                        {{-- @permission('create_warning')
                         <li class="nav-item">
                             <a class="nav-link {{isLinkActive(['warnings.show'], 'active')}}"
                                 href="{{route('warnings.create')}}">
@@ -64,20 +77,42 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('warnings')}}">All Warnings</a>
                         </li>
-                        @endpermission
+                        @endpermission --}}
                         <!--end nav-item-->
+                        
+                        @if (Auth::user()->hasPermission(['create_warning']))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hr_warnings','all')}}">All Warnings</a>
+                        </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hr_warnings','personal')}}">My Warnings</a>
+                        </li>
                     </ul>
                     <!--end nav-->
                 </div>
             </li>
             <!--end nav-item-->
 
-            <li class="nav-item">
+            <li class="nav-item {{ request()->segment(3) == 'terminations' ? 'menuitem-active' : '' }}">
                 <a href="#terminationMenu" class="nav-link" data-bs-toggle="collapse" role="button"
                     aria-expanded="false" aria-controls="terminationMenu">
                     Termination
                 </a>
-                <div class="collapse {{isLinkActive(['terminations.show'], 'show')}}" id="terminationMenu">
+                <div class="collapse" id="terminationMenu">
+                    <ul class="nav flex-column">                             
+                        @if (Auth::user()->hasPermission(['create_termination']))                   
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hr_terminations','all')}}">All Terminations</a>
+                        </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hr_terminations','personal')}}">My Terminations</a>
+                        </li>
+                    </ul>
+                </div>
+
+                {{-- <div class="collapse {{isLinkActive(['terminations.show'], 'show')}}" id="terminationMenu">
                     <ul class="nav flex-column">
                         @permission('create_termination')
                         <li class="nav-item">
@@ -100,7 +135,7 @@
                         <!--end nav-item-->
                     </ul>
                     <!--end nav-->
-                </div>
+                </div> --}}
             </li>
             <!--end nav-item-->
 
@@ -109,7 +144,19 @@
                     aria-expanded="false" aria-controls="resignationMenu">
                     Resignation
                 </a>
-                <div class="collapse {{isLinkActive(['resignations.show'], 'show')}}" id="resignationMenu">
+                <div class="collapse" id="resignationMenu">
+                    <ul class="nav flex-column">                             
+                        @if (Auth::user()->hasPermission(['view_resignations']))                   
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hr_resignations','all')}}">All Resignations</a>
+                        </li>
+                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('hr_resignations','personal')}}">My Resignations</a>
+                        </li>
+                    </ul>
+                </div>
+                {{-- <div class="collapse {{isLinkActive(['resignations.show'], 'show')}}" id="resignationMenu">
                     <ul class="nav flex-column">
                         @permission('create_resignation')
                         <li class="nav-item">
@@ -132,7 +179,7 @@
 
                     </ul>
                     <!--end nav-->
-                </div>
+                </div> --}}
             </li>
             <!--end nav-item-->
 

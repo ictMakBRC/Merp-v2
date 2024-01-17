@@ -62,7 +62,7 @@
                                         <th>Type</th>
                                         <th>Ref</th>
                                         <th>Date</th>
-                                        <th>From Account</th>
+                                        <th>From Unit</th>
                                         <th>Trx Amount</th>
                                         <th>Rate</th>
                                         <th>Currency</th>

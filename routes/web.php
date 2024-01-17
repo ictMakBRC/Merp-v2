@@ -27,7 +27,7 @@ Route::get('lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang');
 
-Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user','twofactor']], function () {
+Route::group(['middleware' => ['auth',  'suspended_user','twofactor']], function () {
     Route::get('/home', function () {
         return view('home');
     })->middleware(['auth', 'verified'])->name('home');
@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth', 'password_expired', 'suspended_user','two
 
             require __DIR__.'/user_mgt.php';
         });
-
+        require __DIR__.'/hr.php';
         require __DIR__.'/human_resource.php';
         require __DIR__.'/inventory.php';
         require __DIR__.'/assets.php';

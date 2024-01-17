@@ -17,6 +17,7 @@ use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Invoice\FmsInvoicePayment;
 use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Banking\FmsBank;
 use App\Models\Finance\Requests\FmsRequestEmployee;
 use App\Models\Finance\Transactions\FmsTransaction;
 use App\Models\Finance\Requests\FmsPaymentRequestDetail;
@@ -97,6 +98,7 @@ class FmsPaymentPreviewComponent extends Component
                     $trans->account_balance = $ledgerAccount->current_balance;
                     $trans->ledger_account = $requestData->ledger_account;
                     $trans->rate = $requestData->rate;
+                    $trans->bank_id = $requestData->bank_id;
                     $trans->department_id = $requestData->department_id;
                     $trans->project_id = $requestData->project_id;
                     $trans->budget_line_id = $requestData->budget_line_id;
@@ -365,6 +367,9 @@ class FmsPaymentPreviewComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'Success', 'message' => 'Document has been successfully marked complete! ']);
     }
 
+    public $bank_id;
+    public $amount_paid;
+    public $amount_to_pay;
     public function render()
     {
         $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'currency', 'requestable', 'budgetLine', 'fromAccount','procurementRequest'])->first();
@@ -382,6 +387,8 @@ class FmsPaymentPreviewComponent extends Component
                 $data['authorizations'] = collect([]);
         }
         $this->totalAmount = $data['items']->sum('amount');
+        $this->amount_paid = $requestData->total_amount;
+        $data['banks']=FmsBank::where('is_active',1)->get();
         return view('livewire.finance.requests.fms-payment-preview-component', $data);
     }
 }

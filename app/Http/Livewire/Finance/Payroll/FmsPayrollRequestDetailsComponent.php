@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Finance\Payroll;
 
 use App\Models\User;
 use Livewire\Component;
+use App\Services\GeneratorService;
 use App\Models\Grants\Project\EmployeeProject;
 use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Requests\FmsRequestEmployee;
@@ -175,6 +176,7 @@ class FmsPayrollRequestDetailsComponent extends Component
             if($this->totalAmount && $this->totalAmount>0){
             $request= FmsPaymentRequest::where('request_code', $this->requestCode)->first();
             $request->total_amount = $this->totalAmount;
+            $request->requester_signature = 'SN_' . GeneratorService::getNumber(8);
             $request->update();
             $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Transaction amount added! please proceed',]);
             return redirect()->SignedRoute('finance-request_detail', $request->request_code);

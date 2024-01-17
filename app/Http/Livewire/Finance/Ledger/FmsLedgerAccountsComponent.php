@@ -55,7 +55,33 @@ class FmsLedgerAccountsComponent extends Component
     public $is_active;
     public $currency_id;
     public $entry_type = 'Department';
-
+    public $unit_type = 'department';
+    public $unit_id = 0;
+    public function mount($type)
+    {
+        if ($type == 'all') {
+            $this->unit_type = 'all';
+            $this->unit_id = '0';
+        } else {
+            if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                $this->unit_id = session('unit_id');
+                $this->unit_type = session('unit_type');
+                $requestable = Project::find($this->unit_id);
+            } else {
+                $this->unit_id = auth()->user()->employee->department_id ?? 0;
+                $this->unit_type = 'department';
+                $requestable = Department::find($this->unit_id);
+            }
+            if ($requestable) {
+                $ledger = FmsLedgerAccount::where(['requestable_type' => get_class($requestable), 'requestable_id' => $this->unit_id])->first();
+                if ($ledger) {
+                    return to_route('finance-ledger_view', $ledger->id);
+                }
+            }else{
+                abort(403, 'Unauthorized access or action.'); 
+            }
+        }
+    }
     public function updatedCreateNew()
     {
         $this->resetInputs();
