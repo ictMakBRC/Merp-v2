@@ -7,7 +7,7 @@
         <!-- Navigation -->
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="#">{{ __('public.dashboard') }}</a>
+                <a class="nav-link" href="{{ route('projects-dashboard') }}">{{ __('public.dashboard') }}</a>
             </li>
             <!--end nav-item-->
 

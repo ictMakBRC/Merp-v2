@@ -35,7 +35,7 @@ class ProjectProfileComponent extends Component
 
     public function render()
     {
-        $data['project']=Project::with('principalInvestigator','coInvestigator','procurementRequests','employees','departments','ledger','currency')->findOrFail($this->project_id);
+        $data['project']=Project::with('principalInvestigator','coordinator','procurementRequests','employees','departments','ledger','currency')->findOrFail($this->project_id);
         return view('livewire.grants.projects.project-profile-component',$data);
     }
 }

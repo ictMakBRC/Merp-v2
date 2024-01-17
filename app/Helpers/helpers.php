@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Collection;
 use App\Enums\ProcurementRequestEnum;
 use App\Models\Grants\Project\Project;
 use App\Models\Global\FacilityInformation;
@@ -191,4 +192,20 @@ function getLedger($ledgerable_type,$ledgerable_id){
 
 function getFinacialYear(FmsFinancialYear $fmsFinancialYear){
     return $fmsFinancialYear->name;
+}
+
+function calculatePercentage($total, $subset, $precision = 2)
+{
+    if ($total == 0) {
+        return 0.0; // To avoid division by zero
+    }
+
+    $percentage = ($subset / $total) * 100;
+
+    return round($percentage, $precision);
+}
+
+function generateQuote()
+{
+    return Collection::make(Config::get('quotes.quotes'))->map(fn ($quot) => $quot)->random();
 }

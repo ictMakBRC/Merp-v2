@@ -190,6 +190,7 @@ class RequestBiddingComponent extends Component
                 ]);
 
                 $this->request->update([
+                    'selected_provider_id'=>$this->best_bidder_id,
                     'delivery_deadline' => $this->delivery_deadline,
                     'net_payment_terms' => $this->net_payment_terms,
                     'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,

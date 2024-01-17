@@ -3,6 +3,7 @@
 namespace App\Services\Grants;
 
 use App\Data\Grants\ProjectData;
+use App\Models\Grants\Project\EmployeeProject;
 use App\Models\Grants\Project\Project;
 use App\Models\Grants\Project\ProjectDocument;
 use App\Models\HumanResource\EmployeeData\Employee;
@@ -32,15 +33,15 @@ class ProjectService
     {
         $project->project_type = $projectDTO->project_type;
         $project->project_category = $projectDTO->project_category;
-        $project->associated_institution = $projectDTO->associated_institution;
+        // $project->associated_institution = $projectDTO->associated_institution;
         $project->project_code = $projectDTO->project_code;
         $project->name = $projectDTO->name;
-        $project->grant_id = $projectDTO->grant_id;
+        // $project->grant_id = $projectDTO->grant_id;
         $project->funding_source = $projectDTO->funding_source;
         $project->funding_amount = $projectDTO->funding_amount;
         $project->currency_id = $projectDTO->currency_id;
-        $project->pi = $projectDTO->pi;
-        $project->co_pi = $projectDTO->co_pi;
+        // $project->pi = $projectDTO->pi;
+        // $project->co_pi = $projectDTO->co_pi;
         $project->start_date = $projectDTO->start_date;
         $project->end_date = $projectDTO->end_date;
         $project->project_summary = $projectDTO->project_summary;
@@ -48,19 +49,19 @@ class ProjectService
     }
 
     //ATTACH EMPLOYEE
-    // public function attachEmployee(ProjectData $projectDocumentDTO):Employee
+    // public function attachEmployee(ProjectData $projectDTO):Employee
     // {
-    //     $employee = Employee::findOrFail($projectDocumentDTO->employee_id);
+    //     $employee = Employee::findOrFail($projectDTO->employee_id);
         
-    //     $employee->projects()->attach($projectDocumentDTO->project_id, [
-    //         'designation_id' => $projectDocumentDTO->designation_id,
-    //         'contract_summary' => $projectDocumentDTO->contract_summary,
-    //         'start_date' => $projectDocumentDTO->contract_start_date,
-    //         'end_date' => $projectDocumentDTO->contract_end_date,
-    //         'fte' => $projectDocumentDTO->fte,
-    //         'gross_salary' => $projectDocumentDTO->gross_salary,
-    //         'contract_file_path' => $projectDocumentDTO->contract_file_path,
-    //         'status' => $projectDocumentDTO->status,
+    //     $employee->projects()->attach($projectDTO->project_id, [
+    //         'designation_id' => $projectDTO->designation_id,
+    //         'contract_summary' => $projectDTO->contract_summary,
+    //         'start_date' => $projectDTO->contract_start_date,
+    //         'end_date' => $projectDTO->contract_end_date,
+    //         'fte' => $projectDTO->fte,
+    //         'gross_salary' => $projectDTO->gross_salary,
+    //         'contract_file_path' => $projectDTO->contract_file_path,
+    //         'status' => $projectDTO->status,
     //     ]);
 
     //     $employee->projects()->where(['status' => 'Running'])
@@ -70,13 +71,13 @@ class ProjectService
     //     return $employee;
     // }
 
-    public function attachEmployee(ProjectData $projectDocumentDTO): Employee
+    public function attachEmployee(ProjectData $projectDTO): Employee
     {
-        $employee = Employee::findOrFail($projectDocumentDTO->employee_id);
+        $employee = Employee::findOrFail($projectDTO->employee_id);
 
         // Check if there is any running contract for the employee on the project
         $runningContract = $employee->projects()
-            ->where('projects.id', $projectDocumentDTO->project_id)
+            ->where('projects.id', $projectDTO->project_id)
             ->wherePivot('status', '!=', 'Terminated')
             ->wherePivot('end_date', '>=', now())
             // ->orWhereNull('projects.end_date')
@@ -92,24 +93,41 @@ class ProjectService
 
         // Mark existing contracts related to the project for the employee as expired
         $employee->projects()
-        ->where('projects.id', $projectDocumentDTO->project_id)
+        ->where('projects.id', $projectDTO->project_id)
         ->wherePivot('status', '!=', 'Terminated')
         ->each(function ($project) {
             $project->pivot->update(['status' => 'Expired']);
         });
 
-
         // Attach the new contract details
-        $employee->projects()->attach($projectDocumentDTO->project_id, [
-            'designation_id' => $projectDocumentDTO->designation_id,
-            'contract_summary' => $projectDocumentDTO->contract_summary,
-            'start_date' => $projectDocumentDTO->contract_start_date,
-            'end_date' => $projectDocumentDTO->contract_end_date,
-            'fte' => $projectDocumentDTO->fte,
-            'gross_salary' => $projectDocumentDTO->gross_salary,
-            'contract_file_path' => $projectDocumentDTO->contract_file_path,
-            'status' => $projectDocumentDTO->status,
+        $employee->projects()->attach($projectDTO->project_id, [
+            'designation_id' => $projectDTO->designation_id,
+            'contract_summary' => $projectDTO->contract_summary,
+            'start_date' => $projectDTO->contract_start_date,
+            'end_date' => $projectDTO->contract_end_date,
+            'fte' => $projectDTO->fte,
+            'gross_salary' => $projectDTO->gross_salary,
+            'contract_file_path' => $projectDTO->contract_file_path,
+            'status' => $projectDTO->status,
         ]);
+
+        return $employee;
+    }
+
+    public function updateProjectContract($runningContractId,ProjectData $projectDTO): Employee
+    {
+        $employee = Employee::findOrFail($projectDTO->employee_id);
+
+        EmployeeProject::
+        where('id', $runningContractId)
+        ->update(['designation_id' => $projectDTO->designation_id,
+        'contract_summary' => $projectDTO->contract_summary,
+        'start_date' => $projectDTO->contract_start_date,
+        'end_date' => $projectDTO->contract_end_date,
+        'fte' => $projectDTO->fte,
+        'gross_salary' => $projectDTO->gross_salary,
+        'contract_file_path' => $projectDTO->contract_file_path,
+        'status' => $projectDTO->status,]);
 
         return $employee;
     }
