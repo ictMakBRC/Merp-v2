@@ -29,5 +29,5 @@
             </div> <!-- end card -->
         </div><!-- end col-->
     </div>
-    @include('livewire.assets-management.inc.asset-logger-modal')
+    {{-- @include('livewire.assets-management.inc.asset-logger-modal') --}}
 </div>
