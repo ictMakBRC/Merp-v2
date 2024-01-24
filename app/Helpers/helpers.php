@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Collection;
 use App\Enums\ProcurementRequestEnum;
 use App\Models\Grants\Project\Project;
 use App\Models\Global\FacilityInformation;
@@ -212,4 +213,33 @@ function getStatusColor($status)
     ];
 
     return $colors[$status] ?? 'secondary';
+}
+function calculatePercentage($total, $subset, $precision = 2)
+{
+    if ($total == 0) {
+        return 0.0; // To avoid division by zero
+    }
+
+    $percentage = ($subset / $total) * 100;
+
+    return round($percentage, $precision);
+}
+
+function generateQuote()
+{
+    return Collection::make(Config::get('quotes.quotes'))->map(fn ($quot) => $quot)->random();
+}
+
+function removeSymbolsAndTransform($inputString)
+{
+    // Convert the string to uppercase
+    $uppercaseString = strtoupper($inputString);
+
+    // Define an array of symbols you want to remove
+    $symbols = ['-', '(', ')', '/', '_',' '];
+
+    // Use str_replace to remove the specified symbols
+    $cleanString = str_replace($symbols, '', $uppercaseString);
+
+    return $cleanString;
 }
