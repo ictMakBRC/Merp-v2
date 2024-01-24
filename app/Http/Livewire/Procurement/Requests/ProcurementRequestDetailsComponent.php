@@ -60,8 +60,8 @@ class ProcurementRequestDetailsComponent extends Component
             if ($procurementRequest->request_type=='Project') {
 
                 $pi= $procurementRequest->requestable->principalInvestigator->id;
-                $copi= $procurementRequest->requestable->coInvestigator->id;
-                $users=User::whereIn('employee_id',[$pi,$copi])->get();
+                $coordinator= $procurementRequest->requestable->coordinator->id;
+                $users=User::whereIn('employee_id',[$pi,$coordinator])->get();
                 // dd($users);
 
             } else {

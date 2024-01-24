@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('asset_catalog_id')->nullable()->constrained('asset_catalog', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('log_type');
-            $table->date('date_allocated')->nullable();
+            $table->morphs('loggable');
             $table->foreignId('station_id')->nullable()->constrained('stations', 'id')->onUpdate('cascade')->onDelete('restrict');
-            $table->foreignId('department_id')->nullable()->constrained('departments', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('employee_id')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->date('date_allocated')->nullable();
             $table->integer('allocation_status')->nullable();
 
             $table->string('breakdown_number')->nullable()->unique();
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('action_taken')->nullable();
             $table->string('breakdown_status')->nullable();
            
-            $table->unsignedBigInteger('asset_breakdown_id')->nullable();
+            $table->foreignId('breakdown_id')->nullable()->references('id')->on('asset_logs')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->string('service_type')->nullable();
             $table->date('date_serviced')->nullable();
             $table->text('service_action')->nullable();

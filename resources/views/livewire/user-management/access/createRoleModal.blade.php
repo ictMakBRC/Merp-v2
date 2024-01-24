@@ -31,10 +31,13 @@
                             <select name="user_group" id="user_group" class="form-select">
                                 <option value="" selected>Select</option>
                                 <option value="System Administration">System Administration</option>
-                                <option value="Sample Referral">Sample Referral</option>
-                                <option value="Logistics">Logistics</option>
-                                <option value="Training Management">Training Management</option>
-                                <option value="External Quality Assurance">External Quality Assurance</option>
+                                <option value="Human Resource">Human Resource</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Procurement">Procurement</option>
+                                <option value="Inventory Management">Inventory Management</option>
+                                <option value="Assets Management">Assets Management</option>
+                                <option value="Grants and Projects">Grants and Projects</option>
+                                <option value="Documents Management">Documents Management</option>
                                 <option value="Helpdesk">Helpdesk</option>
                             </select>
                          </div>

@@ -27,13 +27,15 @@
                             <label for="target_module" class="form-label required">{{ __('user-mgt.target_module') }}</label>
                             <select name="target_module" id="target_module" class="form-select">
                                 <option value="">Select</option>
-                                <option value="User Management">User Management</option>
-                                <option value="Network Management">Network Management</option>
-                                <option value="Logistics">Logistics</option>
-                                <option value="Commodity Management">Commodity Management</option>
-                                <option value="Sample Referral">Sample Referral</option>
-                                <option value="Training Management">Training Management</option>
-                                <option value="External Quality Assurance">External Quality Assurance</option>
+                                <option value="System Administration">System Administration</option>
+                                <option value="Human Resource">Human Resource</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Procurement">Procurement</option>
+                                <option value="Inventory Management">Inventory Management</option>
+                                <option value="Assets Management">Assets Management</option>
+                                <option value="Grants and Projects">Grants and Projects</option>
+                                <option value="Documents Management">Documents Management</option>
+                                <option value="Helpdesk">Helpdesk</option>
                             </select>
                          </div>
                          <div class="mb-3 col-md-6">

@@ -41,7 +41,7 @@ class SupervisorPanelComponent extends Component
          
                 $query->where($column, auth()->user()->employee->id);
 
-                $column2 = $type === Department::class ? 'asst_supervisor' : 'co_pi';
+                $column2 = $type === Department::class ? 'asst_supervisor' : 'coordinator_id';
                 $query->orWhere($column2, auth()->user()->employee->id);
             }
         )->where('step_order','>=',2)

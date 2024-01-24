@@ -9,7 +9,8 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                    {{__('Projects/Studies')}}
+                                    {{__('Projects/Studies')}} (<span
+                                    class="text-danger fw-bold">{{ $projects->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle-alpine')
                                     @else
                                     {{__('Edit Project')}}
