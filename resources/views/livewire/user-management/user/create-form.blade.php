@@ -7,7 +7,8 @@
                     <select class="form-select select2" id="category" wire:model.lazy="category">
                         <option selected value="">Select</option>
                         <option value='Normal-User'>Normal User</option>
-                        <option value='Funder'>Funder</option>
+                        <option value='Funder'>Project/Study Funder</option>
+                        <option value='External-Monitor'>External Monitor</option>
                         <option value='System-Admin'>System Admin</option>
                         <option value='External-Application'>External Application</option>
                     </select>
@@ -16,8 +17,7 @@
                     @enderror
                 </div>
                 @if ($category != '')
-
-                    @if ($category == 'Normal-User')
+                    @if ($category == 'Normal-User' && !$toggleForm )
                         <div class="mb-2 col-md-12">
                             <label for="employee_number" class="form-label required">{{ __('Employee No') }} </label>
                             <input type="text" id="employee_number" class="form-control"
@@ -45,6 +45,14 @@
                         <label for="userEmail" class="form-label required">{{ __('public.email_address') }}</label>
                         <input type="email" id="userEmail" class="form-control" wire:model.defer="email">
                         @error('email')
+                            <div class="text-danger text-small">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="mb-2 col-md-12">
+                        <label for="contact" class="form-label required">{{ __('public.contact') }}</label>
+                        <input type="text" id="contact" class="form-control" wire:model.defer="contact">
+                        @error('contact')
                             <div class="text-danger text-small">{{ $message }}</div>
                         @enderror
                     </div>
@@ -90,7 +98,7 @@
 
             @if ($category != 'External-Application')
                 <div class="col-md-3 bg-light">
-                    <h4>User roles</h4>
+                    <h6>User roles</h4>
                     <div class="scrollable-div">
                         @error('user_roles')
                             <div class="text-danger text-small">{{ $message }}</div>
@@ -112,7 +120,7 @@
 
             @if ($category == 'Funder')
                 <div class="col-md-4 bg-light">
-                    <h4>Funder's Projects/Studies</h4>
+                    <h6>Funder's Projects/Studies</h4>
                     <div class="scrollable-div">
                         @error('user_roles')
                             <div class="text-danger text-small">{{ $message }}</div>
@@ -124,6 +132,28 @@
                                         id="project{{ $project->id }}" wire:model="funder_projects">
                                     <label class="form-check-label"
                                         for="project{{ $project->id }}">{{ $project->project_code }}</label>
+                                </div>
+                            @empty
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if ($category == 'External-Monitor')
+                <div class="col-md-3 bg-light">
+                    <h6>Monitored Departments/Labs</h4>
+                    <div class="scrollable-div">
+                        @error('monitored_departments')
+                            <div class="text-danger text-small">{{ $message }}</div>
+                        @enderror
+                        <div class="list-group list-group-flush">
+                            @forelse ($departments as $department)
+                                <div class="form-check list-group-item py-1 ms-2">
+                                    <input class="form-check-input" type="checkbox" value="{{ $department->id }}"
+                                        id="department{{ $department->id }}" wire:model="monitored_departments">
+                                    <label class="form-check-label"
+                                        for="department{{ $department->id }}">{{ $department->name }}</label>
                                 </div>
                             @empty
                             @endforelse

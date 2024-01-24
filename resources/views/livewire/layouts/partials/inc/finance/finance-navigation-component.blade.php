@@ -29,7 +29,7 @@
                         </a>
                         <div class="collapse " id="accounting">
                             <ul class="nav flex-column">
-                                @if (Auth::user()->hasPermission(['view_coa']))
+                                @if (Auth::user()->hasPermission(['view_charts_of_account']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-chart_of_accounts') }}" class="nav-link ">Chart Of
                                             Accounts</a>
@@ -314,6 +314,9 @@
                                     <li class="nav-item">
                                         <a href="{{ route('finance-currency_rates') }}" class="nav-link ">Ex Rates</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-institutions') }}" class="nav-link ">Institutions</a>
+                                    </li>
                                 @endif
                                 {{-- @if (Auth::user()->hasPermission(['finance-services'])) --}}
                                 <li class="nav-item">
@@ -323,17 +326,17 @@
                                 {{-- @endif --}}
                                 @if (Auth::user()->hasPermission(['view_services']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-categories') }}" class="nav-link ">Service
-                                            Categories</a>
+                                        <a href="{{ route('finance-categories') }}" class="nav-link ">Reveune
+                                            Sub-Categories</a>
                                     </li>
                                     <!--end nav-item-->
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-services') }}" class="nav-link ">Services</a>
+                                        <a href="{{ route('finance-services') }}" class="nav-link ">Revenues</a>
                                     </li>
                                     <!--end nav-item-->
                                     <!--end nav-item-->
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit Services</a>
+                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit Revenues</a>
                                     </li>
                                     <!--end nav-item-->
                                 @endif

@@ -9,6 +9,7 @@
                     <th>{{ __('public.name') }}</th>
                     <th>{{ __('user-mgt.user_category') }}</th>
                     <th>{{ __('public.email_address') }}</th>
+                    <th>{{ __('public.contact') }}</th>
                     <th>{{ __('public.status') }}</th>
                     <th>{{ __('user-mgt.created_at') }}</th>
                     <th>{{ __('public.action') }}</th>
@@ -21,6 +22,7 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->category ?? 'N/A' }}</td>
                     <td>{{ $user->email ?? 'N/A' }}</td>
+                    <td>{{ $user->contact ?? 'N/A' }}</td>
                     @if ($user->is_active == 0)
                     <td><span class="badge bg-danger">Suspended</span></td>
                     @else

@@ -2,6 +2,7 @@
 
 namespace App\Models\Finance\Invoice;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -14,6 +15,11 @@ class FmsInvoicePayment extends Model
     public function invoice()
     {
         return $this->belongsTo(FmsInvoice::class, 'invoice_id', 'id');
+    }
+       
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
     public function requestable(): MorphTo
     {
@@ -31,6 +37,8 @@ class FmsInvoicePayment extends Model
             });
         }
     }
+
+
 
     public static function search($search)
     {

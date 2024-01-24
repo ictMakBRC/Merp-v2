@@ -11,7 +11,7 @@ class EmployeeProject extends Pivot
 {
     public function designation()
     {
-        return $this->belongsTo(Designation::class);
+        return $this->belongsTo(Designation::class,'designation_id');
     }
     public function employee()
     {
