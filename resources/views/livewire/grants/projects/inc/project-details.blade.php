@@ -24,9 +24,9 @@
                 <strong class="text-inverse">{{ __('End date') }}: </strong>
                 @formatDate($project->end_date)<br>
                 <strong class="text-inverse">{{ __('Principal Investigator') }}:
-                </strong>{{ $project->principalInvestigator->fullName ?? 'N/A' }}<br>
-                <strong class="text-inverse">{{ __('Co-Investigator') }}:
-                </strong>{{ $project->coInvestigator->fullName }} <br>
+                </strong>{{ $project->principalInvestigator?->fullName ?? 'N/A' }}<br>
+                <strong class="text-inverse">{{ __('Co-Ordinator') }}:
+                </strong>{{ $project->coordinator?->fullName??'N/A' }} <br>
             </div>
         </div><!--end col-->
     </div><!--end row-->

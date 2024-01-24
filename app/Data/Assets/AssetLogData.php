@@ -66,7 +66,7 @@ class AssetLogData extends Data
         return [
         'asset_catalog_id'=>'required|integer',
         'log_type'=>'required|string',
-        'asset_breakdown_id'=>'required|integer',
+        'asset_breakdown_id'=>'nullable|integer',
         'service_type'=>'required|string',
         'date_serviced'=>'required|date|before_or_equal:today',
         'service_action'=>'required|string',

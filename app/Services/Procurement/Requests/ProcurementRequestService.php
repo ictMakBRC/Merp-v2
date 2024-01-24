@@ -12,10 +12,10 @@ class ProcurementRequestService
     //DOCUMENTS
     public function createProcurementRequest(Model $model,ProcurementRequestData $procurementRequestDTO):ProcurementRequest
     {
-        $document = $model->procurementRequests()->create([
+        $procurementRequest = $model->procurementRequests()->create([
             ...$this->fillProcurementRequestFromDTO($procurementRequestDTO)
         ]);
-        return $document;
+        return $procurementRequest;
     }
 
     public function updateProcurementRequest(ProcurementRequest $procurementRequest, ProcurementRequestData $procurementRequestDTO):ProcurementRequest

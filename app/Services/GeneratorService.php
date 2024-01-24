@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\Assets\AssetLog;
+use Illuminate\Support\Str;
+use App\Models\Assets\AssetsCatalog;
 use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Invoice\FmsInvoice;
-use Illuminate\Support\Str;
+use App\Models\Assets\Settings\AssetCategory;
 use App\Models\Procurement\Settings\Provider;
 use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\Procurement\Request\ProcurementRequest;
@@ -26,9 +29,10 @@ class GeneratorService
         $latestEmpNo = Employee::select('employee_number')->orderBy('id', 'desc')->first();
 
         if ($latestEmpNo) {
-            $emp_number = 'BRC'.((int) filter_var($latestEmpNo->employee_number, FILTER_SANITIZE_NUMBER_INT) + 1).$randomAlphabet;
+            // $emp_number = 'BRC'.((int) filter_var($latestEmpNo->employee_number, FILTER_SANITIZE_NUMBER_INT) + 1).$randomAlphabet;
+            $emp_number ='BRC'.str_pad(((int) filter_var($latestEmpNo->employee_number, FILTER_SANITIZE_NUMBER_INT) + 1), 5, '0', STR_PAD_LEFT).$randomAlphabet;
         } else {
-            $emp_number = 'BRC10000'.$randomAlphabet;
+            $emp_number = 'BRC00001'.$randomAlphabet;
         }
 
         return $emp_number;
@@ -132,7 +136,6 @@ class GeneratorService
         return $identifier;
 
     }
-
 
     public static function getInvNumber()
     {
@@ -246,6 +249,43 @@ class GeneratorService
         }
         
         return $lpoNo;
+    }
+
+
+    public static function assetLabel($departmentCode, $assetCategoryId)
+    {
+        $labelName = null;
+        $assetCategory=AssetCategory::findOrFail($assetCategoryId);
+
+        $latestCategoryAsset = AssetsCatalog::where('asset_category_id',$assetCategory->id)->orderBy('id', 'desc')->first();
+
+        if ($latestCategoryAsset) {
+            $latestCategoryAssetNameSplit = explode('-', $latestCategoryAsset->asset_name);
+           
+            $labelName = $departmentCode.'-'.$assetCategory->short_code.'-'.str_pad(((int) filter_var(end($latestCategoryAssetNameSplit), FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT);
+        } else {
+            $labelName = $departmentCode.'-'.$assetCategory->short_code.'-001';
+        }
+        
+        return $labelName;
+    }
+
+
+    public static function assetBreakdownNumber(AssetsCatalog $assetsCatalog)
+    {
+        $breakdownNumber = null;
+
+        $latestBreakdown = AssetLog::where(['asset_catalog_id'=>$assetsCatalog->id,'log_type'=>'Breakdown'])->orderBy('id', 'desc')->first();
+
+        if ($latestBreakdown) {
+            $latestBreakdownNumberSplit = explode('-', $latestBreakdown->breakdown_number);
+           
+            $breakdownNumber = $assetsCatalog->asset_name.'-BD'.str_pad(((int) filter_var(end($latestBreakdownNumberSplit), FILTER_SANITIZE_NUMBER_INT) + 1), 3, '0', STR_PAD_LEFT);
+        } else {
+            $breakdownNumber = $assetsCatalog->asset_name.'-BD001';
+        }
+        
+        return $breakdownNumber;
     }
 
 

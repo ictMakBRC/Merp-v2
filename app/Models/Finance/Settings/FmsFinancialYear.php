@@ -2,6 +2,7 @@
 
 namespace App\Models\Finance\Settings;
 
+use App\Models\Procurement\Request\ProcurementRequest;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +34,11 @@ class FmsFinancialYear extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
+    }
+
+    public function procurement_requests()
+    {
+        return $this->hasMany(ProcurementRequest::class,'financial_year_id');
     }
 
     public static function boot()
