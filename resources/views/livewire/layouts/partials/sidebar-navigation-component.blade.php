@@ -173,7 +173,7 @@
                 <!--end inventory -->
 
                 <!--start assets -->
-                <livewire:layouts.partials.inc.assets.assets-navigation-component />
+                {{-- <livewire:layouts.partials.inc.assets.assets-navigation-component /> --}}
                 <!--end assets -->
 
                 <!--start procurement -->
@@ -204,5 +204,6 @@
             <!--end menu-body-->
         </div><!-- end main-menu-inner-->
     </div>
+    @include('livewire.layouts.partials.inc.inventory.inc.select-user-department-modal')
 </div>
-@include('livewire.layouts.partials.inc.inventory.inc.select-user-department-modal')
+

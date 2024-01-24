@@ -2,23 +2,22 @@
 
 namespace App\Models\HumanResource\Settings;
 
-use App\Models\Assets\AssetsCatalog;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
-use App\Models\AssetsManagement\Asset;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Traits\AssetableTrait;
+use App\Traits\AssetLoggableTrait;
 use App\Traits\DocumentableTrait;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
 {
-    use HasFactory,LogsActivity, ProcurementRequestableTrait,DocumentableTrait;
+    use HasFactory,LogsActivity, ProcurementRequestableTrait,DocumentableTrait,AssetableTrait,AssetLoggableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -70,10 +69,10 @@ class Department extends Model
         return $this->belongsTo(Employee::class,'asst_supervisor','id');
     }
 
-    public function assets()
-    {
-        return $this->hasMany(AssetsCatalog::class);
-    }
+    // public function assets()
+    // {
+    //     return $this->hasMany(AssetsCatalog::class);
+    // }
 
     public function projects()
     {

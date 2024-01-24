@@ -17,7 +17,7 @@
                                         <p class="mb-0 text-secondary">
                                             {{ __('Recruitment, Compensation and Employee relations.') }}
                                             {{-- @if (Auth::user()->hasPermission(['access_user_management_module'])) --}}
-                                                <a href="{{ route('human-resource-capture-new-info') }}"
+                                                <a href="{{ route('human-resource-dashboard') }}"
                                                     class="btn btn-sm btn-outline-success">
                                                     <i class="ti ti-arrow-bar-right me-1"></i>
                                                 </a>
@@ -36,7 +36,7 @@
                                         <p class="mb-0 text-secondary">
                                             {{ __('Managing MERP system settings, users, their roles and permissions, and tracking user activity on the system.') }}
                                             {{-- @if (Auth::user()->hasPermission(['access_user_management_module'])) --}}
-                                                <a href="{{ route('manage-grants') }}"
+                                                <a href="{{ route('projects-dashboard') }}"
                                                     class="btn btn-sm btn-outline-success">
                                                     <i class="ti ti-arrow-bar-right me-1"></i>
                                                 </a>
