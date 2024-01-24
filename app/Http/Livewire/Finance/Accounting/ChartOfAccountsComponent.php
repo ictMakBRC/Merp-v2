@@ -39,6 +39,7 @@ class ChartOfAccountsComponent extends Component
     public $account_type;
 
     public $is_active;
+    public $is_budget;
 
     public $mode = 'add';
 
@@ -61,7 +62,7 @@ class ChartOfAccountsComponent extends Component
     public $filter = false;
     public function export()
     {
-        // return (new CouriersExport())->download('Couriers.xlsx');
+        // return (new COAsExport())->download('COAs.xlsx');
     }
 
     public function updatingSearch()
@@ -90,7 +91,7 @@ class ChartOfAccountsComponent extends Component
         $this->validate([
             'name' => 'required|unique:fms_chart_of_accounts',
             'code' => 'unique:fms_chart_of_accounts',
-            // 'is_active' => 'required|numeric',
+            'is_budget' => 'required|numeric',
             'account_type' => 'required|numeric',
             'sub_account_type' => 'required|numeric',
 
@@ -101,15 +102,16 @@ class ChartOfAccountsComponent extends Component
         $account->account_type = $this->account_type;
         $account->sub_account_type = $this->sub_account_type;
         $account->parent_account = $this->parent_account;
-        $account->primary_balance = $this->primary_balance;
-        $account->bank_balance = $this->bank_balance == '' ? '0' : $this->bank_balance;
-        $account->as_of = $this->as_of;
+        $account->primary_balance = $this->primary_balance??0;
+        $account->bank_balance = $this->bank_balance??0;
+        $account->as_of = date('Y-m-d');
         $account->description = $this->description;
-        $account->is_active = isset($this->is_active) ? 0 : 1;
+        $account->is_active = isset($this->is_active) ? 1 : 0;
+        $account->is_budget = isset($this->is_budget) ? 1 : 0;
         $account->save();
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier created successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'COA created successfully!']);
     }
 
     public function editdata(FmsChartOfAccount $account)
@@ -124,6 +126,7 @@ class ChartOfAccountsComponent extends Component
         $this->as_of = $account->as_of;
         $this->sub_account_type = $account->sub_account_type;
         $this->description = $account->description;
+        $this->is_budget = $account->is_budget;
         $this->is_active = $account->is_active;
         $this->mode = 'edit';
         //$this->dispatchBrowserEvent('edit-modal');
@@ -142,6 +145,7 @@ class ChartOfAccountsComponent extends Component
             'primary_balance',
             'bank_balance',
             'as_of',
+            'is_budget'
         ]);
         $this->mode = 'add';
         $this->is_sub = false;
@@ -152,6 +156,7 @@ class ChartOfAccountsComponent extends Component
         $this->validate([
             'name' => 'required|unique:fms_chart_of_accounts,name,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
+            'is_budget' => 'required|numeric',
             'account_type' => 'required|numeric',
             'sub_account_type' => 'required|numeric',
         ]);
@@ -161,17 +166,18 @@ class ChartOfAccountsComponent extends Component
         $account->code = $this->code;
         $account->account_type = $this->account_type;
         $account->parent_account = $this->parent_account;
-        $account->primary_balance = $this->primary_balance;
-        $account->bank_balance = $this->bank_balance;
-        $account->as_of = $this->as_of;
+        // $account->primary_balance = $this->primary_balance;
+        // $account->bank_balance = $this->bank_balance;
+        // $account->as_of = $this->as_of;
         $account->sub_account_type = $this->sub_account_type;
         $account->description = $this->description;
-        $account->is_active = isset($this->is_active) ? 1 : 0;
+        $account->is_active = $this->is_active;
+        $account->is_budget = $this->is_budget;
         $account->update();
 
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Courier updated successfully!']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'COA updated successfully!']);
     }
 
     public function refresh()

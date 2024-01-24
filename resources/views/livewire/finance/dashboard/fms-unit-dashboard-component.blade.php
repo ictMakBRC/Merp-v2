@@ -48,9 +48,9 @@
                             <div class="media">
                                 <i class="align-self-center icon-lg text-secondary fas fa-briefcase"></i>
                                 <div class="media-body align-self-center ms-2">
-                                    <h6 class="mt-0 mb-1 font-16">Estimated Income This FY <i
+                                    <h6 class="mt-0 mb-1 font-16">Estimated Income This FY @moneyFormat($budget->estimated_income_local??0)<i
                                             class="fas fa-check text-success"></i></h6>
-                                    <h6 class="mt-0 mb-1 font-16">Estimated Expense This FY <i
+                                    <h6 class="mt-0 mb-1 font-16">Estimated Expense This FY @moneyFormat($budget->estimated_expense_local??0)<i
                                             class="far fa-minus-square text-info"></i></h6>
                                 </div><!--end media body-->
                             </div>
@@ -70,7 +70,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col text-center">
-                                    <span class="h4">60k</span>
+                                    <span class="h4">{{ $request_counts->count() }}</span>
                                     <h6 class="text-uppercase text-muted mt-2 m-0">Total Requests</h6>
                                 </div><!--end col-->
                             </div> <!-- end row -->
@@ -82,7 +82,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col text-center">
-                                    <span class="h4">10k</span>
+                                    <span class="h4">{{ $request_counts->whereIn('status', ['Pending','Submitted'])->count() }}</span>
                                     <h6 class="text-uppercase text-muted mt-2 m-0">Requests Pending</h6>
                                 </div><!--end col-->
                             </div> <!-- end row -->
@@ -94,7 +94,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col text-center">
-                                    <span class="h4">720</span>
+                                    <span class="h4">{{ $request_counts->where('status',  'Approved')->count() }}</span>
                                     <h6 class="text-uppercase text-muted mt-2 m-0">Requests Approved</h6>
                                 </div><!--end col-->
                             </div> <!-- end row -->
@@ -106,7 +106,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col text-center">
-                                    <span class="h4">964</span>
+                                    <span class="h4">{{ $request_counts->where('status', 'Completed')->count() }}</span>
                                     <h6 class="text-uppercase text-muted mt-2 m-0">Requests Paid</h6>
                                 </div><!--end col-->
                             </div> <!-- end row -->

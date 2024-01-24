@@ -2,6 +2,7 @@
 
 namespace App\Models\Finance\Invoice;
 
+use App\Models\Finance\Banking\FmsBank;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
@@ -44,6 +45,10 @@ class FmsInvoice extends Model
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
+    }
+    public function bank()
+    {
+        return $this->belongsTo(FmsBank::class, 'bank_id', 'id');
     }
 
     public function customer()

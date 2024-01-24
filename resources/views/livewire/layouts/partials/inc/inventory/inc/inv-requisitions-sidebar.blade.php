@@ -15,6 +15,11 @@
     @endif
 
       @if(\Auth::user()->hasPermission(['access_department_request']))
+      
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('general-requests') }}">Dpt Request</a>
+    </li>
+    
     <li class="nav-item">
         <a href="#officialContactsSubMenu" class="nav-link" data-bs-toggle="collapse" role="button"
             aria-expanded="false" aria-controls="officialContactsSubMenu">
@@ -28,9 +33,6 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('forecast') }}">Forecasts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('general-requests') }}">General Request</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('consumption-based') }}">Consumption Based Request</a>

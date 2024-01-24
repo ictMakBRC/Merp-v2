@@ -26,7 +26,7 @@
                         <td>{{ $budget_data->name }}</td>
                         <td>{{ $budget_data->fiscalYear->name ?? 'N/A' }}</td>
                         <td>{{ $budget_data->project->name ?? ($budget->department->name ?? 'N/A') }}</td>
-                        <td>{{ $budget_data->esitmated_income }}</td>
+                        <td>{{ $budget_data->estimated_income }}</td>
                         <td>{{ $budget_data->estimated_expenditure }}</td>
                         <td>{{ $budget_data->currency->code ?? 'N/A' }}</td>
                     </tr>

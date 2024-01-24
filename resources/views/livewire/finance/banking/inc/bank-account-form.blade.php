@@ -15,11 +15,19 @@
             <form  @if ($toggleForm) wire:submit.prevent="updateAccount" @else wire:submit.prevent="storeAccount" @endif >             
                 <div class="modal-body">
                     <div class="row">
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-3">
                             <label for="name" class="form-label required">Name</label>
                             <input type="text" id="name" class="form-control" name="name" required
                                 wire:model="name">
                             @error('name')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3 col-md-2">
+                            <label for="name" class="form-label required">Branch</label>
+                            <input type="text" id="name" class="form-control" name="branch" required
+                                wire:model="branch">
+                            @error('branch')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
@@ -43,7 +51,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-3">
+                        <div class="mb-3 col-2">
                             <label for="currency_id" class="form-label required">Account Currency</label>
                             <select class="form-select select2" id="currency_id" wire:model.defer="currency_id">
                                 <option  value="">Select</option>

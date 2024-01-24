@@ -52,6 +52,7 @@ class FmsBanksComponent extends Component
     public $as_of;
     public $is_active;
     public $currency_id;
+    public $branch;
     public $entry_type ='Department';
 
     public function updatedCreateNew()
@@ -79,6 +80,7 @@ class FmsBanksComponent extends Component
             'as_of',
             'is_active',
             'currency_id',
+            'branch'
         ]);
     }
 
@@ -86,6 +88,7 @@ class FmsBanksComponent extends Component
     {
         $this->validateOnly($fields, [
             'name' => 'required|string|unique:fms_banks',
+            'branch' => 'required|string',
             'is_active' => 'required|numeric',
             'account_no' => 'required|unique:fms_banks',
             'currency_id' => 'required|integer',
@@ -121,6 +124,7 @@ class FmsBanksComponent extends Component
 
         $this->validate([
             'name' => 'required|string|unique:fms_banks',
+            'branch' => 'required|string',
             'is_active' => 'required|numeric',
             'account_no' => 'required|unique:fms_banks',            
             'currency_id' => 'required|integer',
@@ -148,6 +152,7 @@ class FmsBanksComponent extends Component
         $current_balance = (float) str_replace(',', '', $this->current_balance);
         $account = new FmsBank();
         $account->name = $this->name;
+        $account->branch = $this->branch;
         $account->is_active = $this->is_active;
         $account->account_no = $this->account_no;
         $account->currency_id = $this->currency_id;
@@ -190,6 +195,7 @@ class FmsBanksComponent extends Component
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
             // 'account_type' => 'required|integer',
+            'branch' => 'required|string',
             'opening_balance' => 'required',
             'current_balance' => 'required',
             'as_of' => 'required|date',
@@ -205,6 +211,7 @@ class FmsBanksComponent extends Component
         $account = FmsBank::where('id',$this->edit_id)->first();
         $account->name = $this->name;
         $account->is_active = $this->is_active;
+        $account->branch = $this->branch;
         $account->account_no = $this->account_no;
         // $account->opening_balance = $opening_balance;
         // $account->current_balance = $current_balance;
@@ -227,6 +234,7 @@ class FmsBanksComponent extends Component
         $this->account_no = $account->account_no;
         $this->currency_id = $account->currency_id;
         $this->current_balance = $account->current_balance;
+        $this->branch = $account->branch;
         $this->as_of = $account->as_of;
         $this->is_active = $account->is_active;
         $this->description = $account->notice_text;
@@ -259,7 +267,7 @@ class FmsBanksComponent extends Component
     {
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['accounts'] = $this->filterAccount()->where('is_active', 1)->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-        ->paginate($this->perPage);
+        ->with('currency')->paginate($this->perPage);
         return view('livewire.finance.banking.fms-banks-component', $data);
     }
 }

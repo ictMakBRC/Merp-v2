@@ -84,6 +84,29 @@
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
+            
+            <div class="mb-3 col-2">
+                <label for="name" class="form-label required">Rate</label>
+                <input type="number" id="rate" step="any"
+                    class="form-control" name="rate" required wire:model="rate">
+                @error('rate')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3 col-2">
+                <label for="bank_id" class="form-label required">Bank</label>
+                <select id="bank_id" class="form-control form-select" name="bank_id" required
+                    wire:model="bank_id">
+                    <option value="">Select</option>
+                    @foreach ($banks as $bank)
+                        <option value="{{ $bank->id }}">{{ $bank->name.' '.$bank->account_no }}</option>
+                    @endforeach
+                </select>
+                @error('currency_id')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
 
             <div class="mb-3 col-2">
                 <label for="opening_balance" class="form-label required">As of</label>

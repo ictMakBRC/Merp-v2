@@ -19,10 +19,10 @@ return new class extends Migration
             $table->id();
             $table->string('name',200)->unique();             
             $table->string('code',16)->unique();             
-            $table->double('esitmated_income',16,2)->default(0.00);
+            $table->double('estimated_income',16,2)->default(0.00);
             $table->double('estimated_expenditure',16,2)->default(0.00);
             $table->double('estimated_income_local',16,2)->default(0.00);
-            $table->double('estimated_expense_local',16,2)->default(0.00);         
+            $table->double('estimated_expense_local',16,2)->default(0.00);             
             $table->foreignId('fiscal_year')->nullable()->references('id')->on('fms_financial_years')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('department_id')->nullable()->constrained('departments','id')->onUpdate('cascade')->onDelete('restrict');    
             $table->foreignId('project_id')->nullable()->constrained('projects','id')->onUpdate('cascade')->onDelete('restrict'); 

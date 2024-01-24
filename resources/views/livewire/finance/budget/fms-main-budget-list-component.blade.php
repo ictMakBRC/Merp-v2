@@ -96,8 +96,8 @@
                                         <th>No.</th>
                                         <th>Name</th>
                                         <th>Fiscal Year</th>
-                                        {{-- <th>Revenue</th>
-                                        <th>Expenditure</th> --}}
+                                        <th>Revenue</th>
+                                        <th>Expenditure</th>
                                         <th>Currency</th>
                                         <th>Action</th>
                                     </tr>
@@ -108,8 +108,8 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>MakBRC BUDGET{{ $budget->fiscalYear->name??'' }}</td>
                                             <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
-                                            {{-- <td>{{ $budget->total_income }}</td>
-                                            <td>{{ $budget->total_expenses }}</td> --}}
+                                            <td>@moneyFormat($budget->total_income)</td>
+                                            <td>@moneyFormat($budget->total_expenses)</td>
                                             <td>{{ $budget->currency->code??'UGX' }}</td>
                                             <td class="table-action">                                                  
                                                

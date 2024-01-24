@@ -6,8 +6,11 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
+use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Invoice\FmsInvoice;
+use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Transactions\FmsTransaction;
 
 class FmsUnitDashboardComponent extends Component
@@ -55,6 +58,7 @@ class FmsUnitDashboardComponent extends Component
     public $department_id;
     public $project_id;
     public $department;
+    public $fiscal_year;
 
     public $unitId;
 
@@ -69,6 +73,7 @@ class FmsUnitDashboardComponent extends Component
             $this->requestable_type  = 'App\Models\Grants\Project\Project';
             $this->requestable =  Project::find($id);
         }
+        $this->fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
 
     }
     public function transactions()
@@ -85,6 +90,18 @@ class FmsUnitDashboardComponent extends Component
 
         return $data;
     }
+    public function budgetQuery()
+    {
+        $budgets = FmsBudget::where('requestable_id', $this->unitId)->where('requestable_type', $this->requestable_type)
+         ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            }, function ($query) {
+                return $query;
+            });
+
+
+        return $budgets;
+    }
     public function filterInvoices()
     {
         $invoices = FmsInvoice::where('requestable_id', $this->unitId)->where('requestable_type', $this->requestable_type)
@@ -97,6 +114,19 @@ class FmsUnitDashboardComponent extends Component
         // $this->invoiceIds = $invoices->pluck('id')->toArray();
 
         return $invoices;
+    }
+    public function paymentRequests()
+    {
+        $data = FmsPaymentRequest::where('requestable_id', $this->unitId)->where('requestable_type', $this->requestable_type)
+        ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            }, function ($query) {
+                return $query;
+            });
+
+        $this->lineIds = $data->pluck('id')->toArray();
+
+        return $data;
     }
     public function render()
     {
@@ -118,6 +148,8 @@ class FmsUnitDashboardComponent extends Component
         $data['invoice_amounts'] = $this->filterInvoices()->whereIn('status',['Partially Paid','Paid','Approved'])->select(DB::raw('sum(total_amount) as amount'), 'status')->groupBy('status')->get();
         $data['incomes'] = $this->transactions()->where('trx_type', 'Income')->latest()->limit(10)->get();
         $data['expenses'] = $this->transactions()->where('trx_type', 'Expense')->latest()->limit(10)->get();
+        $data['budget'] = $this->budgetQuery()->where('fiscal_year', $this->fiscal_year->id??0)->first();
+        $data['request_counts'] = $this->paymentRequests()->get();
         return view('livewire.finance.dashboard.fms-unit-dashboard-component', $data);
     }
 }

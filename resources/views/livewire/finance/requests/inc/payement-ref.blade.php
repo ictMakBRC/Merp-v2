@@ -14,27 +14,29 @@
                         <div class="12">
                           Amount to be paid  @moneyFormat($request_data->total_amount ?? '0') ({{ $request_data->currency->code ?? 'N/A' }})
                         </div>
-                        <div class="mb-3 col-6">
+                        <div class="mb-3 col">
                             <label for="payment_ref" class="form-label required">Amount Paid</label>
                             <input type="text" id="payment_ref" class="form-control" required
                                 wire:model.defer="amount_paid">
                             @error('payment_ref')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
-                        </div>                        
-                        <div class="mb-3 col-6">
-                            <label for="bank_id" class="form-label required">Bank</label>
-                            <select id="bank_id" class="form-control form-select" name="bank_id" required
-                                wire:model="bank_id">
-                                <option value="">Select</option>
-                                @foreach ($banks as $bank)
-                                    <option value="{{ $bank->id }}">{{ $bank->name.' '.$bank->account_no }}</option>
-                                @endforeach
-                            </select>
-                            @error('bank_id')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        </div>       
+                        @if ($request_data->request_type != 'Internal Transfer')                 
+                            <div class="mb-3 col-6">
+                                <label for="bank_id" class="form-label required">Bank</label>
+                                <select id="bank_id" class="form-control form-select" name="bank_id" required
+                                    wire:model="bank_id">
+                                    <option value="">Select</option>
+                                    @foreach ($banks as $bank)
+                                        <option value="{{ $bank->id }}">{{ $bank->name.' Acct '.$bank->account_no.' '.$bank?->currency?->code }}</option>
+                                    @endforeach
+                                </select>
+                                @error('bank_id')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">

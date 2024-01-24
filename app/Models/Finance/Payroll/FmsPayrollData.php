@@ -2,12 +2,13 @@
 
 namespace App\Models\Finance\Payroll;
 
-use App\Models\Finance\Requests\FmsRequestEmployee;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Finance\Payroll\FmsPayroll;
 use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\Finance\Requests\FmsRequestEmployee;
 use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class FmsPayrollData extends Model
 {
@@ -20,6 +21,11 @@ class FmsPayrollData extends Model
     {
         return $this->hasMany(FmsRequestEmployee::class, 'payroll_id', 'id');
     }
+    public function payroll()
+    {
+        return $this->belongsTo(FmsPayroll::class, 'fms_payroll_id', 'id');
+    }
+
     public function currency()
     {
         return $this->belongsTo(FmsCurrency::class, 'currency_id', 'id');

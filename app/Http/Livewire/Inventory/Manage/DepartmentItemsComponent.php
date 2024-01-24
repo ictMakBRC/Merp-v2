@@ -3,21 +3,24 @@
 namespace App\Http\Livewire\Inventory\Manage;
 
 use Livewire\Component;
-use App\Exports\Inventory\ExportDepartmentItems;
-use App\Models\HumanResource\Settings\Department;
-use App\Models\Inventory\Item\InvItem;
-use App\Models\Inventory\Item\InvDepartmentItem;
+use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Grants\Project\Project;
+use App\Models\Inventory\Item\InvItem;
+use App\Exports\Inventory\ExportDepartmentItems;
+use App\Models\Inventory\Item\InvDepartmentItem;
+use App\Models\HumanResource\Settings\Department;
 
 class DepartmentItemsComponent extends Component
 {
-  public $brand, $department_id, $item_id;
+  use WithPagination;
+  public $brand, $unit_id, $item_id;
 
   public $perPage = 10;
 
   public $search = '';
 
-  public $orderBy = 'department_id';
+  public $orderBy = 'id';
 
   public $orderAsc = true;
 
@@ -36,6 +39,9 @@ class DepartmentItemsComponent extends Component
   public $toggleForm = false;
 
   public $filter = false;
+  public $entry_type = 'Department';
+  public $exportData;
+
 
   public function createNew()
   {
@@ -81,7 +87,7 @@ class DepartmentItemsComponent extends Component
     $this->edit_id = $dept_item->id;
     $this->brand = $dept_item->brand;
     $this->item_id = $dept_item->inv_item_id;
-    $this->department_id = $dept_item->department_id;
+    $this->unit_id = $dept_item->unit_id;
     $this->is_active = $dept_item->is_active;
     $this->toggleForm = true;
   }
@@ -89,7 +95,7 @@ class DepartmentItemsComponent extends Component
   public function updateData()
   {
     $this->validate([
-    'department_id' => 'required',
+    'unit_id' => 'required',
     'item_id' => 'required',
     'brand' => 'required',
     ]);
@@ -97,7 +103,7 @@ class DepartmentItemsComponent extends Component
     $dept_item = InvDepartmentItem::findOrFail($this->edit_id);
     $dept_item->brand = $this->brand;
     $dept_item->inv_item_id = $this->item_id;
-    $dept_item->department_id = $this->department_id;
+    $dept_item->unit_id = $this->unit_id;
     $dept_item->is_active = $this->is_active;
     $dept_item->update();
 
@@ -107,9 +113,20 @@ class DepartmentItemsComponent extends Component
 
   public function storeData()
   {
-    $check = $this->mainQuery()->where('inv_item_id', $this->item_id)
-    ->where('department_id',$this->department_id)
-    ->where('brand',$this->brand)->exists();
+
+    $unitable= null;
+    $check = null;
+    if ($this->entry_type == 'Project') {
+        $unitable  = Project::find($this->unit_id);        
+        
+    } elseif ($this->entry_type == 'Department') {
+        $unitable  = Department::find($this->unit_id);    
+    }
+        $unit_type = get_class($unitable);
+        $unit_id = $unitable->id;
+        $check = InvDepartmentItem::where('inv_item_id', $this->item_id)
+        ->where(['unitable_id'=>$this->unit_id, 'unitable_type'=>$unit_type])
+        ->where('brand',$this->brand)->exists();
 
     if ($check) {
       $this->dispatchBrowserEvent('swal:modal', [
@@ -117,10 +134,11 @@ class DepartmentItemsComponent extends Component
       'message' => 'Duplication',
       'text' => 'Commodity already tagged to the selected department',
       ]);
+      return false;
 
     } else {
       $this->validate([
-      'department_id' => 'required',
+      'unit_id' => 'required',
       'item_id' => 'required',
       'brand' => 'required',
       ]);
@@ -128,7 +146,8 @@ class DepartmentItemsComponent extends Component
       $dept_item = new InvDepartmentItem();
       $dept_item->brand = $this->brand;
       $dept_item->inv_item_id = $this->item_id;
-      $dept_item->department_id = $this->department_id;
+      $dept_item->entry_type = $this->entry_type;
+      $dept_item->unitable()->associate($unitable);
       $dept_item->save();
 
       $this->close();
@@ -141,15 +160,15 @@ class DepartmentItemsComponent extends Component
     $this->reset([
     'brand',
     'item_id',
-    'department_id',
+    'unit_id',
     ]);
   }
 
   public function mainQuery()
   {
     return InvDepartmentItem::search($this->search)
-    ->when($this->department_id, function ($query) {
-      $query->where('department_id',$this->department_id);
+    ->when($this->unit_id, function ($query) {
+      $query->where('unitable_id',$this->unit_id);
     })
     ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc');
 
@@ -157,9 +176,12 @@ class DepartmentItemsComponent extends Component
 
   public function render()
   {
-    $data['dept_items'] = $this->mainQuery()->paginate($this->perPage);
-
+    $data['dept_items'] = $this->mainQuery()->with(['unitable','item'])->paginate($this->perPage);
+    if ($this->entry_type == 'Project') {      
+    $data['departments'] = Project::orderBy('name', 'asc')->get();
+    }else{
     $data['departments'] = Department::orderBy('name', 'asc')->get();
+    }
     $data['items'] = InvItem::get();
 
     return view('livewire.inventory.manage.department-items-component',$data);

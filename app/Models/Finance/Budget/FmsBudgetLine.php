@@ -3,6 +3,7 @@
 namespace App\Models\Finance\Budget;
 
 use App\Models\Finance\Accounting\FmsChartOfAccount;
+use App\Models\Finance\Transactions\FmsTransaction;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -17,9 +18,19 @@ class FmsBudgetLine extends Model
     {
        return $this->belongsTo(FmsChartOfAccount::class, 'chat_of_account', 'id');
     }
+
     public function budget()
     {
        return $this->belongsTo(FmsBudget::class, 'fms_budget_id', 'id');
+    }
+    public function expenses()
+    {
+        return $this->hasMany(FmsTransaction::class, 'budget_line_id')->where('trx_type', 'Expense');
+    }
+
+    public function incomes()
+    {
+        return $this->hasMany(FmsTransaction::class, 'budget_line_id')->where('trx_type', 'Income');
     }
     public function getActivitylogOptions(): LogOptions
     {

@@ -1,13 +1,20 @@
 <?php
 
-use App\Http\Controllers\Finance\FinanceGeneralController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Finance\Requests\FmsPaymentRequest;
+use App\Http\Livewire\Finance\Banking\FmsBanksComponent;
+use App\Http\Livewire\Finance\Income\FmsIncomeComponent;
 use App\Http\Livewire\Finance\Budget\FmsBudgetsComponent;
+use App\Http\Livewire\Finance\Lists\FmsProjectsComponent;
+use App\Http\Controllers\Finance\FinanceGeneralController;
 use App\Http\Livewire\Finance\Expense\FmsExpenseComponent;
 use App\Http\Livewire\Finance\Settings\CustomersComponent;
+use App\Http\Livewire\Finance\Banking\FmsViewBankComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollsComponent;
 use App\Http\Livewire\Finance\Budget\FmsMainBudgetComponent;
 use App\Http\Livewire\Finance\Budget\FmsViewBudgetComponent;
+use App\Http\Livewire\Finance\Ledger\FmsViewLedgerComponent;
+use App\Http\Livewire\Finance\Lists\FmsDepartmentsComponent;
 use App\Http\Livewire\Finance\Settings\FmsCurrencyComponent;
 use App\Http\Livewire\Finance\Settings\FmsServicesComponent;
 use App\Http\Livewire\Finance\Budget\FmsBudgetLinesComponent;
@@ -15,48 +22,45 @@ use App\Http\Livewire\Finance\Transfers\FmsTransferComponent;
 use App\Http\Livewire\Finance\Invoice\FmsViewInvoiceComponent;
 use App\Http\Livewire\Finance\Invoice\FmsInvoiceItemsComponent;
 use App\Http\Livewire\Finance\Invoice\FmsInvoiceListsComponent;
+use App\Http\Livewire\Finance\Ledger\FmsGeneralLedgerComponent;
 use App\Http\Livewire\Finance\Budget\FmsMainBudgetListComponent;
 use App\Http\Livewire\Finance\Ledger\FmsLedgerAccountsComponent;
+use App\Http\Livewire\Finance\Settings\FmsUnitServicesComponent;
 use App\Http\Livewire\Finance\Accounting\ChartOfAccountsComponent;
-use App\Http\Livewire\Finance\Banking\FmsBanksComponent;
-use App\Http\Livewire\Finance\Budget\FmsDepartmentBudgetLinesComponent;
+use App\Http\Livewire\Finance\Dashboard\FmsUnitDashboardComponent;
+use App\Http\Livewire\Finance\Invoice\FmsIncomingInvoiceComponent;
+use App\Http\Livewire\Finance\Invoice\FmsOutGoingInvoiceComponent;
+use App\Http\Livewire\Finance\Payroll\FmsGeneratePayrollComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollRequestsComponent;
+use App\Http\Livewire\Finance\Payroll\FmsPayrollScheduleComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentPreviewComponent;
 use App\Http\Livewire\Finance\Settings\FmsFinancialYearsComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestsComponent;
+use App\Http\Livewire\Finance\Settings\FmsCurrencyUpdatesComponent;
 use App\Http\Livewire\Finance\Transactions\FmsTransactionsComponent;
+use App\Http\Livewire\Finance\Dashboard\FmsDirectorDasboardComponent;
 use App\Http\Livewire\Finance\Requests\FmsInternalTransfersComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsTypesComponent;
 use App\Http\Livewire\Finance\Settings\FmsServiceCategoriesComponent;
 use App\Http\Livewire\Finance\Dashboard\FinanceMainDashboardComponent;
-use App\Http\Livewire\Finance\Dashboard\FmsUnitDashboardComponent;
-use App\Http\Livewire\Finance\Income\FmsIncomeComponent;
-use App\Http\Livewire\Finance\Invoice\FmsIncomingInvoiceComponent;
-use App\Http\Livewire\Finance\Invoice\FmsOutGoingInvoiceComponent;
-use App\Http\Livewire\Finance\Ledger\FmsViewLedgerComponent;
-use App\Http\Livewire\Finance\Lists\FmsDepartmentsComponent;
-use App\Http\Livewire\Finance\Lists\FmsProjectsComponent;
-use App\Http\Livewire\Finance\Payroll\FmsGeneratePayrollComponent;
+use App\Http\Livewire\Finance\Budget\FmsDepartmentBudgetLinesComponent;
+use App\Http\Livewire\Finance\Settings\FmsFinanceInstitutionsComponent;
 use App\Http\Livewire\Finance\Payroll\FmsPayrollRequestDetailsComponent;
-use App\Http\Livewire\Finance\Payroll\FmsPayrollRequestsComponent;
-use App\Http\Livewire\Finance\Payroll\FmsPayrollScheduleComponent;
-use App\Http\Livewire\Finance\Payroll\FmsPayrollsComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestDetailsComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestSettingComponent;
 use App\Http\Livewire\Finance\Requests\Internal\FmsInternalTransferRequestsComponent;
-use App\Http\Livewire\Finance\Settings\FmsCurrencyUpdatesComponent;
-use App\Http\Livewire\Finance\Settings\FmsFinanceInstitutionsComponent;
-use App\Http\Livewire\Finance\Settings\FmsUnitServicesComponent;
 
 Route::group(['prefix' => 'finance'], function () {
     Route::get('dashboard', FinanceMainDashboardComponent::class)->name('finance-dashboard');
+    Route::get('dashboard/analytics', FmsDirectorDasboardComponent::class)->name('finance-md_dashboard');
     Route::get('dashboard/unit/{id}/{type}', FmsUnitDashboardComponent::class)->name('finance-dashboard_unit');
 
     Route::group(['prefix' => 'accounting'], function () {
         Route::get('chart-of-accounts', ChartOfAccountsComponent::class)->name('finance-chart_of_accounts');
        
         Route::get('budgets/{type}', FmsBudgetsComponent::class)->name('finance-budgets');
-        Route::get('budgets/main', FmsMainBudgetListComponent::class)->name('finance-main_budget');
+        Route::get('budgets/main/list', FmsMainBudgetListComponent::class)->name('finance-main_budget');
         Route::get('budgets/main/{year}', FmsMainBudgetComponent::class)->name('finance-main_budget_view');
         Route::get('budgets/lines/{budget}', FmsBudgetLinesComponent::class)->name('finance-budget_lines');
         Route::get('budgets/view/{budget}', FmsViewBudgetComponent::class)->name('finance-budget_view');
@@ -71,6 +75,8 @@ Route::group(['prefix' => 'finance'], function () {
     Route::group(['prefix' => 'ledger'], function () {
         Route::get('accounts/{type}', FmsLedgerAccountsComponent::class)->name('finance-ledger_accounts');
         Route::get('account/{id}', FmsViewLedgerComponent::class)->name('finance-ledger_view');
+        Route::get('bank/account/{id}', FmsViewBankComponent::class)->name('finance-bank_view');
+        Route::get('general', FmsGeneralLedgerComponent::class)->name('finance-general_ledger');
     });
     Route::group(['prefix' => 'transactions'], function () {
         Route::get('all/{type}', FmsTransactionsComponent::class)->name('finance-transactions');

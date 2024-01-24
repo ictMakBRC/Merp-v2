@@ -11,6 +11,8 @@ use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Budget\FmsBudgetLine;
+use App\Models\Finance\Budget\FmsUnitBudgetLine;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,10 +35,15 @@ class FmsTransaction extends Model
     {
         return $this->morphTo();
     }
+    public function budgetLine()
+    {
+        return $this->belongsTo(FmsBudgetLine::class, 'budget_line_id', 'id');
+    }
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
     }
+
 
     public function fromAccount()
     {

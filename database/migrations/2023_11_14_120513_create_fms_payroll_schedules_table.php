@@ -35,7 +35,7 @@ return new class extends Migration
             $table->timestamps();
         });
         Schema::table('fms_request_employees', function (Blueprint $table) {
-            $table->foreign('schedule_id')->nullable();
+            $table->unsignedBigInteger('schedule_id')->nullable();
             $table->decimal('paye_rate', 16, 2)->default(0.00);
             $table->decimal('worker_nssf', 16, 2)->default(0.00);
             $table->decimal('emp_nssf', 16, 2)->default(0.00);

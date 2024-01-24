@@ -11,15 +11,19 @@
         <div class="collapse navbar-collapse" id="sidebarCollapse">
             <!-- Navigation -->
             <ul class="navbar-nav">
-                @if (Auth::user()->hasPermission(['view_main_dashboard']))
+                {{-- @if (Auth::user()->hasPermission(['view_main_dashboard'])) --}}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('finance-dashboard') }}">{{ __('public.dashboard') }}</a>
                 </li>
-                @elseif (Auth::user()->hasPermission(['view_unit_dashboard']))
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('finance-md_dashboard') }}">{{ __('MD Dashboard') }}</a>
+                </li>
+                {{-- @endif --}}
+                {{-- @if (Auth::user()->hasPermission(['view_unit_dashboard'])) --}}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('finance-dashboard_unit',[$unit_id, $unit_type]) }}">{{ __('My dashboard') }}</a>
+                        <a class="nav-link" href="{{ route('finance-dashboard_unit',[$unit_id, $unit_type]) }}">{{ __('Unit dashboard') }}</a>
                     </li>
-                @endif
+                {{-- @endif --}}
                 <!--end nav-item-->
                 @if (Auth::user()->hasPermission(['access_accounting']))
                     <li class="nav-item">
@@ -38,13 +42,13 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_cash_flows']))
                                     <li class="nav-item">
-                                        <a href="hh-reports.html" class="nav-link ">Cashflow</a>
+                                        <a href="#" class="nav-link ">Cashflow</a>
                                     </li>
                                 @endif
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_journal_entry']))
                                     <li class="nav-item">
-                                        <a href="jenrty-reports.html" class="nav-link ">Journal Entries</a>
+                                        <a href="#" class="nav-link ">Journal Entries</a>
                                     </li>
                                 @endif
                             </ul>
@@ -99,6 +103,13 @@
                                     <li class="nav-item">
                                         <a href="{{ route('finance-ledger_accounts','all') }}" class="nav-link ">All
                                             Units</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-general_ledger') }}" class="nav-link ">General
+                                            Ledger</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-banks') }}" class="nav-link ">Bank Accts</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_unit_ledger']))
@@ -327,7 +338,7 @@
                                 @if (Auth::user()->hasPermission(['view_services']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-categories') }}" class="nav-link ">Reveune
-                                            Sub-Categories</a>
+                                            Sub-Types</a>
                                     </li>
                                     <!--end nav-item-->
                                     <li class="nav-item">

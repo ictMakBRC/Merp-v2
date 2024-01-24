@@ -15,7 +15,9 @@
                 </div><!--end card-body-->
                 <div class="card-body">
                     @include('livewire.finance.invoice.inc.invoice-header')
-
+                    @php
+                      $currency =  $baseCurrency->code??'UG';
+                    @endphp
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="table-responsive project-invoice">
@@ -23,9 +25,9 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Project Breakdown</th>
-                                            <th>Rate({{$invoice_data->currency->code??'UG'}})</th>
+                                            <th>Rate({{$baseCurrency->code??'UGX'}} @ {{ $invoice_data->rate }})</th>
                                             <th>Qty</th> 
-                                            <th>Subtotal({{$currency}})</th>
+                                            <th>Subtotal({{$baseCurrency->code}})</th>
                                             <th>Action</th>
                                         </tr><!--end tr-->
                                     </thead>

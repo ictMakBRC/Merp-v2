@@ -51,15 +51,6 @@ class FmsBudgetLinesComponent extends Component
             'allocated_amount' => 'required',
             'description' => 'required',
         ]);
-        $record = FmsBudgetLine::where(['fms_budget_id'=>$this->budgetData->id, 'line_id'=>$this->line_id])->first();
-        if($record){
-            $this->dispatchBrowserEvent('swal:modal', [
-                'type' => 'warning',
-                'message' => 'Oops! Duplicate data!',
-                'text' => 'the selected line already exists on this budget!',
-            ]);
-            return false;
-        }
         $line_id = $this->line_id;
         // $budgetName = $this->name[$id];
         $budgetAmount = $this->allocated_amount[$id];
@@ -70,6 +61,29 @@ class FmsBudgetLinesComponent extends Component
         }else{
             $primaryAmount = $this->allocated_amount[$id];
         }
+        $record = FmsBudgetLine::where(['fms_budget_id'=>$this->budgetData->id, 'line_id'=>$this->line_id])->first();
+        if($record){
+            
+                $record->name = $this->name;
+                $record->line_id = $line_id;
+                $record->quantity = $quantity;
+                $record->type = $this->type;
+                $record->fms_budget_id = $this->budgetData->id;
+                $record->chat_of_account = $id;
+                $record->allocated_amount = $budgetAmount;
+                $record->primary_balance = $primaryAmount;
+                $record->description = $description;
+                $record->amount_held = 0;
+                $record->update();
+                $this->resetInputs();
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Duplicate data!',
+                'text' => 'the selected line already exists on this budget and was updated!',
+            ]);
+            return false;
+        }
+       
         $budgetLine = new FmsBudgetLine();
         $budgetLine->name = $this->name;
         $budgetLine->line_id = $line_id;
@@ -117,7 +131,9 @@ class FmsBudgetLinesComponent extends Component
                 $totalExpense = FmsBudgetLine::where(['fms_budget_id' => $budgetData->id, 'type' => 'Expense'])->sum('allocated_amount');
                 $totalIncome = FmsBudgetLine::where(['fms_budget_id' => $budgetData->id, 'type' => 'Revenue'])->sum('allocated_amount');
                 $budgetData->estimated_expenditure = $totalExpense;
-                $budgetData->esitmated_income = $totalIncome;
+                $budgetData->estimated_income = $totalIncome;
+                $budgetData->estimated_income_local = $totalIncome*$budgetData->rate;
+                $budgetData->estimated_expense_local = $totalExpense*$budgetData->rate;
                 $budgetData->status = 'Saved';
                 $budgetData->update();
                 $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget saved successfully!']);
