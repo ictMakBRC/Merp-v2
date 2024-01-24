@@ -28,10 +28,12 @@
                         <td>{{ $asset->model ?? 'N/A' }}</td>
                         <td>{{ $asset->serial_number ?? 'N/A' }}</td>
                         <td>{{ $asset->acquisition_type ?? 'N/A' }}</td>
-                        @if ($asset->operational_status == 1)
-                            <td><span class="badge bg-success">Operational</span></td>
+                        @if ($asset->operational_status == 'Operational')
+                            <td><span class="badge bg-success">{{ $asset->operational_status }}</span></td>
+                        @elseif ($asset->operational_status == 'In-Stock')
+                            <td><span class="badge bg-info">{{ $asset->operational_status }}</span></td>
                         @else
-                            <td><span class="badge bg-danger">Retired</span></td>
+                            <td><span class="badge bg-danger">{{ $asset->operational_status }}</span></td>
                         @endif
                         <td>
                             <div class="d-flex justify-content-between">
@@ -39,12 +41,9 @@
                                     wire:click="editData({{ $asset->id }})" title="{{ __('public.edit') }}">
                                     <i class="ti ti-edit fs-18"></i></button>
                                 <a href="{{ route('asset-details', $asset->id) }}"
-                                    class="btn btn-sm btn-outline-info m-1" title="{{ __('public.view') }}"> <i class="ti ti-eye"></i></a>
+                                    class="btn btn-sm btn-outline-info m-1" title="{{ __('public.view') }}"> <i
+                                        class="ti ti-eye"></i></a>
                             </div>
-                              {{-- <button wire:click="$set('asset_id',{{ $asset->id }})" data-bs-toggle="modal"
-                                data-bs-target="#assetLoggerModal"
-                                class="action-ico btn-sm btn btn-outline-success mx-1">
-                                <i class="fa fa-edit"></i></button> --}}
                         </td>
                     </tr>
                 @endforeach

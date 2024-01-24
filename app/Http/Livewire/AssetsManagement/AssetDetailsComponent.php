@@ -4,9 +4,12 @@ namespace App\Http\Livewire\AssetsManagement;
 
 use Response;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use App\Data\Assets\AssetLogData;
+use App\Services\GeneratorService;
 use Illuminate\Support\Facades\DB;
 use App\Models\Assets\AssetsCatalog;
+use App\Models\Grants\Project\Project;
 use App\Models\Documents\FormalDocument;
 use App\Services\Assets\AssetLogService;
 use App\Data\Document\FormalDocumentData;
@@ -16,7 +19,6 @@ use App\Services\Document\FormalDocumentService;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\Procurement\Request\ProcurementRequest;
-use Livewire\WithFileUploads;
 
 class AssetDetailsComponent extends Component
 {
@@ -59,6 +61,8 @@ class AssetDetailsComponent extends Component
       public $document_path;
       public $description;
 
+      public $assetCode='';
+
     public function mount($id){
         $this->asset_catalog_id=$id;
     }
@@ -68,24 +72,29 @@ class AssetDetailsComponent extends Component
         $assetLogDTO = new AssetLogData();
         $assetLogService = new AssetLogService();
 
+        if ($this->department_id) {
+            $assetableModel = Department::findOrFail($this->department_id);
+        } else {
+            $assetableModel = Project::findOrFail($this->project_id);
+        }
+
         if ($this->log_type=='Allocation') {
             $this->validate($assetLogDTO->allocationRules());
          
-            DB::transaction(function () use($assetLogService){
+            DB::transaction(function () use($assetLogService,$assetableModel){
 
                 $assetLogDTO = AssetLogData::from([
                     'asset_catalog_id' => $this->asset_catalog_id,
                     'log_type' => $this->log_type,
                     'date_allocated' => $this->date_allocated,
                     'station_id' => $this->station_id,
-                    'department_id' => $this->department_id,
                     'employee_id' => $this->employee_id,
                     'allocation_status' => true,
                     
                     ]
                 );
-   
-                $asset = $assetLogService->createAssetLog($assetLogDTO);
+        
+                $asset = $assetLogService->createAssetLog($assetableModel,$assetLogDTO);
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Asset Allocation details created successfully']);
                 $this->reset($assetLogDTO->resetInputs());
     
@@ -94,12 +103,12 @@ class AssetDetailsComponent extends Component
         }elseif($this->log_type=='Breakdown'){
             // dd($assetLogDTO->resetInputs());
             $this->validate($assetLogDTO->breakdownRules());
-            DB::transaction(function ()use($assetLogService){
+            DB::transaction(function ()use($assetLogService,$assetableModel){
 
                 $assetLogDTO = AssetLogData::from([
                     'asset_catalog_id' => $this->asset_catalog_id,
                     'log_type' => $this->log_type,
-                    'breakdown_number' => $this->breakdown_number,
+                    'breakdown_number' => GeneratorService::assetBreakdownNumber($this->asset_catalog_id),
                     'breakdown_type' => $this->breakdown_type,
                     'breakdown_date' => $this->breakdown_date,
                     'breakdown_description' => $this->breakdown_description,
@@ -110,7 +119,7 @@ class AssetDetailsComponent extends Component
                 );
                 // dd($assetLogDTO);
     
-                $asset = $assetLogService->createAssetLog($assetLogDTO);
+                $asset = $assetLogService->createAssetLog($assetableModel,$assetLogDTO);
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Asset Breakdown details created successfully']);
                 $this->reset($assetLogDTO->resetInputs());
     
@@ -118,7 +127,7 @@ class AssetDetailsComponent extends Component
 
         }elseif($this->log_type=='Maintenance'){
             $this->validate($assetLogDTO->maintenanceRules());
-            DB::transaction(function ()use($assetLogService){
+            DB::transaction(function ()use($assetLogService,$assetableModel){
 
                 $assetLogDTO = AssetLogData::from([
                     'asset_catalog_id' => $this->asset_catalog_id,
@@ -137,7 +146,7 @@ class AssetDetailsComponent extends Component
                     ]
                 );
     
-                $asset = $assetLogService->createAssetLog($assetLogDTO);
+                $asset = $assetLogService->createAssetLog($assetableModel,$assetLogDTO);
                 $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Asset Maintenance details created successfully']);
                 $this->reset($assetLogDTO->resetInputs());
     
@@ -230,6 +239,8 @@ class AssetDetailsComponent extends Component
         $data['document_categories'] = DmCategory::all();
 
         $data['asset']=AssetsCatalog::with('category','category.classification','logs','documents')->findOrFail($this->asset_catalog_id);
+
+        
         
         return view('livewire.assets-management.asset-details-component',$data)->layout('layouts.app');
     }

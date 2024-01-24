@@ -1,10 +1,12 @@
 <div>
     <x-report-layout>
         <h5 class="text-center">{{ $asset->asset_name ?? 'N/A' }}
-            @if ($asset->operational_status)
-                <span class="badge bg-success">Operational</span>
+            @if ($asset->operational_status == 'Operational')
+                <span class="badge bg-success">{{ $asset->operational_status }}</span>
+            @elseif ($asset->operational_status == 'In-Stock')
+                <span class="badge bg-info">{{ $asset->operational_status }}</span>
             @else
-                <span class="badge bg-danger">Retired</span>
+                <span class="badge bg-danger">{{ $asset->operational_status }}</span>
             @endif
         </h5>
         @include('livewire.assets-management.inc.asset-details')
@@ -118,7 +120,7 @@
                                             </div>
                                         @else
                                             <div class="alert alert-outline-info mb-0" role="alert">
-                                                <strong>Not Found!</strong> No Breakdown Information found here. 
+                                                <strong>Not Found!</strong> No Breakdown Information found here.
                                             </div>
                                         @endif
                                     </div>
@@ -179,7 +181,7 @@
                                             </div>
                                         @else
                                             <div class="alert alert-outline-info mb-0" role="alert">
-                                                <strong>Not Found!</strong> No Maintenance Information found yet. 
+                                                <strong>Not Found!</strong> No Maintenance Information found yet.
                                             </div>
                                         @endif
                                     </div>
@@ -210,9 +212,9 @@
                                                         @foreach ($asset->logs->where('log_type', 'Allocation') as $key => $assignment)
                                                             <tr>
                                                                 <td>{{ $key + 1 }}</td>
-                                                                <td>{{ $assignment->station?->name??'N/A' }}</td>
-                                                                <td>{{ $assignment->department?->name??'N/A' }}</td>
-                                                                <td>{{ $assignment->employee?->fullName??'N/A' }}</td>
+                                                                <td>{{ $assignment->station?->name ?? 'N/A' }}</td>
+                                                                <td>{{ $assignment->department?->name ?? 'N/A' }}</td>
+                                                                <td>{{ $assignment->employee?->fullName ?? 'N/A' }}</td>
                                                                 <td>@formatDate($assignment->date_allocated)</td>
                                                             </tr>
                                                         @endforeach
@@ -221,7 +223,7 @@
                                             </div>
                                         @else
                                             <div class="alert alert-outline-info mb-0" role="alert">
-                                                <strong>Not Found!</strong> No Assigment Information found yet. 
+                                                <strong>Not Found!</strong> No Assigment Information found yet.
                                             </div>
                                         @endif
                                     </div>
