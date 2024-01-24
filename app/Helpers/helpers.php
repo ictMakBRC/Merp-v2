@@ -213,7 +213,7 @@ function getStatusColor($status)
     ];
 
     return $colors[$status] ?? 'secondary';
-
+}
 function calculatePercentage($total, $subset, $precision = 2)
 {
     if ($total == 0) {
