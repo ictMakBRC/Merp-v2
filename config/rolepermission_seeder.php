@@ -61,14 +61,17 @@ return [
                 'Read' => [
                     'view_grievance_types',
                     'view_grievances',
+                    'view_department_grievances',
                 ],
                 'Update' => [
                     'update_grievance_type',
                     'update_grievance',
+                    'update_department_grievances',
                 ],
                 'Restore' => [
                     'restore_grievance_type',
                     'restore_grievance',
+                    'restore_department_grievances',
                 ],
                 'Delete' => [
                     'archive_grievance_type',
