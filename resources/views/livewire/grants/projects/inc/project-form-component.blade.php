@@ -33,7 +33,7 @@
                 wire:submit.prevent="storeProject" @endif>
                     <div class="row">
 
-                        <div class="mb-3 col-md-2">
+                        <div class="mb-3 col-md-3">
                             <label for="project_category" class="form-label required">{{ __('Category') }}</label>
                             <select class="form-select" id="project_category" wire:model.lazy="project_category">
                                 <option selected value="">Select</option>
@@ -45,7 +45,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3 col-md-2">
+                        <div class="mb-3 col-md-3">
                             <label for="project_type" class="form-label required">{{ __('Type') }}</label>
                             <select class="form-select" id="project_type" wire:model.lazy="project_type">
                                 <option selected value="">Select</option>
@@ -57,7 +57,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3 col-md-4">
+                        {{-- <div class="mb-3 col-md-4">
                             <label for="associated_institution"
                                 class="form-label required">{{ __('Associated Institution') }}</label>
                             <select class="form-select" id="associated_institution"
@@ -71,9 +71,9 @@
                             @error('associated_institution')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
 
-                        <div class="mb-3 col-md-4">
+                        <div class="mb-3 col-md-6">
                             <label for="project_code" class="form-label required">{{ __('Project/Study Code') }}</label>
                             <input type="text" id="project_code" class="form-control"
                                 wire:model.defer="project_code">
@@ -82,7 +82,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-12">
                             <label for="name" class="form-label required">{{ __('Name') }}</label>
                             <input type="text" id="name" class="form-control" wire:model.defer="name">
                             @error('name')
@@ -91,7 +91,7 @@
                         </div>
 
 
-                        <div class="mb-3 col-md-3">
+                        {{-- <div class="mb-3 col-md-3">
                             <label for="grant_id" class="form-label">{{ __('Associated Grant') }}</label>
                             <select class="form-select" id="grant_id" wire:model.lazy="grant_id">
                                 <option selected value="">Select</option>
@@ -99,7 +99,7 @@
                             @error('grant_id')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="mb-3 col-md-6">
                             <label for="funding_source" class="form-label">{{ __('Funding Source') }}</label>
@@ -147,7 +147,7 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3 col-md-3">
+                        {{-- <div class="mb-3 col-md-3">
                             <label for="pi"
                                 class="form-label @if ($project_category == 'Primary') required @endif">{{ __('Principal Investigator') }}</label>
                             <select class="form-select" id="pi" wire:model.lazy="pi">
@@ -160,9 +160,9 @@
                             @error('pi')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
 
-                        <div class="mb-3 col-md-3">
+                        {{-- <div class="mb-3 col-md-3">
                             <label for="co_pi"
                                 class="form-label @if ($project_category == 'Primary') required @endif">{{ __('Co-Principal Investigator') }}</label>
                             <select class="form-select" id="co_pi" wire:model.lazy="co_pi">
@@ -175,7 +175,7 @@
                             @error('co_pi')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="mb-3 col-md-6">
                             <label for="project_summary" class="form-label">{{ __('Project/Study Summary') }}</label>
@@ -190,22 +190,22 @@
                                 class="form-label required">{{ __('Progress Status') }}</label>
                             <select class="form-select" id="progress_status" wire:model.lazy="progress_status">
                                 <option selected value="">Select</option>
-                                <option value="planning">Planning</option>
-                                <option value="pending_funding">Pending Funding</option>
-                                <option value="implementation">Implementation</option>
-                                <option value="in_progress">In Progress</option>
-                                <option value="data_analysis">Data Analysis</option>
-                                <option value="quality_assurance">Quality Assurance</option>
-                                <option value="evaluation">Evaluation</option>
-                                <option value="iteration_refinement">Iteration/Refinement</option>
-                                <option value="milestone_achieved">Milestone Achieved</option>
-                                <option value="reporting">Reporting</option>
-                                <option value="transition">Transition</option>
-                                <option value="completed">Completed</option>
-                                <option value="delayed">Delayed</option>
-                                <option value="pending_review">Pending Review</option>
-                                <option value="on_hold">On Hold</option>
-                                <option value="termination">Termination</option>
+                                <option value="Planning">Planning</option>
+                                <option value="Pending Funding">Pending Funding</option>
+                                <option value="Implementation">Implementation</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Data Analysis">Data Analysis</option>
+                                <option value="Quality Assurance">Quality Assurance</option>
+                                <option value="Evaluation">Evaluation</option>
+                                <option value="Iteration">Iteration/Refinement</option>
+                                <option value="Milestone Achieved">Milestone Achieved</option>
+                                <option value="Reporting">Reporting</option>
+                                <option value="Transition">Transition</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Delayed">Delayed</option>
+                                <option value="Pending Review">Pending Review</option>
+                                <option value="On-hold">On Hold</option>
+                                <option value="Terminated">Terminated</option>
                             </select>
                             @error('progress_status')
                                 <div class="text-danger text-small">{{ $message }}</div>

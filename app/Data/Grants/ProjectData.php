@@ -9,14 +9,14 @@ class ProjectData extends Data
   public ?string $project_code;
   public ?string $project_category;
   public ?string $project_type;
-  public ?int $associated_institution;
+  // public ?int $associated_institution;
   public ?string $name;
-  public ?int $grant_id;
+  // public ?int $grant_id;
   public ?string $funding_source;
   public ?float $funding_amount;
   public ?string $currency_id;
-  public ?int $pi;
-  public ?int $co_pi;
+  // public ?int $pi;
+  // public ?int $co_pi;
   public ?string $start_date;
   public ?string $end_date;
   public ?string $project_summary;
@@ -48,15 +48,15 @@ class ProjectData extends Data
     return [
       'project_category' => 'required|string',
       'project_type' => 'required|string',
-      'associated_institution' => 'required|integer',
+      // 'associated_institution' => 'required|integer',
       'project_code' => 'required|string|unique:projects',
       'name' => 'required|string|unique:projects',
       // 'grant_id' => 'nullable|integer',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency_id' => 'required|integer',
-      'pi' => 'required_if:project_category,Primary|integer',
-      'co_pi' => 'nullable|integer',
+      // 'pi' => 'required_if:project_category,Primary|integer',
+      // 'co_pi' => 'nullable|integer',
       'start_date' => 'required|date',
       'end_date' => 'required|date|after:start_date',
       'project_summary' => 'required|string',
@@ -69,15 +69,15 @@ class ProjectData extends Data
     return [
       'project_category' => 'required|string',
       'project_type' => 'required|string',
-      'associated_institution' => 'required|integer',
+      // 'associated_institution' => 'required|integer',
       'project_code' => 'required|string',
       'name' => 'required|string',
       // 'grant_id' => 'nullable|integer',
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency_id' => 'required|integer',
-      'pi' => 'required_if:project_category,Primary|integer',
-      'co_pi' => 'nullable|integer',
+      // 'pi' => 'required_if:project_category,Primary|integer',
+      // 'co_pi' => 'nullable|integer',
       'start_date' => 'required|date',
       'end_date' => 'required|date|after:start_date',
       'project_summary' => 'required|string',

@@ -27,11 +27,13 @@ class AssetCategoryComponent extends Component
 
     public $orderAsc = 0;
 
-    public $asset_classifications_id;
+    public $asset_classification_id;
 
     public $name;
 
     public $description;
+
+    public $short_code;
 
     public $delete_id;
 
@@ -59,8 +61,9 @@ class AssetCategoryComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, [
-            'asset_classifications_id' => 'required|integer',
+            'asset_classification_id' => 'required|integer',
             'name' => 'required|string',
+            'short_code' => 'required|string|unique:asset_categories',
             'description' => 'nullable|string',
         ]);
     }
@@ -68,14 +71,16 @@ class AssetCategoryComponent extends Component
     public function storeAssetCategory()
     {
         $this->validate([
-            'asset_classifications_id' => 'required|integer',
+            'asset_classification_id' => 'required|integer',
             'name' => 'required|string|unique:asset_categories',
+            'short_code' => 'required|string|unique:asset_categories',
             'description' => 'nullable|string',
         ]);
 
         $category = new AssetCategory();
-        $category->asset_classifications_id = $this->asset_classifications_id;
+        $category->asset_classification_id = $this->asset_classification_id;
         $category->name = $this->name;
+        $category->short_code = removeSymbolsAndTransform($this->short_code);
         $category->description = $this->description;
         $category->save();
         $this->dispatchBrowserEvent('close-modal');
@@ -87,7 +92,8 @@ class AssetCategoryComponent extends Component
     {
         $this->edit_id = $category->id;
         $this->name = $category->name;
-        $this->asset_classifications_id = $category->classification->id;
+        $this->short_code = $category->short_code;
+        $this->asset_classification_id = $category->classification->id;
         $this->description = $category->description;
         $this->createNew = true;
         $this->toggleForm = true;
@@ -102,20 +108,22 @@ class AssetCategoryComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['asset_classifications_id','name','description','edit_id']);
+        $this->reset(['asset_classification_id','name','short_code','description','edit_id']);
     }
 
     public function updateAssetCategory()
     {
         $this->validate([
-            'asset_classifications_id' => 'required|integer',
+            'asset_classification_id' => 'required|integer',
             'name' => 'required|unique:asset_categories,name,'.$this->edit_id.'',
+            'short_code' => 'required|unique:asset_categories,short_code,'.$this->edit_id.'',
             'description' => 'nullable|string',
         ]);
 
         $category = AssetCategory::find($this->edit_id);
-        $category->asset_classifications_id = $this->asset_classifications_id;
+        $category->asset_classification_id = $this->asset_classification_id;
         $category->name = $this->name;
+        $category->short_code = removeSymbolsAndTransform($this->short_code);
         $category->description = $this->description;
         $category->update();
 

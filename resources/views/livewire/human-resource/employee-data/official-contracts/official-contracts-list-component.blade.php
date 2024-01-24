@@ -146,7 +146,7 @@
                                         <th>G-Pay</th>
                                         <th>Contract</th>
                                         <th>Status</th>
-                                        <th>Days to Expire</th>
+                                        {{-- <th>Days to Expire</th> --}}
                                     </tr>
                                 </thead>
 
@@ -174,17 +174,14 @@
 
                                         </td>
                                         @if ($officialContract->end_date >= today())
-                                            <td><span class="badge bg-success">Running</span></td>
-                                        @else
-                                            <td><span class="badge bg-danger">Expired</span></td>
-                                        @endif
-
-                                        @if ($officialContract->days_to_expire >= 0)
-                                            <td><span
-                                                    class="badge bg-success">{{ $officialContract->days_to_expire }}</span>
+                                            <td><span class="badge bg-success">Running</span>
+                                                @if ($officialContract->days_to_expire >= 0)
+                                                    + ({{ $officialContract->days_to_expire }}) days
+                                                @else
+                                                @endif
                                             </td>
                                         @else
-                                            <td>{{ __('N/A') }}</td>
+                                            <td><span class="badge bg-danger">Expired</span></td>
                                         @endif
                                 @endforeach
                             </table>

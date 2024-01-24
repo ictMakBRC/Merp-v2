@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\AssetsManagement\AssetDetailsComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\AssetsManagement\AssetsComponent;
 use App\Http\Livewire\AssetsManagement\Settings\AssetCategoryComponent;
@@ -9,6 +10,7 @@ use App\Http\Livewire\AssetsManagement\Dashboard\AssetsMainDashboardComponent;
 Route::group(['prefix' => 'assets'], function () {
     Route::get('dashboard', AssetsMainDashboardComponent::class)->name('asset-dashboard');
     Route::get('catalog', AssetsComponent::class)->name('asset-catalog');
+    Route::get('{id}/details', AssetDetailsComponent::class)->name('asset-details');
 
     Route::group(['prefix' => 'settings'], function () {
         Route::get('classification', AssetClassificationComponent::class)->name('asset-classification');

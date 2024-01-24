@@ -111,6 +111,11 @@ class ProcurementRequest extends Model
         ->wherePivot('is_best_bidder', true);
     }
 
+    public function selected_provider()
+    {
+        return $this->belongsTo(Provider::class, 'selected_provider_id');
+    }
+
     public static function boot()
     {
         parent::boot();

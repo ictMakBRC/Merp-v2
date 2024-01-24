@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('asset_categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('asset_classifications_id')->constrained('asset_classifications', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('asset_classification_id')->constrained('asset_classifications', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('name');
+            $table->string('short_code')->unique();
             $table->text('description')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();

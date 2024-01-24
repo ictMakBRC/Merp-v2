@@ -26,6 +26,7 @@ class StoresRequestViewComponent extends Component
 
             $procurementRequest->update([
                 'status'=>$status,
+                'delivered_at'=>today(),
             ]);
 
             $procurementRequestApproval->update([

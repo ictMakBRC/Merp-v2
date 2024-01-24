@@ -6,20 +6,20 @@ use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Grants\Grant;
 use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\HumanResource\Settings\Department;
+use App\Traits\AssetableTrait;
+use App\Traits\AssetLoggableTrait;
 use App\Traits\CurrencyTrait;
 use App\Traits\DocumentableTrait;
 use App\Traits\ProcurementRequestableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Project extends Model
 {
-    use HasFactory, LogsActivity, DocumentableTrait, ProcurementRequestableTrait, CurrencyTrait;
+    use HasFactory, LogsActivity, DocumentableTrait, ProcurementRequestableTrait, CurrencyTrait,AssetableTrait,AssetLoggableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -32,7 +32,8 @@ class Project extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
-
+    
+    protected $guarded=['id'];
     // public function requests(): MorphMany
     // {
     //     return $this->morphMany(Request::class, 'requestable');
@@ -47,7 +48,7 @@ class Project extends Model
     {
         return $this->belongsToMany(Employee::class, 'employee_project', 'project_id', 'employee_id')
             ->using(EmployeeProject::class) // Use the pivot model
-            ->withPivot(['designation_id', 'contract_summary', 'start_date', 'end_date', 'fte', 'gross_salary', 'contract_file_path', 'status']) // Include the additional attributes
+            ->withPivot(['id','designation_id', 'contract_summary', 'start_date', 'end_date', 'fte', 'gross_salary', 'contract_file_path', 'status']) // Include the additional attributes
             ->withTimestamps();
     }
 
@@ -64,9 +65,9 @@ class Project extends Model
     }
 
     //co principal investigator
-    public function coInvestigator()
+    public function coordinator()
     {
-        return $this->belongsTo(Employee::class, 'co_pi', 'id');
+        return $this->belongsTo(Employee::class, 'coordinator_id', 'id');
     }
 
     public function grant()
@@ -90,6 +91,7 @@ class Project extends Model
         : static::query()
             ->where('project_code', 'like', '%' . $search . '%')
             ->orWhere('project_category', 'like', '%' . $search . '%')
-            ->orWhere('project_type', 'like', '%' . $search . '%');
+            ->orWhere('project_type', 'like', '%' . $search . '%')
+            ->orWhere('name', 'like', '%' . $search . '%');
     }
 }

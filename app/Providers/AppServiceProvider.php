@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Global\FacilityInformation;
+use App\Models\HumanResource\Settings\CompanyProfile;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         
         if (Schema::hasTable('facility_information')) {
-            View::share('facilityInfo', FacilityInformation::first());
+            View::share('facilityInfo', CompanyProfile::first());
             View::share('organizationInfo', FacilityInformation::first());
         } else {
             View::share('facilityInfo', []);

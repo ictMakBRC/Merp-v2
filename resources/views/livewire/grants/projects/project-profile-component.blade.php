@@ -1,10 +1,10 @@
 <div>
     <x-report-layout>
         <h5 class="text-center">{{ $project->name ?? 'N/A' }}
-            @if ($project->is_active == 0)
-                <span class="badge bg-danger">Suspended</span>
+            @if ($project->end_date >= today())
+                <span class="badge bg-success">Running</span>
             @else
-                <span class="badge bg-success">Active</span>
+                <span class="badge bg-danger">Ended</span>
             @endif
         </h5>
 
@@ -81,7 +81,8 @@
                                             </div>
 
                                             <div class="table-responsive">
-                                                <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
+                                                <table id="datableButton"
+                                                    class="table table-striped mb-0 w-100 sortable">
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
@@ -97,7 +98,7 @@
                                                                 <td>{{ $key + 1 }}</td>
                                                                 <td>{{ $department->name }}</td>
                                                                 <td>{{ $department->type }}</td>
-                                                                <td>{{ $department->parent->name??'N/A' }}</td>
+                                                                <td>{{ $department->parent->name ?? 'N/A' }}</td>
                                                                 <td>{{ $department->description ?? 'N/A' }}</td>
                                                             </tr>
                                                         @endforeach
@@ -116,12 +117,12 @@
                                             </div>
 
                                             <div class="table-responsive">
-                                                <table id="datableButton"
-                                                    class="table table-striped mb-0 w-100 sortable">
+                                                <table class="table table-striped mb-0 w-100 sortable">
                                                     <thead>
                                                         <tr>
                                                             <th>No.</th>
                                                             <th>Employee Name</th>
+                                                            <th>Designation</th>
                                                             <th>Start Date</th>
                                                             <th>End Date</th>
                                                             <th>Gross Salary</th>
@@ -135,6 +136,8 @@
                                                             <tr>
                                                                 <td>{{ $key + 1 }}</td>
                                                                 <td>{{ $employee->fullname ?? 'N/A' }}</td>
+                                                                <td>{{ $employee->pivot->designation->name ?? 'N/A' }}
+                                                                </td>
                                                                 <td>@formatDate($employee->pivot->start_date)</td>
                                                                 <td>@formatDate($employee->pivot->end_date)</td>
                                                                 <td>{{ getCurrencyCode($project->currency_id) }}

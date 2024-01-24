@@ -75,7 +75,7 @@ class DepartmentsComponent extends Component
             'is_active' => 'required|string',
             'description' => 'nullable|string',
             'type' => 'required|string',
-            'prefix' => 'required|string',
+            'prefix' => 'required|string|unique:departments',
             'parent_department' => 'nullable|integer',
             'supervisor' => 'nullable|integer',
             'asst_supervisor' => 'nullable|integer',
@@ -89,7 +89,7 @@ class DepartmentsComponent extends Component
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
             'type' => 'required|string',
-            'prefix' => 'required|string',
+            'prefix' => 'required|string|unique:departments',
             'parent_department' => 'nullable|integer',
             'supervisor' => 'nullable|integer',
             'asst_supervisor' => 'nullable|integer',
@@ -103,7 +103,7 @@ class DepartmentsComponent extends Component
         $department->supervisor = $this->supervisor??null;
         $department->asst_supervisor = $this->asst_supervisor??null;
         $department->type = $this->type;
-        $department->prefix = $this->prefix;
+        $department->prefix = removeSymbolsAndTransform($this->prefix);
         $department->parent_department = $this->parent_department??null;
         $department->save();
         $this->dispatchBrowserEvent('close-modal');
@@ -141,11 +141,11 @@ class DepartmentsComponent extends Component
     public function updateDepartment()
     {
         $this->validate([
-            'name' => 'required|unique:Departments,name,'.$this->edit_id.'',
+            'name' => 'required|unique:departments,name,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
             'type' => 'required|string',
-            'prefix' => 'required|string',
+            'prefix' => 'required|string|unique:departments,prefix,'.$this->edit_id.'',
             'parent_department' => 'nullable|integer',
             'supervisor' => 'nullable|integer',
             'asst_supervisor' => 'nullable|integer',
@@ -158,7 +158,7 @@ class DepartmentsComponent extends Component
         $department->supervisor = $this->supervisor;
         $department->asst_supervisor = $this->asst_supervisor;
         $department->type = $this->type;
-        $department->prefix = $this->prefix;
+        $department->prefix = removeSymbolsAndTransform($this->prefix);
         $department->parent_department = $this->parent_department;
         $department->update();
 

@@ -4,18 +4,35 @@ namespace App\Http\Livewire\AssetsManagement;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Data\Assets\AssetLogData;
+use App\Services\GeneratorService;
 use Illuminate\Support\Facades\DB;
 use App\Models\Assets\AssetsCatalog;
 use App\Data\Assets\AssetCatalogData;
+use App\Models\Grants\Project\Project;
+use Illuminate\Database\Eloquent\Model;
+use App\Services\Assets\AssetLogService;
 use App\Services\Assets\AssetCatalogService;
 use App\Models\Assets\Settings\AssetCategory;
+use App\Models\Procurement\Settings\Provider;
+use App\Models\HumanResource\Settings\Station;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\EmployeeData\Employee;
+use App\Models\Procurement\Request\ProcurementRequest;
 
 class AssetsComponent extends Component
 {
     use WithPagination;
 
-    public $asset_categories_id;
+    public $entry_type;
+    public $station_id;
+    public $department_id;
+    public $project_id;
+    public $employee_id;
+
+    public $procurement_request_id;
+
+    public $asset_category_id;
     public $asset_name;
     public $brand;
     public $model;
@@ -24,7 +41,7 @@ class AssetsComponent extends Component
     public $engraved_label;
     public $description;
     public $acquisition_type;
-    public $project_id;
+    // public $project_id;
     public $procurement_date;
     public $procurement_type;
     public $invoice_number;
@@ -107,9 +124,20 @@ class AssetsComponent extends Component
 
         DB::transaction(function (){
 
+            if ($this->entry_type == 'Department') {
+                // dd('TRUE');
+                $assetableModel = Department::findOrFail($this->department_id);
+                $assetableModelCode=$assetableModel->prefix;
+
+            } else {
+                $assetableModel = Project::findOrFail($this->project_id);
+                $assetableModelCode=$assetableModel->project_code;
+            }
+
             $assetCatalogDTO = AssetCatalogData::from([
-                'asset_categories_id' => $this-> asset_categories_id,
-                'asset_name' => $this->asset_name,
+                'entry_type' => $this->entry_type,
+                'asset_category_id' => $this->asset_category_id,
+                'asset_name' => GeneratorService::assetLabel(str_replace(' ', '-', $assetableModelCode),$this->asset_category_id),
                 'brand' => $this->brand,
                 'model' => $this->model,
                 'serial_number' => $this->serial_number,
@@ -117,9 +145,9 @@ class AssetsComponent extends Component
                 'engraved_label' => $this->engraved_label,
                 'description' => $this->description,
                 'acquisition_type' => $this->acquisition_type,
-                'project_id' => $this->project_id,
+                'procurement_request_id' => $this->procurement_request_id,
                 'procurement_date' => $this->procurement_date,
-                'procurement_type' => $this->procurement_type,
+                // 'procurement_type' => $this->procurement_type,
                 'invoice_number' => $this->invoice_number,
                 'cost' => $this->cost,
                 'currency_id' => $this->currency_id,
@@ -139,7 +167,10 @@ class AssetsComponent extends Component
   
             $assetCatalogService = new AssetCatalogService();
 
-            $asset = $assetCatalogService->createAsset($assetCatalogDTO);
+            $asset = $assetCatalogService->createAsset($assetableModel,$assetCatalogDTO);
+            
+            $this->storeLogDetails($assetableModel,$asset->id);
+            // dd('YES');
    
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Asset created and added to catalog successfully']);
 
@@ -148,10 +179,31 @@ class AssetsComponent extends Component
         });
     }
 
+    public function storeLogDetails(Model $model,$assetId)
+    {
+        $assetLogDTO = new AssetLogData();
+        $assetLogService = new AssetLogService();
+        // $this->validate($assetLogDTO->allocationRules());
+        
+        $assetLogDTO = AssetLogData::from([
+            'asset_catalog_id' => $assetId,
+            'log_type' => 'Allocation',
+            'date_allocated' => today(),
+            'station_id' => $this->station_id,
+            'employee_id' => $this->employee_id,
+            'allocation_status' => true,
+            
+            ]
+        );
+
+        $asset = $assetLogService->createAssetLog($model,$assetLogDTO);
+        
+    }
+
     public function editData(AssetsCatalog $assetCatalog)
     {
         $this->asset = $assetCatalog;
-        $this->asset_categories_id = $assetCatalog->asset_categories_id;
+        $this->asset_category_id = $assetCatalog->asset_category_id;
         $this->asset_name = $assetCatalog->asset_name;
         $this->brand = $assetCatalog->brand;
         $this->model = $assetCatalog->model;
@@ -189,7 +241,7 @@ class AssetsComponent extends Component
         DB::transaction(function (){
 
             $assetCatalogDTO = AssetCatalogData::from([
-                'asset_categories_id' => $this-> asset_categories_id,
+                'asset_category_id' => $this-> asset_category_id,
                 'asset_name' => $this->asset_name,
                 'brand' => $this->brand,
                 'model' => $this->model,
@@ -231,7 +283,6 @@ class AssetsComponent extends Component
         });
     }
 
-    
     public function filterAssets()
     {
         $assets = AssetsCatalog::search($this->search)
@@ -256,6 +307,12 @@ class AssetsComponent extends Component
     {
         $data['categories'] = AssetCategory::with('classification')->get();
         $data['departments'] = Department::where('is_active',true)->get();
+        $data['projects'] = Project::all();
+        $data['employees'] = Employee::where('is_active',true)->get();
+        $data['procurement_requests'] = ProcurementRequest::get();
+        $data['providers'] = Provider::where('is_active',true)->get();
+        $data['stations'] = Station::where('is_active',true)->get();
+
         $data['assets'] = $this->filterAssets()
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
