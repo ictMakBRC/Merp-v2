@@ -191,4 +191,21 @@
             </div><!--end modal-content-->
         </div><!--end modal-dialog-->
     </div><!--end modal-->
+    @include('livewire.inventory.inc.confirm-delete')
+      @push('scripts')
+      <script>
+        window.addEventListener('close-modal', event => {
+          $('#deptItemupdateCreateModal').modal('hide');
+          $('#delete_modal').modal('hide');
+          $('#confirmDelete').modal('hide');
+        });
+        window.addEventListener('show-modal', event => {
+          $('#deptItemupdateCreateModal').modal('show');
+        });
+        window.addEventListener('delete-modal', event => {
+          $('#confirmDelete').modal('show');
+        });
+      </script>
+      @endpush
 </div>
+

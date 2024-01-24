@@ -169,6 +169,21 @@ class FmsDepartmentBudgetLinesComponent extends Component
             {
                 $this->reset(['name', 'is_active', 'description']);
             }
+
+            public function confirmDelete($id)
+            {
+              $this->delete_id = $id;
+              $this->dispatchBrowserEvent('delete-modal');
+            }
+          
+            public function deleteEntry()
+            {
+              $dept_item = FmsUnitBudgetLine::findOrFail($this->delete_id);
+              $dept_item->delete();
+          
+              $this->dispatchBrowserEvent('close-modal');
+              $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Entry successfully deleted!']);
+            }
         
             public function updateInvline()
             {

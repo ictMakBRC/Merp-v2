@@ -38,6 +38,7 @@ return new class extends Migration
             $table->foreignId('billed_project')->nullable()->constrained('projects','id')->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('customer_id')->nullable()->references('id')->on('fms_customers')->constrained()->onUpdate('cascade')->onDelete('restrict'); 
             $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');             
+            $table->foreignId('bank_id')->nullable()->references('id')->on('fms_banks')->constrained()->onUpdate('cascade')->onDelete('restrict');             
             $table->double('rate')->default(1.00); 
             $table->foreignId('tax_id')->nullable(); 
             $table->foreignId('terms_id')->nullable(); 

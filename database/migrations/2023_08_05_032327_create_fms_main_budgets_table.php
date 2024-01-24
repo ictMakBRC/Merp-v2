@@ -29,15 +29,6 @@ return new class extends Migration
                 $table->boolean('is_active')->default(True);
                 $table->timestamps();
             });
-            Schema::table('fms_budgets', function (Blueprint $table1) {
-                $table1->double('rate')->default(1.00)->after('currency_id');
-                $table1->double('estimated_income_local',16,2)->default(0.00)->after('esitmated_income');
-                $table1->double('estimated_expense_local',16,2)->default(0.00)->after('estimated_expenditure');
-            });
-            Schema::table('fms_invoices', function (Blueprint $table2) {
-                $table2->double('rate')->default(1.00)->after('currency_id');
-                $table2->double('amount_local',16,2)->default(1.00)->after('total_amount');
-            });
     }
 
     /**

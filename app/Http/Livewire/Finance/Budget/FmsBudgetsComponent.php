@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Finance\Budget;
 use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsFinancialYear;
+use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
 use App\Services\GeneratorService;
@@ -38,7 +39,8 @@ class FmsBudgetsComponent extends Component
 
     public $description;
     public $name;
-    public $esitmated_income;
+    public $rate;
+    public $estimated_income;
     public $estimated_expenditure;
     public $fiscal_year;
     public $department_id;
@@ -147,7 +149,7 @@ class FmsBudgetsComponent extends Component
         $this->validateOnly($fields, [
             'name' => 'required|string',
             'is_active' => 'required|integer',
-            // 'esitmated_income' =>'required|numeric',
+            // 'estimated_income' =>'required|numeric',
             // 'estimated_expenditure' =>'required|numeric',
             'fiscal_year' =>'required|integer',
             'department_id' =>'required|integer',
@@ -157,13 +159,23 @@ class FmsBudgetsComponent extends Component
             'currency_id' =>'required|integer',
         ]);
     }
+    public function updatedCurrencyId()
+    {
+        if ($this->currency_id) {
+            $latestRate = FmsCurrencyUpdate::where('currency_id', $this->currency_id)->latest()->first();
+
+            if ($latestRate) {
+                $this->rate = $latestRate->exchange_rate;
+            }
+        }
+    }
 
     public function storeBudget()
     {
         $this->validate([
             'name' => 'required|string|unique:fms_budgets',
             'is_active' => 'required|integer',
-            // 'esitmated_income' =>'required|numeric',
+            'rate' =>'required|numeric',
             // 'estimated_expenditure' =>'required|numeric',
             'fiscal_year' =>'required|integer',
             'department_id' =>'nullable|integer',
@@ -206,7 +218,7 @@ class FmsBudgetsComponent extends Component
         $budget->code = GeneratorService::budgetIdentifier();
         $budget->is_active = $this->is_active;
         $budget->description = $this->description;
-        // $budget->esitmated_income = $this->esitmated_income;
+        $budget->rate = $this->rate;
         // $budget->estimated_expenditure = $this->estimated_expenditure;
         $budget->fiscal_year = $this->fiscal_year;
         $budget->department_id = $this->department_id;
@@ -242,7 +254,7 @@ class FmsBudgetsComponent extends Component
     {
         $this->reset([
             'name',
-            'esitmated_income',
+            'estimated_income',
             'estimated_expenditure',
             'fiscal_year',
             // 'department_id',
@@ -258,7 +270,7 @@ class FmsBudgetsComponent extends Component
         $this->validate([
             'name' => 'required|unique:fms_budgets,name,' . $this->edit_id . '',
             'is_active' => 'required|numeric',
-            'esitmated_income' =>'required|numeric',
+            'estimated_income' =>'required|numeric',
             'estimated_expenditure' =>'required|numeric',
             'fiscal_year' =>'required|integer',
             'department_id' =>'required|integer',
@@ -272,7 +284,7 @@ class FmsBudgetsComponent extends Component
         $budget->name = $this->name;
         $budget->is_active = $this->is_active;
         $budget->description = $this->description;
-        $budget->esitmated_income = $this->esitmated_income;
+        $budget->estimated_income = $this->estimated_income;
         $budget->estimated_expenditure = $this->estimated_expenditure;
         $budget->fiscal_year = $this->fiscal_year;
         $budget->department_id = $this->department_id;

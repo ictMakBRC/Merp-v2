@@ -117,7 +117,7 @@
                                             <td>{{ $budget->name }}</td>
                                             <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
                                             <td>{{ $budget->project->name??$budget->department->name??'N/A' }}</td>
-                                            <td>@moneyFormat($budget->esitmated_income)</td>
+                                            <td>@moneyFormat($budget->estimated_income)</td>
                                             <td>@moneyFormat($budget->estimated_expenditure)</td>
                                             <td>{{ $budget->currency->code??'N/A' }}</td>
                                             @if ($budget->is_active == 0)

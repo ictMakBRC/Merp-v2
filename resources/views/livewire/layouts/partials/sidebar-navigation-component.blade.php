@@ -169,7 +169,7 @@
                 <!--end finance -->
 
                 <!--start inventory -->
-                <livewire:layouts.partials.inc.inventory.inventory-navigation-component />
+                {{-- <livewire:layouts.partials.inc.inventory.inventory-navigation-component /> --}}
                 <!--end inventory -->
 
                 <!--start assets -->

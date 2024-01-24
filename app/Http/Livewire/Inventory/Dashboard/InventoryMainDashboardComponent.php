@@ -2,7 +2,10 @@
 
 namespace App\Http\Livewire\Inventory\Dashboard;
 
+use App\Models\Inventory\Item\InvDepartmentItem;
+use App\Models\inventory\Requisitions\invRequest;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
 class InventoryMainDashboardComponent extends Component
 {
@@ -34,7 +37,7 @@ class InventoryMainDashboardComponent extends Component
       $this->department_id = session('department');
       $this->department_namename = session('department_name');
 
-      $data['items'] = inv_department_Item::where('department_id', session('department'))->get();
+      $data['items'] = InvDepartmentItem::where('department_id', session('department'))->get();
       $myRequests = invRequest::where('inv_requests.is_active', 1)->where('department_id', $this->department_id);
       $data['requests'] = $myRequests->get();
       $data['requestsPendingCount'] = $myRequests->where(['inv_requests.is_active' => 1, 'inv_requests.request_state' => 'Submitted'])->count();
@@ -48,11 +51,10 @@ class InventoryMainDashboardComponent extends Component
         WHERE inv_department_items.qty_left - inv_items.min_qty <= 0 AND inv_department_items.department_id = '$this->department_id'"));
         DB::statement("SET sql_mode=(SELECT CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY'));");
       }
-      $data['deparments'] = invUserdeparment::with('department')->where('user_id',auth()->user()->id)->get();
+      $data['deparments'] = [];
 
 
 
-      return view('livewire.inventory.dashboards.user-dashboard-component',$data)->layout('inventdashboard.layouts.app');
 
       return view('livewire.inventory.dashboard.inventory-main-dashboard-component',$data)->layout('layouts.app');
     }

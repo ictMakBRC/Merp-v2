@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Finance\Invoice;
 
+use App\Models\Finance\Banking\FmsBank;
 use Livewire\Component;
 use App\Services\GeneratorService;
 use App\Models\Grants\Project\Project;
@@ -9,6 +10,7 @@ use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\Finance\Settings\FmsCurrencyUpdate;
 
 class FmsOutGoingInvoiceComponent extends Component
 {
@@ -78,6 +80,8 @@ class FmsOutGoingInvoiceComponent extends Component
 
     public $billed_by;
     public $billed_to;
+    public $rate;
+    public $bank_id;
     public $unit_type ='department';
     public $unit_id=0;
     public $requestable;
@@ -133,6 +137,8 @@ class FmsOutGoingInvoiceComponent extends Component
             'description' => 'required',
             'due_date' => 'required|date',
             'recurring' => 'required|numeric',
+            'rate'=> 'required|numeric',
+            'bank_id' => 'required|numeric',
             // 'custom_recurring'=> 'required|numeric',
             // 'recurring_type' => 'required|numeric',
             'cancel_overdue_reminders' => 'required|numeric',
@@ -145,6 +151,18 @@ class FmsOutGoingInvoiceComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, $this->validateInputs());
+    }
+
+    
+    public function updatedCurrencyId()
+    {
+        if ($this->currency_id) {
+            $latestRate = FmsCurrencyUpdate::where('currency_id', $this->currency_id)->latest()->first();
+
+            if ($latestRate) {
+                $this->rate = $latestRate->exchange_rate;
+            }
+        }
     }
 
     public function storeInvoice()
@@ -222,6 +240,8 @@ class FmsOutGoingInvoiceComponent extends Component
         $invoice->project_id = $this->project_id;
         $invoice->customer_id = $this->customer_id;
         $invoice->currency_id = $this->currency_id;
+        $invoice->rate = $this->rate;
+        $invoice->bank_id = $this->bank_id;
         $invoice->tax_id = $this->tax_id;
         $invoice->terms_id = $this->terms_id;
         $invoice->description = $this->description;
@@ -253,6 +273,8 @@ class FmsOutGoingInvoiceComponent extends Component
         $this->project_id = $invoice->project_id;
         $this->customer_id = $invoice->customer_id;
         $this->currency_id = $invoice->currency_id;
+        $this->rate = $invoice->rate;
+        $this->bank_id = $invoice->bank_id;
         $this->tax_id = $invoice->tax_id;
         $this->terms_id = $invoice->terms_id;
         $this->description = $invoice->description;
@@ -275,8 +297,8 @@ class FmsOutGoingInvoiceComponent extends Component
             'total_amount',
             'total_paid',
             'invoice_from',
-            // 'department_id',
-            // 'project_id',
+            'rate',
+            'bank_id',
             'customer_id',
             'currency_id',
             'tax_id',
@@ -319,6 +341,8 @@ class FmsOutGoingInvoiceComponent extends Component
         $invoice->project_id = $this->project_id;
         $invoice->customer_id = $this->customer_id;
         $invoice->currency_id = $this->currency_id;
+        $invoice->rate = $this->rate;
+        $invoice->bank_id = $this->bank_id;
         $invoice->tax_id = $this->tax_id;
         $invoice->terms_id = $this->terms_id;
         $invoice->description = $this->description;
@@ -370,7 +394,8 @@ class FmsOutGoingInvoiceComponent extends Component
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
         $data['customers'] = FmsCustomer::where('is_active', 1)->get();
-        $data['currencies'] = FmsCurrency::where('system_default', 1)->get();
+        $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
+        $data['banks'] = FmsBank::where('is_active', 1)->get();
         $data['departments'] = Department::where('is_active', 1)->get();
         $data['projects'] = Project::all();
         return view('livewire.finance.invoice.fms-out-going-invoice-component', $data);

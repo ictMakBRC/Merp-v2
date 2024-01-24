@@ -1,4 +1,4 @@
-<div id="inventoryManagement" class="main-icon-menu-pane tab-pane" role="tabpanel" aria-labelledby="apps-tab">
+<div id="inventoryManagement" class="main-icon-menu-pane tab-pane {{ request()->segment(1) == 'inventory' ? 'active menuitem-active' : '' }}" role="tabpanel" aria-labelledby="apps-tab">
   <div class="title-box">
     <h6 class="menu-title">Inventory</h6>
   </div>

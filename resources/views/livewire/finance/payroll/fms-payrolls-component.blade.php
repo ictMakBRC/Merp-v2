@@ -98,7 +98,7 @@
                                             <td>{{ $payroll->month }}</td>
                                             <td>{{ $payroll->created_at ?? 'N/A' }}</td>
                                             <td>{{ $payroll->payment_voucher ?? 'N/A' }}</td>
-                                            <td><span class="badge bg-success">{{ $payroll->status }}</span></td>
+                                            <td><x-status-badge :status="$payroll->status" /></td>
                                             <td class="table-action">
                                                 <a href="{{ URL::signedRoute('finance-payroll_data', $payroll->payment_voucher) }}"
                                                     class="btn btn-sm btn-outline-primary">

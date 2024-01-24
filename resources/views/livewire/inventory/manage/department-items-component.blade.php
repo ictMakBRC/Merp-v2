@@ -64,7 +64,7 @@
                   <td>{{$value->item?->name }}</td>
                   <td>{{ $value->item?->description }}</td>
                   <td>{{ $value->brand }}</td>
-                  <td>{{ $value->department?->name }}</td>
+                  <td>{{ $value->unitable?->name }}</td>
                   <td>{{ $value->created_at }}</td>
 
                   <td class="table-action">
@@ -102,7 +102,6 @@
           </div> <!-- end card body-->
         </div> <!-- end card -->
       </div><!-- end col-->
-
       @include('livewire.inventory.item.inc.deptItemupdateCreateModal')
       @include('livewire.inventory.inc.confirm-delete')
       @push('scripts')

@@ -67,7 +67,7 @@ class LaratrustSeeder extends Seeder
                 $user = \App\Models\User::create([
                     'category' => 'System-Admin',
                     'name' => ucwords(str_replace('_', ' ', $user_role)),
-                    'password_updated_at' => now(),
+                    'password_expires_at' => now(),
                     'email' => Str::lower($user_role).'@merp.com',
                     'email_verified_at' => now(),
                     'password' => bcrypt('admin@merp'),

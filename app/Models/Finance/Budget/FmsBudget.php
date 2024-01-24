@@ -80,7 +80,7 @@ class FmsBudget extends Model
 
     protected $fillable =[
         'name',           
-        'esitmated_income',
+        'estimated_income',
         'estimated_expenditure',     
         'fiscal_year',
         'department_id',

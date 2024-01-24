@@ -104,6 +104,7 @@
                                         <th>Billed To</th>
                                         <th>Total Amount</th>
                                         <th>Due Date</th>
+                                        <th>Due Days</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -116,8 +117,19 @@
                                             <td>{{ $invoice->requestable->name??'N/A' }}</td>
                                             <td>{{ $invoice->customer->name??$invoice->department->name??'N/A' }}</td>
                                             <td>@moneyFormat( $invoice->total_amount )</td>
-                                            <td>{{ $invoice->invoice_date }}</td>
-                                            <td>{{ $invoice->status }}</td>
+                                            <td>{{ $invoice->due_date }}</td>
+                                            <td>
+                                                @php
+                                                    $days = \Carbon\Carbon::parse($due_date)->diffInDays(\Carbon\Carbon::now(), true);
+                                                    if ($days>1) {
+                                                        $class = 'bg-light-warning';
+                                                    }else{
+                                                        $class = '';
+                                                    }
+                                                @endphp                                                
+                                                <div class="badge  bg-primary">{{ $days }}Days</div>
+                                            </td>
+                                            <td><x-status-badge :status="$invoice->status" /></td>
                                             <td class="table-action">     
                                                 @if ($invoice->status=='Pending')
                                                     

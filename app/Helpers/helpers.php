@@ -192,3 +192,24 @@ function getLedger($ledgerable_type,$ledgerable_id){
 function getFinacialYear(FmsFinancialYear $fmsFinancialYear){
     return $fmsFinancialYear->name;
 }
+
+function getStatusColor($status)
+{
+    $colors = [
+        'Pending' => 'warning',
+        'Approved' => 'success',
+        'Rejected' => 'danger',
+        'Declined' => 'danger',
+        'Submitted'=>'info',
+        'Viewed'=>'primary',
+        'Processing'=>'secondary',
+        'Closed'=>'primary',
+        'Completed'=>'success',
+        'Paid'=>'success',
+        'Ongoing'=>'secondary', 
+        'Acknowledged'=>'success', 
+         // Add more statuses and corresponding colors as needed
+    ];
+
+    return $colors[$status] ?? 'secondary';
+}

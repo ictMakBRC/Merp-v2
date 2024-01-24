@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('type',8)->default('Bank');
+            $table->string('branch')->nullable(); 
             $table->string('account_no')->unique(); 
             $table->date('as_of')->nullable(); 
             $table->boolean('is_active')->default(true);

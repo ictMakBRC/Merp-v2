@@ -80,7 +80,7 @@
                                             <td>@moneyFormat($request->total_amount)</td>
                                             <td>@moneyFormat($request->rate)</td>
                                             <td>{{ $request->currency->code ?? 'N/A' }}</td>
-                                            <td><span class="badge bg-success">{{ $request->status }}</span></td>
+                                            <td><x-status-badge :status="$request->status" /></td>
                                             <td class="table-action">
                                                 {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
                                                 @if ($request->status =='Pending' || $request->status =='Rejected')

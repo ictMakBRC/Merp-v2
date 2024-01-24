@@ -120,7 +120,12 @@ class FmsInvoiceItemsComponent extends Component
     public function submitInvoice($id)
     {
        $invoice =  FmsInvoice::where(['invoice_no'=> $this->invoiceCode, 'id'=>$id])->first();
-       $invoice->total_amount = $this->totalAmount;
+       if($invoice->status !='Pending'){
+        $this->dispatchBrowserEvent('alert', ['type' => 'warning', 'message' => 'Invoice already submitted!']);
+        return redirect()->SignedRoute('finance-invoice_view', $this->invoiceData->invoice_no);
+       }else{
+       $invoice->total_amount = $this->totalAmount/$invoice->rate;
+       $invoice->amount_local = $this->totalAmount;
        $invoice->discount_type = $this->discount_type;
        $invoice->discount_total = $this->discount_total;
        $invoice->discount = $this->discount;
@@ -128,6 +133,7 @@ class FmsInvoiceItemsComponent extends Component
        $invoice->update();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice created successfully!']);
         return redirect()->SignedRoute('finance-invoice_view', $this->invoiceData->invoice_no);
+       }
     }
 
     public function deleteRecord()
@@ -140,7 +146,7 @@ class FmsInvoiceItemsComponent extends Component
     }
     public function render()
     {
-        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'billedDepartment','billedProject', 'currency'])->first();
+        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'billedDepartment','billedProject', 'currency','bank'])->first();
         if ($invoiceData) {
             if($invoiceData->invoice_type =='External'){                
                 $this->billed = $invoiceData->customer;
@@ -157,7 +163,7 @@ class FmsInvoiceItemsComponent extends Component
                 $this->biller = $invoiceData->project;
             }
             $this->invoiceData = $invoiceData;
-            $this->currency = $invoiceData->currency->code??'UG';
+            // $this->currency = $invoiceData->currency->code??'UG';
             $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['uintService','uintService.service'])->get();
         } else {
             $data['items'] = collect([]);

@@ -18,21 +18,32 @@ aria-labelledby="deptItemupdateCreateModalTitle" data-bs-backdrop="static" data-
       <form  @if (!$toggleForm) wire:submit.prevent="storeData" @else wire:submit.prevent="updateData" @endif >
         <div class="row">
 
-          <div class="mb-3 col-md-6">
-            <label for="department_id" class="form-label" required>Department</label>
-            <select class="form-select" wire:model.defer="department_id" required>
+          <div class="mb-3 col-md-3  col-sm-3">
+            <label for="entry_type" class="form-label required">Entry Unit Type</label>
+            <select class="form-control form-select" id="entry_type" wire:model='entry_type'>
+                <option selected value="">Select</option>
+                <option value="Department">Department</option>
+                <option value="Project">Project</option>
+            </select>
+            @error('entry_type')
+                <div class="text-danger text-small">{{ $message }}</div>
+            @enderror
+        </div>
+          <div class="mb-3 col-md-4">
+            <label for="unit_id" class="form-label" required>Unit</label>
+            <select class="form-select" wire:model.defer="unit_id" required>
 
               <option value="">Select...</option>
               @foreach ($departments as $key => $value)
               <option value="{{$value->id}}">{{$value->name}}</option>
               @endforeach
             </select>
-            @error('department_id')
+            @error('unit_id')
             <div class="text-danger text-small">{{ $message }}</div>
             @enderror
           </div>
 
-          <div class="mb-3 col-md-6" required>
+          <div class="mb-3 col-md-5" required>
             <label for="item_id" class="form-label">Commodity</label>
             <select class="form-select" wire:model.defer="item_id">
               <option value="">Select...</option>

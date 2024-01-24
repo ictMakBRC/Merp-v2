@@ -15,6 +15,7 @@ use App\Models\Finance\Transactions\FmsTransaction;
 use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
 use App\Services\GeneratorService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -137,7 +138,7 @@ class FmsViewInvoiceComponent extends Component
                         $invoice->update(['total_paid' => $newTotalPaid]);
                         $invoice->update(['status' => $status]);
                         $invoice->update(['paid_by' => auth()->user()->id]);
-                        $invoice->update(['paid_at' => date('Y-d-m H:i:s')]);
+                        $invoice->update(['paid_at' => Carbon::now()]);
 
                         $this->ledgerIncome = exchangeCurrency($this->to_ledgerCur, 'foreign', $this->baseAmount);
                         $ledgerAccount = FmsLedgerAccount::where('id', $this->to_account)->first();
@@ -176,6 +177,7 @@ class FmsViewInvoiceComponent extends Component
                         $trans->ledger_account = $this->to_account;
                         $trans->budget_line_id = $this->to_budget_line_id;
                         $trans->department_id = $this->invoiceData->department_id;
+                        $trans->bank_id = $this->invoiceData->bank_id;
                         $trans->project_id = $this->invoiceData->project_id;
                         $trans->billed_department = $this->invoiceData->billed_department;
                         $trans->billed_project = $this->invoiceData->billed_project;
@@ -203,7 +205,7 @@ class FmsViewInvoiceComponent extends Component
             // If the transaction fails, we handle the error and provide feedback
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
-                'message' => 'Oops! Low Line balance!',
+                'message' => 'Oops! something went wrong!',
                 'text' =>  'Transaction failed!' . $e->getMessage(),
             ]);
             $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Transaction failed!' . $e->getMessage()]);

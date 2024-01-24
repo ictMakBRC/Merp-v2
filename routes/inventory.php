@@ -14,6 +14,9 @@ use App\Http\Livewire\Inventory\Manage\DepartmentItemsComponent;
 use App\Http\Livewire\Inventory\Requisitions\ForecastsComponent;
 use App\Http\Livewire\Inventory\Requisitions\GeneralRequisitionsComponent;
 use App\Http\Livewire\Inventory\Requisitions\ConsumptionBasedRequisitionsComponent;
+use App\Http\Livewire\Inventory\Stock\InvItemsStockStatusComponent;
+use App\Http\Livewire\Inventory\Stock\InvStockHistoryComponent;
+use App\Http\Livewire\Inventory\Stock\InvStockItemComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'inventory','middleware' => ['permission:access_inventory_module']], function () {
@@ -35,10 +38,13 @@ Route::group(['prefix' => 'inventory','middleware' => ['permission:access_invent
     // Route::get('unit_of_measures', InvUnitOfMeasuresComponent::class)->name('inventory-unit_of_measures');
   });
 
-  Route::group(['prefix' => 'manage-stock','middleware' => ['permission:access_stock_management']], function () {
+  Route::group(['prefix' => 'stock/manage','middleware' => ['permission:access_stock_management']], function () {
     Route::get('stores/sections', InvStorageSectionsComponent::class)->name('inventory-sections');
     Route::get('stores/sections/bins', InvStorageSubSectionsComponent::class)->name('inventory-storage_bins');
     Route::get('unit_of_measures', InvUnitOfMeasuresComponent::class)->name('inventory-unit_of_measures');
+    Route::get('documents/{type}', InvStockHistoryComponent::class)->name('inventory-stock_doc');
+    Route::get('document/items/{code}', InvStockItemComponent::class)->name('inventory-stock_doc_items');
+    Route::get('status/{type}', InvItemsStockStatusComponent::class)->name('inventory-stock_status');
   });
 
   Route::group(['prefix' => 'requisitions','middleware' => ['permission:access_department_request']], function () {

@@ -44,6 +44,14 @@
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3 col-2">
+                <label for="name" class="form-label required">Rate</label>
+                <input type="number" id="rate" step="any"
+                    class="form-control" name="rate" required wire:model="rate">
+                @error('rate')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
             <div class="mb-3 col">
                 <label for="name" class="form-label required">Name</label>
                 <input type="text" id="name" onkeyup="this.value = this.value.toUpperCase();"

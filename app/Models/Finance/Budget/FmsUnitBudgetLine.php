@@ -2,10 +2,13 @@
 
 namespace App\Models\Finance\Budget;
 
+use App\Models\Finance\Transactions\FmsTransaction;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\HumanResource\Settings\Department;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,6 +36,15 @@ class FmsUnitBudgetLine extends Model
         return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 
+    public function expenses()
+    {
+        return $this->hasMany(FmsTransaction::class, 'budget_line_id')->where('type', 'expense');
+    }
+
+    public function incomes()
+    {
+        return $this->hasMany(FmsTransaction::class, 'budget_line_id')->where('type', 'income');
+    }
 
     public function department()
     {

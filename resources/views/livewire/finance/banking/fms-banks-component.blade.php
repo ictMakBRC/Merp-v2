@@ -108,7 +108,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $account->type }}</td>
-                                            <td>{{ $account->name }}</td>
+                                            <td>{{ $account->name.' ('.$account->branch??'N/A'.')' }}</td>
                                             <td>{{ $account->account_no??'N/A' }}</td>
                                             <td>{{ $account->currency->code??''  }} @moneyFormat($account->current_balance)</td>
                                             @if ($account->is_active == 0)
@@ -125,7 +125,7 @@
                                                             <i class="mdi mdi-chevron-left"></i>
                                                           </button>
                                                           <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="{{ route('finance-ledger_view', $account->id) }}">Account History</a>
+                                                            <a class="dropdown-item" href="{{ route('finance-bank_view', $account->id) }}">Account History</a>
                                                             <a class="dropdown-item" href="#">Run Report</a>
                                                             
                                                         </div>

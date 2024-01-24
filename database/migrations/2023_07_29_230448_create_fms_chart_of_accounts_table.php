@@ -55,10 +55,10 @@ return new class extends Migration {
         (22, 'Consulting & Accounting', '615', NULL, '0.000', '0.000', 3, 12, 1, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
         (23, 'Maintenance and Repairs Expenses', '700', NULL, '0.000', '0.000', 3, 12, 1, NULL, NULL, '2023-08-29', '2022-12-05 13:47:05', '2023-08-29 04:49:41'),
         (24, 'General Expenses', '628', NULL, '0.000', '0.000', 3, 12, 1, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
-        (25, 'Interest Income', '460', NULL, '0.000', '0.000', 4, 13, 2, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
+        (25, 'Restricted Income', '460', NULL, '0.000', '0.000', 4, 13, 2, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
         (26, 'Other Revenue', '470', NULL, '0.000', '0.000', 4, 15, 1, NULL, NULL, '2023-08-29', '2022-12-05 13:47:05', '2023-08-29 05:12:18'),
-        (27, 'Purchase Discount', '475', NULL, '0.000', '0.000', 4, 13, 2, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
-        (28, 'Service Sales', '400', NULL, '0.000', '0.000', 4, 13, 1, 'Service Sales', NULL, '2023-08-29', '2022-12-05 13:47:05', '2023-08-29 05:12:49'),
+        (27, 'Unrestricted Income', '475', NULL, '0.000', '0.000', 4, 13, 2, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
+        (28, 'Interest Income', '400', NULL, '0.000', '0.000', 4, 13, 1, 'Interest Income', NULL, '2023-08-29', '2022-12-05 13:47:05', '2023-08-29 05:12:49'),
         (29, 'Common Stock', '330', NULL, '0.000', '0.000', 5, 16, 1, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
         (30, 'Owners Contribution', '300', NULL, '0.000', '0.000', 5, 16, 1, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
         (31, 'Owners Draw', '310', NULL, '0.000', '0.000', 5, 16, 1, NULL, NULL, NULL, '2022-12-05 13:47:05', '2022-12-05 13:47:05'),
@@ -68,8 +68,7 @@ return new class extends Migration {
         (35, 'Memberships and Subscriptions Expenses', '0', NULL, '0.000', '0.000', 3, 12, 1, 'Memberships and Subscriptions Expenses', 1, '2023-08-29', '2023-08-29 04:52:47', '2023-08-29 04:52:47'),
         (36, 'Direct Materials Expenses', '0', NULL, '0.000', '0.000', 3, 11, 1, 'Direct Materials Expenses', 1, '2023-08-29', '2023-08-29 05:04:10', '2023-08-29 05:04:10'),
         (37, 'Direct Labor Costs', '0', NULL, '0.000', '0.000', 3, 11, 1, 'Direct Labour Costs', 1, '2023-08-29', '2023-08-29 05:09:23', '2023-08-29 05:09:23'),
-        (38, 'Cash or Bank Accounts', '0', NULL, '0.000', '0.000', 1, 1, 1, 'Cash or Bank Accounts', 1, '2023-08-31', '2023-08-31 05:29:02', '2023-08-31 05:29:02'),
-        (39, 'Software', '0', NULL, '0.000', '0.000', 4, 13, 1, 'software', 1, '2023-10-03', '2023-10-03 08:31:04', '2023-10-03 08:31:04');        
+        (38, 'Cash or Bank Accounts', '0', NULL, '0.000', '0.000', 1, 1, 1, 'Cash or Bank Accounts', 1, '2023-08-31', '2023-08-31 05:29:02', '2023-08-31 05:29:02');
         ");
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
     }
