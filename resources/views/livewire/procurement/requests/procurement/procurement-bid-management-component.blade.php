@@ -27,6 +27,12 @@ use App\Enums\ProcurementRequestEnum;
                                     data-bs-toggle="tab" href="#documents" role="tab" aria-selected="false"
                                     @click="active_tab = 'documents'">Supporting Documents</a>
                             </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" :class="{ 'active': active_tab === 'payment' }"
+                                    data-bs-toggle="tab" href="#payment" role="tab" aria-selected="false"
+                                    @click="active_tab = 'payment'">Payment</a>
+                            </li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -90,6 +96,11 @@ use App\Enums\ProcurementRequestEnum;
                             <div class="tab-pane p-3 @if ($activeTab == 'documents') active @endif" id="documents"
                                 role="tabpanel">
                                 @include('livewire.procurement.requests.procurement.inc.procurement-request-documents')
+                            </div>
+
+                            <div class="tab-pane p-3 @if ($activeTab == 'payment') active @endif" id="payment"
+                                role="tabpanel">
+                                @include('livewire.procurement.requests.procurement.inc.procurement-request-payment')
                             </div>
 
                         </div>

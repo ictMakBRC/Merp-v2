@@ -15,6 +15,7 @@ class ProjectData extends Data
   public ?string $funding_source;
   public ?float $funding_amount;
   public ?string $currency_id;
+  public ?string $proposal_submission_date;
   // public ?int $pi;
   // public ?int $co_pi;
   public ?string $start_date;
@@ -55,10 +56,11 @@ class ProjectData extends Data
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency_id' => 'required|integer',
-      // 'pi' => 'required_if:project_category,Primary|integer',
-      // 'co_pi' => 'nullable|integer',
       'start_date' => 'required|date',
       'end_date' => 'required|date|after:start_date',
+      'proposal_submission_date' => 'nullable|date',
+      // 'pi' => 'required_if:project_category,Primary|integer',
+      // 'co_pi' => 'nullable|integer',
       'project_summary' => 'required|string',
       'progress_status' => 'required|string',
     ];
@@ -76,10 +78,11 @@ class ProjectData extends Data
       'funding_source' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency_id' => 'required|integer',
-      // 'pi' => 'required_if:project_category,Primary|integer',
-      // 'co_pi' => 'nullable|integer',
       'start_date' => 'required|date',
       'end_date' => 'required|date|after:start_date',
+      'proposal_submission_date' => 'nullable|date|before:start_date',
+      // 'pi' => 'required_if:project_category,Primary|integer',
+      // 'co_pi' => 'nullable|integer',
       'project_summary' => 'required|string',
       'progress_status' => 'required|string',
     ];

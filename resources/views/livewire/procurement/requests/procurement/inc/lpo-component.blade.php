@@ -111,12 +111,12 @@
                                 Provider</x-button>
                         @endif
 
-                        @if ($request->net_payment_terms > 0)
+                        {{-- @if ($request->net_payment_terms > 0)
                             <x-button class="btn btn-de-success btn-sm"
                                 wire:click="initiatePaymentRequest({{ $request->id }})"
                                 onclick="return confirm('Are you sure you want to proceed?');">Initial Payment
                                 Request</x-button>
-                        @endif
+                        @endif --}}
 
                         <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
                         <a href="{{ route('procurement-office-panel') }}" class="btn btn-de-primary btn-sm">Back to
