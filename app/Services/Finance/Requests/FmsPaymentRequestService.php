@@ -102,7 +102,7 @@ class FmsPaymentRequestService
         } else {
             return redirect()->SignedRoute('finance-request_detail', $paymentRequest->request_code);
         }
-        return $paymentRequest;
+        // return $paymentRequest;
     }
 
     public static function submitRequest($id)
