@@ -2,6 +2,7 @@
 
 namespace App\Models\Finance\Settings;
 
+use App\Models\Finance\Accounting\FmsChartOfAccount;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +41,10 @@ class FmsServiceCategory extends Model
             });
         }
     }
+
+    function category() {
+        return $this->belongsTo(FmsChartOfAccount::class, 'account_id', 'id');
+      }
 
     public static function search($search)
     {

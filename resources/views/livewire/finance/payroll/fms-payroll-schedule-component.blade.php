@@ -189,19 +189,19 @@
                                                 @php
                                                     $paye = calculatePAYE($emp_payroll->base_salary);
                                                 @endphp
-                                                @moneyFormat($emp_payroll->paye)
+                                                @moneyFormat($paye)
                                             </td>
                                             <td class="text-end">
                                                 @php
                                                     $employerNssf = getEmployeerNssf($emp_payroll->base_salary);
                                                 @endphp
-                                                @moneyFormat($emp_payroll->emp_nssf)
+                                                @moneyFormat($employerNssf)
                                             </td>
                                             <td class="text-end">
                                                 @php
                                                     $employeNssf = getEmployeeNssf($emp_payroll->base_salary);
                                                 @endphp
-                                                @moneyFormat($emp_payroll->worker_nssf)
+                                                @moneyFormat($employeNssf)
                                             </td>
                                             <td class="text-end">
                                                 @php

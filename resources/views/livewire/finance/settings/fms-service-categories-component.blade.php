@@ -96,6 +96,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
+                                        <th>Category</th>
                                         <th>Description</th>
                                         <th>Status</th>
                                         <th>Created at</th>
@@ -107,6 +108,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $service->name }}</td>
+                                            <td>{{ $service->category->name }}</td>
                                             <td>{{ $service->description ?? 'N/A' }}</td>
                                             @if ($service->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>

@@ -233,7 +233,7 @@
                                                 class="nav-link ">Main Payrolls</a>
                                         </li>
                                     @endif
-                                    @if (Auth::user()->hasPermission(['create_salary_request']))
+                                    @if (Auth::user()->hasPermission(['view_unit_payroll']))
                                         <li class="nav-item">
                                             <a href="{{ route('finance-payroll_unit_list','unit') }}"
                                                 class="nav-link ">Unit Payrolls</a>
