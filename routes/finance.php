@@ -44,6 +44,7 @@ use App\Http\Livewire\Finance\Settings\ChartOfAccountsTypesComponent;
 use App\Http\Livewire\Finance\Settings\FmsServiceCategoriesComponent;
 use App\Http\Livewire\Finance\Dashboard\FinanceMainDashboardComponent;
 use App\Http\Livewire\Finance\Budget\FmsDepartmentBudgetLinesComponent;
+use App\Http\Livewire\Finance\Customer\FmsViewCustomerLedgerComponent;
 use App\Http\Livewire\Finance\Settings\FmsFinanceInstitutionsComponent;
 use App\Http\Livewire\Finance\Payroll\FmsPayrollRequestDetailsComponent;
 use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
@@ -76,6 +77,7 @@ Route::group(['prefix' => 'finance'], function () {
         Route::get('accounts/{type}', FmsLedgerAccountsComponent::class)->name('finance-ledger_accounts');
         Route::get('account/{id}', FmsViewLedgerComponent::class)->name('finance-ledger_view');
         Route::get('bank/account/{id}', FmsViewBankComponent::class)->name('finance-bank_view');
+        Route::get('customer/account/{id}', FmsViewCustomerLedgerComponent::class)->name('finance-customer_view');
         Route::get('general', FmsGeneralLedgerComponent::class)->name('finance-general_ledger');
     });
     Route::group(['prefix' => 'transactions'], function () {

@@ -165,7 +165,7 @@ class FmsViewInvoiceComponent extends Component
                         }
                         $trans = new FmsTransaction();
                         $trans->trx_no = 'TRX' . GeneratorService::getNumber(7);
-                        $trans->trx_ref = $this->description;
+                        $trans->trx_ref = $this->trx_ref;
                         $trans->trx_date = $this->as_of;
                         $trans->total_amount = $this->payment_amount;
                         $trans->rate = $this->rate;                        
@@ -178,6 +178,8 @@ class FmsViewInvoiceComponent extends Component
                         $trans->budget_line_id = $this->to_budget_line_id;
                         $trans->department_id = $this->invoiceData->department_id;
                         $trans->bank_id = $this->invoiceData->bank_id;
+                        $trans->invoice_id = $this->invoiceData->id;
+                        $trans->payment_id = $payement->id;
                         $trans->project_id = $this->invoiceData->project_id;
                         $trans->billed_department = $this->invoiceData->billed_department;
                         $trans->billed_project = $this->invoiceData->billed_project;

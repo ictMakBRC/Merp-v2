@@ -51,10 +51,10 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Name</th>
+                                <th>Description</th>
                                 <th>Quantity</th>
                                 <th>Amount ({{ $budget_data->currency->code??'N/A' }})</th>
                                 <th>Actual Amount ({{ $budget_data->currency->code??'N/A' }})</th>
-                                <th>Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,10 +63,10 @@
                                 <tr>
                                     <td>{{ $number }}</td>
                                     <td>{{ $budget->name }}</td>
+                                    <td>{{ $budget->description }}</td>                                               
                                     <td>{{ $budget->quantity??1 }}</td>
                                     <td>@moneyFormat($budget->allocated_amount)</td>
                                     <td>@moneyFormat($budget->primary_balance)</td>
-                                    <td>{{ $budget->description }}</td>                                               
                                 </tr>
                                 @php $number++;@endphp
                             @endforeach
@@ -90,11 +90,12 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Name</th>
+                                <th>Description</th>
                                 <th>Quantity</th>
-                                <th>Amount Budgeted({{ $budget_data->currency->code??'N/A' }})</th>
                                 <th>Actual Balance({{ $budget_data->currency->code??'N/A' }})</th>
                                 <th>Amount Held({{ $budget_data->currency->code??'N/A' }})</th>
-                                <th>Description</th>
+                                <th>Amount Used({{ $budget_data->currency->code??'N/A' }})</th>
+                                <th>Amount Budgeted({{ $budget_data->currency->code??'N/A' }})</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,11 +104,12 @@
                                 <tr>
                                     <td>{{ $number }}</td>
                                     <td>{{ $budget->name }}</td>
+                                    <td>{{ $budget->description }}</td>
                                     <td>{{ $budget->quantity??1 }}</td>
-                                    <td>@moneyFormat($budget->allocated_amount)</td>
                                     <td>@moneyFormat($budget->primary_balance)</td>
                                     <td>@moneyFormat($budget->amount_held)</td>
-                                    <td>{{ $budget->description }}</td>
+                                    <td>@moneyFormat($budget->allocated_amount - $budget->primary_balance)</td>
+                                    <td>@moneyFormat($budget->allocated_amount)</td>
                                 </tr>
                                 @php $number++;@endphp
                             @endforeach
@@ -119,5 +121,36 @@
             @endforeach                        
             <h4 class="text-center">Total Expenses: <span>@moneyFormat($budget_lines->where('type','Expense')->sum('allocated_amount'))</span></h4>
         </div>
+        @if ($budget_data->status =='Saved')
+        <span class="text-end">            
+            <a class="btn btn-sm btn-success text-end float-end" wire:click='submitBudget' href="javascript:void(0)">Submit Budget</a>
+        </span>
+        @endif
+        @if ($budget_data->status =='Submitted' && Auth::user()->hasPermission(['approve_unit_budget']))
+            <span class="text-end">
+                <a class="btn btn-sm btn-success text-end float-end" data-bs-toggle="modal"
+                data-bs-target="#approveBudgetModal" href="javascript:void(0)">Approve Budget</a>
+            </span>
+        @endif
+        @if ($budget_data->status =='Approved' && Auth::user()->hasPermission(['update_unit_budget']))
+        <span class="text-end">
+            <a class="btn btn-sm btn-success text-end float-end" data-bs-toggle="modal"
+            data-bs-target="#adjustBudgetModal" href="javascript:void(0)">Adjust Budget</a>
+        </span>
+    @endif
     </div>
+    @include('livewire.finance.budget.inc.approve-budget')
+    @include('livewire.finance.budget.inc.adjust-budget')
+    @push('scripts')
+   <script>
+       window.addEventListener('close-modal', event => {
+           $('#approveBudgetModal').modal('hide');
+           $('#adjustBudgetModal').modal('hide');
+           $('#show-delete-confirmation-modal').modal('hide');
+       });
+       window.addEventListener('delete-modal', event => {
+           $('#delete_modal').modal('show');
+       });
+   </script>
+@endpush
 </div>

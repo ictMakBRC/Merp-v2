@@ -84,13 +84,14 @@
                                             <td><x-status-badge :status="$request->status" /></td>
                                             <td class="table-action">
                                                 {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
-                                                @if ($request->status =='Pending' || $request->status =='Rejected')
+                                                @if ($request->status =='Pending' || $request->status =='Rejected'|| $request->status =='Declined')
                                                 <a href="{{ URL::signedRoute('finance-request_detail', $request->request_code) }}"
                                                     class="btn btn-sm btn-outline-secondary">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
+                                                @endif
                                                     
-                                                @else
+                                                @if($request->status !='Pending' )
                                                 <a href="{{ URL::signedRoute('finance-request_preview', $request->request_code) }}"
                                                     class="btn btn-sm btn-outline-primary">
                                                     <i class="fa fa-eye"></i>

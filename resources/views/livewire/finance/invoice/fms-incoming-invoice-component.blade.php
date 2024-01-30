@@ -110,7 +110,7 @@
                                             <td>{{ $invoice->due_date }}</td>
                                             <td>
                                                 @php
-                                                    $days = \Carbon\Carbon::parse($due_date)->diffInDays(\Carbon\Carbon::now(), true);
+                                                    $days = \Carbon\Carbon::parse($invoice->due_date)->diffInDays(\Carbon\Carbon::now(), true);
                                                     if ($days>1) {
                                                         $class = 'bg-light-warning';
                                                     }else{

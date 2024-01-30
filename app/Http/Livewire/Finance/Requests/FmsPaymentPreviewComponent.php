@@ -268,10 +268,11 @@ class FmsPaymentPreviewComponent extends Component
                 if ($signed) {
 
                     $signed->status = 'Signed';
+                    $signed->comments = $this->comment;
                     $signed->signature = generateInitials(auth()->user()->employee->empName ?? auth()->user()->name) . '_' . GeneratorService::getNumber(8);
                     $signed->signature_date = date('Y-m-d');
                     $signed->update();
-                    $signatory = FmsPaymentRequestAuthorization::where(['request_id' => $id, 'status' => 'Pending'])
+                    $signatory = FmsPaymentRequestAuthorization::where(['request_id' => $id])->whereIn('status',['Declined','Pending','Rejected'])
                         ->orderBy('level', 'asc')->first();
                     if ($signatory) {
                         $signatory->update(['status' => 'Active']);
@@ -303,14 +304,22 @@ class FmsPaymentPreviewComponent extends Component
                 // dd($signed);
                 if ($signed) {
 
+                    $signed->comments = $this->comment;
                     $signed->status = 'Declined';
                     $signed->signature = 'SN_' . GeneratorService::getNumber(8);
                     $signed->signature_date = date('Y-m-d');
                     $signed->update();
                     $data = FmsPaymentRequest::where('request_code', $this->requestCode)->first();
-                    $data->status = 'Declined';
+                    $data->status = 'Submitted';
                     $data->date_approved = date('Y-m-d');
                     $data->update();
+                    $signatory = FmsPaymentRequestAuthorization::where(['request_id' => $id, 'status' => 'Signed'])
+                    ->orderBy('level', 'desc')->first();
+                if ($signatory) {
+                    $signatory->update(['status' => 'Active']);
+                    $body = 'Hello, You have a pending request #' . $this->requestCode . ' to correct and sign, please login to view more details';
+                    $this->SendMail($signatory->approver_id, $body);
+                }
                     $body = 'Hello, Your request #' . $this->requestCode . ' has been declined, please login to view more details and comments';
                     $this->SendMail($signed->created_by, $body);
 
@@ -370,6 +379,10 @@ class FmsPaymentPreviewComponent extends Component
     public $bank_id;
     public $amount_paid;
     public $amount_to_pay;
+    public $request_comment;
+    function viewComment($comment) {
+        $this->request_comment = $comment;
+    }
     public function render()
     {
         $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'currency', 'requestable', 'budgetLine', 'fromAccount','procurementRequest'])->first();

@@ -216,7 +216,7 @@ class FmsIncomingInvoiceComponent extends Component
 
     public function filterInvoices()
     {
-        $invoices = FmsInvoice::search($this->search)->where(['billtable_id'=> $this->requestable_id,'billtable_type' => $this->requestable_type,'status'=>'Approved'])
+        $invoices = FmsInvoice::search($this->search)->where(['billtable_id'=> $this->requestable_id,'billtable_type' => $this->requestable_type])->where('status','!=','Pending')
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

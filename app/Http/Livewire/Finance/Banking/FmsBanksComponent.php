@@ -123,7 +123,7 @@ class FmsBanksComponent extends Component
     {
 
         $this->validate([
-            'name' => 'required|string|unique:fms_banks',
+            'name' => 'required|string',
             'branch' => 'required|string',
             'is_active' => 'required|numeric',
             'account_no' => 'required|unique:fms_banks',            
@@ -189,7 +189,7 @@ class FmsBanksComponent extends Component
     public function updateAccount()
     {
         $this->validate([
-            'name' => 'required|string|unique:fms_banks,name,'.$this->edit_id.'',
+            'name' => 'required|string',
             'is_active' => 'required|numeric',
             'account_no' => 'required|unique:fms_banks,account_no,'.$this->edit_id.'',
             'department_id' => 'nullable|integer',
@@ -217,7 +217,7 @@ class FmsBanksComponent extends Component
         // $account->current_balance = $current_balance;
         // $account->account_type = $this->account_type;
         // $this->account_type = $account->account_type;
-        $account->as_of = $this->as_of;
+        // $account->as_of = $this->as_of;
         $account->is_active = $this->is_active;
         $account->notice_text = $this->description;
         $account->update();

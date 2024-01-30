@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('fms_customers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('type');
             $table->string('nationality')->nullable();           
             $table->string('address')->nullable();
             $table->string('city')->nullable();

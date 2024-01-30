@@ -150,6 +150,9 @@ class FmsBudgetLinesComponent extends Component
         $this->confirmingDelete = false;
         $this->budgetToDelete = null;
     }
+    public function redirectRequest()  {
+        return redirect()->signedRoute('finance-budget_view', $this->budgetCode);
+    }
     public function render()
     {
         $data['budget_data'] = $budgetData = FmsBudget::where('code', $this->budgetCode)->first();
@@ -162,6 +165,9 @@ class FmsBudgetLinesComponent extends Component
         } else {
             $data['budget_lines'] = collect([]);
             $data['unitLines'] = collect([]);
+        }
+        if($budgetData->status =='Submitted' || $budgetData->status =='Approved'){
+           $this->redirectRequest();
         }
         $chartOfAccts = FmsChartOfAccount::where('is_active', 1)->with(['type']);
         $data['incomes'] = $chartOfAccts->where('account_type', 4)->get();

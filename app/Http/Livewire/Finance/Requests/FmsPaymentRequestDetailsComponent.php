@@ -356,10 +356,16 @@ class FmsPaymentRequestDetailsComponent extends Component
             }
         }
     }
+   public function redirectRequest($requestCode)  {
+        return redirect()->SignedRoute('finance-request_preview', $requestCode);
+    }
     public function render()
     {
         $data['request_data'] = $requestData = FmsPaymentRequest::where('request_code', $this->requestCode)->with(['department', 'project', 'toDepartment', 'toProject', 'currency', 'requestable', 'budgetLine','procurementRequest'])->first();
         if ($requestData) {
+            if($requestData->status == 'Submitted' || $requestData->status =='Approved'|| $requestData->status =='Completed'){
+               $this->redirectRequest($requestData->request_code);
+            }
             $this->requestData = $requestData;
             $this->requestable_type = $requestData->requestable_type;
             $this->currency = $requestData->currency->code ?? 'UG';

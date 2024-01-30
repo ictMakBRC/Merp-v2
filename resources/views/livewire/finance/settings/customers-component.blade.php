@@ -119,22 +119,11 @@
                                             <td>{{ $customer->company_name }}</td>
                                             <td class="table-action">                                                  
                                                     {{-- @livewire('fms.partials.status-component', ['model' => $customer, 'field' => 'is_active'], key($customer->id)) --}}
-                                                    <div class="btn-group btn-sm">
-                                                        <div class="btn-group dropstart" role="group">
-                                                          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <span class="visually-hidden">Toggle Dropstart</span>
-                                                            <i class="mdi mdi-chevron-left"></i>
-                                                          </button>
-                                                          <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#">customer History</a>
-                                                            <a class="dropdown-item" href="#">Run Report</a>
-                                                            
-                                                        </div>
-                                                        </div>
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" wire:click="editData({{ $customer->id }})" class="btn btn-outline-secondary">
-                                                            <i class="fa fa-edit"></i>
-                                                        </button>
-                                                    </div>
+                                                    <button type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" wire:click="editData({{ $customer->id }})" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <a href="{{ URL::SignedRoute('finance-customer_view',$customer->id) }}" class="action-ico btn-sm btn btn-outline-info mx-1">
+                                                        <i class="fa fa-eye"></i></a>
                                                     
                                             </td>
                                         </tr>
