@@ -279,7 +279,7 @@
                                     <a href="{{ route('finance-requests_internal', 'unit') }}"
                                         class="nav-link ">Internal Transfer</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item d-none">
                                     <a href="{{ route('finance-requests', 'incoming') }}"
                                         class="nav-link ">Incoming</a>
                                 </li>
@@ -288,6 +288,11 @@
                             <!--end nav-->
                         </div>
                         <!--end sidebarAnalytics-->
+                    </li>
+                @endif
+                @if (Auth::user()->hasPermission(['view_customers']))
+                    <li class="nav-link">
+                        <a href="{{ route('finance-customers') }}" class="nav-link ">Customers</a>
                     </li>
                 @endif
                 @if (Auth::user()->hasPermission(['access_finance_management_settings']))
@@ -311,12 +316,7 @@
                                     </li>
                                     <!--end nav-item-->
                                 @endif
-                                @if (Auth::user()->hasPermission(['view_customers']))
-                                    <li class="nav-item">
-                                        <a href="{{ route('finance-customers') }}" class="nav-link ">Customers</a>
-                                    </li>
-                                    <!--end nav-item-->
-                                @endif
+                              
                                 @if (Auth::user()->hasPermission(['view_currencies']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-currencies') }}" class="nav-link ">Currencies</a>

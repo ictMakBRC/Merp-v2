@@ -36,11 +36,8 @@
                         <div class="badge  bg-primary">{{ $days }}Days</div>
                     </td>
                     <td><x-status-badge :status="$invoice->status" /></td>
-                    <td class="table-action">    
-                        
-                            <a href="{{URL::signedRoute('finance-invoice_view', $invoice->invoice_no)}}" class="action-ico btn-sm btn btn-outline-success mx-1"><i class="fa fa-eye"></i></a>
-                                                                
-                            
+                    <td class="table-action">  
+                            <a target="_blank" href="{{URL::signedRoute('finance-invoice_view', $invoice->invoice_no)}}" class="action-ico btn-sm btn btn-outline-success mx-1"><i class="fa fa-eye"></i></a>                                              
                     </td>
                 </tr>
             @endforeach

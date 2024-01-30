@@ -1,10 +1,23 @@
 <div x-cloak x-show="create_new">
     <form  @if ($toggleForm) wire:submit.prevent="updateCustomer" @else wire:submit.prevent="storeCustomer" @endif >             
 
-        <div class="row">          
+        <div class="row">  
+            
+            <div class="mb-3 col-md-2">
+                <label for="type" class="form-label required">Type</label>
+                <select class="form-select select2" id="nationality" wire:model.lazy='type'>
+                    <option selected value="">Select</option>
+                    <option value="Customer">Customer</option>
+                    <option value="Sponsor">Sponsor</option>
+                    <option value="Funder">Funder</option>
+                </select>
+                @error('type')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
 
             <div class="mb-3 col-md-3">
-                <label for="name" class="form-label required">Customer Name</label>
+                <label for="name" class="form-label required">{{ $type }} Name</label>
                 <input type="text" id="name" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='name'>
                 @error('name')
@@ -12,8 +25,8 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
-                <label for="nationality" class="form-label required">Origin</label>
+            <div class="mb-3 col-md-2">
+                <label for="nationality" class="form-label required">Nationality</label>
                 <select class="form-select select2" id="nationality" wire:model.lazy='nationality'>
                     <option selected value="">Select</option>
                     @include('layouts.nationalities')
@@ -23,7 +36,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="address" class="form-label">Address</label>
                 <input type="text" id="address" class="form-control text-uppercase" wire:model.defer='address'
                     onkeyup="this.value = this.value.toUpperCase();">
