@@ -38,6 +38,8 @@ return new class extends Migration
             $table->foreignId('to_budget_line_id')->nullable()->references('id')->on('fms_budget_lines')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('ledger_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('to_account')->nullable()->references('id')->on('fms_ledger_accounts')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('invoice_id')->nullable()->constrained('fms_invoices','id')->onUpdate('cascade')->onDelete('restrict');    
+            $table->foreignId('payment_id')->nullable()->constrained('fms_invoice_payments','id')->onUpdate('cascade')->onDelete('restrict'); 
             $table->enum('trx_type',['Income','Expense','Transfer'])->default('Expense');
             $table->enum('entry_type',['Internal','External','Invoice'])->default('External'); 
             $table->enum('status',['Paid','Pending','Approved','Canceled'])->default('Pending'); 

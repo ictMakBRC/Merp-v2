@@ -327,7 +327,7 @@ return [
                 ],
 
                 'Update' => [
-                    'update_unit_budget',
+                    'open_unit_budget',
                     'approve_unit_requests',
                     'approve_unit_budget',
                     'update_unit_budget',

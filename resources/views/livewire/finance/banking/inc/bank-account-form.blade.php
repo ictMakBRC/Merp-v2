@@ -51,6 +51,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
+                        @if(!$toggleForm)
                         <div class="mb-3 col-2">
                             <label for="currency_id" class="form-label required">Account Currency</label>
                             <select class="form-select select2" id="currency_id" wire:model.defer="currency_id">
@@ -79,6 +80,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
+                        @endif
                         <div class="mb-3 col-md-2">
                             <label for="is_active" class="form-label required">{{ __('public.status') }}</label>
                             <select class="form-select select2" id="is_active" wire:model.defer="is_active">

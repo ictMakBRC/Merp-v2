@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Finance\Requests;
 
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Services\GeneratorService;
@@ -14,6 +15,8 @@ use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Requests\FmsPaymentRequestPosition;
+use App\Models\Finance\Requests\FmsPaymentRequestAuthorization;
 
 class FmsPaymentRequestsComponent extends Component
 {
@@ -302,6 +305,12 @@ class FmsPaymentRequestsComponent extends Component
                     // $dataLeger->update();
                 }
 
+                if ($p_request->requestable_type == 'App\Models\HumanResource\Settings\Department') {
+                    $signatory = User::where('is_active', 1)->where('employee_id', $p_request->requestable?->supervisor)->first();
+                } elseif ($p_request->requestable_type == 'App\Models\Grants\Project\Project') {                
+                    $signatory = User::where('is_active', 1)->with('employee')->where('employee_id', $p_request->requestable?->pi)->first();
+                }
+
                 $this->dispatchBrowserEvent('close-modal');
                 $this->resetInputs();
                 $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Request created successfully, please proceed!']);
@@ -316,6 +325,49 @@ class FmsPaymentRequestsComponent extends Component
                 'text' => 'Failed to save due to this error '.$e->getMessage(),
             ]);
         }
+
+    }
+    public function addSignatory($id)
+    {
+        $this->validate([
+            'position' => 'required',
+            'signatory_level' => 'required|integer',
+            'approver_id' => 'required|integer',
+        ]);
+        $exists = FmsPaymentRequestAuthorization::where(['position' => $this->position, 'request_id' => $id])->first();
+        // dd($exists);
+        if ($exists) {
+            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Signatory already exists on this particular document, please select another different person']);
+            return false;
+        }
+        $requestAuth = new FmsPaymentRequestAuthorization();
+        $requestAuth->request_id = $id;
+        $requestAuth->request_code = $this->requestCode;
+        $requestAuth->position = 1;
+        $requestAuth->level = 1;
+        $requestAuth->approver_id = $this->approver_id;
+        $requestAuth->save();
+        if ($this->requestData->request_type != 'Petty Cash') {
+            $positions = FmsPaymentRequestPosition::where('name_lock', '!=', 'head')
+                ->when($this->requestable_type == 'App\Models\HumanResource\Settings\Department', function ($query) {
+                    $query->where('name_lock', '!=', 'grants');})
+                ->when($this->requestData->request_type == 'Internal Transfer', function ($query) {
+                    $query->where('name_lock', '!=', 'operations');})->get();
+            foreach ($positions as $position) {
+                $exists = FmsPaymentRequestAuthorization::where(['position' => $position->id, 'request_id' => $id])->first();
+                if (!$exists) {
+                    $requestAuth = new FmsPaymentRequestAuthorization();
+                    $requestAuth->request_id = $id;
+                    $requestAuth->request_code = $this->requestCode;
+                    $requestAuth->position = $position->id;
+                    $requestAuth->level = $position->level;
+                    $requestAuth->approver_id = $position->assigned_to;
+                    $requestAuth->save();
+                }
+            }
+        }
+        $this->resetInputs();
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Request attachment added successfully!']);
     }
 
     public function updatedFiscalYear()

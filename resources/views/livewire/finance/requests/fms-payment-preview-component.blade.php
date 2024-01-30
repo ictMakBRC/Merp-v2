@@ -334,15 +334,24 @@
                             <td class="btop" width="130" valign="top">
                                 {{ $authorizer->signature_date ?? 'N/A' }}
                             </td>
-                            <td class="btop" width="66" valign="top">
+                            <td class="btop" width="66" valign="top" class="table-action">
                                @if ($authorizer->status =='Active' && $authorizer->approver_id == auth()->user()->id)
                                <div class="btn-group m-1" role="group" aria-label="Basic example">
                                     <button  data-bs-toggle="modal" data-bs-target="#approveRejectRequest-modal" type="button" title="Approve" class="btn btn-xs btn-outline-success" wire:click="$set('click_action','Signed')"><i class="far fa-check-circle"></i></button>
                                     <button data-bs-toggle="modal" data-bs-target="#approveRejectRequest-modal"  type="button" title="Decline" class="btn btn-xs btn-outline-danger" wire:click="$set('click_action','Declined')"><i class="fas fa-frown"></i></button>
                                 </div> 
                                @else
-                               {{ $authorizer->status ?? 'N/A' }}
+                               
+                               <x-status-badge :status="$authorizer->status ?? 'N/A' " />
+                                @if ($authorizer->comments)
+                                    
+                                    <a href="javascript:void()" wire:click='viewComment("{{ $authorizer->comments }}")' data-bs-target="#viewComment" data-bs-toggle="modal"
+                                       >
+                                        <i class="fa fa-comments"></i>
+                                    </a>
+                                @endif
                                @endif
+                                
                                 
                             </td>
 
@@ -375,6 +384,7 @@
     </div>
     @include('livewire.finance.requests.inc.request-action-form')
     @include('livewire.finance.requests.inc.payement-ref')
+    @include('livewire.finance.requests.inc.view-comment')
     @push('scripts')
             <script>
                 window.addEventListener('close-modal', event => {
