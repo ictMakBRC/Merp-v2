@@ -21,6 +21,7 @@ class ProjectFormComponent extends Component
     public $funding_source;
     public $funding_amount;
     public $currency_id;
+    public $proposal_submission_date;
     public $start_date;
     public $end_date;
     // public $pi;
@@ -53,6 +54,7 @@ class ProjectFormComponent extends Component
         $this->funding_source = $project->funding_source;
         $this->funding_amount = $project->funding_amount;
         $this->currency_id = $project->currency_id;
+        $this->proposal_submission_date = $this->project->proposal_submission_date;
         // $this->pi = $project->pi??null;
         // $this->co_pi = $project->co_pi??null;
         $this->start_date = $project->start_date;
@@ -82,6 +84,7 @@ class ProjectFormComponent extends Component
                 'funding_source' => $this->funding_source,
                 'funding_amount' => $this->funding_amount,
                 'currency_id' => $this->currency_id,
+                'proposal_submission_date' => $this->proposal_submission_date,
                 // 'pi' => $this->pi??null,
                 // 'co_pi' => $this->co_pi??null,
                 'start_date' => $this->start_date,
@@ -121,6 +124,7 @@ class ProjectFormComponent extends Component
                 'funding_source' => $this->funding_source,
                 'funding_amount' => $this->funding_amount,
                 'currency_id' => $this->currency_id,
+                'proposal_submission_date' => $this->proposal_submission_date,
                 // 'pi' => $this->pi??null,
                 // 'co_pi' => $this->co_pi??null,
                 'start_date' => $this->start_date,

@@ -40,6 +40,7 @@ class ProjectService
         $project->funding_source = $projectDTO->funding_source;
         $project->funding_amount = $projectDTO->funding_amount;
         $project->currency_id = $projectDTO->currency_id;
+        $project->proposal_submission_date = $projectDTO->proposal_submission_date;
         // $project->pi = $projectDTO->pi;
         // $project->co_pi = $projectDTO->co_pi;
         $project->start_date = $projectDTO->start_date;

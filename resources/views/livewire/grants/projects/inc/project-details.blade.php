@@ -11,7 +11,7 @@
                 <strong class="text-inverse">{{ __('Funding source') }}:
                 </strong>{{ $project->funding_source ?? 'N/A' }}<br>
                 <strong class="text-inverse">{{ __('Funding amount') }}:
-                </strong>{{ $project->funding_amount ?? 'N/A' }}<br>
+                </strong>@moneyFormat($project->funding_amount)<br>
                 <strong class="text-inverse">{{ __('Currency') }}:
                 </strong>{{ $project->currency->code ?? 'N/A' }}<br>
 

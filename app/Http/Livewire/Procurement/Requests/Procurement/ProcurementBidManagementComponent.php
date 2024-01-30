@@ -8,11 +8,15 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\DB;
 use App\Enums\ProcurementRequestEnum;
+use App\Models\Grants\Project\Project;
 use App\Models\Documents\FormalDocument;
 use App\Data\Document\FormalDocumentData;
 use App\Models\Documents\Settings\DmCategory;
 use App\Services\Document\FormalDocumentService;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Procurement\Request\ProcurementRequest;
+use App\Services\Finance\Requests\FmsPaymentRequestService;
 use App\Models\Procurement\Request\ProcurementRequestApproval;
 use App\Jobs\Procurement\SendProcRequestChainOfCustodyNotification;
 
@@ -24,6 +28,7 @@ class ProcurementBidManagementComponent extends Component
     public $activeTab = 'summary-information';
     
     public $request_id;
+    public $procurementRequest;
     public $comment;
 
     //SUPPORT DOCUMENTS
@@ -34,6 +39,10 @@ class ProcurementBidManagementComponent extends Component
     public $document;
     public $document_path;
     public $description;
+
+    public $net_payment;
+    public $payment_description;
+    public $read_only=false;
 
     public function mount($id){
         $this->request_id = $id;
@@ -171,14 +180,95 @@ class ProcurementBidManagementComponent extends Component
         }
     }
 
+    public function initiatePaymentRequest()
+    {
+        $this->validate([
+            'net_payment'=>'required|numeric|gt:0|lte:'.(100-$this->procurementRequest?->payment_requests?->sum('net_payment_terms')),
+            'payment_description'=>'required|string',
+        ]);
+
+        $requestable = null;
+        $department_id = null;
+        $project_id = null;
+        $ledger_account = null;
+        $currency_id = $this->procurementRequest->currency_id;
+        $budget_line_id = $this->procurementRequest->budget_line_id;
+        
+        if ($this->procurementRequest->request_type == 'Project') {
+            $department_id = null;
+            $requestable = Project::with('ledger')->find($this->procurementRequest->requestable_id);
+            $ledger_account = $requestable->ledger->id;
+
+        } elseif ($this->procurementRequest->request_type == 'Department') {
+            $project_id = null;
+            $requestable = Department::with('ledger')->find($this->procurementRequest->requestable_id);
+            $ledger_account = $requestable->ledger->id;
+        }
+
+        // $exists = FmsPaymentRequest::where('procurement_request_id', $this->procurementRequest->id)->first();
+    
+        // if ($exists) {
+
+        //     $this->dispatchBrowserEvent('swal:modal', [
+        //         'type' => 'warning',
+        //         'message' => 'Oops! Payment Request already exists!',
+        //         'text' => 'Payment request for this procurement request is already in the Queue',
+        //     ]);
+        //     return;
+        // }
+
+        try{
+            $requestData = [
+                'request_type' => 'Procurement',
+                'request_description' =>$this->payment_description,
+                'rate'=>exchangeRate($currency_id),
+                'project_id'=>$project_id,
+                'department_id'=>$department_id,
+                'currency_id'=>$currency_id,
+                'ledger_account'=>$ledger_account,
+                'budget_line_id'=>$budget_line_id,
+                'requestable'=>$requestable,
+                'procurement_request_id'=>$this->request_id,
+                'total_amount'=> $this->procurementRequest->contract_value,
+                'net_payment_terms'=> $this->net_payment,
+            ];
+
+            $paymentRequestService= new FmsPaymentRequestService();
+            // Call the service to create the payment request
+            $saveData = $paymentRequestService->createPaymentRequest($requestData);
+            $this->procurementRequest->update([
+                'net_payment_terms'=>$this->procurementRequest->net_payment_terms+$this->net_payment,
+            ]);
+    
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Upfront/Advance Payment Request initiated successfully!']);      
+
+        } catch (\Exception $e) {
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Something went wrong!',
+                'text' => 'Failed to save due to this error '.$e->getMessage(),
+            ]);
+        }
+    }
+
     public function resetInputs(){
         $this->reset(['comment']);
     }
 
     public function render()
     {
-        $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers')->findOrFail($this->request_id);
+        $data['request'] = ProcurementRequest::with('items','documents','requester','approvals','approvals.approver','decisions','procurement_method','providers','payment_requests')->findOrFail($this->request_id);
         $data['document_categories'] = DmCategory::all();
+        $this->procurementRequest=$data['request'];
+        if ($data['request']->payment_requests->isEmpty() && $data['request']->net_payment_terms>0) {
+            $this->net_payment=$data['request']->net_payment_terms;
+            $this->read_only=true;
+        } else {
+            $this->net_payment=100-$data['request']?->payment_requests?->sum('net_payment_terms');
+            $this->read_only=false;
+        }
+        
+        // dd($this->procurementRequest=$data['request']->payment_requests);
 
         return view('livewire.procurement.requests.procurement.procurement-bid-management-component',$data);
     }

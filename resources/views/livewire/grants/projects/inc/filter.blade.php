@@ -6,6 +6,7 @@
             <option selected value="">Select</option>
             <option value="Project">Project</option>
             <option value="Study">Study</option>
+            <option value="Grant">Grant</option>
         </select>
         <div class="text-info" wire:loading wire:target='project_category'>
             <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
@@ -18,8 +19,28 @@
         <label for="project_type" class="form-label required">{{ __('Type') }}</label>
         <select class="form-select" id="project_type" wire:model.lazy="project_type">
             <option selected value="">Select</option>
-            <option value="Primary">Primary</option>
-            <option value="Non-Primary">Non-Primary</option>
+            @if ($project_category == 'Grant')
+                <option value="Research">Research Grant</option>
+                <option value="Health-Medical">Health and Medical Research Grant</option>
+                <option value="Education">Education Grant</option>
+                <option value="Equipment">Equipment Grant</option>
+                <option value="Training">Training Grant</option>
+                <option value="Program-Development">Program Development Grant</option>
+                <option value="Community-Outreach">Community Outreach Grant</option>
+                <option value="Capacity-Building">Capacity Building Grant</option>
+                <option value="International-Collaboration">International Collaboration Grant
+                </option>
+                <option value="Environmental">Environmental Grant</option>
+                <option value="Humanitarian">Humanitarian Grant</option>
+                <option value="Technology-Innovation">Technology Innovation Grant</option>
+                <option value="Innovation-Entrepreneurship">Innovation and Entrepreneurship Grant
+                </option>
+                <option value="Arts-Culture">Arts and Culture Grant</option>
+                <option value="Travel">Travel Grant</option>
+            @else
+                <option value="Primary">Primary</option>
+                <option value="Non-Primary">Non-Primary</option>
+            @endif
         </select>
         <div class="text-info" wire:loading wire:target='project_type'>
             <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
@@ -49,22 +70,35 @@
         <label for="progress_status" class="form-label required">{{ __('Progress Status') }}</label>
         <select class="form-select" id="progress_status" wire:model.lazy="progress_status">
             <option selected value="">Select</option>
-            <option value="Planning">Planning</option>
-            <option value="Pending Funding">Pending Funding</option>
-            <option value="Implementation">Implementation</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Data Analysis">Data Analysis</option>
-            <option value="Quality Assurance">Quality Assurance</option>
-            <option value="Evaluation">Evaluation</option>
-            <option value="Iteration">Iteration/Refinement</option>
-            <option value="Milestone Achieved">Milestone Achieved</option>
-            <option value="Reporting">Reporting</option>
-            <option value="Transition">Transition</option>
-            <option value="Completed">Completed</option>
-            <option value="Delayed">Delayed</option>
-            <option value="Pending Review">Pending Review</option>
-            <option value="On-hold">On Hold</option>
-            <option value="Terminated">Terminated</option>
+            @if ($project_category == 'Grant')
+                <option value="proposal_submission">Proposal Submission</option>
+                <option value="pending_review">Pending Review</option>
+                <option value="under_evaluation">Under Evaluation</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="funded">Funded</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="expired">Expired</option>
+                <option value="terminated">Terminated</option>
+            @else
+                <option value="Planning">Planning</option>
+                <option value="Pending Funding">Pending Funding</option>
+                <option value="Implementation">Implementation</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Data Analysis">Data Analysis</option>
+                <option value="Quality Assurance">Quality Assurance</option>
+                <option value="Evaluation">Evaluation</option>
+                <option value="Iteration">Iteration/Refinement</option>
+                <option value="Milestone Achieved">Milestone Achieved</option>
+                <option value="Reporting">Reporting</option>
+                <option value="Transition">Transition</option>
+                <option value="Completed">Completed</option>
+                <option value="Delayed">Delayed</option>
+                <option value="Pending Review">Pending Review</option>
+                <option value="On-hold">On Hold</option>
+                <option value="Terminated">Terminated</option>
+            @endif
         </select>
         <div class="text-info" wire:loading wire:target='progress_status'>
             <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>

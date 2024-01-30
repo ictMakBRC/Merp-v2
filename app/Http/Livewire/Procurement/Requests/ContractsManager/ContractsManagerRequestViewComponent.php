@@ -59,7 +59,7 @@ class ContractsManagerRequestViewComponent extends Component
                         'status' => ProcurementRequestEnum::PENDING,
                         'step' => ProcurementRequestEnum::step($nextStepOrder),
                     ]);
-                    $this->initiatePaymentRequest();
+                    // $this->initiatePaymentRequest();
                     
                 }else{
                     $procurementRequest->update([
