@@ -69,7 +69,7 @@ class StationsComponent extends Component
     public function storeStation()
     {
         $this->validate([
-            'name' => 'required|string|unique:Stations',
+            'name' => 'required|string|unique:stations',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
 
