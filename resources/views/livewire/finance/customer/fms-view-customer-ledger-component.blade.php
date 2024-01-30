@@ -16,7 +16,7 @@
                             href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
                             aria-selected="false">Invoice</a>
                         <a class="nav-link waves-effect waves-light" id="v-pills-profile-tab" data-bs-toggle="pill"
-                            href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
+                            href="#v-pills-statement" role="tab" aria-controls="v-pills-statement"
                             aria-selected="false">Statement</a>
                         <a class="nav-link waves-effect waves-light" id="v-pills-settings-tab" data-bs-toggle="pill"
                             href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
@@ -56,16 +56,9 @@
                             @include('livewire.finance.customer.inc.invoices')
                             {{-- @endif --}}
                         </div>
-                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
-                            aria-labelledby="v-pills-settings-tab">
-                            <p class="text-muted mb-0">
-                                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin
-                                coffee squid. Exercitation commodo enim craft beer mlkshk +1 labore velit, blog
-                                sartorial PBR leggings next
-                                level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo
-                                booth letterpress, beer mlkshk aliquip jean shorts ullamco
-                                ad vinyl cillum PBR.
-                            </p>
+                        <div class="tab-pane fade" id="v-pills-statement" role="tabpanel"
+                            aria-labelledby="v-pills-statement-tab">
+                            @include('livewire.finance.customer.inc.statement')
                         </div>
                     </div>
                 </div>

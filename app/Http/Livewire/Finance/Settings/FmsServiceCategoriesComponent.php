@@ -154,7 +154,7 @@ class FmsServiceCategoriesComponent extends Component
     
         public function filterCategories()
         {
-            $categorys = FmsServiceCategory::search($this->search)
+            $categorys = FmsServiceCategory::search($this->search)->with('category')
                 ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                     $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
                 }, function ($query) {

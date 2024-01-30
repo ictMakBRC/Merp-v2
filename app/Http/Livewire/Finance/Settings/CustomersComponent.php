@@ -29,6 +29,7 @@ class CustomersComponent extends Component
     public $delete_id;
 
     public $edit_id;
+    public $type;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -78,6 +79,7 @@ class CustomersComponent extends Component
             'account_number' => 'nullable|string',
             'title' => 'nullable|string',
             'name' => 'required|string',
+            'type' => 'required|string',
             'gender' => 'nullable|string',
             'nationality' => 'nullable|string',
             'address' => 'nullable|string',
@@ -109,6 +111,7 @@ class CustomersComponent extends Component
 
         $customer = new FmsCustomer();
         $customer->name = $this->name;
+        $customer->type = $this->type??'Customer';
         $customer->nationality = $this->nationality;
         $customer->address = $this->address;
         $customer->city = $this->city;
@@ -134,6 +137,7 @@ class CustomersComponent extends Component
     {
         $this->edit_id = $customer->id;
         $this->name = $customer->name;
+        $this->type = $customer->type;
         $this->nationality = $customer->nationality;
         $this->address = $customer->address;
         $this->city = $customer->city;
@@ -193,6 +197,7 @@ class CustomersComponent extends Component
 
         $customer = FmsCustomer::find($this->edit_id);
         $customer->name = $this->name;
+        $customer->type = $this->type;
         $customer->nationality = $this->nationality;
         $customer->address = $this->address;
         $customer->city = $this->city;
