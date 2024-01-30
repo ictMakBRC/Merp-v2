@@ -48,6 +48,11 @@ class ProcurementBidManagementComponent extends Component
         $this->request_id = $id;
     }
 
+    // public function updatedNetPayment(){
+    //     $this->payment_description = 'Payment Request For '.$this->procurementRequest->bestBidders->first()->name.' who is the approved provider for procurement request  with reference #'.$this->procurementRequest->reference_no.' and LPO Number #'.$this->procurementRequest->lpo_no;
+    // }
+    
+
     public function storeSupportDocument()
     {
         if ($this->request_id==null) {
@@ -229,7 +234,7 @@ class ProcurementBidManagementComponent extends Component
                 'budget_line_id'=>$budget_line_id,
                 'requestable'=>$requestable,
                 'procurement_request_id'=>$this->request_id,
-                'total_amount'=> $this->procurementRequest->contract_value,
+                'total_amount'=> ($this->net_payment/100)*$this->procurementRequest->contract_value,
                 'net_payment_terms'=> $this->net_payment,
             ];
 
@@ -262,13 +267,13 @@ class ProcurementBidManagementComponent extends Component
         $this->procurementRequest=$data['request'];
         if ($data['request']->payment_requests->isEmpty() && $data['request']->net_payment_terms>0) {
             $this->net_payment=$data['request']->net_payment_terms;
+            $this->payment_description = 'Payment Request For '.$this->procurementRequest->bestBidders->first()->name.' who is the approved provider for procurement request  with reference #'.$this->procurementRequest->reference_no.' and LPO Number #'.$this->procurementRequest->lpo_no;
             $this->read_only=true;
         } else {
             $this->net_payment=100-$data['request']?->payment_requests?->sum('net_payment_terms');
+            $this->payment_description = 'Payment Request For '.$this->procurementRequest->bestBidders->first()->name.' who is the approved provider for procurement request  with reference #'.$this->procurementRequest->reference_no.' and LPO Number #'.$this->procurementRequest->lpo_no;
             $this->read_only=false;
         }
-        
-        // dd($this->procurementRequest=$data['request']->payment_requests);
 
         return view('livewire.procurement.requests.procurement.procurement-bid-management-component',$data);
     }

@@ -235,7 +235,7 @@ use App\Enums\ProcurementRequestEnum;
 
                         @if ($decision == 'Approved')
                             <div class="mb-3 col-md-2">
-                                <label for="invoice_no" class="form-label required">{{ __('Invoice No.') }}</label>
+                                <label for="invoice_no" class="form-label required">{{ __('Proforma Invoice No.') }}</label>
                                 <input type="text" id="invoice_no" class="form-control"
                                     wire:model.defer="invoice_no" min="{{ now()->toDateString() }}">
                                 @error('invoice_no')
