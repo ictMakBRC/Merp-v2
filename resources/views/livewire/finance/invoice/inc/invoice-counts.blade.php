@@ -97,7 +97,7 @@
                                     </div><!--end media-->                                                     
                                 </div><!--end col-->
                                 <div class="col-auto align-self-center">
-                                    <h5 class="my-1">@moneyFormat($invoices->whereIn('status',['Partially Paid','Approved'])->where('due_date','>=',date('Y-m-d'))->sum('amount_local'))</h5>                       
+                                    <h5 class="my-1">@moneyFormat($invoices->whereIn('status',['Partially Paid','Approved','Acknowledged'])->where('due_date','<=',date('Y-m-d'))->sum('amount_local'))</h5>                       
                                 </div><!--end col-->
                             </div><!--end row-->
                         </div><!--end card-body-->                                            
