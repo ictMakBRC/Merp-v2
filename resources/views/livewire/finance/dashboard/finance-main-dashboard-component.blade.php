@@ -25,6 +25,7 @@
                         <div class="col-md-6 col-lg-3">
                             <div class="card">
                                 <div class="card-body">
+
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-9">
                                             <p class="text-dark mb-0 fw-semibold">Total Requets</p>
@@ -137,30 +138,25 @@
                                     <tr>
                                         <th>Type</th>
                                         <th class="text-end">Budgeted</th>
-                                        <th class="text-end">Expected</th>
                                         <th class="text-end">Total</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="text-success">
                                             <td class="text-end">Income</td>
-                                            <td class="text-end">@moneyFormat(40000000)</td>
-                                            <td class="text-end">@moneyFormat(1000000)</td>                                                 
-                                            <td class="text-end">@moneyFormat(200000)</td>                                                 
+                                            <td class="text-end">@moneyFormat($budget->total_income??0)</td>                                                
+                                            <td class="text-end">@moneyFormat($transactions_all->where('trx_type','Income')->sum('amount_local'))</td>                                                
+                                             
                                         </tr>
                                         <tr class="text-info">
                                             <td class="text-end">Expense</td>
-                                            <td class="text-end">@moneyFormat(20000000)</td>
-                                            <td class="text-end">@moneyFormat(5000000)</td>                                                 
-                                            <td class="text-end">@moneyFormat(250000)</td>                                                 
+                                            <td class="text-end">@moneyFormat($budget->total_expenses??0)</td>                                                
+                                            <td class="text-end">@moneyFormat($transactions_all->where('trx_type','Expense')->sum('amount_local'))</td>                                                 
                                         </tr>
                                     </tbody>
                                 </table><!--end /table-->
                             </div><!--end /div-->     
-                            <div class="progress mb-1">                                                    
-                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 62%" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100">62%</div>
-                                <div class="progress-bar bg-info" role="progressbar" style="width: 38%" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100">38%</div>
-                            </div> 
+                            
                             </div>
                     </div>
                     <div class="card">

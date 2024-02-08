@@ -22,7 +22,7 @@
                 <label for="employee_id" class="form-label required">{{ __('Employee') }}</label>
                 <select class="form-select" id="employee_id" wire:model.lazy="employee_id">
                     <option selected value="">Select</option>
-                    @forelse ($employees as $employee)
+                    @forelse ($employees_list as $employee)
                         <option value="{{ $employee->id }}">{{ $employee->fullName }}</option>
                     @empty
                     @endforelse

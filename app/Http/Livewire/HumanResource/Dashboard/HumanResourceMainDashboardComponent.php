@@ -106,7 +106,7 @@ class HumanResourceMainDashboardComponent extends Component
   
             return [
                 'employee_id' => $latestContract->employee_id,
-                'department' => $latestContract->employee->department->name,
+                'department' => $latestContract->employee?->department?->name??'N/A',
                 'gross_salary' => $latestContract->gross_salary,
             ];
         })->values()->groupBy('department')->map(function ($department,$key) {

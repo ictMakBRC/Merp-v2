@@ -15,7 +15,7 @@
                                         <select class="form-select" aria-label="Default select" wire:model.lazy='employee_id'>
                                             <option selected value="">Select</option>
                                             @foreach ($employees as $employee)
-                                                <option value='{{ $employee->id }}'>{{ $employee->fullName }}</option>
+                                                <option value='{{ $employee->id }}'>{{ $employee->flatName }}</option>
                                             @endforeach
                                           </select>
                                     </div>

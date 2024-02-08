@@ -22,7 +22,7 @@
     <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
 
     <link href="{{ asset('assets/libs/starability/starability-css/starability-all.css') }}" rel="stylesheet" type="text/css" />
-    <script src="{{ asset('assets/libs/ckeditor/ckeditor.js') }}"></script>
+    <!--<script src="{{ asset('assets/libs/ckeditor/ckeditor.js') }}"></script>-->
     <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
 
 

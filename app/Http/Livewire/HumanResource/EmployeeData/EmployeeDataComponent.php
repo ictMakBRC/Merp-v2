@@ -42,7 +42,7 @@ class EmployeeDataComponent extends Component
 
     public function render()
     {
-        $employees = Employee::where('is_active',true)->get();
+        $employees = Employee::where('is_active',true)->orderBy('first_name', 'asc')->get();
         return view('livewire.human-resource.employee-data.employee-data-component',compact('employees'));
     }
 }

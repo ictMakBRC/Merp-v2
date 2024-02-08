@@ -11,19 +11,19 @@
         <div class="collapse navbar-collapse" id="sidebarCollapse">
             <!-- Navigation -->
             <ul class="navbar-nav">
-                @if (Auth::user()->hasPermission(['view_main_dashboard']))
+                {{-- @if (Auth::user()->hasPermission(['view_main_dashboard'])) --}}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('finance-dashboard') }}">{{ __('public.dashboard') }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('finance-md_dashboard') }}">{{ __('MD Dashboard') }}</a>
                 </li>
-                @endif
-                @if (Auth::user()->hasPermission(['view_unit_dashboard']))
+               {{--  @endif --}}
+               {{-- -@if (Auth::user()->hasPermission(['view_unit_dashboard']))--}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('finance-dashboard_unit',[$unit_id, $unit_type]) }}">{{ __('Unit dashboard') }}</a>
                     </li>
-                @endif
+                {{-- @endif--}}
                 <!--end nav-item-->
                 @if (Auth::user()->hasPermission(['access_accounting']))
                     <li class="nav-item">
