@@ -34,6 +34,16 @@
                                 </select>
                             </div>
 
+                            <div class="mb-3 col-md-3">
+                                <label for="countryName" class="form-label required">Account Type</label>
+                                <select name="" id="f_account_type" class="form-control" wire:model="f_account_type">
+                                    <option value="">select...</option>
+                                    @foreach ($types as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                         <div class="row mb-0">
                             <div class="mt-4 col-md-1">
@@ -108,7 +118,11 @@
                                     @foreach ($accounts as $key => $account)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $account->name }}</td>
+                                            <td>{{ $account->name }} 
+                                            @if ($account->parent_account)
+                                                Parent ({{ $account->parent->name }})
+                                            @endif
+                                            </td>
                                             <td>{{ $account->type->name??'N/A' }}</td>
                                             <td>{{ $account->subType->name??'N/A' }}</td>
                                             {{-- <td>{{ $account->type_id }}</td>
