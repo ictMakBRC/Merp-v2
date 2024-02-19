@@ -1,7 +1,7 @@
 <div>
-
+    @include('livewire.user-management.user.consent')
     <!-- /Declaration Modal -->
-    <div id="info-alert-modal" class="modal fade" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    {{-- <div id="info-alert-modal" class="modal fade" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body p-4">
@@ -28,6 +28,6 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div><!-- /.modal --> --}}
     <!-- /end of Declaration Modal -->
 </div>

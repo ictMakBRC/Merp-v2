@@ -25,7 +25,7 @@
         </select>
     </div>
 
-  <div class="mb-1 col-md-3">
+  <div class="mb-1 col-md-2">
     <label for="search" class="form-label">{{ __('public.search') }}</label>
     <input id="search" type="text" class="form-control float-end" wire:model.debounce.300ms="search"
     placeholder="search">
