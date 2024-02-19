@@ -8,6 +8,7 @@ use App\Models\Assets\AssetsCatalog;
 use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Assets\Settings\AssetCategory;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Procurement\Settings\Provider;
 use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\Procurement\Request\ProcurementRequest;
@@ -131,6 +132,31 @@ class GeneratorService
             }
         } else {
             $identifier = 'FMB'.$yearStart.'-0001'.$l;
+        }
+
+        return $identifier;
+
+    }
+
+    public static function ledgerIdentifier()
+    {
+        $identifier = '';
+        $yearStart = date('y');
+        $characters = 'ABCDEFGHJKLMNOPQRSTUVWXYZ';
+        $l = $characters[rand(0, strlen($characters) - 2)];
+        $latestIdentifier = FmsLedgerAccount::select('account_number')->orderBy('id', 'desc')->first();
+
+        if ($latestIdentifier) {
+            $numberSplit = explode('-', $latestIdentifier->account_number);
+            $numberYear = (int) filter_var($numberSplit[0], FILTER_SANITIZE_NUMBER_INT);
+
+            if ($numberYear == $yearStart) {
+                $identifier = $numberSplit[0].'-'.str_pad(((int) filter_var($numberSplit[1], FILTER_SANITIZE_NUMBER_INT) + 1), 4, '0', STR_PAD_LEFT).$l;
+            } else {
+                $identifier = 'BRC-L'.$yearStart.'-0001'.$l;
+            }
+        } else {
+            $identifier = 'BRCL'.$yearStart.'-0001'.$l;
         }
 
         return $identifier;

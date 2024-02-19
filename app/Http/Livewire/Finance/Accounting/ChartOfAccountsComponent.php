@@ -92,7 +92,7 @@ class ChartOfAccountsComponent extends Component
     {
         $this->validate([
             'name' => 'required|unique:fms_chart_of_accounts',
-            'code' => 'unique:fms_chart_of_accounts',
+            'code' => 'required|unique:fms_chart_of_accounts',
             'is_budget' => 'required|numeric',
             'account_type' => 'required|numeric',
             'sub_account_type' => 'required|numeric',
@@ -157,6 +157,7 @@ class ChartOfAccountsComponent extends Component
     {
         $this->validate([
             'name' => 'required|unique:fms_chart_of_accounts,name,'.$this->edit_id.'',
+            'code' => 'required|unique:fms_chart_of_accounts,code,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
             'is_budget' => 'required|numeric',
             'account_type' => 'required|numeric',

@@ -91,6 +91,7 @@ class FmsLedgerAccountsComponent extends Component
     public function updatedDepartmentId()
     {
         $department = Department::where('id', $this->department_id)->first();
+        $this->account_number = GeneratorService::ledgerIdentifier();
         $this->currency_id = $department?->currency_id;
         if ($department && $department->name) {
 
@@ -102,6 +103,7 @@ class FmsLedgerAccountsComponent extends Component
     {
         $department = Project::where('id', $this->project_id)->first();
         $this->currency_id = $department?->currency_id;
+        $this->account_number = GeneratorService::ledgerIdentifier();
         if ($department && $department->project_code) {
 
             $this->name = $department->project_code . ' Ledger Acct';
