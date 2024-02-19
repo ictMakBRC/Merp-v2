@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Grants\Projects\Inc;
 
 use Livewire\Component;
 use App\Data\Grants\ProjectData;
+use App\Models\Finance\Settings\FmsCustomer;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
 use App\Services\Grants\ProjectService;
@@ -18,7 +19,7 @@ class ProjectFormComponent extends Component
     public $project_type;
     // public $associated_institution;
     // public $grant_id;
-    public $funding_source;
+    public $sponsor_id;
     public $funding_amount;
     public $currency_id;
     public $proposal_submission_date;
@@ -51,7 +52,7 @@ class ProjectFormComponent extends Component
         $this->project_code = $project->project_code;
         $this->name = $project->name;
         // $this->grant_id = $project->grant_id??null;
-        $this->funding_source = $project->funding_source;
+        $this->sponsor_id = $project->sponsor_id;
         $this->funding_amount = $project->funding_amount;
         $this->currency_id = $project->currency_id;
         $this->proposal_submission_date = $this->project->proposal_submission_date;
@@ -80,8 +81,8 @@ class ProjectFormComponent extends Component
                 // 'associated_institution' => $this->associated_institution,
                 'project_code' => $this->project_code,
                 'name' => $this->name,
-                // 'grant_id' => $this->grant_id??null,
-                'funding_source' => $this->funding_source,
+                'sponsor_id' => $this->sponsor_id??null,
+                // 'sponsor_id' => $this->sponsor_id,
                 'funding_amount' => $this->funding_amount,
                 'currency_id' => $this->currency_id,
                 'proposal_submission_date' => $this->proposal_submission_date,
@@ -121,7 +122,7 @@ class ProjectFormComponent extends Component
                 'project_code' => $this->project_code,
                 'name' => $this->name,
                 // 'grant_id' => $this->grant_id??null,
-                'funding_source' => $this->funding_source,
+                'sponsor_id' => $this->sponsor_id,
                 'funding_amount' => $this->funding_amount,
                 'currency_id' => $this->currency_id,
                 'proposal_submission_date' => $this->proposal_submission_date,
@@ -148,6 +149,7 @@ class ProjectFormComponent extends Component
     public function render()
     {
         $data['employees'] = Employee::where('is_active',true)->get();
+        $data['sponsors'] = FmsCustomer::whereIn('type',['Sponsor','Funder'])->get();
         return view('livewire.grants.projects.inc.project-form-component',$data);
     }
 }

@@ -114,7 +114,7 @@ class HumanResourceMainDashboardComponent extends Component
             return [
                 'department' => $key,
                 'total_salary' => $department->sum('gross_salary'),
-                'avg_salary' => $department->sum('gross_salary'),
+                'avg_salary' => $department->avg('gross_salary'),
                 'employees_count' => $department->count(),
             ];
         })->values();
