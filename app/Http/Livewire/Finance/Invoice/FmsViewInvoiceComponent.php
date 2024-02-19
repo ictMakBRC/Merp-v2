@@ -100,14 +100,14 @@ class FmsViewInvoiceComponent extends Component
     }
     public function savePayment($id)
     {
-        // $this->validate([
-        //     'as_of' => 'required',
-        //     'payment_amount' => 'required',
-        //     // 'status' => 'required',
-        //     'description' => 'required',
-        //     'to_account' => 'required',
-        //     'to_budget_line_id' => 'required',
-        // ]);
+        $this->validate([
+            'as_of' => 'required',
+            'payment_amount' => 'required',
+            // 'status' => 'required',
+            'description' => 'required',
+            'to_account' => 'required',
+            'to_budget_line_id' => 'required',
+        ]);
         try {
             DB::transaction(function () use ($id) {
                 $payement = new FmsInvoicePayment();
@@ -201,6 +201,7 @@ class FmsViewInvoiceComponent extends Component
                 }
 
                 $this->resetInputs();
+                $this->dispatchBrowserEvent('close-modal');
                 $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget-line item created successfully!']);
             });
         } catch (\Exception $e) {

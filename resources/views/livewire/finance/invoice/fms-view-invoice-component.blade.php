@@ -191,4 +191,15 @@
             @include('livewire.finance.invoice.inc.new-internal-payment')
         </div>
     @endif
+    @push('scripts')
+        <script>
+            window.addEventListener('close-modal', event => {
+                $('#NewPaymentModal').modal('hide');
+                $('#delete_modal').modal('hide');
+            });
+            window.addEventListener('delete-modal', event => {
+                $('#delete_modal').modal('show');
+            });
+        </script>
+    @endpush
 </div>
