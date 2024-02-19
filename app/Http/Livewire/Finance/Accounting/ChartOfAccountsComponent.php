@@ -59,6 +59,8 @@ class ChartOfAccountsComponent extends Component
 
     public $toggleForm = false;
 
+    public $f_account_type;
+
     public $filter = false;
     public function export()
     {
@@ -198,7 +200,9 @@ class ChartOfAccountsComponent extends Component
     public function render()
     {
         $data['accounts'] = FmsChartOfAccount::search($this->search)
-        ->with(['type', 'subType'])
+        ->with(['type', 'subType','parent']) ->when($this->f_account_type != '', function ($query) {
+            $query->where('account_type',  $this->f_account_type);
+        })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         $data['types'] = FmsChartOfAccountsType::all();
@@ -206,7 +210,7 @@ class ChartOfAccountsComponent extends Component
         $data['sub_types'] = FmsChartOfAccountsSubType::where('type_id', $this->account_type)->get();
              
         if($this->is_sub){
-            $this->sub_accounts = FmsChartOfAccount::where('is_active',1)->with(['type'])
+            $this->sub_accounts = FmsChartOfAccount::where(['is_active'=>1,'account_type'=>$this->account_type])->with(['type'])
             ->orderBy('name', 'asc')->get();
         }
         return view('livewire.finance.accounting.fms-chart-of-accounts-component', $data);
