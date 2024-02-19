@@ -4,8 +4,10 @@
         role="tabpanel" aria-labelledby="apps-tab">
         <div class="title-box">
             <h6 class="menu-title">Finance</h6>
-            @if (Session::has('unit'))                
-                <li class="side-nav-item">Current Unit: {{ Session::get('unit') }} <span wire:click="checkOut" class="badge bg-primary pill float-end ms-auto"><i class="mdi mdi-lock-outline me-1"></i></span></li>
+            @if (Session::has('unit'))
+                <li class="side-nav-item">Current Unit: {{ Session::get('unit') }} <span wire:click="checkOut"
+                        class="badge bg-primary pill float-end ms-auto"><i class="mdi mdi-lock-outline me-1"></i></span>
+                </li>
             @endif
         </div>
         <div class="collapse navbar-collapse" id="sidebarCollapse">
@@ -20,9 +22,10 @@
                 </li>
                 {{-- @endif --}}
                 {{-- @if (Auth::user()->hasPermission(['view_unit_dashboard'])) --}}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('finance-dashboard_unit',[$unit_id, $unit_type]) }}">{{ __('Unit dashboard') }}</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="{{ route('finance-dashboard_unit', [$unit_id, $unit_type]) }}">{{ __('Unit dashboard') }}</a>
+                </li>
                 {{-- @endif --}}
                 <!--end nav-item-->
                 @if (Auth::user()->hasPermission(['access_accounting']))
@@ -66,21 +69,19 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_all_invoices']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-invoices','all') }}"
-                                            class="nav-link ">All</a>
+                                        <a href="{{ route('finance-invoices', 'all') }}" class="nav-link ">All</a>
                                     </li>
                                 @endif
                                 <li class="nav-item">
-                                    <a href="{{ route('finance-invoices_in') }}"
-                                        class="nav-link ">Incoming</a>
+                                    <a href="{{ route('finance-invoices_in') }}" class="nav-link ">Incoming</a>
                                 </li>
                                 @if (Auth::user()->hasPermission(['create_invoice']) || Auth::user()->hasPermission(['view_all_invoices']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-invoices_out') }}"
-                                            class="nav-link ">Outgoing</a>
+                                        <a href="{{ route('finance-invoices_out') }}" class="nav-link ">Outgoing</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit Services</a>
+                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit
+                                            Services</a>
                                     </li>
                                 @endif
                             </ul>
@@ -101,7 +102,7 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_all_ledger']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-ledger_accounts','all') }}" class="nav-link ">All
+                                        <a href="{{ route('finance-ledger_accounts', 'all') }}" class="nav-link ">All
                                             Units</a>
                                     </li>
                                     <li class="nav-item">
@@ -114,10 +115,11 @@
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_unit_ledger']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-ledger_accounts', $unit_type) }}" class="nav-link ">Unit Ledger</a>
+                                        <a href="{{ route('finance-ledger_accounts', $unit_type) }}"
+                                            class="nav-link ">Unit Ledger</a>
                                     </li>
                                 @endif
-                                
+
                             </ul>
 
                             <!--end nav-->
@@ -125,7 +127,7 @@
                         <!--end sidebarAnalytics-->
                     </li>
                 @endif
-                @if (Auth::user()->hasPermission(['manage_projects']) )
+                @if (Auth::user()->hasPermission(['manage_projects']))
                     <li class="nav-item {{ request()->segment(3) == 'lists' ? 'menuitem-active' : '' }}">
                         <a class="nav-link" href="#listing" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="listing">
@@ -136,7 +138,8 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['manage_projects']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-department_list') }}" class="nav-link ">Departments</a>
+                                        <a href="{{ route('finance-department_list') }}"
+                                            class="nav-link ">Departments</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-project_list') }}" class="nav-link ">Projects</a>
@@ -148,8 +151,7 @@
                         <!--end sidebarAnalytics-->
                     </li>
                 @endif
-                @if (Auth::user()->hasPermission(['view_unit_budget']) ||
-                        Auth::user()->hasPermission(['view_organization_budget']))
+                @if (Auth::user()->hasPermission(['view_unit_budget']) || Auth::user()->hasPermission(['view_organization_budget']))
                     <li class="nav-item {{ request()->segment(3) == 'budgets' ? 'menuitem-active' : '' }}">
                         <a class="nav-link" href="#budgeting" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="budgeting">
@@ -160,7 +162,8 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_organization_budget']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-budgets','all') }}" class="nav-link ">All Budgets</a>
+                                        <a href="{{ route('finance-budgets', 'all') }}" class="nav-link ">All
+                                            Budgets</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-main_budget') }}" class="nav-link ">Main
@@ -169,7 +172,8 @@
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_unit_budget']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-budgets','unit') }}" class="nav-link ">Unit Budgets</a>
+                                        <a href="{{ route('finance-budgets', 'unit') }}" class="nav-link ">Unit
+                                            Budgets</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-unit_lines') }}" class="nav-link ">Unit Lines</a>
@@ -181,8 +185,7 @@
                         <!--end sidebarAnalytics-->
                     </li>
                 @endif
-                @if (Auth::user()->hasPermission(['view_all_transactions']) ||
-                        Auth::user()->hasPermission(['view_unit_transactions']))
+                @if (Auth::user()->hasPermission(['view_all_transactions']) || Auth::user()->hasPermission(['view_unit_transactions']))
                     <li class="nav-item {{ request()->segment(3) == 'transctions' ? 'menuitem-active' : '' }}">
                         <a class="nav-link" href="#transctions" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="transctions">
@@ -193,11 +196,11 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_all_transactions']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-transactions', 'all') }}" class="nav-link ">All</a>
+                                        <a href="{{ route('finance-transactions', 'all') }}"
+                                            class="nav-link ">All</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-revenues', 'all') }}"
-                                            class="nav-link ">Income</a>
+                                        <a href="{{ route('finance-revenues', 'all') }}" class="nav-link ">Income</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-expenses', 'all') }}"
@@ -206,7 +209,8 @@
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_unit_transactions']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-transactions', 'unit') }}" class="nav-link ">History</a>
+                                        <a href="{{ route('finance-transactions', 'unit') }}"
+                                            class="nav-link ">History</a>
                                     </li>
                                 @endif
                             </ul>
@@ -215,39 +219,39 @@
                         <!--end sidebarAnalytics-->
                     </li>
                 @endif
-                
-                    {{-- //======================= --}}
-                    @if (Auth::user()->hasPermission(['view_all_transactions']) ||
-                    Auth::user()->hasPermission(['create_salary_request'])|| Auth::user()->hasPermission(['view_unit_payroll']))
-                        <li class="nav-item {{ request()->segment(3) == 'payroll' ? 'menuitem-active' : '' }}">
-                            <a class="nav-link" href="#payroll" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="payroll">
-                                Payroll
-                            </a>
-                            <div class="collapse " id="payroll">
-                                <ul class="nav flex-column">
-                                    <!--end nav-item-->
-                                    @if (Auth::user()->hasPermission(['view_all_transactions']))
-                                        <li class="nav-item">
-                                            <a href="{{ route('finance-payroll_list','all') }}"
-                                                class="nav-link ">Main Payrolls</a>
-                                        </li>
-                                    @endif
-                                    @if (Auth::user()->hasPermission(['view_unit_payroll']))
-                                        <li class="nav-item">
-                                            <a href="{{ route('finance-payroll_unit_list','unit') }}"
-                                                class="nav-link ">Unit Payrolls</a>
-                                        </li>
-                                    @endif
-                                </ul>
-                                <!--end nav-->
-                            </div>
-                            <!--end sidebarAnalytics-->
-                        </li>
-                    @endif
 
-                @if (Auth::user()->hasPermission(['view_payment_requests']) ||
-                        Auth::user()->hasPermission(['view_unit_request']))
+                {{-- //======================= --}}
+                @if (Auth::user()->hasPermission(['view_all_transactions']) ||
+                        Auth::user()->hasPermission(['create_salary_request']) ||
+                        Auth::user()->hasPermission(['view_unit_payroll']))
+                    <li class="nav-item {{ request()->segment(3) == 'payroll' ? 'menuitem-active' : '' }}">
+                        <a class="nav-link" href="#payroll" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="payroll">
+                            Payroll
+                        </a>
+                        <div class="collapse " id="payroll">
+                            <ul class="nav flex-column">
+                                <!--end nav-item-->
+                                @if (Auth::user()->hasPermission(['view_all_transactions']))
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-payroll_list', 'all') }}" class="nav-link ">Main
+                                            Payrolls</a>
+                                    </li>
+                                @endif
+                                @if (Auth::user()->hasPermission(['view_unit_payroll']))
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-payroll_unit_list', 'unit') }}"
+                                            class="nav-link ">Unit Payrolls</a>
+                                    </li>
+                                @endif
+                            </ul>
+                            <!--end nav-->
+                        </div>
+                        <!--end sidebarAnalytics-->
+                    </li>
+                @endif
+
+                @if (Auth::user()->hasPermission(['view_payment_requests']) || Auth::user()->hasPermission(['view_unit_request']))
                     <li class="nav-item {{ request()->segment(3) == 'requests' ? 'menuitem-active' : '' }}">
                         <a class="nav-link" href="#payemnt_requets" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="payemnt_requets">
@@ -271,18 +275,18 @@
                                     </li> --}}
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_unit_request']))
-                                <li class="nav-item">
-                                    <a href="{{ route('finance-requests', 'unit') }}" class="nav-link ">Payment
-                                        Requests</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('finance-requests_internal', 'unit') }}"
-                                        class="nav-link ">Internal Transfer</a>
-                                </li>
-                                <li class="nav-item d-none">
-                                    <a href="{{ route('finance-requests', 'incoming') }}"
-                                        class="nav-link ">Incoming</a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-requests', 'unit') }}" class="nav-link ">Payment
+                                            Requests</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-requests_internal', 'unit') }}"
+                                            class="nav-link ">Internal Transfer</a>
+                                    </li>
+                                    <li class="nav-item d-none">
+                                        <a href="{{ route('finance-requests', 'incoming') }}"
+                                            class="nav-link ">Incoming</a>
+                                    </li>
                                 @endif
                             </ul>
                             <!--end nav-->
@@ -316,17 +320,19 @@
                                     </li>
                                     <!--end nav-item-->
                                 @endif
-                              
+
                                 @if (Auth::user()->hasPermission(['view_currencies']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-currencies') }}" class="nav-link ">Currencies</a>
                                     </li>
                                     <!--end nav-item-->
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-currency_rates') }}" class="nav-link ">Ex Rates</a>
+                                        <a href="{{ route('finance-currency_rates') }}" class="nav-link ">Ex
+                                            Rates</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-institutions') }}" class="nav-link ">Institutions</a>
+                                        <a href="{{ route('finance-institutions') }}"
+                                            class="nav-link ">Institutions</a>
                                     </li>
                                 @endif
                                 {{-- @if (Auth::user()->hasPermission(['finance-services'])) --}}
@@ -347,7 +353,8 @@
                                     <!--end nav-item-->
                                     <!--end nav-item-->
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit Revenues</a>
+                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit
+                                            Revenues</a>
                                     </li>
                                     <!--end nav-item-->
                                 @endif
