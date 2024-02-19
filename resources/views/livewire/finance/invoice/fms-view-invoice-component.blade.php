@@ -132,6 +132,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
+                    @if (Auth::user()->hasPermission(['update_all_invoices']))
+                    
                     <div class="card-header">
                         <h4>Invoice Payments
                             @if ($invoice_data->invoice_type =='External')
@@ -149,6 +151,8 @@
                             @endif
                         </h4>
                     </div>
+                        
+                    @endif
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
