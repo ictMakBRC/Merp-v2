@@ -100,14 +100,14 @@ class FmsViewInvoiceComponent extends Component
     }
     public function savePayment($id)
     {
-        // $this->validate([
-        //     'as_of' => 'required',
-        //     'payment_amount' => 'required',
-        //     // 'status' => 'required',
-        //     'description' => 'required',
-        //     'to_account' => 'required',
-        //     'to_budget_line_id' => 'required',
-        // ]);
+        $this->validate([
+            'as_of' => 'required',
+            'payment_amount' => 'required',
+            // 'status' => 'required',
+            'description' => 'required',
+            'to_account' => 'required',
+            'to_budget_line_id' => 'required',
+        ]);
         try {
             DB::transaction(function () use ($id) {
                 $payement = new FmsInvoicePayment();
@@ -124,7 +124,7 @@ class FmsViewInvoiceComponent extends Component
                     ->increment('total_paid', 1);
                 // Find the specific record you want to update
                 $invoice = FmsInvoice::find($id);
-                if ($invoice) {
+                // if ($invoice) {
 
                     // Calculate the new total_paid amount (e.g., increment by a certain value)
                     $newTotalPaid = $invoice->total_paid + $this->payment_amount;
@@ -198,10 +198,11 @@ class FmsViewInvoiceComponent extends Component
                        
 
                     // });
-                }
+                    $this->resetInputs();
+                    $this->dispatchBrowserEvent('close-modal');
+                // }
 
-                $this->resetInputs();
-                $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget-line item created successfully!']);
+                $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Payment saved successfully!']);
             });
         } catch (\Exception $e) {
             // If the transaction fails, we handle the error and provide feedback

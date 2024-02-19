@@ -43,7 +43,7 @@
                     <div class="mb-3 col-6">
                         <label for="payment_amount" class="form-label required">Amount Received({{ $currency }})</label>
                         <div class="input-group">
-                        <input type="text" id="payment_amount"  class="form-control" name="payment_amount" required
+                        <input type="text" id="payment_amount"  max={{ $payment_balance+1 }} class="form-control" name="payment_amount" required
                             wire:model="payment_amount">
                             <span class="input-group-text">Base({{ $rate }})</span>
                             <input id="baseAmount" readonly class="form-control" name="baseAmount" required wire:model="baseAmount" step="any"  type="number">
@@ -56,7 +56,7 @@
 
                     <div class="mb-3 col-3">
                         <label for="opening_balance" class="form-label required">Payment Date</label>
-                        <input type="date" id="as_of" class="form-control" wire:model.defer='as_of'>
+                        <input type="date" id="as_of" min="{{ date('Y-m-d') }}" class="form-control" wire:model.defer='as_of'>
                         @error('as_of')
                             <div class="text-danger text-small">{{ $message }}</div>
                         @enderror

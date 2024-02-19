@@ -24,15 +24,16 @@
                     <td>{{ $invoice->due_date }}</td>
                     <td>
                         @php
+                            $due_date = \Carbon\Carbon::parse($invoice->due_date);
+                            $today = \Carbon\Carbon::now();
                             $days = \Carbon\Carbon::parse($invoice->due_date)->diffInDays(\Carbon\Carbon::now(), true);
-                            if ($days > 1 && $invoice->status != 'Fully Paid') {
+                            if ($days > 1 && $invoice->status != 'Fully Paid' && $due_date<$today) {
                                 $class = 'bg-light-warning';
                             } else {
                                 $class = '';
                                 $days = 0;
                             }
                         @endphp
-
                         <div class="badge  bg-primary">{{ $days }}Days</div>
                     </td>
                     <td><x-status-badge :status="$invoice->status" /></td>

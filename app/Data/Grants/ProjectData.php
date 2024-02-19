@@ -12,7 +12,7 @@ class ProjectData extends Data
   // public ?int $associated_institution;
   public ?string $name;
   // public ?int $grant_id;
-  public ?string $funding_source;
+  public ?string $sponsor_id;
   public ?float $funding_amount;
   public ?string $currency_id;
   public ?string $proposal_submission_date;
@@ -53,7 +53,7 @@ class ProjectData extends Data
       'project_code' => 'required|string|unique:projects',
       'name' => 'required|string|unique:projects',
       // 'grant_id' => 'nullable|integer',
-      'funding_source' => 'nullable|string',
+      'sponsor_id' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency_id' => 'required|integer',
       'start_date' => 'required|date',
@@ -75,7 +75,7 @@ class ProjectData extends Data
       'project_code' => 'required|string',
       'name' => 'required|string',
       // 'grant_id' => 'nullable|integer',
-      'funding_source' => 'nullable|string',
+      'sponsor_id' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
       'currency_id' => 'required|integer',
       'start_date' => 'required|date',
