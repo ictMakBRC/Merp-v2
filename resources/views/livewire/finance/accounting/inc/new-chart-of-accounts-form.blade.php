@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label for="countryName" class="form-label required">Account Type</label>
                                 <select name="" id="account_type" class="form-control" wire:model="account_type">
                                     <option value="">select...</option>
@@ -34,7 +34,7 @@
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label for="sub_account_type" class="form-label required">Account sub Type</label>
                                 <select name="sub_types" id="account_type" class="form-control"
                                     wire:model="sub_account_type">
@@ -56,7 +56,7 @@
                                             @if ($is_sub) checked @endif class="light-btn">
                                         <span class="slider round"></span>
                                     </label>
-                                    Is Sub-account
+                                    Sub-account
                                     <select @if (!$is_sub && $parent_account == null) disabled @endif name="parent_account"
                                         id="parent_account" class="form-control" wire:model="parent_account">
                                         <option value="">select parent account</option>
@@ -69,6 +69,14 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="code" class="form-label">Code <span class="text-danger">*</span></label>
+                                <input type="text" id="code" class="form-control" name="code" required
+                                    wire:model.lazy="code">
+                                @error('code')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>
