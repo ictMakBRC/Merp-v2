@@ -53,7 +53,7 @@
                             <div class="text-sm">
                                 <label>Batch No.</label>
                                 <input type="text" @if ($expires == '1') required @endif
-                                    class="form-control" id=";plo " wire:models="batch_no">
+                                    class="form-control" id=";plo " wire:model="batch_no">
                             </div>
                         </div><!-- end col-->
                         <div class="col-sm-1">
@@ -100,8 +100,9 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Item name</th>
-                                        <th>Belongs to</th>
+                                        <th>Store</th>
                                         <th>UOM</th>
+                                        <th>Batch No.</th>
                                         <th>Quantity</th>
                                         <th>Cost</th>
                                         <th>Total Cost</th>
@@ -115,10 +116,11 @@
                                         @foreach ($stock_items as $value)
                                             <tr>
                                                 <td>{{ $i++ }}</td>
-                                                <td>{{ $value->item->item_name ?? '' }}<input type="hidden"
+                                                <td>{{ $value->departmentItem->item->name ?? '' }}  {{ $value->inv_item_id }}<input type="hidden"
                                                         name="item[]" required value="{{ $value->inv_item_id }}"></td>
-                                                <td>{{ $value->item->subUmit->subunit_name ?? 'N/A' }}</td>
-                                                <td>{{ $value->item->parentUom->uom_name ?? 'N/A' }}</td>
+                                                <td>{{ $value->store->name ?? 'N/A' }}</td>
+                                                <td>{{ $value->departmentItem->item->uom->name ?? 'N/A' }}</td>
+                                                <td>{{ $value->batch_no }}</td>
                                                 <td>{{ $value->stock_qty }} <input type="hidden" name="quantity[]"
                                                         value="{{ $value->stock_qty }}"></td>
                                                 <td>{{ $value->unit_cost }}</td>
@@ -168,6 +170,9 @@
                                 <button type="submit" id="saveStk" wire:click='SaveStock'
                                     class="btn btn-primary {{ $display }} mb-2 me-1 mt-1 text-sm-end">Save
                                     stock</button>
+                                    <a href="javascript:void(0)" id="deleteStk" wire:click='deleteStockDoc("{{ $stockLog->stock_code }}")'
+                                    class="btn btn-danger mb-2 me-1 mt-1 text-sm-end">Delete
+                                    Doc</a>
                             </div>
                         </div>
 

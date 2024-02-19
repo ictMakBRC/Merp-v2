@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('inv_item_id')->nullable()->index('inv_department_items_inv_item_id_foreign');
             $table->integer('brand')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->double('qty_left', 8, 2)->default(0);
-            $table->double('qty_held', 8, 2)->default(0);
+            $table->decimal('qty_left', 8, 2)->default(0);
+            $table->decimal('qty_held', 8, 2)->default(0);
             $table->timestamps();
         });
     }

@@ -15,11 +15,11 @@
                     </div>
                 </div>
             </div><!--end card-->
-            <div class="row d-flex justify-content-center">\
-                <div class="col-lg-12 col-xl-4">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-12 col-xl-12">
                     <div class="float-end d-print-none mt-2 mt-md-0">
                         <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>                       
-                        <a href="{{ route('finance-invoices') }}" class="btn btn-de-danger btn-sm">Cancel</a>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#actionModal"  class="btn btn-de-success btn-sm">Action</a>
                     </div>
                 </div><!--end col-->
             </div><!--end row-->

@@ -114,6 +114,11 @@ class DepartmentItemsComponent extends Component
   public function storeData()
   {
 
+    $this->validate([
+      'unit_id' => 'required',
+      'item_id' => 'required',
+      'brand' => 'required',
+      ]);
     $unitable= null;
     $check = null;
     if ($this->entry_type == 'Project') {
@@ -136,12 +141,7 @@ class DepartmentItemsComponent extends Component
       ]);
       return false;
 
-    } else {
-      $this->validate([
-      'unit_id' => 'required',
-      'item_id' => 'required',
-      'brand' => 'required',
-      ]);
+    } else {      
 
       $dept_item = new InvDepartmentItem();
       $dept_item->brand = $this->brand;

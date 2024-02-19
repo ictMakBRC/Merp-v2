@@ -18,12 +18,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('finance-md_dashboard') }}">{{ __('MD Dashboard') }}</a>
                 </li>
+<<<<<<< HEAD
                {{--  @endif --}}
                {{-- -@if (Auth::user()->hasPermission(['view_unit_dashboard']))--}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('finance-dashboard_unit',[$unit_id, $unit_type]) }}">{{ __('Unit dashboard') }}</a>
                     </li>
                 {{-- @endif--}}
+=======
+                {{-- @endif --}}
+                {{-- @if (Auth::user()->hasPermission(['view_unit_dashboard'])) --}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('finance-dashboard_unit',[$unit_id, $unit_type]) }}">{{ __('Unit dashboard') }}</a>
+                    </li>
+                {{-- @endif --}}
+>>>>>>> 15b26077317954badc62bca7059ee37b868a0681
                 <!--end nav-item-->
                 @if (Auth::user()->hasPermission(['access_accounting']))
                     <li class="nav-item">
@@ -64,17 +73,17 @@
                         <div class="collapse " id="invoice">
                             <ul class="nav flex-column">
                                 <!--end nav-item-->
-                                @if (Auth::user()->hasPermission(['view_all_transactions']))
+                                @if (Auth::user()->hasPermission(['view_all_invoices']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-invoices','all') }}"
                                             class="nav-link ">All</a>
                                     </li>
                                 @endif
-                                @if (Auth::user()->hasPermission(['create_salary_request']))
-                                    <li class="nav-item">
-                                        <a href="{{ route('finance-invoices_in') }}"
-                                            class="nav-link ">Incoming</a>
-                                    </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('finance-invoices_in') }}"
+                                        class="nav-link ">Incoming</a>
+                                </li>
+                                @if (Auth::user()->hasPermission(['create_invoice']) || Auth::user()->hasPermission(['view_all_invoices']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-invoices_out') }}"
                                             class="nav-link ">Outgoing</a>

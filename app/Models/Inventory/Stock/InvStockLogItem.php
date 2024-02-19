@@ -6,13 +6,18 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventory\Item\InvDepartmentItem;
+use App\Models\Inventory\Settings\InvStore;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class InvStockLogItem extends Model
 {
     use HasFactory;
-    
-    public function item()
+    public function unitable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+    public function departmentItem()
     {
         return $this->belongsTo(InvDepartmentItem::class, 'inv_item_id', 'id');
     }
@@ -41,6 +46,10 @@ class InvStockLogItem extends Model
     public function createdBy()
         {
             return $this->belongsTo(User::class, 'created_by');
+        }
+        public function store()
+        {
+            return $this->belongsTo(InvStore::class, 'inv_store_id');
         }
 
     public static function search($search)
