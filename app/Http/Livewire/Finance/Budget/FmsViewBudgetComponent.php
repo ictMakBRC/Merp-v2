@@ -10,11 +10,11 @@ use App\Jobs\SendNotifications;
 use App\Services\GeneratorService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use App\Services\WhatAppMessageService;
+use App\Models\Grants\Project\Project;
 use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Budget\FmsBudgetLine;
-use App\Models\Finance\Accounting\FmsLedgerAccount;
-use App\Models\Finance\Transactions\FmsTransaction;
+use App\Models\HumanResource\Settings\Department;
+use App\Models\Finance\Budget\FmsBudgetAdjustment;
 use App\Models\Finance\Accounting\FmsChartOfAccount;
 use App\Models\Finance\Requests\FmsPaymentRequestPosition;
 
@@ -25,10 +25,42 @@ class FmsViewBudgetComponent extends Component
     public $status;
     public $comment;
     public $max_amount = 0;
+    public $amount;
+    public $reason;
+    public $description;
+    public $from_budget_line_id;
+    public $to_budget_line_id;
+
+    public $requestable_type;
+    public $requestable_id;
+    public $requestable;
+    public $unit_id;
     public function mount($budget)
     {
         $this->budgetCode = $budget;
-
+        $this->budgetData = $budgetData= FmsBudget::where('code', $this->budgetCode)->with('requestable')->first();
+        if (auth()->user()->hasPermission(['approve_unit_budget'])) {            
+            $this->requestable = $budgetData->requestable??null;
+            $this->requestable_type = $budgetData->requestable_type??null;
+            $this->requestable_id = $budgetData->requestable_id??null;
+        } else {
+            if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                $this->unit_id = session('unit_id');
+                $this->requestable = $requestable = Project::find($this->unit_id);
+            } else {
+                $this->unit_id = auth()->user()->employee->department_id ?? 0;
+                $this->requestable = $requestable = Department::find($this->unit_id);
+            }
+            if ($requestable) {
+                $this->requestable_type = get_class($requestable);
+                $this->requestable_id = $this->unit_id;
+            }else{
+                abort(403, 'Unauthorized access or action.'); 
+            }
+        }
+        if($this->requestable_id != $budgetData->requestable_id){
+            abort(403, 'Unauthorized access or action.'); 
+        }
     }
     public function submitBudget()
     {
@@ -36,27 +68,58 @@ class FmsViewBudgetComponent extends Component
         $data->status = 'Submitted';
         $data->update();
         $body = 'Hello, A unit has submitted a budget #' . $this->budgetCode . ' which needs to be approved, please login to view more details';
-        $head =  FmsPaymentRequestPosition::where('name_lock', 'finance')->first();
-        $this->SendMail($head->assigned_to??'1', $body);
+        $head = FmsPaymentRequestPosition::where('name_lock', 'finance')->first();
+        $this->SendMail($head->assigned_to ?? '1', $body);
         $this->dispatchBrowserEvent('alert', ['type' => 'Success', 'message' => 'Budget approval request has been successfully submitted! ']);
     }
-    public function approveBudget()
+    public function rejectBudget()
     {
         $this->validate([
-            'status'=>'required',
-            'comment'=>'nullable|string'
+            'status' => 'required',
+            'comment' => 'nullable|string',
         ]);
         $data = FmsBudget::where('code', $this->budgetCode)->first();
-        $data->status = $this->status??'Approved';
+        $data->status = $this->status ?? 'Approved';
         $data->comment = $this->comment;
         $data->acknowledged_by = auth()->user()->id;
         $data->acknowledged_at = date('Y-m-d');
         $data->update();
         $this->resetInputs();
+
         $this->dispatchBrowserEvent('close-modal');
         $body = 'Hello, Your budget #' . $this->budgetCode . ' has been approved, please login to view more details';
         $this->SendMail($data->created_by, $body);
         $this->dispatchBrowserEvent('alert', ['type' => 'Success', 'message' => 'Request has been successfully Approved! ']);
+    }
+    public function approveBudget()
+    {
+        DB::transaction(function () {
+            $this->validate([
+                'status' => 'required',
+                'comment' => 'nullable|string',
+            ]);
+            $budgetData = FmsBudget::where('code', $this->budgetCode)->first();
+            if ($budgetData) {
+                if($this->status=='Approved'){
+                    $totalExpense = FmsBudgetLine::where(['fms_budget_id' => $budgetData->id, 'type' => 'Expense'])->sum('allocated_amount');
+                    $totalIncome = FmsBudgetLine::where(['fms_budget_id' => $budgetData->id, 'type' => 'Revenue'])->sum('allocated_amount');
+                    $budgetData->estimated_expenditure = $totalExpense;
+                    $budgetData->estimated_income = $totalIncome;
+                    $budgetData->estimated_income_local = $totalIncome*$budgetData->rate;
+                    $budgetData->estimated_expense_local = $totalExpense*$budgetData->rate;
+                }
+                $budgetData->status = $this->status ?? 'Approved';
+                $budgetData->comment = $this->comment;
+                $budgetData->acknowledged_by = auth()->user()->id;
+                $budgetData->acknowledged_at = date('Y-m-d');
+                $budgetData->update();
+                $this->dispatchBrowserEvent('close-modal');
+                $body = 'Hello, Your budget #' . $this->budgetCode . ' has been approved, please login to view more details';
+                $this->SendMail($budgetData->created_by, $body);
+                $this->dispatchBrowserEvent('alert', ['type' => 'Success', 'message' => 'Request has been successfully Approved! ']);
+            
+            }
+        });
     }
 
     public function SendMail($id, $body)
@@ -85,18 +148,21 @@ class FmsViewBudgetComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'Success', 'message' => 'Document has been successfully marked complete! ']);
     }
     public $from_line, $to_line, $transfer_amount;
-    public function updatedFromLine(){
-       $data = FmsBudgetLine::where('id', $this->from_line)->first();
-       $this->max_amount = $data->primary_balance??0;
+    public function updatedFromLine()
+    {
+        $data = FmsBudgetLine::where('id', $this->from_line)->first();
+        $this->max_amount = $data->primary_balance ?? 0;
     }
     public function makeTransfer()
     {
         $this->validate([
-            'from_line'=>'required|numeric',
-            'to_line'=>'required|numeric',
-            'transfer_amount'=>'required|numeric',
+            'from_line' => 'required|numeric',
+            'to_line' => 'required|numeric',
+            'reason' => 'required|string',
+            'description' => 'nullable|string',
+            'transfer_amount' => 'required|numeric',
         ]);
-        if($this->from_line == $this->to_line){
+        if ($this->from_line == $this->to_line) {
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! come on',
@@ -104,7 +170,7 @@ class FmsViewBudgetComponent extends Component
             ]);
             return false;
         }
-        if($this->transfer_amount > $this->max_amount){
+        if ($this->transfer_amount > $this->max_amount) {
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! come on',
@@ -114,81 +180,30 @@ class FmsViewBudgetComponent extends Component
         }
 
         try {
-            DB::transaction(function ()  {
+            DB::transaction(function () {
                 $requestData = FmsBudget::where('code', $this->budgetCode)->first();
 
                 if ($requestData) {
-
-                    // FmsBudgetLine::where('id', $this->budget_line_id)->update(['primary_balance' => DB::raw('primary_balance - '.$this->budgetExpense)]);
 
                     $from_budget = FmsBudgetLine::find($this->from_line);
                     $from_budget->primary_balance -= $this->transfer_amount;
                     $from_budget->save();
 
+                    $budget = FmsBudgetLine::find($this->to_line);
+                    $budget->primary_balance += $this->transfer_amount;
+                    $budget->save();
+
                     $ref = 'ADJ' . GeneratorService::getNumber(7);
-                    $trans = new FmsTransaction();
-                    $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
-                    $trans->trx_ref = $ref;
-                    $trans->trx_date = date('Y-m-d');
-                    $trans->total_amount = $this->transfer_amount;                    
-                    $trans->amount_local = $this->transfer_amount*$requestData->rate; 
-                    $trans->line_balance = $from_budget->primary_balance;
-                    $trans->line_amount = $this->transfer_amount;
-                    // $trans->account_amount = $requestData->ledger_amount;
-                    // $trans->account_balance = $ledgerAccount->current_balance;
-                    // $trans->ledger_account = $requestData->ledger_account;
-                    $trans->rate = $requestData->rate;
-                    $trans->financial_year_id = $requestData->fiscal_year;
-                    $trans->department_id = $requestData->department_id;
-                    $trans->project_id = $requestData->project_id;
-                    $trans->budget_line_id = $this->from_line;
-                    $trans->currency_id = $requestData->currency_id;
-                    $trans->trx_type = 'Expense';
+                    $trans = new FmsBudgetAdjustment();
+                    $trans->amount = $this->transfer_amount;
+                    $trans->reason = $this->reason;
+                    $trans->description = $this->description;
                     $trans->status = 'Approved';
-                    $trans->description = 'Budget line adjustment loss';
-                    $trans->entry_type = 'Internal';
-                    if ($requestData->project_id != null) {
-                        $trans->is_department = false;
-                    }
-                    $trans->requestable_type = $requestData->requestable_type;
-                    $trans->requestable_id = $requestData->requestable_id;
+                    $trans->from_budget_line_id = $this->from_line;
+                    $trans->to_budget_line_id = $this->to_line;
                     $trans->save();
 
-                       
-                        $budget = FmsBudgetLine::find($this->to_line);
-                        $budget->primary_balance += $this->transfer_amount;
-                        $budget->save();
-
-                        $incomeTrans = new FmsTransaction();
-                        $incomeTrans->trx_no = 'TRI' . GeneratorService::getNumber(7);
-                        $incomeTrans->trx_ref = $ref;
-                        $incomeTrans->trx_date = date('Y-m-d');
-                        $incomeTrans->total_amount = $this->transfer_amount;
-                        $trans->amount_local = $this->transfer_amount*$requestData->rate; 
-                        $incomeTrans->line_balance = $budget->primary_balance;
-                        $incomeTrans->line_amount = $this->transfer_amount;
-                        // $incomeTrans->account_amount = $accountIncome;
-                        // $incomeTrans->account_balance = $creditAccount->current_balance;
-                        // $incomeTrans->ledger_account = $requestData->to_account;
-                        $incomeTrans->rate = $requestData->rate;
-                        $incomeTrans->financial_year_id = $requestData->fiscal_year;
-                        $incomeTrans->department_id = $requestData->to_department_id;
-                        $incomeTrans->project_id = $requestData->to_project_id;
-                        $incomeTrans->budget_line_id = $this->to_line;
-                        $incomeTrans->currency_id = $requestData->currency_id;
-                        $incomeTrans->trx_type = 'Income';
-                        $incomeTrans->status = 'Approved';
-                        $incomeTrans->description = 'Budget line adjustment gain';
-                        $incomeTrans->entry_type = 'Internal';
-                        if ($requestData->to_project_id != null) {
-                            $incomeTrans->is_department = false;
-                        }
-                        $incomeTrans->requestable_type = $requestData->requestable_type;
-                        $incomeTrans->requestable_id = $requestData->requestable_id;
-                        $incomeTrans->save();
-
-                    
-                        $this->resetInputs();
+                    $this->resetInputs();
                     $this->dispatchBrowserEvent('close-modal');
                     $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Transaction created successfully!']);
                 }});
@@ -202,6 +217,9 @@ class FmsViewBudgetComponent extends Component
 
         }
     }
+    public function close(){
+        $this->resetInputs();
+    }
     public function resetInputs()
     {
         $this->reset([
@@ -211,13 +229,19 @@ class FmsViewBudgetComponent extends Component
             'comment',
             'status',
             'max_amount',
+            'amount',
+            'reason',
+            'description',
+            'status',
+            'comment',
+            'from_budget_line_id',
+            'to_budget_line_id',
         ]);
     }
     public function render()
     {
-        $data['budget_data'] = $budgetData = FmsBudget::where('code', $this->budgetCode)->first();
-        if ($budgetData) {
-            $this->budgetData = $budgetData;
+        $data['budget_data'] = $this->budgetData;
+        if ($this->budgetData) {
             $data['budget_lines'] = FmsBudgetLine::where('fms_budget_id', $data['budget_data']->id)->get();
         } else {
             $data['budget_lines'] = collect([]);
@@ -225,6 +249,6 @@ class FmsViewBudgetComponent extends Component
         $chartOfAccts = FmsChartOfAccount::where('is_active', 1)->with(['type']);
         $data['incomes'] = $chartOfAccts->where('account_type', 4)->get();
         $data['expenses'] = FmsChartOfAccount::where('is_active', 1)->with(['type'])->where('account_type', 3)->get();
-        return view('livewire.finance.budget.fms-view-budget-component',$data);
+        return view('livewire.finance.budget.fms-view-budget-component', $data);
     }
 }

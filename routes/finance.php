@@ -7,6 +7,7 @@ use App\Http\Livewire\Finance\Income\FmsIncomeComponent;
 use App\Http\Livewire\Finance\Budget\FmsBudgetsComponent;
 use App\Http\Livewire\Finance\Lists\FmsProjectsComponent;
 use App\Http\Controllers\Finance\FinanceGeneralController;
+use App\Http\Livewire\Finace\Payroll\FmsViewPayrollComponent;
 use App\Http\Livewire\Finance\Expense\FmsExpenseComponent;
 use App\Http\Livewire\Finance\Settings\CustomersComponent;
 use App\Http\Livewire\Finance\Banking\FmsViewBankComponent;
@@ -116,6 +117,7 @@ Route::group(['prefix' => 'finance'], function () {
     Route::group(['prefix' => 'payroll'], function () {
         Route::get('requests/{type}', FmsPayrollRequestsComponent::class)->name('finance-payroll_unit_list');
         Route::get('payroll/{code}/employees', FmsPayrollRequestDetailsComponent::class)->name('finance-payroll_unit_details');
+        Route::get('payroll/{code}/view', FmsViewPayrollComponent::class)->name('finance-payroll_view');
         Route::get('list', FmsPayrollsComponent::class)->name('finance-payroll_list');
         Route::get('create/{voucher}/add', FmsPayrollScheduleComponent::class)->name('finance-payroll_data');
         Route::get('generate/{voucher}/add', FmsGeneratePayrollComponent::class)->name('finance-payroll_generate');

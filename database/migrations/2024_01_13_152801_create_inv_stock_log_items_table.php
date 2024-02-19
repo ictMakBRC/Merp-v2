@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('inv_stock_log_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('inv_stock_log_id')->constrained('inv_stock_logs','id')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('inv_stock_log_id')->nullable()->constrained('inv_stock_logs','id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('inv_item_id')->constrained('inv_department_items','id')->onUpdate('cascade')->onDelete('restrict');
-            $table->double('stock_qty', 8, 2)->default(0);
-            $table->decimal('qyt_given', 20)->nullable()->default(0);
+            $table->decimal('stock_qty', 8, 2)->default(0);
+            $table->decimal('qty_left', 20)->nullable()->default(0);
             $table->string('batch_no')->nullable();
             $table->date('expiry_date')->nullable();
             $table->double('unit_cost', 60, 2)->nullable();
