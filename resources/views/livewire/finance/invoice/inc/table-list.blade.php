@@ -34,7 +34,6 @@
                                 $days = 0;
                             }
                         @endphp
-                        {{ $today.'-'.$due_date }}
                         <div class="badge  bg-primary">{{ $days }}Days</div>
                     </td>
                     <td><x-status-badge :status="$invoice->status" /></td>
