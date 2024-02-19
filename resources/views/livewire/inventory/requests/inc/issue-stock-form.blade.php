@@ -6,7 +6,7 @@
                 <h6 class="modal-title" id="issueModal">Full screen modal</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            @if ($inventory_data->manager_id == auth()->user()->id && $request_data->status == 'Received')
+            @if ($inventory_data?->manager_id == auth()->user()->id && $request_data?->status == 'Received')
                 @if ($active_item)
                     <div class="modal-body">
                         <div class="row">

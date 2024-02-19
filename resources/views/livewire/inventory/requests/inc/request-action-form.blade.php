@@ -9,7 +9,7 @@
                 <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()"
                     aria-label="Close"></button>
             </div><!--end modal-header-->
-            @if ($request_data->status == 'Submitted')
+            @if ($request_data?->status == 'Submitted')
                 @if ($approver == auth()->user()->employee?->id)
                     <form wire:submit.prevent="approveRejectRequest({{ $request_data->id }})">
                         <div class="modal-body">
@@ -55,7 +55,7 @@
                     <h5 class="text-center">No action needed</h5>
                 @endif
             @elseif($request_data->status == 'Approved')
-                @if ($inventory_data->manager_id == auth()->user()->id||Auth::user()->hasPermission(['approve_inventory_request']))
+                @if ($inventory_data?->manager_id == auth()->user()->id||Auth::user()->hasPermission(['approve_inventory_request']))
                     <form wire:submit.prevent="receiveRejectRequest({{ $request_data->id }})">
                         <div class="modal-body">
                             <div class="row">
