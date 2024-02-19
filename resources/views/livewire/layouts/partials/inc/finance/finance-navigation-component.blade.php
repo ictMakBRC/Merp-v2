@@ -296,9 +296,37 @@
                 @endif
                 @if (Auth::user()->hasPermission(['view_customers']))
                     <li class="nav-link">
-                        <a href="{{ route('finance-customers') }}" class="nav-link ">Customers</a>
+                        <a href="{{ route('finance-customers') }}" class="nav-link ">Clients</a>
                     </li>
                 @endif
+                @if (Auth::user()->hasPermission(['view_fms_reports']))
+                <li class="nav-item">
+                    <a class="nav-link" href="#sidebarReports" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarAnalytics">
+                        Reports
+                    </a>
+                    <div class="collapse " id="sidebarReports">
+                        <ul class="nav flex-column">
+                            @if (Auth::user()->hasPermission(['view_coa']))
+                                <li class="nav-item">
+                                    <a href="{{ route('finance-chart_of_account_types') }}"
+                                        class="nav-link ">Account Types</a>
+                                </li>
+                                <!--end nav-item-->
+                                <li class="nav-item">
+                                    <a href="{{ route('finance-chart_of_account_sub_types') }}"
+                                        class="nav-link ">Account
+                                        Subtypes</a>
+                                </li>
+                                <!--end nav-item-->
+                            @endif
+                        </ul>
+                        <!--end nav-->
+                    </div>
+                    <!--end sidebarAnalytics-->
+                </li>
+                <!--end nav-item-->
+            @endif
                 @if (Auth::user()->hasPermission(['access_finance_management_settings']))
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarAnalytics" data-bs-toggle="collapse" role="button"
