@@ -37,7 +37,7 @@ class ProjectService
         $project->project_code = $projectDTO->project_code;
         $project->name = $projectDTO->name;
         // $project->grant_id = $projectDTO->grant_id;
-        $project->funding_source = $projectDTO->funding_source;
+        $project->sponsor_id = $projectDTO->sponsor_id;
         $project->funding_amount = $projectDTO->funding_amount;
         $project->currency_id = $projectDTO->currency_id;
         $project->proposal_submission_date = $projectDTO->proposal_submission_date;

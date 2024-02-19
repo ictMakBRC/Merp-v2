@@ -96,7 +96,8 @@
                         </div> --}}
 
                         <div class="mb-3 col-md-6">
-                            <label for="project_code" class="form-label required">{{ __('Project/Study/Grant Code') }}</label>
+                            <label for="project_code"
+                                class="form-label required">{{ __('Project/Study/Grant Code') }}</label>
                             <input type="text" id="project_code" class="form-control"
                                 wire:model.defer="project_code">
                             @error('project_code')
@@ -123,14 +124,28 @@
                             @enderror
                         </div> --}}
 
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-3">
+                            <label for="sponsor_id" class="form-label required">{{ __('Sponsor/Funder') }}</label>
+                            <select class="form-select" id="sponsor_id" wire:model.lazy="sponsor_id">
+                                <option selected value="">Select</option>
+                                @forelse ($sponsors as $sponsor)
+                                    <option selected value="{{ $sponsor->id }}">{{ $sponsor->name }}</option>
+                                @empty
+                                @endforelse
+                            </select>
+                            @error('sponsor_id')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        {{-- <div class="mb-3 col-md-6">
                             <label for="funding_source" class="form-label">{{ __('Funding Source') }}</label>
                             <input type="text" id="funding_source" class="form-control"
                                 wire:model.defer="funding_source">
                             @error('funding_source')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="mb-3 col-md-3">
                             <label for="funding_amount" class="form-label">{{ __('Funding Amount') }}</label>
