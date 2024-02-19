@@ -11,10 +11,7 @@
                                 <address class="font-13">
                                     <strong class="font-14">Billed By :</strong><br>
                                     {{$biller->name??'N/A'}}<br>
-                                    {{$biller->prefix??'N/A'}}<br>
-                                    <strong class="font-14">Bank Details :</strong><br>
-                                    {{$invoice_data->bank->name??'N/A'}}:-
-                                    {{$invoice_data->bank->account_no??'N/A'}}
+                                    {{$biller->prefix??'N/A'}}
                                 </address>
                             </div>
                         </div><!--end col--> 
