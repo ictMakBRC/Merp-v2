@@ -44,6 +44,23 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div> 
+                        <div class="mb-3 col-12">
+                            <label for="reason" class="form-label required">Reason</label>
+                            <select  id="transfer_amount" class="form-control form-select" wire:model="reason">
+                                <option value="">Select</option>
+                                <option value="Adjustment">Adjustment</option>
+                            </select>
+                            @error('reason')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div> 
+                        <div class="mb-3 col-12">
+                            <label for="description" class="form-label required">Description</label>
+                            <textarea  id="description" class="form-control" wire:model.defer="description"></textarea>
+                            @error('description')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div> 
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -9,7 +9,7 @@
                     <p>Name:{{ $budget_data->name }}</p>
                 </div>
                 <div class="col-3">
-                    <p>Unit:{{ $budget_data->project->name??$budget->department->name??'N/A' }}</p>
+                    <p>Unit:{{ $requestable->name??'N/A' }}</p>
                 </div>
                 <div class="col-3">
                     <p>Fiscal Year:{{ $budget_data->fiscalYear->name??'N/A' }}</p>
@@ -133,11 +133,13 @@
             </span>
         @endif
         @if ($budget_data->status =='Approved' && Auth::user()->hasPermission(['update_unit_budget']))
-        <span class="text-end">
-            <a class="btn btn-sm btn-success text-end float-end" data-bs-toggle="modal"
-            data-bs-target="#adjustBudgetModal" href="javascript:void(0)">Adjust Budget</a>
-        </span>
-    @endif
+            @if ($budget_data->status =='Approved' && Auth::user()->hasPermission(['update_unit_budget']))
+                <span class="text-end">
+                    <a class="btn btn-sm btn-success text-end float-end" data-bs-toggle="modal"
+                    data-bs-target="#adjustBudgetModal" href="javascript:void(0)">Adjust Budget</a>
+                </span>
+            @endif
+        @endif
     </div>
     @include('livewire.finance.budget.inc.approve-budget')
     @include('livewire.finance.budget.inc.adjust-budget')

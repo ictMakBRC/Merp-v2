@@ -132,8 +132,8 @@ class FmsBudgetLinesComponent extends Component
                 $totalIncome = FmsBudgetLine::where(['fms_budget_id' => $budgetData->id, 'type' => 'Revenue'])->sum('allocated_amount');
                 $budgetData->estimated_expenditure = $totalExpense;
                 $budgetData->estimated_income = $totalIncome;
-                $budgetData->estimated_income_local = $totalIncome*$budgetData->rate;
-                $budgetData->estimated_expense_local = $totalExpense*$budgetData->rate;
+                // $budgetData->estimated_income_local = $totalIncome*$budgetData->rate;
+                // $budgetData->estimated_expense_local = $totalExpense*$budgetData->rate;
                 $budgetData->status = 'Saved';
                 $budgetData->update();
                 $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget saved successfully!']);

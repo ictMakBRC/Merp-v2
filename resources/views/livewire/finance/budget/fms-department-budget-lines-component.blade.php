@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <label for="budgetAmount_{{ $income->id }}">Budget Name:</label>
-                            <input type="text" class="form-control" wire:model="name.{{ $income->id }}">
+                            <input type="text" class="form-control" wire:model.lazy="name.{{ $income->id }}">
                             @error('name')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
@@ -20,7 +20,7 @@
                         <div class="col-md-6">
                             <label for="description_{{ $income->id }}">Income description:</label>
                             <input type="text" required class="form-control"
-                                wire:model="description.{{ $income->id }}">
+                                wire:model.lazy="description.{{ $income->id }}">
                             @error('description')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
@@ -75,7 +75,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <label for="budgetname_{{ $expense->id }}">Budget Name:</label>
-                            <input type="text" class="form-control" wire:model="name.{{ $expense->id }}">
+                            <input type="text" class="form-control" wire:model.lazy="name.{{ $expense->id }}">
                             @error('name')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
@@ -83,7 +83,7 @@
                         <div class="col-md-6">
                             <label for="description_{{ $expense->id }}">Expense description:</label>
                             <input type="text" required class="form-control"
-                                wire:model="description.{{ $expense->id }}">
+                                wire:model.lazy="description.{{ $expense->id }}">
                             @error('description')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror

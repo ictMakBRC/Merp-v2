@@ -1,6 +1,13 @@
 <div>
+    @php
+        if ($payroll->status =='Completed'){
+            $display ='d-none';
+        }else{
+            $display =''; 
+        }
+    @endphp
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 {{  $display }}">
             <div class="table-responsive">
                 <table class="table-striped text-info">
                     <tr>
@@ -13,7 +20,8 @@
             </div>
         </div>
         <div class="card">
-            <div class="card-header">
+                
+            <div class="card-header {{  $display }}">
                 <form wire:submit.prevent="createPayrollRate()">
                     <div class="row">
 
@@ -264,8 +272,12 @@
                         </div> <!-- end preview-->
                     </div> <!-- end tab-content-->
                     <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#markPaid" wire:click="markAsPaid({{ $payroll_rate->id }}, 'PayrollRate')"
-                        class="text-success m-2 btn-xs btn btn-outline-success float-end" title="mark {{ $payroll_rate->currency->code }} as paid">
+                        class="text-success m-2 btn-xs btn btn-outline-success float-end {{  $display }}" title="mark {{ $payroll_rate->currency->code }} as paid">
                             <i class="fa fa-check"></i>Mark All {{ $payroll_rate->currency->code }} salaries as paid
+                    </a>
+                    <a href="javascript:void()" data-bs-toggle="modal" data-bs-target="#markPaid" wire:click="markAsPaid({{ $payroll_rate->id }}, 'PayrollRate')"
+                        class="text-success m-2 btn-xs btn btn-outline-info float-end" title="mark {{ $payroll_rate->currency->code }} as paid">
+                            <i class="fa fa-check"></i>Generate {{ $payroll_rate->currency->code }} Bank Data
                     </a>
                 </div> <!-- end card body-->
             @endforeach

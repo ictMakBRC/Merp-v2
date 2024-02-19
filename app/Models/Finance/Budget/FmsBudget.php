@@ -58,6 +58,9 @@ class FmsBudget extends Model
        return $this->belongsTo(FmsFinancialYear::class, 'fiscal_year', 'id');
     }
       
+    // function adjustments() {
+    //     return $this->hasMany(B)
+    // }
     public static function boot()
     {
         parent::boot();

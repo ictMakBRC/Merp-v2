@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
+use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsFinancialYear;
@@ -111,6 +112,18 @@ class FinanceMainDashboardComponent extends Component
 
         return $convertedAmount;
     }
+    public function budgetQuery()
+    {
+        $budgets = FmsBudget::where('fiscal_year', $this->fiscal_year->id??0)
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+            }, function ($query) {
+                return $query;
+            });
+
+
+        return $budgets;
+    }
     public function render()
     {
         DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
@@ -129,7 +142,10 @@ class FinanceMainDashboardComponent extends Component
         $data['invoice_amounts'] = $this->filterInvoices()->whereIn('status',['Partially Paid','Paid','Approved'])->select(DB::raw('sum(total_amount) as amount'), 'status')->groupBy('status')->get();
         $data['requests'] = $this->paymentRequests()->where('status', 'Approved')->latest()->limit(10)->get();
         $data['request_counts'] = $this->paymentRequests()->get();
+        $data['transactions_all'] = $this->transactions()->get();
         $data['transactions'] = $this->transactions()->latest()->limit(10)->get();
+        $data['budget'] = $this->budgetQuery()->with(['fiscalYear'])->select('fiscal_year', DB::raw('sum(estimated_income_local) as total_income'), DB::raw('sum(estimated_expense_local) as total_expenses'))
+        ->groupBy('fiscal_year')->first();
         return view('livewire.finance.dashboard.finance-main-dashboard-component', $data)->layout('layouts.app');
     }
 }
