@@ -44,6 +44,10 @@ class FmsChartOfAccount extends Model
     {
         return $this->belongsTo(FmsChartOfAccountsType::class, 'account_type', 'id');
     }
+    public function parent()
+    {
+        return $this->belongsTo(FmsChartOfAccount::class, 'parent_account', 'id');
+    }
     public function subType()
     {
         return $this->belongsTo(FmsChartOfAccountsSubType::class, 'sub_account_type', 'id');
