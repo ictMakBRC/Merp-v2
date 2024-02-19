@@ -75,7 +75,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('finance-invoices_in') }}" class="nav-link ">Incoming</a>
                                 </li>
-                                @if (Auth::user()->hasPermission(['create_invoice']) || Auth::user()->hasPermission(['view_all_invoices'])|| Auth::user()->hasPermission(['create_unit_invoice']) ||)
+                                @if (Auth::user()->hasPermission(['create_invoice']) || Auth::user()->hasPermission(['view_all_invoices'])|| Auth::user()->hasPermission(['create_unit_invoice']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-invoices_out') }}" class="nav-link ">Outgoing</a>
                                     </li>
