@@ -112,8 +112,8 @@ class ChartOfAccountsComponent extends Component
         $account->is_active =$this->is_active??1; //isset($this->is_active) ? 1 : 0;
         $account->is_budget =$this->is_budget??0;
         $account->save();
-        $this->resetInputs();
-        $this->dispatchBrowserEvent('close-modal');
+        // $this->resetInputs();
+        // $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'COA created successfully!']);
     }
 
