@@ -45,7 +45,7 @@
                         
                         <div class="mb-3 col-md-4">
                             <label for="system_default" class="form-label required">{{ __('System Default') }}</label>
-                            <select class="form-select select2" id="system_default" wire:model.defer="system_default">
+                            <select class="form-select select2" disabled readonly id="system_default" wire:model.defer="system_default">
                                 <option selected value="">Select</option>
                                 <option value='1'>Yes</option>
                                 <option value='0'>No</option>

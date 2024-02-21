@@ -81,7 +81,7 @@ class ChartOfAccountsComponent extends Component
         $this->validateOnly($fields, [
             'name' => 'required|unique:fms_chart_of_accounts',
             'code' => 'unique:fms_chart_of_accounts',
-            // 'is_active' => 'required|numeric',
+            'is_active' => 'required|numeric',
             'account_type' => 'required|numeric',
             'sub_account_type' => 'required|numeric',
 
@@ -94,6 +94,7 @@ class ChartOfAccountsComponent extends Component
             'name' => 'required|unique:fms_chart_of_accounts',
             'code' => 'required|unique:fms_chart_of_accounts',
             'is_budget' => 'required|numeric',
+            'is_active' => 'required|numeric',
             'account_type' => 'required|numeric',
             'sub_account_type' => 'required|numeric',
 
@@ -108,8 +109,8 @@ class ChartOfAccountsComponent extends Component
         $account->bank_balance = $this->bank_balance??0;
         $account->as_of = date('Y-m-d');
         $account->description = $this->description;
-        $account->is_active = isset($this->is_active) ? 1 : 0;
-        $account->is_budget = isset($this->is_budget) ? 1 : 0;
+        $account->is_active =$this->is_active??1; //isset($this->is_active) ? 1 : 0;
+        $account->is_budget =$this->is_budget??0;
         $account->save();
         $this->resetInputs();
         $this->dispatchBrowserEvent('close-modal');

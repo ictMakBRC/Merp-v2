@@ -37,7 +37,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="sub_account_type" class="form-label required">Account sub Type</label>
                                 <select name="sub_types" id="account_type" class="form-control"
-                                    wire:model="sub_account_type">
+                                    wire:model.lazy="sub_account_type">
                                     <option value="">select...</option>
                                     @foreach ($sub_types as $subtype)
                                         <option value="{{ $subtype->id }}">{{ $subtype->name }}</option>
@@ -58,7 +58,7 @@
                                     </label>
                                     Sub-account
                                     <select @if (!$is_sub && $parent_account == null) disabled @endif name="parent_account"
-                                        id="parent_account" class="form-control" wire:model="parent_account">
+                                        id="parent_account" class="form-control" wire:model.lazy="parent_account">
                                         <option value="">select parent account</option>
                                         @foreach ($sub_accounts as $account)
                                             <option value="{{ $account->id }}">
@@ -93,7 +93,7 @@
                             </div>
                             <div class="col-md-12">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea name="description" wire:model='description' id="description" class="form-control"></textarea>
+                                <textarea name="description" wire:model.defer='description' id="description" class="form-control"></textarea>
                                 @error('description')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
@@ -102,7 +102,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="is_budget" class="form-label required">Bugdetable ?</label>
                                 <select name="sub_types" id="is_budget" class="form-control"
-                                    wire:model="is_budget">
+                                    wire:model.defer="is_budget">
                                     <option value="">select...</option>
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>
@@ -115,7 +115,7 @@
                             <div class="mb-3 col-md-6">
                                 <label for="is_active" class="form-label required">Active ?</label>
                                 <select name="sub_types" id="is_active" class="form-control"
-                                    wire:model="is_active">
+                                    wire:model.defer="is_active">
                                     <option value="">select...</option>
                                     <option value="1">Yes</option>
                                     <option value="0">No</option>

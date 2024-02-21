@@ -1,6 +1,6 @@
 <div x-cloak x-show="create_new">
     <form wire:submit.prevent="storeTransaction" >             
-
+        @include('layouts.messages')
             <div class="row">          
 
                 @include('livewire.partials.project-department-toggle')           
@@ -65,7 +65,7 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div> 
-                <div class="mb-3 col">
+                <div class="mb-3 col-3">
                     <label for="total_amount" class="form-label required">Amount</label>
                     <div class="input-group">
                     <input type="text" id="total_amount"  class="form-control" name="total_amount" required
@@ -77,8 +77,32 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div>            
+                <div class="mb-3 col-2">
+                    <label for="bank_id" class="form-label required">Bank</label>
+                    <div class="input-group">
+                        <select id="bank_id" class="form-control" name="bank_id" required wire:model="bank_id">
+                            <option value="">Select</option>
+                            @foreach ($banks as $bank)
+                                <option value="{{$bank->id}}">{{$bank->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 
-                <div class="mb-3 col-md-4">
+                    @error('bank_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div> 
+                <div class="mb-3 col-2">
+                    <label for="trx_date" class="form-label required">Trx Date</label>
+                    <div class="input-group">
+                    <input type="date" id="trx_date" max="{{ $active_year->end_date }}" min="{{ $active_year->start_date }}" class="form-control" name="trx_date" required
+                        wire:model="trx_date">                        
+                    </div>
+                    @error('trx_date')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>  
+                <div class="mb-3 col">
                     <label for="description" class="form-label">Description</label>
                     <textarea  id="description" class="form-control"
                     name="description" wire:model.defer="description"></textarea>
