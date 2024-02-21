@@ -295,9 +295,24 @@
                     </li>
                 @endif
                 @if (Auth::user()->hasPermission(['view_customers']))
-                    <li class="nav-link">
-                        <a href="{{ route('finance-customers') }}" class="nav-link ">Clients</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#sidebarClients" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarAnalytics">
+                        Clients
+                    </a>
+                    <div class="collapse " id="sidebarClients">
+                        <ul class="nav flex-column">                           
+                            <li class="nav-item">
+                                <a href="{{ route('finance-customers') }}" class="nav-link ">Clients List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('finance-customers') }}" class="nav-link ">Debtors List</a>
+                            </li>
+                        </ul>
+                        <!--end nav-->
+                    </div>
+                    <!--end sidebarAnalytics-->
+                </li>
                 @endif
                 @if (Auth::user()->hasPermission(['view_fms_reports']))
                 <li class="nav-item">
