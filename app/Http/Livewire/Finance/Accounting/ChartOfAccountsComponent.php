@@ -139,16 +139,16 @@ class ChartOfAccountsComponent extends Component
     {
         $this->reset([
             'name',
-            'code',
-            'account_type',
-            'sub_account_type',
-            'is_active',
+            // 'code',
+            // 'account_type',
+            // 'sub_account_type',
+            // 'is_active',
             'description',
-            'parent_account',
-            'primary_balance',
-            'bank_balance',
-            'as_of',
-            'is_budget'
+            // 'parent_account',
+            // 'primary_balance',
+            // 'bank_balance',
+            // 'as_of',
+            // 'is_budget'
         ]);
         $this->mode = 'add';
         $this->is_sub = false;
