@@ -106,6 +106,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
+                                        <th>Code</th>
                                         <th>Type</th>
                                         <th>Detail Type</th>
                                         {{-- <th>Tax Rate</th>
@@ -123,6 +124,7 @@
                                                 Parent ({{ $account->parent->name }})
                                             @endif
                                             </td>
+                                            <td>{{ $account->code??'N/A' }}</td>
                                             <td>{{ $account->type->name??'N/A' }}</td>
                                             <td>{{ $account->subType->name??'N/A' }}</td>
                                             {{-- <td>{{ $account->type_id }}</td>
