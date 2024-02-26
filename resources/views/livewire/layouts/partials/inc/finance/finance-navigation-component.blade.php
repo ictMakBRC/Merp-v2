@@ -110,7 +110,7 @@
                                             Ledger</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-banks') }}" class="nav-link ">Bank Accts</a>
+                                        <a href="{{ route('finance-banks') }}" class="nav-link ">Bank Accounts</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_unit_ledger']))
@@ -131,7 +131,7 @@
                     <li class="nav-item {{ request()->segment(3) == 'lists' ? 'menuitem-active' : '' }}">
                         <a class="nav-link" href="#listing" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="listing">
-                            Lists
+                            Unit Lists
                         </a>
                         <div class="collapse " id="listing">
                             <ul class="nav flex-column">
@@ -380,30 +380,30 @@
                                 @endif
                                 {{-- @if (Auth::user()->hasPermission(['finance-services'])) --}}
                                 <li class="nav-item">
-                                    <a href="{{ route('finance-req_settings') }}" class="nav-link ">Positions</a>
+                                    <a href="{{ route('finance-req_settings') }}" class="nav-link ">Approval Chain</a>
                                 </li>
                                 <!--end nav-item-->
                                 {{-- @endif --}}
                                 @if (Auth::user()->hasPermission(['view_services']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-categories') }}" class="nav-link ">Reveune
+                                        <a href="{{ route('finance-categories') }}" class="nav-link ">Service
                                             Sub-Types</a>
                                     </li>
                                     <!--end nav-item-->
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-services') }}" class="nav-link ">Revenues</a>
+                                        <a href="{{ route('finance-services') }}" class="nav-link ">Services</a>
                                     </li>
                                     <!--end nav-item-->
                                     <!--end nav-item-->
                                     <li class="nav-item">
                                         <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit
-                                            Revenues</a>
+                                            Services</a>
                                     </li>
                                     <!--end nav-item-->
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_years']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-years') }}" class="nav-link ">Years</a>
+                                        <a href="{{ route('finance-years') }}" class="nav-link ">Financial Years</a>
                                     </li>
                                 @endif
                             </ul>

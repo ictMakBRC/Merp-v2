@@ -171,7 +171,7 @@ class FmsServiceCategoriesComponent extends Component
             $data['categories'] = $this->filterCategories()
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->paginate($this->perPage);
-                $data['accounts']= FmsChartOfAccount::where('account_type', 4)->get();
+                $data['accounts']= FmsChartOfAccount::where(['account_type'=>4,'is_budget'=>2])->get();
             return view('livewire.finance.settings.fms-service-categories-component', $data);
         }
 }

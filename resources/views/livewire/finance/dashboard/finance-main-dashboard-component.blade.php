@@ -28,7 +28,7 @@
 
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-9">
-                                            <p class="text-dark mb-0 fw-semibold">Total Requets</p>
+                                            <p class="text-dark mb-0 fw-semibold">Total Requests</p>
                                             <h3 class="my-1 font-20 fw-bold">{{ $request_counts->count() }}</h3>
                                             <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>
                                                 {{ $request_counts->where('status', '!=', 'Completed')->count() }}</span> Pending</p>
@@ -47,7 +47,7 @@
                                 <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-9">
-                                            <p class="text-dark mb-0 fw-semibold">Inter-Trans Requets</p>
+                                            <p class="text-dark mb-0 fw-semibold">Inter-Trans Requests</p>
                                             <h3 class="my-1 font-20 fw-bold">{{ $request_counts->whereIn('request_type',['Internal Transfer'])->count() }}</h3>
                                             <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>
                                                 {{ $request_counts->whereIn('request_type',['Internal Transfer'])->where('status', '!=', 'Completed')->count() }}</span> Pending</p>
@@ -66,7 +66,7 @@
                                 <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-9">
-                                            <p class="text-dark mb-0 fw-semibold">Payemnt Requets</p>
+                                            <p class="text-dark mb-0 fw-semibold">Payemnt Requests</p>
                                             <h3 class="my-1 font-20 fw-bold">{{ $request_counts->whereIn('request_type',['Payment','Procurement', 'Advance Payment'])->count() }}</h3>
                                             <p class="mb-0 text-truncate text-muted"><span class="text-warning"><i class="mdi mdi-trending-up"></i>
                                                 {{ $request_counts->whereIn('request_type',['Payment','Procurement Request', 'Advance Request'])->where('status', '!=', 'Completed')->count() }}</span> Pending</p>
@@ -85,7 +85,7 @@
                                 <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-9">
-                                            <p class="text-dark mb-0 fw-semibold">Petty cash Requets</p>
+                                            <p class="text-dark mb-0 fw-semibold">Petty cash Requests</p>
                                             <h3 class="my-1 font-20 fw-bold">{{ $request_counts->whereIn('request_type',['Petty Cash'])->count() }}</h3>
                                             <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>
                                                 {{ $request_counts->whereIn('request_type',['Petty Cash'])->where('status', '!=', 'Completed')->count() }}</span> Pending</p>
@@ -138,7 +138,7 @@
                                     <tr>
                                         <th>Type</th>
                                         <th class="text-end">Budgeted</th>
-                                        <th class="text-end">Total</th>
+                                        <th class="text-end">Actual</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -181,10 +181,10 @@
                         <div class="card-body">
                             <div class="text-center">
                                 <div class="apex-charts" wire:ignore id="invoice_report"></div>
-                                <h6 class="bg-light-alt py-3 px-2 mb-0">
+                                {{-- <h6 class="bg-light-alt py-3 px-2 mb-0">
                                     <i data-feather="calendar" class="align-self-center icon-xs me-1"></i>
                                     01 January 2023 to 31 December 2023
-                                </h6>
+                                </h6> --}}
                             </div>  
                             <div class="table-responsive mt-2">
                                 <table class="table border-dashed mb-0">
@@ -325,7 +325,9 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>No.</th>
+                                            <th>Unit</th>
                                             <th>Trx No.</th>
+                                            <th>Trx Type</th>
                                             <th>Date</th>
                                             <th>Amount</th>
                                             <th>Currency</th>
@@ -337,7 +339,9 @@
                                         @foreach ($transactions as $key => $transaction)
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
+                                                <td>{{ $transaction->requestable?->name ?? '' }}</td>
                                                 <td>{{ $transaction->trx_no ?? '' }}</td>
+                                                <td>{{ $transaction->trx_type ?? '' }}</td>
                                                 <td>{{ $transaction->trx_date ?? 'N/A' }}</td>
                                                 <td>{{ $transaction->total_amount }}</td>
                                                 <td>{{ $transaction->currency->code ?? 'UGX' }} @ {{ $transaction->rate }}</td>
