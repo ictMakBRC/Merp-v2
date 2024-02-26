@@ -167,8 +167,8 @@
                         </div>
                         <div class="col-md-3">
                             <label for="description_{{ $expense->id }}">Expense description:</label>
-                            <input type="text" required class="form-control"
-                                wire:model="description.{{ $expense->id }}">
+                            <textarea required class="form-control"
+                                wire:model="description.{{ $expense->id }}"></textarea>
                             @error('description')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror

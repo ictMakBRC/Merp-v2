@@ -68,12 +68,18 @@ class FmsBudgetsComponent extends Component
             $this->unit_type = 'all';
             $this->unit_id = '0';
         } else {
-            if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+            if (session()->has('unit_type') && session()->has('unit_id')) {
                 $this->unit_id = session('unit_id');
                 $this->unit_type = session('unit_type');
-                $this->requestable = $requestable = Project::find($this->unit_id);
-                $this->project_id = $this->unit_id;
-                $this->entry_type = 'Project';
+                if(session('unit_type') == 'project'){
+                    $this->requestable = $requestable = Project::find($this->unit_id);
+                    $this->project_id = $requestable->id??null;
+                    $this->entry_type = 'Project';
+                }else{
+                    $this->requestable = $requestable = Department::find($this->unit_id);
+                    $this->department_id = $requestable->id??null;
+                    $this->entry_type = 'Department';
+                }
             } else {
                 $this->unit_id = auth()->user()->employee->department_id ?? 0;
                 $this->unit_type = 'department';

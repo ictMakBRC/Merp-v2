@@ -76,12 +76,19 @@ class FmsDepartmentBudgetLinesComponent extends Component
 
             public function mount(){
        
-                if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                if (session()->has('unit_type') && session()->has('unit_id') ) {
                     $this->unit_id = session('unit_id');
                     $this->unit_type = session('unit_type');
+                    // dd($this->unit_type);
+                    if(session('unit_type') == 'project'){
                     $this->requestable = $requestable = Project::find($this->unit_id);
                     $this->project_id = $requestable->id??null;
                     $this->entry_type = 'Project';
+                }else{
+                    $this->requestable = $requestable = Department::find($this->unit_id);
+                    $this->department_id = $requestable->id??null;
+                    $this->entry_type = 'Department';
+                }
                 } else {
                     $this->unit_id = auth()->user()->employee->department_id ?? 0;
                     $this->unit_type = 'department';
@@ -245,8 +252,8 @@ class FmsDepartmentBudgetLinesComponent extends Component
                 $data['budget_lines'] = $this->filterCategories()
                     ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                     ->paginate($this->perPage);
-                    $data['incomes'] = FmsChartOfAccount::where('account_type', 4)->with(['type'])->where(['is_active'=> 1, 'is_budget'=>1])->get();
-                    $data['expenses'] = FmsChartOfAccount::where(['is_active'=> 1, 'is_budget'=>1])->with(['type'])->where('account_type', 3)->get();
+                    $data['incomes'] = FmsChartOfAccount::where(['is_active'=> 1, 'account_type'=> 4])->with(['type'])->whereIn('is_budget',[1,2])->get();
+                    $data['expenses'] = FmsChartOfAccount::where(['is_active'=> 1, 'account_type'=> 3])->whereIn('is_budget',[1,2])->with(['type'])->get();
                     return view('livewire.finance.budget.fms-department-budget-lines-component', $data);
             }
     }
