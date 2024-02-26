@@ -325,7 +325,9 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>No.</th>
+                                            <th>Unit</th>
                                             <th>Trx No.</th>
+                                            <th>Trx Type</th>
                                             <th>Date</th>
                                             <th>Amount</th>
                                             <th>Currency</th>
@@ -337,7 +339,9 @@
                                         @foreach ($transactions as $key => $transaction)
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
+                                                <td>{{ $transaction->requestable?->name ?? '' }}</td>
                                                 <td>{{ $transaction->trx_no ?? '' }}</td>
+                                                <td>{{ $transaction->trx_type ?? '' }}</td>
                                                 <td>{{ $transaction->trx_date ?? 'N/A' }}</td>
                                                 <td>{{ $transaction->total_amount }}</td>
                                                 <td>{{ $transaction->currency->code ?? 'UGX' }} @ {{ $transaction->rate }}</td>
