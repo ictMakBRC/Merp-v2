@@ -150,6 +150,11 @@ class DepartmentsComponent extends Component
             'supervisor' => 'nullable|integer',
             'asst_supervisor' => 'nullable|integer',
         ]);
+        if(!$this->parent_department || $this->parent_department==0){
+            $parent_department = null;
+        }else{
+            $parent_department = $this->parent_department;
+        }
 
         $department = Department::find($this->edit_id);
         $department->name = $this->name;
@@ -159,7 +164,7 @@ class DepartmentsComponent extends Component
         $department->asst_supervisor = $this->asst_supervisor;
         $department->type = $this->type;
         $department->prefix = removeSymbolsAndTransform($this->prefix);
-        $department->parent_department = $this->parent_department??null;
+        $department->parent_department = $parent_department;
         $department->update();
 
         $this->resetInputs();
