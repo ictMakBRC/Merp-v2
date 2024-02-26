@@ -56,13 +56,14 @@
                                             @if ($is_sub) checked @endif class="light-btn">
                                         <span class="slider round"></span>
                                     </label>
-                                    Sub-account
+                                    Is Sub-account
                                     <select @if (!$is_sub && $parent_account == null) disabled @endif name="parent_account"
                                         id="parent_account" class="form-control" wire:model.lazy="parent_account">
                                         <option value="">select parent account</option>
                                         @foreach ($sub_accounts as $account)
                                             <option value="{{ $account->id }}">
-                                                {{ $account->name . ' (' . $account->type->name . ')' ?? '' }}</option>
+                                                @if ($account->parent_account)--@endif
+                                                {{ $account->name . ' (' . $account?->type?->name . ')' ?? '' }}</option>
                                         @endforeach
                                     </select>
                                     @error('parent_account')
@@ -105,6 +106,7 @@
                                     wire:model.defer="is_budget">
                                     <option value="">select...</option>
                                     <option value="1">Yes</option>
+                                    <option value="2">Parent</option>
                                     <option value="0">No</option>
                                 </select>
                                 @error('is_budget')
