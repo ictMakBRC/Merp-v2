@@ -113,7 +113,8 @@
                                             @endif
                                             <td class="table-action">
                                                 {{-- <a href="{{ route('finance-unit_lines',[$department->id, 'department']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="budget-lines"><i class="fas fa-briefcase"></i></a> --}}
-                                                <a href="{{ route('finance-dashboard_unit',[$department->id, 'department']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="dashboard"><i class="fa fa-home"></i></a>
+                                                {{-- <a href="{{ route('finance-dashboard_unit',[$department->id, 'department']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="dashboard"><i class="fa fa-home"></i></a> --}}
+                                                <a href="javascript::void(0)" wire:click='selectUnit({{ $department->id }})' class="action-ico btn-sm btn btn-outline-success mx-1" title="dashboard"><i class="fa fa-home"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -306,7 +306,7 @@
                                 <a href="{{ route('finance-customers') }}" class="nav-link ">Clients List</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('finance-customers') }}" class="nav-link ">Debtors List</a>
+                                <a href="{{ route('finance-aging') }}" class="nav-link ">Debtors List</a>
                             </li>
                         </ul>
                         <!--end nav-->
