@@ -96,8 +96,10 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Contac</th>
+                                        <th>Short Code</th>
+                                        <th>Contact</th>
                                         <th>Type</th>
+                                        <th>Address</th>
                                         <th>Status</th>
                                         <th>Created at</th>
                                         <th>Action</th>
@@ -108,8 +110,10 @@
                                         <tr @if ($institution->is_budget_institution == 1) class="text-success" @endif>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $institution->name }}</td>
+                                            <td>{{ $institution->code??'N/A' }}</td>
                                             <td>{{ $institution->contact ?? 'N/A' }}</td>
                                             <td>{{ $institution->type ?? 'N/A' }}</td>
+                                            <td>{{ $institution->address ?? 'N/A' }}</td>
                                             @if ($institution->is_active == 0)
                                                 <td><span class="badge bg-danger">Suspended</span></td>
                                             @else

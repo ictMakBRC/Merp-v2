@@ -23,7 +23,15 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-12">
+                        <div class="mb-3 col-md-4">
+                            <label for="code" class="form-label required">Short Code</label>
+                            <input type="text" id="contact" class="form-control" name="code" required
+                                wire:model.lazy="code">
+                            @error('code')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3 col-md-8">
                             <label for="contact" class="form-label required">Contact</label>
                             <input type="text" id="contact" class="form-control" name="contact" required
                                 wire:model.defer="contact">
@@ -31,7 +39,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-12">
+                        <div class="mb-3 col-md-6">
                             <label for="type" class="form-label required">{{ __('Type') }}</label>
                             <select class="form-select select2" id="type" wire:model.defer="type">
                                 <option selected value="">Select</option>
@@ -41,7 +49,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-12">
+                        <div class="mb-3 col-md-6">
                             <label for="is_active" class="form-label required">{{ __('public.status') }}</label>
                             <select class="form-select select2" id="is_active" wire:model.defer="is_active">
                                 <option selected value="">Select</option>
@@ -52,7 +60,15 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-12">
+                        <div class="mb-3 col-md-6">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea  id="description" class="form-control"
+                            name="address" wire:model.defer="address"></textarea>
+                            @error('address')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3 col-md-6">
                             <label for="countryName" class="form-label">Description</label>
                             <textarea  id="description" class="form-control"
                             name="description" wire:model.defer="description"></textarea>
