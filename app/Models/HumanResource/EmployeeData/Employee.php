@@ -77,7 +77,20 @@ class Employee extends Model
     protected function fullName(): Attribute
     {
         return Attribute::make(
+            get: fn () => $this->first_name.' '.$this->other_name.' '.$this->surname,
+        );
+    }
+    protected function titledName(): Attribute
+    {
+        return Attribute::make(
             get: fn () => $this->title.' '.$this->first_name.' '.$this->other_name.' '.$this->surname,
+        );
+    }
+    
+     protected function flatName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->first_name.' '.$this->other_name.' '.$this->surname,
         );
     }
 

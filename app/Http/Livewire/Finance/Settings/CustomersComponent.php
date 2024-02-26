@@ -61,11 +61,17 @@ class CustomersComponent extends Component
     public $as_of;
     public $is_active = 1;
     public $created_by;
+    public $parent_id;
+    public $code;
 
     public function updatedCreateNew()
     {
         $this->resetInputs();
         $this->toggleForm = false;
+    }
+
+    function mount() {
+        $this->as_of = date('Y-m-d');
     }
 
     public function updatingSearch()
@@ -79,8 +85,10 @@ class CustomersComponent extends Component
             'account_number' => 'nullable|string',
             'title' => 'nullable|string',
             'name' => 'required|string',
+            'code' => 'required|string',
             'type' => 'required|string',
             'gender' => 'nullable|string',
+            'parent_id' => 'nullable|integer',
             'nationality' => 'nullable|string',
             'address' => 'nullable|string',
             'city' => 'nullable|string',
@@ -111,6 +119,8 @@ class CustomersComponent extends Component
 
         $customer = new FmsCustomer();
         $customer->name = $this->name;
+        $customer->parent_id = $this->parent_id;
+        $customer->code = $this->code;
         $customer->type = $this->type??'Customer';
         $customer->nationality = $this->nationality;
         $customer->address = $this->address;
@@ -137,6 +147,8 @@ class CustomersComponent extends Component
     {
         $this->edit_id = $customer->id;
         $this->name = $customer->name;
+        $this->parent_id = $customer->parent_id;
+        $this->code = $customer->code;
         $this->type = $customer->type;
         $this->nationality = $customer->nationality;
         $this->address = $customer->address;
@@ -152,7 +164,7 @@ class CustomersComponent extends Component
         $this->payment_methods = $customer->payment_methods;
         $this->sales_tax_registration = $customer->sales_tax_registration;
         $this->as_of = $customer->as_of;
-        $customer->is_active = $customer->is_active;
+        $this->is_active = $customer->is_active;
         $this->createNew = true;
         $this->toggleForm = true;
     }
@@ -170,6 +182,8 @@ class CustomersComponent extends Component
             'account_number',
             'title',
             'name',
+            'code',
+            'parent_id',
             'gender',
             'nationality',
             'address',
@@ -197,6 +211,8 @@ class CustomersComponent extends Component
 
         $customer = FmsCustomer::find($this->edit_id);
         $customer->name = $this->name;
+        $customer->parent_id = $this->parent_id;
+        $customer->code = $this->code;
         $customer->type = $this->type;
         $customer->nationality = $this->nationality;
         $customer->address = $this->address;
@@ -259,6 +275,7 @@ class CustomersComponent extends Component
         $data['customers'] = $this->filterCustomers()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+            $data['funders'] = $this->filterCustomers()->where('type','Funder')->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         return view('livewire.finance.settings.customers-component', $data);
     }

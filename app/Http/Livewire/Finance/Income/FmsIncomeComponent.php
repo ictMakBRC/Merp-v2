@@ -13,6 +13,7 @@ use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Banking\FmsBank;
 use App\Models\Finance\Transactions\FmsTransaction;
 
 class FmsIncomeComponent extends Component
@@ -59,6 +60,7 @@ class FmsIncomeComponent extends Component
     public $budget_line_id;
     public $income_budget_line_id;
     public $to_account;
+    public $bank_id;
     public $trx_type;
     public $entry_type ='Department';
     public $ledger_account;
@@ -70,6 +72,7 @@ class FmsIncomeComponent extends Component
     public $fiscal_year;
     public $description;
     public $ledgers;
+    public $active_year;
 
     public function updatedCreateNew()
     {
@@ -86,7 +89,7 @@ class FmsIncomeComponent extends Component
     {
         $this->budgetLines = collect([]);
         $this->ledgers = collect([]);
-        $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
+        $this->active_year = $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
         $this->fiscal_year = $fiscal_year->id;
     }
 
@@ -113,9 +116,10 @@ class FmsIncomeComponent extends Component
     public function storeTransaction()
     {
         $this->validate([
-            // 'trx_date' => 'required|date',
+            'trx_date' => 'required|date',
             'total_amount' => 'required',
             // 'trx_ref' => 'nullable',
+            'fiscal_year' => 'required|integer',
             'rate' => 'required|numeric',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
@@ -156,10 +160,18 @@ class FmsIncomeComponent extends Component
             $budget->primary_balance += $this->budgetExpense;
             $budget->save();
 
+            $amountLocal = $total_amount*$this->rate;
+            $bank = FmsBank::find($this->bank_id);
+            $bank->previous_balance = $bank->current_balance;
+            $bankExpense = getCurrencyRate($bank->currency_id, 'foreign', $amountLocal);
+            $bank->current_balance += $bankExpense;
+            $bank->update();
+
+
             $trans = new FmsTransaction();
             $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
             $trans->trx_ref = $this->trx_ref ?? 'TRF' . GeneratorService::getNumber(7);;
-            $trans->trx_date = $this->as_of ?? date('Y-m-d');
+            $trans->trx_date = $this->trx_date ?? date('Y-m-d');
             $trans->line_balance = $budget->primary_balance;
             $trans->line_amount = $this->budgetExpense;
             $trans->account_amount = $this->ledgerExpense;
@@ -172,6 +184,9 @@ class FmsIncomeComponent extends Component
             $trans->project_id = $this->project_id;
             $trans->budget_line_id = $this->budget_line_id;
             $trans->currency_id = $this->currency_id;
+            $trans->financial_year_id = $this->fiscal_year;
+            $trans->bank_id = $this->bank_id;
+            $trans->bank_balance = $bank->current_balance;
             $trans->trx_type = 'Income';
             $trans->status = 'Approved';
             $trans->description =$this->description;
@@ -188,13 +203,18 @@ class FmsIncomeComponent extends Component
             $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Transaction created successfully!']);
         });
     } catch (\Exception $e) {
-        // If the transaction fails, we handle the error and provide feedback
-        $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Transfer failed!'. $e->getMessage()]);
+        $this->dispatchBrowserEvent('swal:modal', [
+            'type' => 'warning',
+            'message' => 'Oops! Not Found!',
+            'text' => 'Transfer failed!'. $e->getMessage(),
+        ]);
+        // $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Transfer failed!'. $e->getMessage()]);
     }
     }
 
     public function updatedFiscalYear()
     {
+        $this->active_year = FmsFinancialYear::where('id', $this->fiscal_year)->first();
         $this->updatedProjectId();
         $this->updatedDepartmentId();
     }
@@ -359,6 +379,7 @@ class FmsIncomeComponent extends Component
         $data['departments'] = Department::all();
         $data['projects'] = Project::all();
         $data['years'] = FmsFinancialYear::all();
+        $data['banks'] = FmsBank::all();
         return view('livewire.finance.income.fms-income-component', $data);
     }
 }

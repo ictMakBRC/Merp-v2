@@ -16,11 +16,32 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-4">
                 <label for="name" class="form-label required">{{ $type }} Name</label>
-                <input type="text" id="name" class="form-control text-uppercase"
-                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='name'>
+                <input type="text" id="name" class="form-control"wire:model.defer='name'>
                 @error('name')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3 col-md-2">
+                <label for="name" class="form-label required">{{ $type }} Short Code</label>
+                <input type="text" id="name" class="form-control text-uppercase"
+                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='code'>
+                @error('code')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3 col-md-2">
+                <label for="nationality" class="form-label">Donor</label>
+                <select class="form-select select2" id="parent_id" wire:model.lazy='parent_id'>
+                    <option selected value="">Select</option>
+                    @foreach ($funders as $funder)
+                        <option value="{{ $funder->id }}">{{ $funder->name }}</option>
+                    @endforeach
+                </select>
+                @error('parent_id')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
@@ -45,7 +66,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="email" class="form-label required">Email Address</label>
                 <input type="email" id="email" class="form-control" wire:model.defer='email'>
                 @error('email')
@@ -53,7 +74,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="alt_email" class="form-label">Alternative Email</label>
                 <input type="email" id="alt_email" class="form-control" wire:model.defer='alt_email'>
                 @error('alt_email')
@@ -61,7 +82,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="contact" class="form-label required">Telephone Number</label>
                 <input type="text" id="contact" class="form-control text-uppercase"
                     onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='contact'>
@@ -70,7 +91,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="v" class="form-label">Company Name</label>
                 <input type="text" id="company_name" class="form-control text-uppercase"
                     wire:model.defer='company_name'>
@@ -79,7 +100,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="city" class="form-label">City</label>
                 <input type="text" id="city" class="form-control text-uppercase"
                     wire:model.defer='city'>
@@ -128,7 +149,7 @@
                         
             <div class="mb-3 col">
                 <label for="opening_balance" class="form-label required">As of</label>
-                <input type="date" id="as_of" class="form-control" wire:model.defer='as_of'>
+                <input type="date" id="as_of" class="form-control" wire:model='as_of'>
                 @error('as_of')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror

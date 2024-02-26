@@ -69,7 +69,7 @@ class OfficesComponent extends Component
     public function storeOffice()
     {
         $this->validate([
-            'name' => 'required|string|unique:Offices',
+            'name' => 'required|string|unique:offices',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
 

@@ -46,6 +46,8 @@ class FmsProjectsComponent extends Component
     public $supervisor;
 
     public $asst_supervisor;
+    
+    public $project_category;
 
     protected $paginationTheme = 'bootstrap';
 
