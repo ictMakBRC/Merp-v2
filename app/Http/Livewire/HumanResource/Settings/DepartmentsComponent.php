@@ -159,7 +159,7 @@ class DepartmentsComponent extends Component
         $department->asst_supervisor = $this->asst_supervisor;
         $department->type = $this->type;
         $department->prefix = removeSymbolsAndTransform($this->prefix);
-        $department->parent_department = $this->parent_department;
+        $department->parent_department = $this->parent_department??null;
         $department->update();
 
         $this->resetInputs();

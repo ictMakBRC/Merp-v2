@@ -20,7 +20,7 @@
                         <div class="mb-3 col-md-5">
                             <label for="parent_deparment" class="form-label">Parent Department</label>
                             <select class="form-select select2" id="parent_deparment" wire:model.defer="parent_department">
-                                <option value="">None</option>
+                                <option value=" ">None</option>
                                 @foreach ($parent_departments as $parentdeparment)
                                     <option value="{{$parentdeparment->id}}">{{$parentdeparment->name}}</option>
                                 @endforeach
