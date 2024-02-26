@@ -13,7 +13,7 @@
                                 <li class="breadcrumb-item active">Dashboard</li>
                             </ol>
                         </div>
-                        <h4 class="page-title">Main Dashboard</h4>
+                        <h4 class="page-title">Main Dashboard FY: {{ $fiscal_year->start_date.' to '.$fiscal_year->end_date }}</h4>
                     </div><!--end page-title-box-->
                 </div><!--end col-->
             </div>
@@ -66,7 +66,7 @@
                                 <div class="card-body">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-9">
-                                            <p class="text-dark mb-0 fw-semibold">Payemnt Requests</p>
+                                            <p class="text-dark mb-0 fw-semibold">Payment Requests</p>
                                             <h3 class="my-1 font-20 fw-bold">{{ $request_counts->whereIn('request_type',['Payment','Procurement', 'Advance Payment'])->count() }}</h3>
                                             <p class="mb-0 text-truncate text-muted"><span class="text-warning"><i class="mdi mdi-trending-up"></i>
                                                 {{ $request_counts->whereIn('request_type',['Payment','Procurement Request', 'Advance Request'])->where('status', '!=', 'Completed')->count() }}</span> Pending</p>

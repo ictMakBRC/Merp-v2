@@ -25,6 +25,8 @@ class FmsFinanceInstitutions extends Model
     }
     protected $fillable = [
         'name',
+        'code',
+        'address',
         'description',
         'contact',
         'type',
