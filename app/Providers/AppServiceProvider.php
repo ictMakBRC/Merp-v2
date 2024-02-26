@@ -39,19 +39,19 @@ class AppServiceProvider extends ServiceProvider
             View::share('baseCurrency', []);
         }
         Blade::directive('moneyFormat', function ($figure) {
-            return "<?php echo number_format($figure,2); ?>";
+            return $figure != null? "<?php echo number_format($figure,2); ?>":"<?php echo 'N/A'; ?>";
         });
 
         Blade::directive('numberFormat', function ($figure) {
-            return "<?php echo number_format($figure); ?>";
+            return $figure != null? "<?php echo number_format($figure); ?>":"<?php echo 'N/A'; ?>";
         });
 
         Blade::directive('formatDate', function ($expression) {
-            return "<?php echo date('d-M-Y', strtotime($expression)); ?>";
+            return $expression != null? "<?php echo date('d-M-Y', strtotime($expression)); ?>":"<?php echo 'N/A'; ?>";
         });
 
         Blade::directive('formatDateTime', function ($date) {
-            return "<?php echo date('d-M-Y H:i', strtotime($date)); ?>";
+            return $date != null? "<?php echo date('d-M-Y H:i', strtotime($date)); ?>":"<?php echo 'N/A'; ?>";
         });
 
         Blade::directive('formatTelephoneContact', function ($contact) {

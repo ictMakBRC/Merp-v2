@@ -1,6 +1,5 @@
 <div>
     <div class="tab-content">
-        @include('livewire.grants.projects.inc.filter')
     
         <div class="table-responsive">
             <table class="table table-striped mb-0 w-100 sortable">
@@ -26,7 +25,7 @@
                             <td>{{$project->project_type}}</td>
                             <td>@formatDate($project->start_date)</td>
                             <td>@formatDate($project->end_date)</td>
-                            <td>{{$project->principalInvestigator->fullName}}</td>
+                            <td>{{$project?->principalInvestigator?->fullName??'N/A'}}</td>
                             <td>{{ ucfirst($project->progress_status)}}</td>
                             <td>
                                 {{-- <a href="{{ route('finance-unit_lines',[$project->id, 'project']) }}" class="action-ico btn-sm btn btn-outline-success mx-1" title="budget-lines"><i class="fas fa-briefcase"></i></a> --}}

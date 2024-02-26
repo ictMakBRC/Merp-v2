@@ -67,25 +67,18 @@ class UserProfileComponent extends Component
             'name' => 'required|string',
             'email' => 'required|email:filter',
             'current_password' => 'required|string',
-            'avatar' => 'nullable|mimes:jpg,png,jpeg|max:10240|file|min:1',
-            'signature' => 'nullable|mimes:jpg,png,jpeg|max:10240|file|min:1',
+            'avatar' => 'nullable|mimes:jpg,png,jpeg|max:1024|file|min:1',
+            'signature' => 'nullable|mimes:jpg,png,jpeg|max:1024|file|min:1',
         ]);
         $user = auth()->user();
         if (Hash::check($this->current_password, auth()->user()->password)) {
-            if ($this->avatar != null) {
+             if ($this->avatar != null) {
                 $this->validate([
                     'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
                 ]);
 
                 $avatarName = date('YmdHis').$this->name.'.'.$this->avatar->extension();
-
-                // Resize the photo to a width and height 150 pixels using intervention lib
-                $resizedPhoto = Image::make($this->avatar)->resize(150, 150, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-
-                $resizedPhoto->save(storage_path('photos/'.$avatarName,'public'));
-                $this->avatarPath = 'photos/'.$avatarName;
+                $this->avatarPath = $this->avatar->storeAs('photos', $avatarName, 'public');
 
                 if (file_exists(storage_path('app/public/').$user->avatar)) {
                     @unlink(storage_path('app/public/').$user->avatar);
@@ -93,6 +86,28 @@ class UserProfileComponent extends Component
             } else {
                 $this->avatarPath = $user->avatar;
             }
+
+            // if ($this->avatar != null) {
+            //     $this->validate([
+            //         'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
+            //     ]);
+
+            //     $avatarName = date('YmdHis').$this->name.'.'.$this->avatar->extension();
+
+            //     // Resize the photo to a width and height 150 pixels using intervention lib
+            //     $resizedPhoto = Image::make($this->avatar)->resize(150, 150, function ($constraint) {
+            //         $constraint->aspectRatio();
+            //     });
+
+            //     $resizedPhoto->save(storage_path('photos/'.$avatarName,'public'));
+            //     $this->avatarPath = 'photos/'.$avatarName;
+
+            //     if (file_exists(storage_path('app/public/').$user->avatar)) {
+            //         @unlink(storage_path('app/public/').$user->avatar);
+            //     }
+            // } else {
+            //     $this->avatarPath = $user->avatar;
+            // }
 
             if ($this->signature != null) {
                 $this->validate([

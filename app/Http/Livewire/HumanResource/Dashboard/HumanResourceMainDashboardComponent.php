@@ -106,7 +106,7 @@ class HumanResourceMainDashboardComponent extends Component
   
             return [
                 'employee_id' => $latestContract->employee_id,
-                'department' => $latestContract->employee->department->name,
+                'department' => $latestContract->employee?->department?->name??'N/A',
                 'gross_salary' => $latestContract->gross_salary,
             ];
         })->values()->groupBy('department')->map(function ($department,$key) {
@@ -114,7 +114,7 @@ class HumanResourceMainDashboardComponent extends Component
             return [
                 'department' => $key,
                 'total_salary' => $department->sum('gross_salary'),
-                'avg_salary' => $department->sum('gross_salary'),
+                'avg_salary' => $department->avg('gross_salary'),
                 'employees_count' => $department->count(),
             ];
         })->values();

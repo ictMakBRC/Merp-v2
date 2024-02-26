@@ -2,6 +2,7 @@
 
 namespace App\Models\Procurement\Request;
 
+use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\User;
 use App\Traits\CurrencyTrait;
 use App\Traits\DocumentableTrait;
@@ -114,6 +115,11 @@ class ProcurementRequest extends Model
     public function selected_provider()
     {
         return $this->belongsTo(Provider::class, 'selected_provider_id');
+    }
+
+    public function payment_requests()
+    {
+        return $this->hasMany(FmsPaymentRequest::class, 'procurement_request_id','id');
     }
 
     public static function boot()

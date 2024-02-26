@@ -93,6 +93,7 @@ class RequestBiddingComponent extends Component
     }
 
     public function saveProcurementMethodDecision(){
+        // dd($this->decision);
         if ($this->isMacroProcurement) {
             $this->validate([
                 'decision'=>'required|string',
@@ -144,7 +145,7 @@ class RequestBiddingComponent extends Component
                 $this->request->update([
                     'procurement_method_id'=>$this->procurement_method_id,
                     'bid_return_deadline'=>$this->bid_return_deadline,
-                    'status'=>$this->decision==ProcurementRequestEnum::APPROVED ? ProcurementRequestEnum::PROCESSING:$this->decision,
+                    'status'=>$this->decision==ProcurementRequestEnum::APPROVED||$this->decision==null ? ProcurementRequestEnum::PROCESSING:$this->decision,
     
                 ]);
 

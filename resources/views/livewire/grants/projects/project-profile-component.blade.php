@@ -1,11 +1,14 @@
 <div>
     <x-report-layout>
         <h5 class="text-center">{{ $project->name ?? 'N/A' }}
-            @if ($project->end_date >= today())
+            @if ($project->start_date > today())
+            <span class="badge bg-info">Coming soon...</span>
+            @elseif ($project->end_date >= today())
                 <span class="badge bg-success">Running</span>
             @else
                 <span class="badge bg-danger">Ended</span>
             @endif
+            
         </h5>
 
         @include('livewire.grants.projects.inc.project-details')

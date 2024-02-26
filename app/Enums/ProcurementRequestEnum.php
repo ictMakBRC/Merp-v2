@@ -88,6 +88,7 @@ class ProcurementRequestEnum extends Enum
 
     public static function step($stepOrder)
     {
+        $stepOrder=intVal($stepOrder);
         return match ($stepOrder) {
             1 => ProcurementRequestEnum::DEPARTMENT_STEP,
             2 => ProcurementRequestEnum::SUPERVISOR_STEP,

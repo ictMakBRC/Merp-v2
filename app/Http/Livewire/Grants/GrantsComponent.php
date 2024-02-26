@@ -3,8 +3,9 @@
 namespace App\Http\Livewire\Grants;
 
 use Livewire\Component;
-use App\Models\Grants\Grant;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+use App\Models\Grants\Project\Project;
 
 class GrantsComponent extends Component
 {
@@ -12,9 +13,9 @@ class GrantsComponent extends Component
     use WithPagination;
 
     //Filters
-    public $grant_id;
-    public $grantIds;
-    public $user_category;
+    public $projectIds;
+    public $progress_status;
+    public $project_type;
 
     public $from_date;
 
@@ -28,61 +29,42 @@ class GrantsComponent extends Component
 
     public $orderAsc = 0;
 
-    public $createNew = false;
-
-    public $toggleForm = false;
-
     public $filter = false;
 
-    protected $listeners = [
-        'grantCreated',
-    ];
-
-    public function grantCreated($details)
-    {
-        $this->grant_id = $details['grantId'];
-    }
-
-    public function updatedCreateNew()
-    {
-        // $this->reset();
-        $this->toggleForm = !$this->toggleForm;
-    }
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
-    public function loadGrant(Grant $grant):void
-    {
-        $loadingInfo = 'For '.$grant->grant_code;
-            $this->emit('loadGrant', [
-                'grantId' => $grant->id,
-                'info'=>$loadingInfo,
-            ]);
-           
-        $this->createNew = true;
-        $this->toggleForm = true;
-    }
-
     
-    public function filterGrants()
+    public function filterProjects()
     {
-        $grants = Grant::search($this->search)->with('principalInvestigator')->when($this->from_date != '' && $this->to_date != '', function ($query) {
+        $projects = Project::search($this->search)->where('project_category','Grant')
+        ->when($this->project_type != '', function ($query){
+            $query->where('project_type',$this->project_type);
+        })
+        ->when($this->progress_status != '', function ($query){
+            $query->where('progress_status',$this->progress_status);
+        })
+            ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
-            });
+            })
+            ->addSelect([
+                'projects.*',
+                DB::raw('DATEDIFF(end_date, CURRENT_DATE()) as days_to_expire')
+            ]);
 
-        $this->grantIds = $grants->pluck('id')->toArray();
+        $this->projectIds = $projects->pluck('id')->toArray();
 
-        return $grants;
+        return $projects;
     }
 
     public function render()
     {
-        $data['grants'] = $this->filterGrants()
+        $data['projects'] = $this->filterProjects()
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
 
