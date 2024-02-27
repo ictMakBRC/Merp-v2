@@ -3,6 +3,7 @@
 namespace App\Models\Grants\Project;
 
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Settings\FmsCustomer;
 use App\Models\Grants\Grant;
 use App\Models\HumanResource\EmployeeData\Employee;
 use App\Models\HumanResource\Settings\Department;
@@ -42,6 +43,11 @@ class Project extends Model
     public function ledger()
     {
         return $this->HasOne(FmsLedgerAccount::class, 'project_id', 'id');
+    }
+
+    public function sponsor()
+    {
+        return $this->belongsTo(FmsCustomer::class, 'sponsor_id', 'id');
     }
     
     public function employees()
