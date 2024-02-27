@@ -26,6 +26,8 @@ class FmsFinanceInstitutionsComponent extends Component
     public $orderAsc = 0;
 
     public $name;
+    public $code;
+    public $address;
     public $contact;
 
     public $is_active = 1;
@@ -60,8 +62,10 @@ class FmsFinanceInstitutionsComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, [
-            'name' => 'required|string',
+            'name' => 'required|string|unique:fms_finance_institutions',
             'type' => 'required|string',
+            'code' => 'required|string|unique:fms_finance_institutions',
+            'address' => 'required|string',
             'is_active' => 'required|integer',
             'contact' => 'required|numeric',
             'description' => 'nullable|string',
@@ -71,7 +75,9 @@ class FmsFinanceInstitutionsComponent extends Component
     public function storeInstitution()
     {
         $this->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:fms_finance_institutions',
+            'code' => 'required|string|unique:fms_finance_institutions',
+            'address' => 'required|string',
             'type' => 'required|string',
             'is_active' => 'required|integer',
             'contact' => 'required|numeric',
@@ -81,6 +87,8 @@ class FmsFinanceInstitutionsComponent extends Component
         $institution = new FmsFinanceInstitutions();
         $institution->type = $this->type;
         $institution->name = $this->name;
+        $institution->code = $this->code;
+        $institution->address = $this->address;
         $institution->contact = $this->contact;
         $institution->is_active = $this->is_active;
         $institution->description = $this->description;
@@ -93,7 +101,9 @@ class FmsFinanceInstitutionsComponent extends Component
     public function editData(FmsFinanceInstitutions $institution)
     {
         $this->type = $institution->type;
-        $this->edit_id = $institution->id;
+        $this->edit_id = $institution->id;        
+        $this->code = $institution->code;
+        $this->address = $institution->address;
         $this->name = $institution->name;
         $this->contact = $institution->contact;
         $this->is_active = $institution->is_active;
@@ -111,13 +121,15 @@ class FmsFinanceInstitutionsComponent extends Component
 
     public function resetInputs()
     {
-        $this->reset(['name', 'is_active', 'description']);
+        $this->reset(['name', 'is_active', 'description','code', 'contact','address']);
     }
 
     public function updateInstitution()
     {
         $this->validate([
-            'name' => 'required|string',
+            'name' => 'required|unique:fms_finance_institutions,name,'.$this->edit_id.'',
+            'code' => 'required|unique:fms_finance_institutions,code,'.$this->edit_id.'',
+            'address' => 'required|string',
             'type' => 'required|string',
             'is_active' => 'required|integer',
             'contact' => 'required|numeric',
@@ -127,6 +139,8 @@ class FmsFinanceInstitutionsComponent extends Component
         $institution = FmsFinanceInstitutions::find($this->edit_id);
         $institution->name = $this->name;
         $institution->contact = $this->contact;
+        $institution->code = $this->code;
+        $institution->address = $this->address;
         $institution->type = $this->type;
         $institution->is_active = $this->is_active;
         $institution->description = $this->description;

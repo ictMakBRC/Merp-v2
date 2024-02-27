@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Inventory\Stock;
 
-use Exception;
-use Livewire\Component;
-use Illuminate\Support\Facades\DB;
+use App\Models\Inventory\Item\InvDepartmentItem;
 use App\Models\Inventory\Settings\InvStore;
+use App\Models\Inventory\Stock\InvItemStockCard;
 use App\Models\Inventory\Stock\InvStockLog;
 use App\Models\Inventory\Stock\InvStockLogItem;
-use App\Models\Inventory\Item\InvDepartmentItem;
-use App\Models\Inventory\Stock\InvItemStockCard;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
 class InvStockItemComponent extends Component
 {
@@ -21,7 +21,7 @@ class InvStockItemComponent extends Component
     public $inv_item_id;
     public $item_id;
     public $stock_qty;
-    public $batch_no='N/A';
+    public $batch_no = 'N/A';
     public $supplier_id;
     public $expiry_date;
     public $stock_code;
@@ -50,7 +50,7 @@ class InvStockItemComponent extends Component
 
     public function updatedInvItemId()
     {
-       $this->item_data = $item_data = InvDepartmentItem::with(['item'])->where('id', $this->inv_item_id)->first();
+        $this->item_data = $item_data = InvDepartmentItem::with(['item'])->where('id', $this->inv_item_id)->first();
         $this->unit_cost = $item_data->item->cost_price ?? 0;
         $this->expires = $item_data->item->expires ?? 'Off';
         $this->item_id = $item_data->inv_item_id;
@@ -73,24 +73,24 @@ class InvStockItemComponent extends Component
         $isExist = InvStockLogItem::select('*')
             ->where('stock_code', $this->stock_code)
             ->where('inv_item_id', $this->inv_item_id)
-            ->where('batch_no', $this->batch_no??'N/A')
+            ->where('batch_no', $this->batch_no ?? 'N/A')
             ->exists();
         if ($isExist) {
-           $stock = InvStockLogItem::where('stock_code', $this->stock_code)
+            $stock = InvStockLogItem::where('stock_code', $this->stock_code)
                 ->where('inv_item_id', $this->inv_item_id)
-                ->where('batch_no', $this->batch_no??'N/A')->first();
-                $stock_qty = $stock->stock_qty + $this->stock_qty;
-                $qyt_left = $stock->qyt_left + $this->stock_qty;
-                //->increment('stock_qty',$this->stock_qty'))
-                $stock->stock_qty =$stock_qty;
-                $stock->qyt_left =$qyt_left;
-                $stock->update();
-               
-                $stockCard = InvItemStockCard::where(['inv_item_id' => $this->inv_item_id,'voucher_number' => $this->stock_code,'batch_id'=>$stock->id])->first();               
-                $stockCard->quantity_in = $stock->stock_qty;
-                $stockCard->batch_balance = $stock->stock_qty;
-                $stockCard->quantity = $stock->stock_qty;
-                $stockCard->save();
+                ->where('batch_no', $this->batch_no ?? 'N/A')->first();
+            $stock_qty = $stock->stock_qty + $this->stock_qty;
+            $qyt_left = $stock->qyt_left + $this->stock_qty;
+            //->increment('stock_qty',$this->stock_qty'))
+            $stock->stock_qty = $stock_qty;
+            $stock->qyt_left = $qyt_left;
+            $stock->update();
+
+            $stockCard = InvItemStockCard::where(['inv_item_id' => $this->inv_item_id, 'voucher_number' => $this->stock_code, 'batch_id' => $stock->id])->first();
+            $stockCard->quantity_in = $stock->stock_qty;
+            $stockCard->batch_balance = $stock->stock_qty;
+            $stockCard->quantity = $stock->stock_qty;
+            $stockCard->save();
             $this->resetInputs();
             $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Record updated successfully!']);
         } else {
@@ -99,7 +99,7 @@ class InvStockItemComponent extends Component
             $value->inv_item_id = $this->inv_item_id;
             $value->stock_qty = $this->stock_qty;
             $value->qyt_left = $this->stock_qty;
-            $value->batch_no = $this->batch_no??'N/A';
+            $value->batch_no = $this->batch_no ?? 'N/A';
             $value->expiry_date = $this->expiry_date;
             $value->unit_cost = $this->unit_cost;
             $value->total_cost = $this->total_cost;
@@ -141,34 +141,82 @@ class InvStockItemComponent extends Component
             'grn' => 'required',
 
         ]);
-        DB::transaction(function () {
+        // DB::transaction(function () {
+            // $value = InvStockLog::where('id', $this->inv_stock_log_id)->first();
+            // $value->status = 'Received';
+            // $value->delivery_no = $this->delivery_no;
+            // $value->lpo = $this->lpo;
+            // $value->grn = $this->grn;
+            // $items = InvStockLogItem::where('inv_stock_log_id', $value->id)->get();
+            // // dd($items);
+            // foreach ($items as $myItem) {
+            //     $item = $myItem->inv_item_id;
+            //     $qty = $myItem->stock_qty;
+            //     // dd($qty);
+            //     $dptItem = InvDepartmentItem::where('id', $item)->first();
+            //     $newQty = $dptItem->qty_left + $qty;
+            //     $dptItem->qty_left = $newQty;
+            //     $dptItem->update();
+            //     //    dd($dptItem);
+            //     //    ->update(['qty_left' => DB::raw('qty_left + ' . $qty)]);
+            // }
+            // $value->update();
+
+            // $value = InvStockLog::where('id', $this->inv_stock_log_id)->first();
+            // if ($value) {
+            //     $value->status = 'Received';
+            //     $value->delivery_no = $this->delivery_no;
+            //     $value->lpo = $this->lpo;
+            //     $value->grn = $this->grn;
+            //     $value->save();
+
+            //     $processedItems = []; // Array to track processed items
+
+            //     $items = InvStockLogItem::where('inv_stock_log_id', $value->id)->get();
+            //     foreach ($items as $myItem) {
+            //         $item = $myItem->inv_item_id;
+            //         if (!in_array($item, $processedItems)) { // Check if item has been processed
+            //             $processedItems[] = $item; // Mark item as processed
+            //             $qty = $myItem->stock_qty;
+
+            //             $dptItem = InvDepartmentItem::where('id', $item)->first();
+            //             if ($dptItem) {
+            //                 $newQty = $dptItem->qty_left + $qty;
+            //                 $dptItem->qty_left = $newQty;
+            //                 $dptItem->save();
+            //             }
+            //         }
+            //     }
+            // }
             $value = InvStockLog::where('id', $this->inv_stock_log_id)->first();
-            $value->status = 'Received';
-            $value->delivery_no = $this->delivery_no;
-            $value->lpo = $this->lpo;
-            $value->grn = $this->grn;
-            $items = InvStockLogItem::where('inv_stock_log_id', $value->id)->get();
-            // dd($items);
-            foreach ($items as  $myItem) {
-                $item = $myItem->inv_item_id;
-                $qty = $myItem->stock_qty;
-                // dd($qty);
-               $dptItem = InvDepartmentItem::where('id', $item)->first();
-               $newQty=$dptItem->qty_left+$qty;
-               $dptItem->qty_left = $newQty;
-               $dptItem->update();
-            //    dd($dptItem);
-            //    ->update(['qty_left' => DB::raw('qty_left + ' . $qty)]);
+            if ($value) {
+                // $value->status = 'Received';
+                // $value->delivery_no = $this->delivery_no;
+                // $value->lpo = $this->lpo;
+                // $value->grn = $this->grn;
+                // $value->save();
+
+                $items = InvStockLogItem::where('inv_stock_log_id', $value->id)->get();
+                foreach ($items as $myItem) {
+                    $item = $myItem->inv_item_id;
+                    $qty = $myItem->stock_qty;
+
+                    $dptItem = InvDepartmentItem::where('id', $item)->first();
+                    if ($dptItem) {
+                        $dptItem->qty_left += $qty; // Increment the quantity
+                        $dptItem->save();
+                    }
+                }
             }
-            $value->update();
-            
-        $this->dispatchBrowserEvent('swal:modal', [
-            'type' => 'success',
-            'message' => 'Done!',
-            'text' => 'Stock values.',
-        ]);
-        return to_route('inventory-stock_doc', 'all');
-        });
+
+
+            // $this->dispatchBrowserEvent('swal:modal', [
+            //     'type' => 'success',
+            //     'message' => 'Done!',
+            //     'text' => 'Stock values.',
+            // ]);
+            return to_route('inventory-stock_doc', 'all');
+        // });
     }
     public function confirmDelete($id)
     {
@@ -210,7 +258,7 @@ class InvStockItemComponent extends Component
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'error',
                 'message' => 'Something went wrong!',
-                'text' => 'Document Can not be deleted because: '.$error,
+                'text' => 'Document Can not be deleted because: ' . $error,
             ]);
         }
     }
@@ -235,13 +283,13 @@ class InvStockItemComponent extends Component
             'total_cost',
             'inv_store_id',
         ]);
-        $this->batch_no ='N/A';
+        $this->batch_no = 'N/A';
     }
     public function render()
     {
         $data['items'] = InvDepartmentItem::where(['unitable_id' => $this->unitable_id, 'unitable_type' => $this->unitable_type])
             ->with('item', 'unitable', 'item.uom')->get();
-        $data['stock_items'] = InvStockLogItem::where('inv_stock_log_id', $this->stockLog->id)->with('departmentItem','departmentItem.item', 'store', 'departmentItem.item.uom')->get();
+        $data['stock_items'] = InvStockLogItem::where('inv_stock_log_id', $this->stockLog->id)->with('departmentItem', 'departmentItem.item', 'store', 'departmentItem.item.uom')->get();
         $data['stores'] = InvStore::where('is_active', 1)->get();
         return view('livewire.inventory.stock.inv-stock-item-component', $data);
     }

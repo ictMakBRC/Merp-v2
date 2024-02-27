@@ -67,9 +67,15 @@ class FmsUnitDashboardComponent extends Component
         if($type == 'department'){
             $this->requestable = $requestable = Department::find($id);            
             $this->department_id =$id;
+            if(!$requestable){
+                abort(403, 'Unauthorized access or action.'); 
+            }
             $this->requestable_type =  get_class($requestable);
         }elseif($type == 'project'){
             $this->project_id = $id;
+             if(!$requestable){
+                abort(403, 'Unauthorized access or action.'); 
+            }
             $this->requestable_type  = 'App\Models\Grants\Project\Project';
             $this->requestable =  Project::find($id);
         }

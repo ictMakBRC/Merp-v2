@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use App\Services\GeneratorService;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
+use App\Models\Finance\Banking\FmsBank;
 use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsFinancialYear;
@@ -60,6 +61,7 @@ class FmsExpenseComponent extends Component
     public $income_budget_line_id;
     public $to_account;
     public $trx_type;
+    public $bank_id;
     public $entry_type ='Department';
     public $ledger_account;
     public $is_department;
@@ -68,6 +70,7 @@ class FmsExpenseComponent extends Component
     public $fromAccountData;
     public $budgetLines;
     public $fiscal_year;
+    public $active_year;
     public $description;
     public $ledgers;
 
@@ -86,7 +89,7 @@ class FmsExpenseComponent extends Component
     {
         $this->budgetLines = collect([]);
         $this->ledgers = collect([]);
-        $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
+        $this->active_year = $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
         $this->fiscal_year = $fiscal_year->id;
     }
 
@@ -113,10 +116,12 @@ class FmsExpenseComponent extends Component
     public function storeTransaction()
     {
         $this->validate([
-            // 'trx_date' => 'required|date',
+            'trx_date' => 'required|date',
             'total_amount' => 'required',
             // 'trx_ref' => 'nullable',
+            'bank_id' => 'required|numeric',
             'rate' => 'required|numeric',
+            'fiscal_year' => 'required|integer',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
             'billed_project' => 'nullable|integer',
@@ -150,16 +155,23 @@ class FmsExpenseComponent extends Component
 
             $ledgerAccount = FmsLedgerAccount::find($this->ledger_account);
             $ledgerAccount->current_balance -= $this->ledgerExpense;
-            $ledgerAccount->save();
+            $ledgerAccount->update();
 
             $budget = FmsBudgetLine::find($this->budget_line_id);
             $budget->primary_balance -= $this->budgetExpense;
-            $budget->save();
+            $budget->update();
+
+            $amountLocal = $total_amount*$this->rate;
+            $bank = FmsBank::find($this->bank_id);
+            $bank->previous_balance = $bank->current_balance;
+            $bankExpense = getCurrencyRate($bank->currency_id, 'foreign', $amountLocal);
+            $bank->current_balance -= $bankExpense;
+            $bank->update();
 
             $trans = new FmsTransaction();
             $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
             $trans->trx_ref = $this->trx_ref ?? 'TRF' . GeneratorService::getNumber(7);;
-            $trans->trx_date = $this->as_of ?? date('Y-m-d');
+            $trans->trx_date = $this->trx_date ?? date('Y-m-d');
             $trans->line_balance = $budget->primary_balance;
             $trans->line_amount = $this->budgetExpense;
             $trans->account_amount = $this->ledgerExpense;
@@ -172,6 +184,9 @@ class FmsExpenseComponent extends Component
             $trans->project_id = $this->project_id;
             $trans->budget_line_id = $this->budget_line_id;
             $trans->currency_id = $this->currency_id;
+            $trans->financial_year_id = $this->fiscal_year;
+            $trans->bank_id = $this->bank_id;
+            $trans->bank_balance = $bank->current_balance;
             $trans->trx_type = 'Expense';
             $trans->status = 'Approved';
             $trans->description =$this->description;
@@ -181,19 +196,25 @@ class FmsExpenseComponent extends Component
             }
             $trans->requestable()->associate($requestable);
             $trans->save();
+
             
             $this->dispatchBrowserEvent('close-modal');
             $this->resetInputs();
             $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Transaction created successfully!']);
         });
     } catch (\Exception $e) {
-        // If the transaction fails, we handle the error and provide feedback
+        $this->dispatchBrowserEvent('swal:modal', [
+            'type' => 'warning',
+            'message' => 'Oops! Not Found!',
+            'text' => 'Transfer failed!'. $e->getMessage()
+        ]);
         $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Transfer failed!'. $e->getMessage()]);
     }
     }
 
     public function updatedFiscalYear()
     {
+        $this->active_year = FmsFinancialYear::where('id', $this->fiscal_year)->first();
         $this->updatedProjectId();
         $this->updatedDepartmentId();
     }
@@ -327,7 +348,7 @@ class FmsExpenseComponent extends Component
         if (count($this->serviceIds) > 0) {
             // return (new servicesExport($this->serviceIds))->download('services_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
-            $this->dispatchBrowserEventBrowserEvent('swal:modal', [
+            $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! Not Found!',
                 'text' => 'No services selected for export!',
@@ -358,6 +379,7 @@ class FmsExpenseComponent extends Component
         $data['departments'] = Department::all();
         $data['projects'] = Project::all();
         $data['years'] = FmsFinancialYear::all();
+        $data['banks'] = FmsBank::all();
         return view('livewire.finance.expense.fms-expense-component', $data);
     }
 }

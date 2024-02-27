@@ -59,6 +59,8 @@ class ChartOfAccountsComponent extends Component
 
     public $toggleForm = false;
 
+    public $f_account_type;
+
     public $filter = false;
     public function export()
     {
@@ -79,7 +81,7 @@ class ChartOfAccountsComponent extends Component
         $this->validateOnly($fields, [
             'name' => 'required|unique:fms_chart_of_accounts',
             'code' => 'unique:fms_chart_of_accounts',
-            // 'is_active' => 'required|numeric',
+            'is_active' => 'required|numeric',
             'account_type' => 'required|numeric',
             'sub_account_type' => 'required|numeric',
 
@@ -90,8 +92,9 @@ class ChartOfAccountsComponent extends Component
     {
         $this->validate([
             'name' => 'required|unique:fms_chart_of_accounts',
-            'code' => 'unique:fms_chart_of_accounts',
+            'code' => 'required|unique:fms_chart_of_accounts',
             'is_budget' => 'required|numeric',
+            'is_active' => 'required|numeric',
             'account_type' => 'required|numeric',
             'sub_account_type' => 'required|numeric',
 
@@ -106,11 +109,11 @@ class ChartOfAccountsComponent extends Component
         $account->bank_balance = $this->bank_balance??0;
         $account->as_of = date('Y-m-d');
         $account->description = $this->description;
-        $account->is_active = isset($this->is_active) ? 1 : 0;
-        $account->is_budget = isset($this->is_budget) ? 1 : 0;
+        $account->is_active =$this->is_active??1; //isset($this->is_active) ? 1 : 0;
+        $account->is_budget =$this->is_budget??0;
         $account->save();
         $this->resetInputs();
-        $this->dispatchBrowserEvent('close-modal');
+        // $this->dispatchBrowserEvent('close-modal');
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'COA created successfully!']);
     }
 
@@ -155,6 +158,7 @@ class ChartOfAccountsComponent extends Component
     {
         $this->validate([
             'name' => 'required|unique:fms_chart_of_accounts,name,'.$this->edit_id.'',
+            'code' => 'required|unique:fms_chart_of_accounts,code,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
             'is_budget' => 'required|numeric',
             'account_type' => 'required|numeric',
@@ -198,7 +202,9 @@ class ChartOfAccountsComponent extends Component
     public function render()
     {
         $data['accounts'] = FmsChartOfAccount::search($this->search)
-        ->with(['type', 'subType'])
+        ->with(['type', 'subType','parent']) ->when($this->f_account_type != '', function ($query) {
+            $query->where('account_type',  $this->f_account_type);
+        })
         ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
         $data['types'] = FmsChartOfAccountsType::all();
@@ -206,7 +212,7 @@ class ChartOfAccountsComponent extends Component
         $data['sub_types'] = FmsChartOfAccountsSubType::where('type_id', $this->account_type)->get();
              
         if($this->is_sub){
-            $this->sub_accounts = FmsChartOfAccount::where('is_active',1)->with(['type'])
+            $this->sub_accounts = FmsChartOfAccount::where(['is_active'=>1,'account_type'=>$this->account_type])->with(['type'])
             ->orderBy('name', 'asc')->get();
         }
         return view('livewire.finance.accounting.fms-chart-of-accounts-component', $data);

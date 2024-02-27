@@ -44,6 +44,8 @@ class FmsDepartmentsComponent extends Component
 
     public $prefix;
 
+    public $active_unit;
+
     public $supervisor;
 
     public $asst_supervisor;
@@ -67,6 +69,26 @@ class FmsDepartmentsComponent extends Component
         $this->resetPage();
     }
 
+    public function selectUnit($id)
+    {
+        $this->active_unit = $id;
+        if (session()->has('unit')) {
+            session()->forget('unit');
+        }
+        $this->validate([
+            'active_unit' => 'required',
+        ]);
+        $unit = Department::where('id', $this->active_unit)->first();
+        if ($unit) {
+            session(['unit' => $unit->name]);
+            session(['unit_type' => 'department']);
+            session(['unit_id' => $unit->id]);
+            if (session()->has('unit')) {
+                return to_route('finance-dashboard_unit', [session('unit_id'), session('unit_type')]);
+            }
+        }
+    }
+    
 
     public function refresh()
     {

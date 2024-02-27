@@ -142,7 +142,7 @@ class FmsCurrencyUpdatesComponent extends Component
         $data['currency_rates'] = $this->filterCurrencies()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
+        $data['currencies'] = FmsCurrency::where(['is_active'=> true, 'system_default' =>false])->get();
         return view('livewire.finance.settings.fms-currency-updates-component', $data);
     }
 }

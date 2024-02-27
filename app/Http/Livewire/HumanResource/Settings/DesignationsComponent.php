@@ -69,7 +69,7 @@ class DesignationsComponent extends Component
     public function storeDesignation()
     {
         $this->validate([
-            'name' => 'required|string|unique:Designations',
+            'name' => 'required|string|unique:designations',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
 
