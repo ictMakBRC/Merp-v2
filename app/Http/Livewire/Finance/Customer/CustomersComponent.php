@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Finance\Settings;
+namespace App\Http\Livewire\Finance\Customer;
 
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
@@ -277,6 +277,6 @@ class CustomersComponent extends Component
             ->paginate($this->perPage);
             $data['funders'] = $this->filterCustomers()->where('type','Funder')->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
-        return view('livewire.finance.settings.customers-component', $data);
+        return view('livewire.finance.customer.customers-component', $data);
     }
 }

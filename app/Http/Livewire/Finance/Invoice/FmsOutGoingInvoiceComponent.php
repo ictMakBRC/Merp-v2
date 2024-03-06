@@ -393,6 +393,7 @@ class FmsOutGoingInvoiceComponent extends Component
         $data['invoices'] = $this->filterInvoices()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+        $data['invoice_counts'] = $this->filterInvoices()->get();
         $data['customers'] = FmsCustomer::where('is_active', 1)->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['banks'] = FmsBank::where('is_active', 1)->get();

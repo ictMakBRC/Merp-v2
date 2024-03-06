@@ -87,7 +87,7 @@ class FmsBanksComponent extends Component
     public function updated($fields)
     {
         $this->validateOnly($fields, [
-            'name' => 'required|string|unique:fms_banks',
+            'name' => 'required|string',
             'branch' => 'required|string',
             'is_active' => 'required|numeric',
             'account_no' => 'required|unique:fms_banks',

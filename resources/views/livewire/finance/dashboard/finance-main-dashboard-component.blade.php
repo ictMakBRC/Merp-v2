@@ -21,8 +21,8 @@
             <!-- end page title end breadcrumb -->
             <div class="row">
                 <div class="col-lg-9">
-                    <div class="row justify-content-center">
-                        <div class="col-md-6 col-lg-3">
+                    <div class="row justify-content-center d-flex">
+                        <div class="col-md-6 col-lg-3 d-flex">
                             <div class="card">
                                 <div class="card-body">
 
@@ -42,7 +42,7 @@
                                 </div><!--end card-body--> 
                             </div><!--end card--> 
                         </div> <!--end col-->                  
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6 col-lg-3 d-flex">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row d-flex justify-content-center">
@@ -61,7 +61,7 @@
                                 </div><!--end card-body--> 
                             </div><!--end card--> 
                         </div> <!--end col--> 
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6 col-lg-3 d-flex">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row d-flex justify-content-center">
@@ -80,7 +80,7 @@
                                 </div><!--end card-body--> 
                             </div><!--end card--> 
                         </div> <!--end col-->  
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-6 col-lg-3 d-flex">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row d-flex justify-content-center">
@@ -133,7 +133,7 @@
                                 <h4 class="card-title mt-0 mb-2">Budget Overview</h4>                                         
                             <div class="card-body">
                             <div class="table-responsive mt-2">
-                                <table class="table border-dashed mb-0">
+                                <table class="table border-dashed mb-0 table-sm">
                                     <thead>
                                     <tr>
                                         <th>Type</th>
@@ -223,45 +223,97 @@
                     </div><!--end card--> 
                 </div> <!--end col--> 
             </div><!--end row-->
-
             <div class="row">
-                @if (count($requests) > 0)
-        
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row align-items-center">
-                                    <div class="col">
-                                        <h4 class="card-title">Income Transactions</h4>
-                                    </div><!--end col-->
-                                    <div class="col-auto">
-                                        <div class="dropdown">
-                                            <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle"
-                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                This Month<i class="las la-angle-down ms-1"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item" href="#">Today</a>
-                                                <a class="dropdown-item" href="#">Last Week</a>
-                                                <a class="dropdown-item" href="#">Last Month</a>
-                                                <a class="dropdown-item" href="#">This Year</a>
-                                            </div>
-                                        </div>
-                                    </div><!--end col-->
-                                </div> <!--end row-->
-                            </div><!--end card-header-->
-                            <div class="card-body">
-        
-                                <div class="table-responsive">
-                                    <table id="datableButton" class="table thead-light table-striped mb-0 w-100 sortable">
+                <div class="col-md-12">
+                    {{-- <div class="card"> --}}
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">                      
+                                    <h4 class="card-title">Invoice Overview</h4>                      
+                                </div><!--end col-->
+                                <div class="col-auto"> 
+                                    <a href="#" class="text-primary">View All</a>   
+                                </div><!--end col-->
+                            </div>  <!--end row-->    
+                        </div>
+                    {{-- </div> --}}
+                    @include('livewire.finance.invoice.inc.invoice-counts')
+                </div>
+            </div>
+            <div class="row">  
+                <div class="col-lg-5">
+                    <div class="card">
+                        <div class="card-header bg-info">
+                            <div class="row align-items-center">
+                                <div class="col">                      
+                                    <h4 class="card-title">Unit Income/Expense Performance</h4>                      
+                                </div><!--end col-->
+                                <div class="col-auto"> 
+                                    <a href="#" class="text-primary">View All</a>   
+                                </div><!--end col-->
+                            </div>  <!--end row-->                                  
+                        </div><!--end card-header-->    
+                        <div class="card-body p-0"> 
+                             <div style="height:200px;" data-simplebar>
+                                <div class="table-responsiven p-1">
+                                    <table id="tableIE" class="table thead-light  mb-0 w-100 sortable table-sm">
                                         <thead class="table-light">
                                             <tr>
                                                 <th>No.</th>
+                                                <th>Unit</th>
+                                                <th>Total Expense</th>
+                                                <th>Total Income</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($expenseIncome as $key => $transaction)
+                                                <tr>
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{ $transaction->requestable?->name ?? '' }}</td>
+                                                    <td>@moneyFormat($transaction->total_income )</td>
+                                                    <td>@moneyFormat($transaction->total_expense)</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div> <!-- end preview-->
+                            </div><!--end analytics-dash-activity-->
+                        </div><!--end card-body-->
+                    </div><!--end card-->
+                </div><!--end col-->                       
+                <div class="col-lg-7 col-md-7">
+                    <div class="card">   
+                        <div class="card-header bg-success text-white">
+                            <div class="row align-items-center">
+                                <div class="col">                      
+                                    <h4 class="card-title">Recent Requests</h4>                      
+                                </div><!--end col-->
+                                <div class="col-auto"> 
+                                    <div class="dropdown">
+                                        <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            All<i class="las la-angle-down ms-1"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#">Purchases</a>
+                                            <a class="dropdown-item" href="#">Emails</a>
+                                        </div>
+                                    </div>          
+                                </div><!--end col-->
+                            </div>  <!--end row-->                                  
+                        </div><!--end card-header-->                                              
+                        <div class="card-body p-0"> 
+                            <div style="height:200px;" data-simplebar>
+                                <div class="table-responsiven">
+                                    <table id="mm" class="table thead-light mb-0 w-100 sortable table-sm">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Unit</th>
                                                 <th>Trx No.</th>
                                                 <th>Date</th>
                                                 <th>Amount</th>
                                                 <th>Currency</th>
-                                                <th>Unit</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -269,9 +321,10 @@
                                             @foreach ($requests as $key => $transaction)
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
+                                                    <td>{{ $transaction->requestable?->name ?? '' }}</td>
                                                     <td>{{ $transaction->request_type ?? '' }}</td>
                                                     <td>{{ $transaction->date_approved ?? 'N/A' }}</td>
-                                                    <td>{{ $transaction->total_amount }}</td>
+                                                    <td>@moneyFormat($transaction->total_amount)</td>
                                                     <td>{{ $transaction->currency->code ?? 'UGX' }} @ {{ $transaction->rate }}
                                                     </td>
                                                     <td><span
@@ -290,14 +343,15 @@
                                         </tbody>
                                     </table>
                                 </div> <!-- end preview-->
-                            </div><!--end card-body-->
-                        </div><!--end card-->
-                    </div><!--end col-->
-                @endif
-        
+                            </div><!--end analytics-dash-activity-->
+                        </div>  <!--end card-body-->                                     
+                    </div><!--end card--> 
+                </div><!--end col-->
+            </div><!--end row-->
+            <div class="row">        
                 <div class="col">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header bg-light-primary">
                             <div class="row align-items-center">
                                 <div class="col">
                                     <h4 class="card-title">Recent Transactions</h4>
@@ -319,48 +373,49 @@
                             </div> <!--end row-->
                         </div><!--end card-header-->
                         <div class="card-body">
-        
-                            <div class="table-responsive">
-                                <table id="datableButton" class="table thead-light table-striped mb-0 w-100 sortable">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Unit</th>
-                                            <th>Trx No.</th>
-                                            <th>Trx Type</th>
-                                            <th>Date</th>
-                                            <th>Amount</th>
-                                            <th>Currency</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($transactions as $key => $transaction)
+                            <div style="height:385px;" data-simplebar>
+                                <div class="table-responsive">
+                                    <table id="datableButton" class="table table-sm thead-light table-striped mb-0 w-100 sortable">
+                                        <thead class="table-light">
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{ $transaction->requestable?->name ?? '' }}</td>
-                                                <td>{{ $transaction->trx_no ?? '' }}</td>
-                                                <td>{{ $transaction->trx_type ?? '' }}</td>
-                                                <td>{{ $transaction->trx_date ?? 'N/A' }}</td>
-                                                <td>{{ $transaction->total_amount }}</td>
-                                                <td>{{ $transaction->currency->code ?? 'UGX' }} @ {{ $transaction->rate }}</td>
-                                                <td><span
-                                                        class="badge badge-md badge-soft-purple">{{ $transaction->status }}</span>
-                                                </td>
-                                                <td class="table-action">
-        
-                                                    <a href="{{ URL('finance-main_transaction_view', $transaction->id) }}"
-                                                        class="btn btn-sm btn-outline-secondary">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-        
-                                                </td>
+                                                <th>No.</th>
+                                                <th>Unit</th>
+                                                <th>Trx No.</th>
+                                                <th>Trx Type</th>
+                                                <th>Date</th>
+                                                <th>Amount</th>
+                                                <th>Currency</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div> <!-- end preview-->
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($transactions as $key => $transaction)
+                                                <tr>
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{ $transaction->requestable?->name ?? '' }}</td>
+                                                    <td>{{ $transaction->trx_no ?? '' }}</td>
+                                                    <td>{{ $transaction->trx_type ?? '' }}</td>
+                                                    <td>{{ $transaction->trx_date ?? 'N/A' }}</td>
+                                                    <td>@moneyFormat($transaction->total_amount)</td>
+                                                    <td>{{ $transaction->currency->code ?? 'UGX' }} @ {{ $transaction->rate }}</td>
+                                                    <td><span
+                                                            class="badge badge-md badge-soft-purple">{{ $transaction->status }}</span>
+                                                    </td>
+                                                    <td class="table-action">
+            
+                                                        <a href="{{ URL('finance-main_transaction_view', $transaction->id) }}"
+                                                            class="btn btn-sm btn-outline-secondary">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+            
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div> <!-- end preview-->
+                            </div>
                         </div><!--end card-body-->
                     </div><!--end card-->
                 </div><!--end col-->

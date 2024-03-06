@@ -2,22 +2,20 @@
 
 namespace App\Http\Livewire\Finance\Dashboard;
 
-use Livewire\Component;
-use Livewire\WithPagination;
-use Illuminate\Support\Facades\DB;
-use App\Models\Grants\Project\Project;
 use App\Models\Finance\Budget\FmsBudget;
 use App\Models\Finance\Invoice\FmsInvoice;
+use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsFinancialYear;
-use App\Models\HumanResource\Settings\Department;
-use App\Models\Finance\Requests\FmsPaymentRequest;
 use App\Models\Finance\Transactions\FmsTransaction;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class FinanceMainDashboardComponent extends Component
 {
     use WithPagination;
-            
+
     //Filters
     public $from_date;
 
@@ -35,7 +33,7 @@ class FinanceMainDashboardComponent extends Component
 
     public $name;
 
-    public $is_active =1;
+    public $is_active = 1;
 
     public $description;
 
@@ -62,17 +60,18 @@ class FinanceMainDashboardComponent extends Component
     public $fiscal_year;
     public $unitId;
 
-    public function mount(){
+    public function mount()
+    {
         $this->fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
     }
 
     public function transactions()
     {
-        $data = FmsTransaction::when($this->from_date != '' && $this->to_date != '', function ($query) {
-                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
-            }, function ($query) {
-                return $query;
-            });
+        $data = FmsTransaction::with('requestable')->when($this->from_date != '' && $this->to_date != '', function ($query) {
+            $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+        }, function ($query) {
+            return $query;
+        });
 
         $this->lineIds = $data->pluck('id')->toArray();
 
@@ -80,11 +79,11 @@ class FinanceMainDashboardComponent extends Component
     }
     public function paymentRequests()
     {
-        $data = FmsPaymentRequest::when($this->from_date != '' && $this->to_date != '', function ($query) {
-                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
-            }, function ($query) {
-                return $query;
-            });
+        $data = FmsPaymentRequest::with('requestable')->when($this->from_date != '' && $this->to_date != '', function ($query) {
+            $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+        }, function ($query) {
+            return $query;
+        });
 
         $this->lineIds = $data->pluck('id')->toArray();
 
@@ -93,10 +92,10 @@ class FinanceMainDashboardComponent extends Component
     public function filterInvoices()
     {
         $invoices = FmsInvoice::when($this->from_date != '' && $this->to_date != '', function ($query) {
-                $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
-            }, function ($query) {
-                return $query;
-            });
+            $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
+        }, function ($query) {
+            return $query;
+        });
 
         // $this->invoiceIds = $invoices->pluck('id')->toArray();
 
@@ -114,22 +113,21 @@ class FinanceMainDashboardComponent extends Component
     }
     public function budgetQuery()
     {
-        $budgets = FmsBudget::where('fiscal_year', $this->fiscal_year->id??0)
+        $budgets = FmsBudget::where('fiscal_year', $this->fiscal_year->id ?? 0)
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {
                 return $query;
             });
 
-
         return $budgets;
     }
     public function render()
     {
         DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
-     
-            $data['transactions_chart'] = $this->transactions()
-            // ->selectRaw('SUM(CASE WHEN trx_type = "Income" THEN (total_amount * rate) ELSE 0 END) AS total_income')            
+
+        $data['transactions_chart'] = $this->transactions()
+        // ->selectRaw('SUM(CASE WHEN trx_type = "Income" THEN (total_amount * rate) ELSE 0 END) AS total_income')
             ->selectRaw('SUM(CASE WHEN trx_type = "Income" THEN amount_local ELSE 0 END) AS total_income')
             ->selectRaw('SUM(CASE WHEN trx_type = "Expense" THEN amount_local ELSE 0 END) AS total_expense')
             ->selectRaw("DATE_FORMAT(trx_date, '%M-%Y') display_date")
@@ -137,15 +135,23 @@ class FinanceMainDashboardComponent extends Component
             ->groupBy('new_date')
             ->orderBy('new_date', 'ASC')
             ->get();
+            $data['expenseIncome'] = FmsTransaction::latest()
+    ->select('requestable_type', 'requestable_id')
+    ->selectRaw('SUM(CASE WHEN trx_type = "Income" THEN total_amount*rate ELSE 0 END) AS total_income')
+    ->selectRaw('SUM(CASE WHEN trx_type = "Expense" THEN total_amount*rate ELSE 0 END) AS total_expense')
+    ->groupBy('requestable_type', 'requestable_id')
+    ->with('requestable')
+    ->get();
         DB::statement("SET sql_mode=(SELECT CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY'));");
         $data['invoice_chart'] = $this->filterInvoices()->select(DB::raw('count(id) as inv_count'), 'status')->groupBy('status')->get();
-        $data['invoice_amounts'] = $this->filterInvoices()->whereIn('status',['Partially Paid','Paid','Approved'])->select(DB::raw('sum(total_amount) as amount'), 'status')->groupBy('status')->get();
-        $data['requests'] = $this->paymentRequests()->where('status', 'Approved')->latest()->limit(10)->get();
+        $data['invoice_amounts'] = $this->filterInvoices()->whereIn('status', ['Partially Paid', 'Paid', 'Approved'])->select(DB::raw('sum(total_amount) as amount'), 'status')->groupBy('status')->get();
+        $data['requests'] = $this->paymentRequests()->whereIn('status', ['Approved', 'Completed'])->orderBy('status', 'asc')->latest()->limit(10)->get();
         $data['request_counts'] = $this->paymentRequests()->get();
         $data['transactions_all'] = $this->transactions()->get();
         $data['transactions'] = $this->transactions()->latest()->limit(10)->get();
         $data['budget'] = $this->budgetQuery()->with(['fiscalYear'])->select('fiscal_year', DB::raw('sum(estimated_income_local) as total_income'), DB::raw('sum(estimated_expense_local) as total_expenses'))
-        ->groupBy('fiscal_year')->first();
+            ->groupBy('fiscal_year')->first();
+        $data['invoice_counts'] = $this->filterInvoices()->get();
         return view('livewire.finance.dashboard.finance-main-dashboard-component', $data)->layout('layouts.app');
     }
 }

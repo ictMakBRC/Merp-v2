@@ -229,6 +229,7 @@ class FmsIncomingInvoiceComponent extends Component
     }
     public function render()
     {
+        $data['invoice_counts'] = $this->filterInvoices()->get();
         $data['invoices'] = $this->filterInvoices()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);

@@ -131,7 +131,7 @@ class FmsViewCustomerLedgerComponent extends Component
         $data['expenses'] = $this->transactions()->latest()->limit(10)->get();
         $data['invoices'] = $this->filterInvoices() ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->paginate($this->perPage);
-
+        $data['invoice_counts'] = $this->filterInvoices()->get();
      return view('livewire.finance.customer.fms-view-customer-ledger-component', $data);
 }
 }

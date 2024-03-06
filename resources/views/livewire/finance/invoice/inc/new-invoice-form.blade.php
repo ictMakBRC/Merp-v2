@@ -3,8 +3,11 @@
         @if ($toggleForm) wire:submit.prevent="updateInvoice" @else wire:submit.prevent="storeInvoice" @endif>
 
         <div class="row">
-            @include('livewire.partials.single-project-department-toggle')
-            
+            @if ($unit_type == 'all')
+                @include('livewire.partials.project-department-toggle')
+            @else
+                @include('livewire.partials.single-project-department-toggle')
+            @endif
             <div class="mb-3 col col-12 col col-sm-4">
                 <label for="invoice_to" class="form-label required">Billed To</label>
                 <select class="form-control form-select" id="invoice_to" wire:model='invoice_to'>

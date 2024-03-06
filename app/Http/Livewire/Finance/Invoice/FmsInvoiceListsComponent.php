@@ -2,15 +2,16 @@
 
 namespace App\Http\Livewire\Finance\Invoice;
 
+use Livewire\Component;
+use App\Services\GeneratorService;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Grants\Project\Project;
 use App\Models\Finance\Banking\FmsBank;
 use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
-use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Settings\FmsCurrencyUpdate;
-use App\Services\GeneratorService;
-use Livewire\Component;
 
 class FmsInvoiceListsComponent extends Component
 {
@@ -84,13 +85,17 @@ class FmsInvoiceListsComponent extends Component
     public $billed_to;
     public $unit_type ='department';
     public $unit_id=0;
+    public $type ='all';
     public function mount(){
-        if (session()->has('unit_type') && session()->has('unit_id')) {
-            $this->unit_id = session('unit_id');
-            $this->unit_type = session('unit_type');
+        if(Auth::user()->hasPermission(['view_all_invoices'])){
+            if (session()->has('unit_type') && session()->has('unit_id')) {
+                $this->unit_id = session('unit_id');
+                $this->unit_type = session('unit_type');
+            }else{
+                $this->unit_type = 'all';
+            }
         }else{
-            $this->unit_id = auth()->user()->employee->department_id??0;
-            $this->unit_type = 'department';
+            abort(403, 'No permission to access this page');
         }
     }
 
@@ -140,6 +145,9 @@ class FmsInvoiceListsComponent extends Component
 
             if ($latestRate) {
                 $this->rate = $latestRate->exchange_rate;
+            }else{
+                $rate = FmsCurrency::where('id', $this->currency_id)->first();
+                $this->rate = $rate?->exchange_rate??0;
             }
         }
     }
@@ -352,7 +360,7 @@ class FmsInvoiceListsComponent extends Component
                 'text' => 'No invoices selected for export!',
             ]);
         }
-    }
+    } 
 
     public function filterInvoices()
     {
@@ -372,6 +380,7 @@ class FmsInvoiceListsComponent extends Component
         $data['invoices'] = $this->filterInvoices()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+        $data['invoice_counts'] = $this->filterInvoices()->get();
         $data['customers'] = FmsCustomer::where('is_active', 1)->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['banks'] = FmsBank::where('is_active', 1)->get();
