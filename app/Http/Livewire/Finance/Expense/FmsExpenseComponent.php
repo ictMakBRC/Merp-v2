@@ -15,6 +15,7 @@ use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Transactions\FmsTransaction;
+use App\Models\Finance\Accounting\FmsChartOfAccount;
 
 class FmsExpenseComponent extends Component
 {
@@ -56,6 +57,7 @@ class FmsExpenseComponent extends Component
     public $billed_department;
     public $billed_project;
     public $customer_id;
+    public $coa_id;
     public $currency_id;
     public $budget_line_id;
     public $income_budget_line_id;
@@ -118,7 +120,7 @@ class FmsExpenseComponent extends Component
         $this->validate([
             'trx_date' => 'required|date',
             'total_amount' => 'required',
-            // 'trx_ref' => 'nullable',
+            'coa_id' => 'required|integer',
             'bank_id' => 'required|numeric',
             'rate' => 'required|numeric',
             'fiscal_year' => 'required|integer',
@@ -157,10 +159,11 @@ class FmsExpenseComponent extends Component
             $ledgerAccount->current_balance -= $this->ledgerExpense;
             $ledgerAccount->update();
 
+            if($this->budget_line_id){
             $budget = FmsBudgetLine::find($this->budget_line_id);
             $budget->primary_balance -= $this->budgetExpense;
             $budget->update();
-
+            }
             $amountLocal = $total_amount*$this->rate;
             $bank = FmsBank::find($this->bank_id);
             $bank->previous_balance = $bank->current_balance;
@@ -172,10 +175,10 @@ class FmsExpenseComponent extends Component
             $trans->trx_no = 'TRE' . GeneratorService::getNumber(7);
             $trans->trx_ref = $this->trx_ref ?? 'TRF' . GeneratorService::getNumber(7);;
             $trans->trx_date = $this->trx_date ?? date('Y-m-d');
-            $trans->line_balance = $budget->primary_balance;
-            $trans->line_amount = $this->budgetExpense;
-            $trans->account_amount = $this->ledgerExpense;
-            $trans->account_balance = $ledgerAccount->current_balance;
+            $trans->line_balance = $budget->primary_balance??0;
+            $trans->line_amount = $this->budgetExpense??0;
+            $trans->account_amount = $this->ledgerExpense??0;
+            $trans->account_balance = $ledgerAccount->current_balance??0;
             $trans->total_amount = $total_amount;
             $trans->ledger_account = $this->ledger_account;
             $trans->rate = $this->rate;
@@ -183,6 +186,7 @@ class FmsExpenseComponent extends Component
             $trans->department_id = $this->department_id;
             $trans->project_id = $this->project_id;
             $trans->budget_line_id = $this->budget_line_id;
+            $trans->coa_id = $this->coa_id;
             $trans->currency_id = $this->currency_id;
             $trans->financial_year_id = $this->fiscal_year;
             $trans->bank_id = $this->bank_id;
@@ -227,6 +231,7 @@ class FmsExpenseComponent extends Component
         $data = FmsBudgetLine::where('id', $this->budget_line_id)->with('budget', 'budget.currency')->first();
         $this->budgetLineBalance = $data->primary_balance ?? 0 - $data->amount_held ?? 0;
         $this->budgetLineCur = $data->budget?->currency?->code ?? '';
+        $this->coa_id = $data->chat_of_account??'';
     }
 
     public function updatedLedgerAccount()
@@ -316,6 +321,7 @@ class FmsExpenseComponent extends Component
     {
         $this->reset([
 
+            'coa_id',
             'trx_no',
             'trx_ref',
             'trx_date',
@@ -334,6 +340,7 @@ class FmsExpenseComponent extends Component
             'is_department',
             'ledger_account',
             'baseAmount',
+            'bank_id'
         ]);
         $this->viewSummary = false;
     }
@@ -380,6 +387,7 @@ class FmsExpenseComponent extends Component
         $data['projects'] = Project::all();
         $data['years'] = FmsFinancialYear::all();
         $data['banks'] = FmsBank::all();
+        $data['expense_types'] = FmsChartOfAccount::where(['is_active'=> 1, 'account_type'=> 3])->whereIn('is_budget',[1])->with(['type'])->get();
         return view('livewire.finance.expense.fms-expense-component', $data);
     }
 }

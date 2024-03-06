@@ -109,7 +109,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="fax" class="form-label">Fax</label>
                 <input type="tel" id="fax" class="form-control text-uppercase"
                     wire:model.defer='fax'>
@@ -117,7 +117,7 @@
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="mb-3 col-md-3">
+            <div class="mb-3 col-md-2">
                 <label for="city" class="form-label">Website</label>
                 <input type="website" id="website" class="form-control text-uppercase"
                     wire:model.defer='website'>
@@ -126,22 +126,22 @@
                 @enderror
             </div>
 
-            {{-- <div class="mb-3 col-md-4">
-                <label for="reporting_to" class="form-label">Reporting to</label>
-                <select class="form-select select2" id="reporting_to" wire:model.defer='reporting_to'>
-                    <option selected value="">Select</option>
-                    @foreach ($supervisors as $employee)
-                        <option value='{{ $employee->id }}'>{{ $employee->fullName }}</option>
-                    @endforeach
-                </select>
-                @error('reporting_to')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div> --}}
             <div class="mb-3 col-md-3">
                 <label for="sales_tax_registration" class="form-label">TIN Number</label>
                 <input type="number" id="sales_tax_registration" class="form-control" wire:model.defer='sales_tax_registration'>
                 @error('sales_tax_registration')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3 col-md-2">
+                <label for="currency_id" class="form-label">Currency</label>
+                <select class="form-select select2" id="currency_id" wire:model='currency_id'>
+                    <option value="">Select</option>
+                    @foreach ($currencies as $currency)
+                        <option value='{{ $currency->id }}'>{{ $currency->code }}</option>
+                    @endforeach
+                </select>
+                @error('currency_id')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>

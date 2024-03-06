@@ -152,6 +152,10 @@ class FmsInvoiceListsComponent extends Component
         }
     }
 
+    function updatedCustomerId() {
+      $this->currency_id =  $customer = FmsCustomer::where('id', $this->customer_id)->first()->currency_id;
+    }
+
     public function storeInvoice()
     {
         $this->validate($this->validateInputs());

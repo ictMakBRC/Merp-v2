@@ -153,6 +153,10 @@ class FmsOutGoingInvoiceComponent extends Component
         $this->validateOnly($fields, $this->validateInputs());
     }
 
+    function updatedCustomerId() {
+        $this->currency_id =  $customer = FmsCustomer::where('id', $this->customer_id)->first()->currency_id;
+      }
+
     
     public function updatedCurrencyId()
     {

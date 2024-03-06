@@ -12,18 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('fms_transactions', function (Blueprint $table) {
-            $table->decimal('bank_balance')->after('bank_id');
+            // $table->decimal('bank_balance')->nullable()->after('bank_id');
+            $table->decimal('coa_id')->nullable()->after('trx_date');
         });
         Schema::table('fms_banks', function (Blueprint $table) {
-            $table->decimal('previous_balance')->after('current_balance')->default(0);
+            // $table->decimal('previous_balance')->after('current_balance')->default(0);
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::dropIfExists('inv_department_items');
-    }
 };

@@ -2,14 +2,18 @@
 
 namespace App\Http\Livewire\Finance\Customer;
 
-use App\Models\Finance\Settings\FmsCurrency;
-use App\Models\Finance\Settings\FmsCustomer;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\Finace\FmsClientsImport;
+use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\Finance\Settings\FmsCustomer;
+use Livewire\WithFileUploads;
 
 class CustomersComponent extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     //Filters
     public $from_date;
@@ -63,6 +67,9 @@ class CustomersComponent extends Component
     public $created_by;
     public $parent_id;
     public $code;
+    public $currency_id;
+    public $iteration;
+    public $import_file;
 
     public function updatedCreateNew()
     {
@@ -84,6 +91,7 @@ class CustomersComponent extends Component
         return [
             'account_number' => 'nullable|string',
             'title' => 'nullable|string',
+            'currency_id' =>'required|integer',
             'name' => 'required|string',
             'code' => 'required|string',
             'type' => 'required|string',
@@ -120,6 +128,7 @@ class CustomersComponent extends Component
         $customer = new FmsCustomer();
         $customer->name = $this->name;
         $customer->parent_id = $this->parent_id;
+        $customer->currency_id = $this->currency_id;
         $customer->code = $this->code;
         $customer->type = $this->type??'Customer';
         $customer->nationality = $this->nationality;
@@ -146,6 +155,7 @@ class CustomersComponent extends Component
     public function editData(FmsCustomer $customer)
     {
         $this->edit_id = $customer->id;
+        $this->currency_id = $customer->currency_id;
         $this->name = $customer->name;
         $this->parent_id = $customer->parent_id;
         $this->code = $customer->code;
@@ -169,6 +179,52 @@ class CustomersComponent extends Component
         $this->toggleForm = true;
     }
 
+    public function importData()
+    {
+
+        $data = Excel::toArray(new FmsClientsImport(), $this->import_file);
+
+        // Pass the data to the view for preview
+        // dd($dagta);
+        // log($data);
+        $this->validate([
+            'import_file' => 'required|mimes:xlsx|max:10240|file|min:2',
+        ]);
+        try {
+           
+            DB::statement('SET foreign_key_checks=1');
+            Excel::import(new FmsClientsImport, $this->import_file);
+            DB::statement('SET foreign_key_checks=1');
+            $this->iteration = rand();
+            $this->dispatchBrowserEvent('close-modal');
+            session()->forget(['import_batch', 'entry_type', 'pathogen']);
+            
+             // Check if there was any import error
+            if (session()->has('error')) {
+                $errorMessage = session('error');
+                 $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Import completed with duplicates. Summary of duplicate clients: ' . $errorMessage]);
+            }else{
+                $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Clients Data imported successfully!']);
+            }
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            foreach ($failures as $failure) {
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.
+            }
+            foreach ($failure->errors() as $err) {
+            }
+            $this->dispatchBrowserEvent('close-modal');
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'error',
+                'message' => 'Something went wrong!',
+                'text' => 'Failed to import data.'.$err,
+            ]);
+        }
+    }
+
     public function close()
     {
         $this->createNew = false;
@@ -180,6 +236,7 @@ class CustomersComponent extends Component
     {
         $this->reset([
             'account_number',
+            'currency_id',
             'title',
             'name',
             'code',
@@ -217,6 +274,7 @@ class CustomersComponent extends Component
         $customer->nationality = $this->nationality;
         $customer->address = $this->address;
         $customer->city = $this->city;
+        $customer->currency_id = $this->currency_id;
         $customer->email = $this->email;
         $customer->alt_email = $this->alt_email;
         $customer->contact = $this->contact;

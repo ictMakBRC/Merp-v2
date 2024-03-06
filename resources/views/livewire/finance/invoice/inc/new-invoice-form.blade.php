@@ -166,7 +166,7 @@
             <div class="col-md-2">
                 <div class="form-group select-placeholder">
                     <label for="recurring" class="form-label required">
-                        Don't sending overdue reminders</label>
+                        Sending overdue reminders</label>
                     <select class="form-select" data-width="100%" name="cancel_overdue_reminders"
                          wire:model='cancel_overdue_reminders'>
                         <option value="0">No</option>

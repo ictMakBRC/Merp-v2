@@ -16,6 +16,7 @@
 
                                 </h5>
                                 @include('livewire.layouts.partials.inc.create-resource-alpine')
+                                <button data-bs-target="#importModal" data-bs-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-import"></i> Import</button>
                             </div>
                         </div>
                     </div>
@@ -99,6 +100,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
+                                        <th>Short Code</th>
                                         <th>Origin</th>
                                         <th>Address</th>
                                         <th>Email</th>
@@ -112,6 +114,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $customer->name }}</td>
+                                            <td>{{ $customer->code }}</td>
                                             <td>{{ $customer->nationality??'N/A' }}</td>
                                             <td>{{ $customer->address??'N/A' }}</td>
                                             <td>{{ $customer->email }}</td>
@@ -143,7 +146,7 @@
             </div> <!-- end card -->
         </div><!-- end col-->
     </div>
-
+    @include('livewire.general.import-data')
    
 
 @push('scripts')
