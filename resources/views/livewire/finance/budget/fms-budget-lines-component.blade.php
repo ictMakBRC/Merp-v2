@@ -39,53 +39,10 @@
         @foreach ($incomes as $income)
             @if (count($unitLines->where('account_id', $income->id))>0)
             <hr class="hr-custom">
-                <h4>{{ $income->name }}</h4>
-                <form wire:submit.prevent="saveBudgetLine({{ $income->id }})">
-                    <div class="row">
-                    
-                        <div class="col-md-3">
-                            <label for="budgetAmount_{{ $income->id }}">Budget Line:</label> 
-                            <select class="form-select" name="line_id" id="line_id" wire:model='line_id'>
-                                <option value="">Select</option>                            
-                                @foreach ($unitLines->where('account_id', $income->id) as $line)
-                                    <option value="{{ $line->id }}">{{ $line->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('line_id')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-2">
-                            <label for="quantity_{{ $income->id }}">Quantity</label>
-                            <input type="number" step='any' required class="form-control"
-                                wire:model="quantity.{{ $income->id }}">
-                            @error('quantity')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-2">
-                            <label for="allocated_amount_{{ $income->id }}">Budget Amount
-                                ({{ $budget_data->currency->code ?? 'N/A' }}):</label>
-                            <input type="number" required class="form-control"
-                                wire:model="allocated_amount.{{ $income->id }}">
-                            @error('allocated_amount')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-3">
-                            <label for="description_{{ $income->id }}">Income description:</label>
-                            <input type="text" required class="form-control"
-                                wire:model="description.{{ $income->id }}">
-                            @error('description')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-2 pt-3 text-end">
-                            <button wire:click="$set('type','Revenue')" class="btn btn-primary" type="submit">Save
-                                Item</button>
-                        </div>
-                    </div>
-                </form>
+                <h4>{{ $income->name }}</h4>                      
+                <div class="ms-auto text-end">
+                    <button wire:click="selectLine({{ $income->id }},'Revenue')" data-bs-target="#newItemBudgetModal" data-bs-toggle="modal" class="btn btn-success btn-sm" type="submit">Save Item</button>
+                </div>
                 @if (count($budget_lines->where('chat_of_account', $income->id)) > 0)
                     <div class="table-responsive-sm pt-2">
                         <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
@@ -107,7 +64,7 @@
                                         <td>{{ $budget->name }}</td>
                                         <td>{{ $budget->quantity??1 }}</td>
                                         <td>@moneyFormat($budget->allocated_amount)</td>
-                                        <td>{{ $budget->description }}</td>
+                                        <td>{!! $budget->description !!}</td>
                                         <td class="table-action">
 
                                             <a href="javascript:void(0)" wire:click="confirmDelete('{{ $budget->id }}')"
@@ -133,52 +90,10 @@
         @foreach ($expenses as $expense)
             @if (count($unitLines->where('account_id', $expense->id))>0)
                 <hr class="hr-custom">
-                <h4>{{ $expense->name }}</h4>
-                <form wire:submit.prevent="saveBudgetLine({{ $expense->id }})">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="budgetAmount_{{ $expense->id }}">Budget Line:</label> 
-                            <select class="form-select" name="line_id" id="line_id" wire:model='line_id'>
-                                <option value="">Select</option>                            
-                                @foreach ($unitLines->where('account_id', $expense->id) as $line)
-                                    <option value="{{ $line->id }}">{{ $line->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('line_id')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-2">
-                            <label for="allocated_amount_{{ $expense->id }}">Budget
-                                Amount({{ $budget_data->currency->code ?? 'N/A' }}):</label>
-                            <input type="number" required class="form-control"
-                                wire:model="allocated_amount.{{ $expense->id }}">
-                            @error('allocated_amount')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-2">
-                            <label for="quantity_{{ $expense->id }}">Quantity</label>
-                            <input type="number" step='any' required class="form-control"
-                                wire:model="quantity.{{ $expense->id }}">
-                            @error('quantity')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-3">
-                            <label for="description_{{ $expense->id }}">Expense description:</label>
-                            <textarea required class="form-control"
-                                wire:model="description.{{ $expense->id }}"></textarea>
-                            @error('description')
-                                <div class="text-danger text-small">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-2 pt-3 text-end">
-                            <button wire:click="$set('type','Expense')" class="btn btn-info" type="submit">Save
-                                Item</button>
-                        </div>
-                    </div>
-                </form>
+                <h4>{{ $expense->name }} </h4>        
+                <div class="ms-auto text-end">
+                    <button wire:click="selectLine({{ $expense->id }},'Expense')" data-bs-target="#newItemBudgetModal" data-bs-toggle="modal" class="btn btn-info btn-sm" type="submit">Save Item</button>
+                </div>
                 @if (count($budget_lines->where('chat_of_account', $expense->id)) > 0)
                     <div class="table-responsive-sm pt-2">
                         <table class="table table-sm table-bordered table-striped mb-0 w-100 sortable">
@@ -200,7 +115,11 @@
                                         <td>{{ $budget->name }}</td>
                                         <td>{{ $budget->quantity??1 }}</td>
                                         <td>@moneyFormat($budget->allocated_amount)</td>
-                                        <td>{{ $budget->description }}</td>
+                                        <td>                                                 
+                                                    <div class="scrollable list-group">                                                   
+                                                        {!! $budget->description !!}
+                                                    </div>
+                                        </td>
                                         <td class="table-action">
                                             <a href="javascript:void(0)" wire:click="confirmDelete('{{ $budget->id }}')"
                                                 class="text-danger">
@@ -226,5 +145,36 @@
             <a class="btn btn-sm btn-success text-end float-end" wire:click='saveBudget' href="javascript:void(0)">Save Budget</a>
         </span>
     @include('livewire.finance.budget.inc.preview-budget')
+    @include('livewire.finance.budget.inc.new-budget-item-form')
     @include('livewire.partials.delete')
+    @push('scripts')
+    <script>
+        let editorInstance;
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .then(editor => {
+                editorInstance = editor;
+                editor.model.document.on('change:data', () => {
+                @this.set('description', editor.getData());
+                })
+            })
+            .catch(error => {
+                console.error(error);
+            });
+         
+
+        window.addEventListener('delete-modal', event => {
+           $('#delete_modal').modal('show');
+       });
+       window.addEventListener('close-modal', event => {
+           $('#newItemBudgetModal').modal('hide');
+           $('#delete_modal').modal('hide');
+           $('#show-delete-confirmation-modal').modal('hide');
+           if (editorInstance) {
+                editorInstance.setData('');
+            }
+       });
+            
+    </script>
+    @endpush
 </div>

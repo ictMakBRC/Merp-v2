@@ -48,6 +48,18 @@
                         <small class="text-info"><strong>Balance:</strong>{{exchangeCurrency($budgetLineCur, 'base', $budgetLineBalance).' UGX' }}</small>
                     @endif
                 </div>   
+                <div class="mb-3 col-2">
+                    <label for="coa_id" class="form-label required">Expense Type</label>
+                    <select id="coa_id" class="form-control" name="coa_id" required wire:model="coa_id">
+                        <option value="">Select</option>
+                        @foreach ($expense_types as $expense_type)
+                            <option value="{{$expense_type->id}}">{{$expense_type->name}}</option>
+                        @endforeach
+                    </select>
+                    @error('coa_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>   
                 <div class="mb-3 col-3">
                     <label for="currency_id" class="form-label required">Currency</label>
                     <div class="input-group">

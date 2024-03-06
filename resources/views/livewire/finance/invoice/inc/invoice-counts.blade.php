@@ -17,7 +17,7 @@
                                     </div><!--end media-->                                                    
                                 </div><!--end col-->
                                 <div class="col-auto align-self-center">
-                                    <h5 class="my-1">@moneyFormat($invoices->where('status','!=','Canceled')->sum('amount_local'))</h5>
+                                    <h5 class="my-1">@moneyFormat($invoice_counts->where('status','!=','Canceled')->sum('amount_local'))</h5>
                                 </div><!--end col-->
                             </div><!--end row-->
                         </div><!--end card-body-->                                            
@@ -37,7 +37,7 @@
                                     </div><!--end media-->                                                    
                                 </div><!--end col-->
                                 <div class="col-auto align-self-center">
-                                    <h4 class="my-1">  <h5 class="my-1">@moneyFormat($invoices->whereIn('status',['Pending','Submitted','Reviewed'])->sum('amount_local'))</h5></h4>
+                                    <h4 class="my-1">  <h5 class="my-1">@moneyFormat($invoice_counts->whereIn('status',['Pending','Submitted','Reviewed'])->sum('amount_local'))</h5></h4>
                                 </div><!--end col-->
                             </div><!--end row-->
                         </div><!--end card-body-->                                            
@@ -57,7 +57,7 @@
                                     </div><!--end media-->                                                    
                                 </div><!--end col-->
                                 <div class="col-auto align-self-center">
-                                    <h4 class="my-1">  <h5 class="my-1">@moneyFormat($invoices->where('status','Fully Paid')->sum('amount_local'))</h5></h4>
+                                    <h4 class="my-1">  <h5 class="my-1">@moneyFormat($invoice_counts->where('status','Fully Paid')->sum('amount_local'))</h5></h4>
                                 </div><!--end col-->
                             </div><!--end row-->
                         </div><!--end card-body-->                                            
@@ -77,7 +77,7 @@
                                     </div><!--end media-->                                                    
                                 </div><!--end col-->
                                 <div class="col-auto align-self-center">
-                                    <h5 class="my-1">@moneyFormat($invoices->whereIn('status',['Partially Paid','Approved','Acknowledged'])->sum('amount_local'))</h5>                                                     
+                                    <h5 class="my-1">@moneyFormat($invoice_counts->whereIn('status',['Partially Paid','Approved','Acknowledged'])->sum('amount_local'))</h5>                                                     
                                 </div><!--end col-->
                             </div><!--end row-->
                         </div><!--end card-body-->                                            
@@ -97,7 +97,7 @@
                                     </div><!--end media-->                                                     
                                 </div><!--end col-->
                                 <div class="col-auto align-self-center">
-                                    <h5 class="my-1">@moneyFormat($invoices->whereIn('status',['Partially Paid','Approved','Acknowledged'])->where('due_date','<=',date('Y-m-d'))->sum('amount_local'))</h5>                       
+                                    <h5 class="my-1">@moneyFormat($invoice_counts->whereIn('status',['Partially Paid','Approved','Acknowledged'])->where('due_date','<=',date('Y-m-d'))->sum('amount_local'))</h5>                       
                                 </div><!--end col-->
                             </div><!--end row-->
                         </div><!--end card-body-->                                            

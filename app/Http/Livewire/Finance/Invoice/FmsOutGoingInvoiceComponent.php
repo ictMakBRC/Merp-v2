@@ -153,6 +153,10 @@ class FmsOutGoingInvoiceComponent extends Component
         $this->validateOnly($fields, $this->validateInputs());
     }
 
+    function updatedCustomerId() {
+        $this->currency_id =  $customer = FmsCustomer::where('id', $this->customer_id)->first()->currency_id;
+      }
+
     
     public function updatedCurrencyId()
     {
@@ -393,6 +397,7 @@ class FmsOutGoingInvoiceComponent extends Component
         $data['invoices'] = $this->filterInvoices()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+        $data['invoice_counts'] = $this->filterInvoices()->get();
         $data['customers'] = FmsCustomer::where('is_active', 1)->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['banks'] = FmsBank::where('is_active', 1)->get();

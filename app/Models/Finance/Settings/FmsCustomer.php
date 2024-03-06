@@ -25,17 +25,15 @@ class FmsCustomer extends Model
     }
 
     protected $fillable = [ 
-    'account_number',
-    'title',
-    'surname',
-    'first_name',
-    'other_name', 
-    'gender', 
+    'type',
+    'code',
+    'name',
     'nationality',            
     'address', 
     'city', 
     'email', 
     'alt_email',
+    'currency_id',
     'contact', 
     'fax', 
     'alt_contact', 
@@ -63,12 +61,11 @@ class FmsCustomer extends Model
     {
         return empty($search) ? static::query()
         : static::query()
-            ->where('surname', 'like', '%'.$search.'%')
-            ->where('first_name', 'like', '%'.$search.'%')
-            ->where('other_name', 'like', '%'.$search.'%')
-            ->where('company_name', 'like', '%'.$search.'%')
-            ->where('email', 'like', '%'.$search.'%')
-            ->where('contact', 'like', '%'.$search.'%')
-            ->orWhere('description', 'like', '%'.$search.'%');
+            ->where('name', 'like', '%'.$search.'%')
+            ->orWhere('code', 'like', '%'.$search.'%')
+            ->orWhere('company_name', 'like', '%'.$search.'%')
+            ->orWhere('email', 'like', '%'.$search.'%')
+            ->orWhere('alt_email', 'like', '%'.$search.'%')
+            ->orWhere('contact', 'like', '%'.$search.'%');
     }
 }

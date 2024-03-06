@@ -315,4 +315,93 @@ class GeneratorService
     }
 
 
+    public static function generateInitials(string $name)
+    {
+        $n = Str::of($name)->wordCount();
+        $words = explode(' ', $name);
+
+        if (count($words) <= 2) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 3) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 4) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 5) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 6) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr($words[4], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 7) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr($words[4], 0, 1, 'UTF-8').
+                mb_substr($words[5], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) == 8) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr($words[4], 0, 1, 'UTF-8').
+                mb_substr($words[5], 0, 1, 'UTF-8').
+                mb_substr($words[6], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        } elseif (count($words) >= 9) {
+            return mb_strtoupper(
+                mb_substr($words[0], 0, 1, 'UTF-8').
+                mb_substr($words[1], 0, 1, 'UTF-8').
+                mb_substr($words[2], 0, 1, 'UTF-8').
+                mb_substr($words[3], 0, 1, 'UTF-8').
+                mb_substr($words[4], 0, 1, 'UTF-8').
+                mb_substr($words[5], 0, 1, 'UTF-8').
+                mb_substr($words[6], 0, 1, 'UTF-8').
+                mb_substr($words[7], 0, 1, 'UTF-8').
+                mb_substr(end($words), 0, 1, 'UTF-8'),
+                'UTF-8');
+        }
+
+        return self::makeInitialsFromSingleWord($name);
+    }
+
+    protected static function makeInitialsFromSingleWord(string $name)
+    {
+        $n = Str::of($name)->wordCount();
+        preg_match_all('#([A-Z]+)#', $name, $capitals);
+        if (count($capitals[1]) >= $n) {
+            return mb_substr(implode('', $capitals[1]), 0, $n, 'UTF-8');
+        }
+
+        return mb_strtoupper(mb_substr($name, 0, $n, 'UTF-8'), 'UTF-8');
+    }
+
 }

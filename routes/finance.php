@@ -9,7 +9,7 @@ use App\Http\Livewire\Finance\Lists\FmsProjectsComponent;
 use App\Http\Controllers\Finance\FinanceGeneralController;
 use App\Http\Livewire\Finace\Payroll\FmsViewPayrollComponent;
 use App\Http\Livewire\Finance\Expense\FmsExpenseComponent;
-use App\Http\Livewire\Finance\Settings\CustomersComponent;
+use App\Http\Livewire\Finance\Customer\CustomersComponent;
 use App\Http\Livewire\Finance\Banking\FmsViewBankComponent;
 use App\Http\Livewire\Finance\Payroll\FmsPayrollsComponent;
 use App\Http\Livewire\Finance\Budget\FmsMainBudgetComponent;

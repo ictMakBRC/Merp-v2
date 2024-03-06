@@ -29,9 +29,11 @@ class FmsBudgetLinesComponent extends Component
     public $budget_year;
     public $confirmingDelete = false;
     public $budgetToDelete;
+    public $selected_id;
     public function mount($budget)
     {
         $this->budgetCode = $budget;
+        $this->budgetData =  FmsBudget::where('code', $this->budgetCode)->first();
 
     }
     function updatedLineId(){
@@ -41,6 +43,11 @@ class FmsBudgetLinesComponent extends Component
         $this->name = $budgetLine->name;
         $this->description = $budgetLine->description;
      }
+    }
+    public function selectLine($id, $type){
+        $this->line_id = null;
+        $this->type = $type;
+        $this->selected_id = $id;
     }
     public function saveBudgetLine($id)
     {
@@ -53,16 +60,18 @@ class FmsBudgetLinesComponent extends Component
         ]);
         $line_id = $this->line_id;
         // $budgetName = $this->name[$id];
-        $budgetAmount = $this->allocated_amount[$id];
-        $description = $this->description[$id];
-        $quantity = $this->quantity[$id];
+        $budgetAmount = $this->allocated_amount;
+        $description = $this->description;
+        $quantity = $this->quantity;
         if($this->type =='Revenue'){
             $primaryAmount = 0;
         }else{
-            $primaryAmount = $this->allocated_amount[$id];
+            $primaryAmount = $this->allocated_amount;
         }
         $record = FmsBudgetLine::where(['fms_budget_id'=>$this->budgetData->id, 'line_id'=>$this->line_id])->first();
         if($record){
+
+            if($this->budgetData->status !='Pending'||$this->budgetData->status !='Saved'){
             
                 $record->name = $this->name;
                 $record->line_id = $line_id;
@@ -76,12 +85,22 @@ class FmsBudgetLinesComponent extends Component
                 $record->amount_held = 0;
                 $record->update();
                 $this->resetInputs();
+                $this->dispatchBrowserEvent('close-modal');
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
                 'message' => 'Oops! Duplicate data!',
                 'text' => 'the selected line already exists on this budget and was updated!',
             ]);
             return false;
+        }else{
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Duplicate data!',
+                'text' => 'The selected line already exists on a submitted budget and was approved!',
+            ]);
+            return false;
+
+            }
         }
        
         $budgetLine = new FmsBudgetLine();
@@ -96,8 +115,14 @@ class FmsBudgetLinesComponent extends Component
         $budgetLine->description = $description;
         $budgetLine->amount_held = 0;
         $budgetLine->save();
+        $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget-line item created successfully!']);
+    }
+    function close(){
+        $this->resetInputs();
+        $this->description = null;
+        $this->dispatchBrowserEvent('close-modal');
     }
     public function resetInputs()
     {
@@ -115,7 +140,10 @@ class FmsBudgetLinesComponent extends Component
             'quantity',
             'is_active',
             'line_id',
+            'selected_id'
         ]);
+        $this->dispatchBrowserEvent('close-modal');
+        // return redirect(request()->header('Referer'));
     }
     public function confirmDelete($budgetId)
     {
@@ -145,19 +173,28 @@ class FmsBudgetLinesComponent extends Component
     public function deleteRecord()
     {
 
-        FmsBudgetLine::find($this->budgetToDelete)->delete();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget-line item deleted successfully!']);
-        $this->confirmingDelete = false;
-        $this->budgetToDelete = null;
+        if($this->budgetData->status =='Pending'||$this->budgetData->status =='Saved'){
+            FmsBudgetLine::find($this->budgetToDelete)->delete();
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Budget-line item deleted successfully!']);
+            $this->confirmingDelete = false;
+            $this->budgetToDelete = null;
+
+        }else{
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Failed!',
+                'text' => 'The selected line can not be deleted from this budget!',
+            ]);
+        }
     }
     public function redirectRequest()  {
         return redirect()->signedRoute('finance-budget_view', $this->budgetCode);
     }
     public function render()
     {
-        $data['budget_data'] = $budgetData = FmsBudget::where('code', $this->budgetCode)->first();
+        $data['budget_data'] = $budgetData = $this->budgetData;
         if ($budgetData) {
-            $this->budgetData = $budgetData;
+            // $this->budgetData = $budgetData;
             $data['budget_lines'] = FmsBudgetLine::where('fms_budget_id', $data['budget_data']->id)->get();            
             $data['unitLines'] = FmsUnitBudgetLine::where('is_active', 1)->where('requestable_id', $budgetData->requestable_id)
         ->where('requestable_type', $budgetData->requestable_type)->get();
@@ -167,7 +204,7 @@ class FmsBudgetLinesComponent extends Component
             $data['unitLines'] = collect([]);
         }
         if($budgetData->status =='Submitted' || $budgetData->status =='Approved'){
-           $this->redirectRequest();
+        //    $this->redirectRequest();
         }
         $chartOfAccts = FmsChartOfAccount::where('is_active', 1)->with(['type']);
         $data['incomes'] = $chartOfAccts->where('account_type', 4)->get();
