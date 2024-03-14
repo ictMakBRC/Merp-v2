@@ -15,7 +15,7 @@
             <form  @if ($toggleForm) wire:submit.prevent="updateAccount" @else wire:submit.prevent="storeAccount" @endif >             
                 <div class="modal-body">
                     <div class="row">
-                        <div class="mb-3 col-md-3">
+                        <div class="mb-3 col-md-5">
                             <label for="name" class="form-label required">Name</label>
                             <input type="text" id="name" class="form-control" name="name" required
                                 wire:model="name">
@@ -23,6 +23,18 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="mb-3 col-2">
+                            <label for="coa_id" class="form-label required">COA Type</label>
+                            <select id="coa_id" class="form-control" name="coa_id" required wire:model="coa_id">
+                                <option value="">Select</option>
+                                @foreach ($coa_types as $coa_type)
+                                    <option value="{{$coa_type->id}}">{{$coa_type->name}}</option>
+                                @endforeach
+                            </select>
+                            @error('coa_id')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div> 
                         <div class="mb-3 col-md-2">
                             <label for="name" class="form-label required">Branch</label>
                             <input type="text" id="name" class="form-control" name="branch" required
@@ -64,10 +76,15 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-3">
+                        <div class="mb-3 col-5">
                             <label for="opening_balance" class="form-label required">Primary Balance</label>
+                            <div class="input-group">
                             <input type="text" id="opening_balance" oninput="formatAmount(this)" class="form-control"  name="opening_balance" required
                                 wire:model.defer="opening_balance">
+                                <span class="input-group-text">Rate</span>
+                                <input type="text" id="rate" oninput="formatAmount(this)" class="form-control"  name="rate" required
+                                wire:model.defer="rate">
+                            </div>
                             @error('opening_balance')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror

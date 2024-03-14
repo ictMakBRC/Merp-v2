@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('fms_customers', function (Blueprint $table) {
             $table->string('code',10)->after('name')->nullable();
             $table->foreignId('parent_id')->after('code')->nullable()->constrained('fms_customers','id')->onUpdate('cascade')->onDelete('restrict');
+            $table->decimal('opening_balance',16,2)->nullable()->after('current_balance')->default(0);
         });
     }
 
