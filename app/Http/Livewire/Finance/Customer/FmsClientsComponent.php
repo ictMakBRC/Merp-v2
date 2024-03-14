@@ -131,6 +131,11 @@ class FmsClientsComponent extends Component
         $this->validateOnly($fields, $this->validateCustomer());
     }
 
+    public function updatedName()
+    {
+        $this->code = GeneratorService::generateInitials($this->name);
+    }
+
     public function storeCustomer()
     {
         $this->validate($this->validateCustomer());
