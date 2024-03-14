@@ -103,7 +103,7 @@ class FmsClientsComponent extends Component
             'title' => 'nullable|string',
             'currency_id' => 'required|integer',
             'name' => 'required|string',
-            'code' => 'required|string',
+            'code' => 'nullable|string|max:10',
             'type' => 'required|string',
             'gender' => 'nullable|string',
             'parent_id' => 'nullable|integer',
@@ -131,6 +131,11 @@ class FmsClientsComponent extends Component
         $this->validateOnly($fields, $this->validateCustomer());
     }
 
+    public function updatedName()
+    {
+        $this->code = GeneratorService::generateInitials($this->name);
+    }
+
     public function storeCustomer()
     {
         $this->validate($this->validateCustomer());
@@ -139,7 +144,7 @@ class FmsClientsComponent extends Component
         $customer->name = $this->name;
         $customer->parent_id = $this->parent_id;
         $customer->currency_id = $this->currency_id;
-        $customer->code = $this->code;
+        $customer->code = $this->code?? GeneratorService::generateInitials($this->name);
         $customer->type = $this->type ?? 'Customer';
         $customer->nationality = $this->nationality;
         $customer->address = $this->address;

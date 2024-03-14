@@ -18,7 +18,7 @@
 
             <div class="mb-3 col-md-4">
                 <label for="name" class="form-label required">{{ $type }} Name</label>
-                <input type="text" id="name" class="form-control"wire:model.defer='name'>
+                <input type="text" id="name" class="form-control"wire:model.lazy='name'>
                 @error('name')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
@@ -27,7 +27,7 @@
             <div class="mb-3 col-md-2">
                 <label for="name" class="form-label required">{{ $type }} Short Code</label>
                 <input type="text" id="name" class="form-control text-uppercase"
-                    onkeyup="this.value = this.value.toUpperCase();" wire:model.defer='code'>
+                    onkeyup="this.value = this.value.toUpperCase();" wire:model.lazy='code'>
                 @error('code')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
