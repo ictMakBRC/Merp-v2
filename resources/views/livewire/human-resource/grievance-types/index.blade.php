@@ -109,7 +109,7 @@
                             </div>
                             <div class="col-md-10">
                                 <div class="btn-group float-end">
-                                    {{ $grievanceTypes->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $grievanceTypes->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

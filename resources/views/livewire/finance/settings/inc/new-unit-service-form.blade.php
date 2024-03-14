@@ -37,7 +37,7 @@
                         <div class="mb-3 col-md-4">
                             <label for="sale_price" class="form-label required">Sale Price</label>
                             <input type="number" step="any" id="sale_price" class="form-control" name="sale_price"
-                                required wire:model.defer="sale_price">
+                                wire:model.defer="sale_price">
                             @error('sale_price')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
