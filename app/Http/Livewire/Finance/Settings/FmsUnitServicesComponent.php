@@ -63,7 +63,7 @@ class FmsUnitServicesComponent extends Component
             $this->validateOnly($fields, [
                 'service_id' => 'required|integer',
                 'is_active' => 'required|integer',
-                'sale_price' => 'required|numeric',
+                'sale_price' => 'nullable|numeric',
             ]);
         }
     
@@ -72,7 +72,7 @@ class FmsUnitServicesComponent extends Component
             $this->validate([
                 'service_id' => 'required|integer',
                 'is_active' => 'required|integer',
-                'sale_price' => 'required|numeric',
+                'sale_price' => 'nullable|numeric',
                 'project_id'=> 'nullable|numeric',
                 'department_id'=> 'nullable|numeric',
             ]);
