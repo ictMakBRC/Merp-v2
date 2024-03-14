@@ -103,7 +103,6 @@ class FmsClientsComponent extends Component
             'title' => 'nullable|string',
             'currency_id' => 'required|integer',
             'name' => 'required|string',
-            'rate' => 'required',
             'code' => 'required|string',
             'type' => 'required|string',
             'gender' => 'nullable|string',
@@ -246,7 +245,7 @@ class FmsClientsComponent extends Component
     {
         $this->reset([
             'account_number',
-            'currency_id',
+            // 'currency_id',
             'title',
             'name',
             'code',
@@ -267,7 +266,7 @@ class FmsClientsComponent extends Component
             'opening_balance',
             'sales_tax_registration',
             'as_of',
-            'rate',
+            // 'rate',
             'is_active',
             'created_by',
             'edit_id']);
