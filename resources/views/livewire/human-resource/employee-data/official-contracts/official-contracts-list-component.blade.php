@@ -189,7 +189,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $contracts->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $contracts->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

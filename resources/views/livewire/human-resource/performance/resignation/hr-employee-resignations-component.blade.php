@@ -96,7 +96,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $resignations->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $resignations->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
