@@ -120,8 +120,8 @@ class FmsViewInvoiceComponent extends Component
                 $payement->status = $this->status;
                 $payement->save();
                 $this->trx_ref = $payement->payment_reference;
-                FmsInvoice::where(['id' => $this->payment_amount])
-                    ->increment('total_paid', 1);
+                // FmsInvoice::where(['id' => $this->payment_amount])
+                //     ->increment('total_paid', 1);
                 // Find the specific record you want to update
                 $invoice = FmsInvoice::find($id);
                 // if ($invoice) {
@@ -132,7 +132,6 @@ class FmsViewInvoiceComponent extends Component
                     // Update the invoice status based on the new total_paid amount
                     $status = ($newTotalPaid >= $invoice->total_amount) ? 'Fully Paid' : 'Partially Paid';
 
-                    // Use a database transaction for data consistency
                     // DB::transaction(function () use ($invoice, $newTotalPaid, $status) {
                         // Update the total_paid column
                         $invoice->update(['total_paid' => $newTotalPaid]);

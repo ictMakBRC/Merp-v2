@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('fms_transactions', function (Blueprint $table) {
-            // $table->decimal('bank_balance')->nullable()->after('bank_id');
-            $table->decimal('coa_id')->nullable()->after('trx_date');
+            $table->foreignId('coa_id')->nullable()->constrained('fms_chart_of_accounts','id')->onUpdate('cascade')->onDelete('restrict')->after('trx_date');
+            $table->decimal('bank_balance', 16,2)->nullable()->after('bank_id');
         });
         Schema::table('fms_banks', function (Blueprint $table) {
-            // $table->decimal('previous_balance')->after('current_balance')->default(0);
+            $table->foreignId('coa_id')->nullable()->constrained('fms_chart_of_accounts','id')->onUpdate('cascade')->onDelete('restrict')->after('id');
+            $table->decimal('previous_balance',16,2)->nullable()->after('current_balance')->default(0);
+            $table->decimal('opening_balance',16,2)->nullable()->after('current_balance')->default(0);
         });
     }
 

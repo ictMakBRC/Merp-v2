@@ -1,5 +1,5 @@
 <div>
-    <div class="row">
+    <div class="row" x-data="{ filter_data: @entangle('filter'),create_new: @entangle('createNew') }">
         <div class="col-12">
             <div class="card">
                 <div class="card-header pt-0">
@@ -8,22 +8,26 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                         Bank Accounts (<span class="text-danger fw-bold">{{ $accounts->total() }}</span>)
+                                        Customers (<span class="text-danger fw-bold">{{ $customers->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
-                                        Edit Bank Accounts 
+                                        Edit Customer
                                     @endif
 
                                 </h5>
-                                @include('livewire.layouts.partials.inc.create-resource')
+                                @include('livewire.layouts.partials.inc.create-resource-alpine')
+                                <button data-bs-target="#importModal" data-bs-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-import"></i> Import</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
+                    @include('livewire.finance.settings.inc.new-customer-form')
+                </div>
+                <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter Department/Project Accounts</h6>
+                            <h6>Filter Customers</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>
@@ -95,45 +99,35 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>No.</th>
-                                        <th>Type</th>
                                         <th>Name</th>
-                                        <th>Acct No.</th>
-                                        <th>Current Balance</th>
-                                        <th>status</th>
+                                        <th>Short Code</th>
+                                        <th>Origin</th>
+                                        <th>Address</th>
+                                        <th>Email</th>
+                                        <th>Contact</th>
+                                        <th>Company</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($accounts as $key => $account)
+                                    @foreach ($customers as $key => $customer)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $account->type }}</td>
-                                            <td>{{ $account->name.' ('.$account->branch??'N/A' }})</td>
-                                            <td>{{ $account->account_no??'N/A' }}</td>
-                                            <td>{{ $account->currency->code??''  }} @moneyFormat($account->current_balance)</td>
-                                            @if ($account->is_active == 0)
-                                                <td><span class="badge bg-danger">Suspended</span></td>
-                                            @else
-                                                <td><span class="badge bg-success">Active</span></td>
-                                            @endif
+                                            <td>{{ $customer->name }}</td>
+                                            <td>{{ $customer->code }}</td>
+                                            <td>{{ $customer->nationality??'N/A' }}</td>
+                                            <td>{{ $customer->address??'N/A' }}</td>
+                                            <td>{{ $customer->email }}</td>
+                                            <td>{{ $customer->contact }}</td>
+                                            <td>{{ $customer->company_name }}</td>
                                             <td class="table-action">                                                  
-                                                    {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
-                                                    <div class="btn-group btn-sm">
-                                                        <div class="btn-group dropstart" role="group">
-                                                          <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split me-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <span class="visually-hidden">Toggle Dropstart</span>
-                                                            <i class="mdi mdi-chevron-left"></i>
-                                                          </button>
-                                                          <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="{{ route('finance-bank_view', $account->id) }}">Account History</a>
-                                                            <a class="dropdown-item" href="#">Run Report</a>
-                                                            
-                                                        </div>
-                                                        </div>
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" wire:click="editData({{ $account->id }})" class="btn btn-outline-secondary">
-                                                            <i class="fa fa-edit"></i>
-                                                        </button>
-                                                    </div>
+                                                    {{-- @livewire('fms.partials.status-component', ['model' => $customer, 'field' => 'is_active'], key($customer->id)) --}}
+                                                    <button type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" wire:click="editData({{ $customer->id }})" class="action-ico btn-sm btn btn-outline-success mx-1">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <a href="{{ URL::SignedRoute('finance-customer_view',$customer->id) }}" class="action-ico btn-sm btn btn-outline-info mx-1">
+                                                        <i class="fa fa-eye"></i></a>
+                                                    <button wire:click="selectCustomer({{ $customer->id }})" data-bs-toggle="modal" data-bs-target="#addOpeningBalance" class="action-ico btn-sm btn btn-outline-info mx-1"><i class="fa fa-bill"></i></button>
                                                     
                                             </td>
                                         </tr>
@@ -144,7 +138,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $accounts->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $customers->links('vendor.pagination.bootstrap-5') }}
                                 </div>
                             </div>
                         </div>
@@ -153,10 +147,8 @@
             </div> <!-- end card -->
         </div><!-- end col-->
     </div>
-
-    @include('livewire.finance.banking.inc.bank-account-form')
-   {{-- Add/update modal --}}
-   
+    @include('livewire.general.import-data')
+   @include('livewire.finance.customer.inc.new-balance-form-modal')
 
 @push('scripts')
    <script>

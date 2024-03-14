@@ -45,6 +45,7 @@ use App\Http\Livewire\Finance\Settings\ChartOfAccountsTypesComponent;
 use App\Http\Livewire\Finance\Settings\FmsServiceCategoriesComponent;
 use App\Http\Livewire\Finance\Dashboard\FinanceMainDashboardComponent;
 use App\Http\Livewire\Finance\Budget\FmsDepartmentBudgetLinesComponent;
+use App\Http\Livewire\Finance\Customer\FmsClientsComponent;
 use App\Http\Livewire\Finance\Customer\FmsDebtorReportComponent;
 use App\Http\Livewire\Finance\Customer\FmsViewCustomerLedgerComponent;
 use App\Http\Livewire\Finance\Settings\FmsFinanceInstitutionsComponent;
@@ -98,7 +99,7 @@ Route::group(['prefix' => 'finance'], function () {
     Route::group(['prefix' => 'settings'], function () {
         Route::get('chart-of-accounts/types', ChartOfAccountsTypesComponent::class)->name('finance-chart_of_account_types');
         Route::get('chart-of-accounts/subtypes', ChartOfAccountsSubTypesComponent::class)->name('finance-chart_of_account_sub_types');
-        Route::get('customers', CustomersComponent::class)->name('finance-customers');
+        Route::get('customers', FmsClientsComponent::class)->name('finance-customers');
         Route::get('debtors', FmsDebtorReportComponent::class)->name('finance-aging');
         Route::get('currencies', FmsCurrencyComponent::class)->name('finance-currencies');
         Route::get('currencies/rates', FmsCurrencyUpdatesComponent::class)->name('finance-currency_rates');

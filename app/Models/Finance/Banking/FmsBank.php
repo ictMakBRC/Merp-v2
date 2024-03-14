@@ -26,8 +26,10 @@ class FmsBank extends Model
     }
     protected $fillable = [
         'name',
+        'coa_id',
         'account_no',
         'current_balance',
+        'opening_balance',
         'is_active',
         'currency_id',
         'created_by',

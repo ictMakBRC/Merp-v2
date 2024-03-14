@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Finance\Banking;
 
+use App\Models\Finance\Accounting\FmsChartOfAccount;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Services\GeneratorService;
@@ -53,6 +54,8 @@ class FmsBanksComponent extends Component
     public $is_active;
     public $currency_id;
     public $branch;
+    public $coa_id;
+    public $rate;
     public $entry_type ='Department';
 
     public function updatedCreateNew()
@@ -124,6 +127,8 @@ class FmsBanksComponent extends Component
 
         $this->validate([
             'name' => 'required|string',
+            'coa_id'=> 'required|numeric',
+            'rate'=> 'required',
             'branch' => 'required|string',
             'is_active' => 'required|numeric',
             'account_no' => 'required|unique:fms_banks',            
@@ -149,7 +154,7 @@ class FmsBanksComponent extends Component
         }
 
         $opening_balance = (float) str_replace(',', '', $this->opening_balance);
-        $current_balance = (float) str_replace(',', '', $this->current_balance);
+        $rate = (float) str_replace(',', '', $this->rate);
         $account = new FmsBank();
         $account->name = $this->name;
         $account->branch = $this->branch;
@@ -158,25 +163,29 @@ class FmsBanksComponent extends Component
         $account->currency_id = $this->currency_id;
         $account->type = $this->account_type;
         $account->current_balance = $opening_balance;
+        $account->opening_balance = $opening_balance;
         $account->as_of = $this->as_of;
         $account->is_active = $this->is_active;
-        $account->notice_text = $this->description;       
+        $account->notice_text = $this->description;           
+        $account->coa_id = $this->coa_id;    
         $account->save();
         
         $requestable = FmsBank::where('id',$account->id)->first();
         $incomeTrans = new FmsTransaction();
         $incomeTrans->trx_no = 'TRL' . GeneratorService::getNumber(7);
         $incomeTrans->trx_ref = $account->account_no ?? 'TRF' . GeneratorService::getNumber(7);;
-        $incomeTrans->trx_date = date('Y-m-d');
-        $incomeTrans->total_amount = $account->current_balance;
-        $incomeTrans->account_amount = $account->current_balance; 
-        $incomeTrans->account_balance = $account->current_balance;
-        $incomeTrans->bank_id = $account->id;
-        $incomeTrans->rate = 1;
-        $incomeTrans->currency_id = $account->currency_id;
+        $incomeTrans->trx_date = $this->as_of??date('Y-m-d');
+        $incomeTrans->total_amount = $requestable->current_balance;
+        $incomeTrans->account_amount = $requestable->current_balance; 
+        $incomeTrans->account_balance = $requestable->current_balance;
+        $incomeTrans->bank_balance = $requestable->current_balance;
+        $incomeTrans->bank_id = $requestable->id;
+        $incomeTrans->rate = $rate??1;
+        $incomeTrans->coa_id = $requestable->coa_id;
+        $incomeTrans->currency_id = $requestable->currency_id;
         $incomeTrans->trx_type = 'Income';
         $incomeTrans->status = 'Approved';
-        $incomeTrans->description = 'Unit initial Income deposit';
+        $incomeTrans->description = 'Opening Balance';
         $incomeTrans->entry_type = 'Internal';
         $incomeTrans->requestable()->associate($requestable);
         $incomeTrans->save();
@@ -184,6 +193,27 @@ class FmsBanksComponent extends Component
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'account created successfully!']);
+    }
+
+    public $new_balance;
+    public $trx_type;
+    public function storeBalance($id)
+    {
+        $this->validate([
+            'customer'=>'required',
+            'amount'=>'required|numeric'
+        ]);
+        
+            $bank = FmsBank::find($id);
+            if($this->trx_type=='Credit'){
+                $bank->balance += $this->new_balance;
+            }else{
+                $bank->balance -= $this->new_balance;
+            }
+            
+            $bank->save();
+            
+            return redirect()->back()->with('success', 'Record Successfully added !!');
     }
 
     public function updateAccount()
@@ -265,6 +295,7 @@ class FmsBanksComponent extends Component
 
     public function render()
     {
+        $data['coa_types'] = FmsChartOfAccount::where('sub_account_type', 6)->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['accounts'] = $this->filterAccount()->where('is_active', 1)->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
         ->with('currency')->paginate($this->perPage);

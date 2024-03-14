@@ -159,7 +159,15 @@
                                                 <a type="button" data-bs-toggle="modal"
                                                     data-bs-target="#internalTransferModal"
                                                     class="btn btn-sm me-2 btn-primary float-end">
-                                                    <i class="fa fa-plus"></i>New Internal Transfer
+                                                    <i class="fa fa-plus"></i>Internal Transfer
+                                                </a>
+                                            @endif
+                                            @elseif($invoice_data->invoice_type == 'Opening Balance')
+                                            @if ($invoice_data->status == 'Acknowledged' || $invoice_data->status == 'Partially Paid')
+                                                <a type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#internalTransferModal"
+                                                    class="btn btn-sm me-2 btn-primary float-end">
+                                                    <i class="fa fa-plus"></i>Payment
                                                 </a>
                                             @endif
                                         @endif
@@ -203,6 +211,7 @@
                     </div>
                     @include('livewire.finance.invoice.inc.new-invoice-payment')
                     @include('livewire.finance.invoice.inc.new-internal-payment')
+                    @include('livewire.finance.invoice.inc.new-open-balance-payment')
                 </div>
             @endif
         </div>

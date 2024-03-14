@@ -54,6 +54,11 @@ class FmsServicesComponent extends Component
     public $category_id;
     public $created_by;
 
+    function mount()  {
+        $currency = FmsCurrency::where(['is_active'=> 1, 'system_default'=>1])->first();
+        $this->currency_id = $currency->id??null;
+    }
+
   public function updatedCreateNew()
         {
             $this->resetInputs();
@@ -71,7 +76,7 @@ class FmsServicesComponent extends Component
                 'name' => 'required|string',
                 'is_active' => 'required|integer',
                 'description' => 'nullable|string',
-                'sku'=>'required',
+                'sku'=>'nullable',
             ]);
         }
     
@@ -81,7 +86,7 @@ class FmsServicesComponent extends Component
                 'name' => 'required|string|unique:fms_services',
                 'is_active' => 'required|numeric',
                 'description' => 'nullable|string',
-                'sku'=>'required',
+                'sku'=>'nullable',
                 // 'code'=>'required',
                 'rate'=>'nullable',
                 'is_taxable'=>'required',
@@ -89,16 +94,16 @@ class FmsServicesComponent extends Component
                 'is_purchased'=>'required',
                 'supplier_id'=>'nullable',
                 'cost_price'=>'nullable',
-                'sale_price'=>'required',
+                'sale_price'=>'nullable',
                 'currency_id'=>'required',
                 'category_id'=>'required',
     
             ]);
-    
+            $sku =GeneratorService::generateInitials($this->name).rand();
             $service = new FmsService();
             $service->name = $this->name;
             $service->is_active = $this->is_active; 
-            $service->sku =  $this->sku;
+            $service->sku =  $this->sku??$sku;
             $service->code =  GeneratorService::getNumber(10);
             $service->rate =  $this->rate??0;
             $service->is_taxable =  $this->is_taxable;
@@ -106,11 +111,10 @@ class FmsServicesComponent extends Component
             $service->is_purchased =  $this->is_purchased;
             $service->supplier_id =  $this->supplier_id;
             $service->cost_price =  $this->cost_price??0;
-            $service->sale_price =  $this->sale_price;
+            $service->sale_price =  $this->sale_price??0;
             $service->currency_id =  $this->currency_id;
             $service->category_id =  $this->category_id;
             $service->description = $this->description;
-
             $service->save();
             $this->dispatchBrowserEvent('close-modal');
             $this->resetInputs();
