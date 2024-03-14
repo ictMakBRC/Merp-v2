@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="mb-3 col-4">
                             <label for="currency_id" class="form-label required">Account Currency</label>
-                            <select class="form-select select2" id="currency_id" wire:model.defer="currency_id">
+                            <select class="form-select select2" id="currency_id" wire:model="currency_id">
                                 <option  value="">Select</option>
                                 @foreach ($currencies as $currency)
                                     <option value="{{ $currency->id }}">{{ $currency->name.' '.$currency->code }}</option>

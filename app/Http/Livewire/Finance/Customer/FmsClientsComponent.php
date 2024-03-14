@@ -355,9 +355,32 @@ class FmsClientsComponent extends Component
                 $amount = (float) str_replace(',', '', $this->opening_balance);
                 $rate = (float) str_replace(',', '', $this->rate);
                 $opening_balance = $amount * $rate;
-                $this->billtable->opening_balance = $opening_balance;
-                $this->billtable->update();
+                
 
+                $record = FmsInvoice::where(['invoice_type'=>'Opening Balance','customer_id'=>$this->customer_id])->first();
+                if($record){
+                    if($record->status == 'Acknowledged'){
+                    $record->currency_id = $this->currency_id;
+                    $record->rate = $rate;
+                    $record->description = $this->description;
+                    $record->due_date = $this->due_date ?? $this->invoice_date;
+                    $record->recurring = $this->recurring??0;
+                    $record->total_amount = $amount;
+                    $record->amount_local = $opening_balance;
+                    $record->update();                    
+                    $this->billtable->opening_balance = $opening_balance;
+                    $this->billtable->update();
+                    $this->dispatchBrowserEvent('close-modal');
+                    $this->resetInputs();
+                    $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice updated successfully!']);
+                    }else{
+                        $this->dispatchBrowserEvent('swal:modal', [
+                            'type' => 'warning',
+                            'message' => 'Oops! Not Allowed!',
+                            'text' => 'Ypu are not allowed to make changes on this record!',
+                        ]);
+                    }
+                }else{
                 $invoice = new FmsInvoice();
                 $invoice->invoice_type = 'Opening Balance';
                 $invoice->invoice_no = GeneratorService::getInvNumber() . rand(10, 99);
@@ -374,7 +397,7 @@ class FmsClientsComponent extends Component
                 $invoice->description = $this->description;
                 $invoice->due_date = $this->due_date ?? $this->invoice_date;
                 $invoice->recurring = $this->recurring??0;
-                $invoice->total_amount = $opening_balance;
+                $invoice->total_amount = $amount;
                 $invoice->amount_local = $opening_balance;
                 $invoice->discount_type = $this->discount_type;
                 $invoice->discount_total = $this->discount_total;
@@ -384,10 +407,14 @@ class FmsClientsComponent extends Component
                 $invoice->cancel_overdue_reminders = $this->cancel_overdue_reminders;
                 $invoice->requestable()->associate($this->billtable);
                 $invoice->billtable()->associate($this->billtable);
-                $invoice->save();
+                $invoice->save();                
+                $this->billtable->opening_balance = $opening_balance;
+                $this->billtable->update();
                 $this->dispatchBrowserEvent('close-modal');
                 $this->resetInputs();
                 $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice created successfully!']);
+                }
+               
             });
         }
 
