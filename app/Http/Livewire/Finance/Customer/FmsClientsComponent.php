@@ -2,16 +2,18 @@
 
 namespace App\Http\Livewire\Finance\Customer;
 
+use Carbon\Carbon;
+use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use App\Services\GeneratorService;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\Finace\FmsClientsImport;
 use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
-use App\Services\GeneratorService;
-use Illuminate\Support\Facades\DB;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\WithPagination;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Finance\Settings\FmsFinancialYear;
 
 class FmsClientsComponent extends Component
 {
@@ -28,7 +30,7 @@ class FmsClientsComponent extends Component
 
     public $search = '';
 
-    public $orderBy = 'id';
+    public $orderBy = 'name';
 
     public $orderAsc = 0;
 
@@ -72,6 +74,7 @@ class FmsClientsComponent extends Component
     public $currency_id;
     public $iteration;
     public $import_file;
+    public $active_year;
 
     public function updatedCreateNew()
     {
@@ -82,6 +85,10 @@ class FmsClientsComponent extends Component
     public function mount()
     {
         $this->as_of = date('Y-m-d');
+        $this->active_year = $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
+        $this->fiscal_year = $fiscal_year->id;
+        $this->max_date =$this->active_year->end_date;
+        $this->min_date = $this->active_year->start_date;
     }
 
     public function updatingSearch()
@@ -332,10 +339,19 @@ class FmsClientsComponent extends Component
     public $invoice_to = 'Customer';
 
     public $billed_by;
+    public $fiscal_year;
     public $billed_to;
     public $rate;
     public $bank_id;
     public $billtable;
+    public $max_date;
+    public $min_date;
+    public function updatedFiscalYear()
+    {
+        $this->active_year = FmsFinancialYear::where('id', $this->fiscal_year)->first();
+        $this->max_date =$this->active_year->end_date;
+        $this->min_date = $this->active_year->start_date;
+    }
     public function selectCustomer($id)
     {
         $this->billtable = FmsCustomer::where('id', $id)->first();
@@ -348,7 +364,8 @@ class FmsClientsComponent extends Component
                 'invoice_date'=>'required|date',
                 'opening_balance'=>'required',
                 'rate'=>'required',
-                'currency_id'=>'required',
+                'currency_id'=>'required',                
+                'fiscal_year'=>'required|numeric',
             ]);
             DB::transaction(function () {
                 $this->customer_id = $this->billtable->id;
@@ -361,6 +378,7 @@ class FmsClientsComponent extends Component
                 if($record){
                     if($record->status == 'Acknowledged'){
                     $record->currency_id = $this->currency_id;
+                    $record->fiscal_year = $this->fiscal_year;
                     $record->rate = $rate;
                     $record->description = $this->description;
                     $record->due_date = $this->due_date ?? $this->invoice_date;
@@ -381,6 +399,7 @@ class FmsClientsComponent extends Component
                         ]);
                     }
                 }else{
+                $this->due_date = Carbon::parse($this->invoice_date)->addDays(30);
                 $invoice = new FmsInvoice();
                 $invoice->invoice_type = 'Opening Balance';
                 $invoice->invoice_no = GeneratorService::getInvNumber() . rand(10, 99);
@@ -393,6 +412,7 @@ class FmsClientsComponent extends Component
                 $invoice->project_id = $this->project_id;
                 $invoice->customer_id = $this->customer_id;
                 $invoice->currency_id = $this->currency_id;
+                $invoice->fiscal_year = $this->fiscal_year;
                 $invoice->rate = $rate;
                 $invoice->description = $this->description;
                 $invoice->due_date = $this->due_date ?? $this->invoice_date;
@@ -456,6 +476,7 @@ class FmsClientsComponent extends Component
         $data['customers'] = $this->filterCustomers()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+        $data['years'] = FmsFinancialYear::all();
         $data['funders'] = $this->filterCustomers()->where('type', 'Funder')->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         return view('livewire.finance.customer.fms-clients-component', $data);

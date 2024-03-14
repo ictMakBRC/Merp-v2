@@ -11,7 +11,19 @@
             <form  wire:submit.prevent="addBalance" >             
                 <div class="modal-body">
                     <div class="row">
-                        <div class="mb-3 col-4">
+                        <div class="mb-3 col-2">
+                            <label for="fiscal_year" class="form-label required">Fiscal year</label>
+                            <select id="fiscal_year" class="form-control" name="fiscal_year" required wire:model="fiscal_year">
+                                <option value="">Select</option>
+                                @foreach ($years as $fy)
+                                    <option value="{{$fy->id}}">{{$fy->name}}</option>
+                                @endforeach
+                            </select>
+                            @error('fiscal_year')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3 col-2">
                             <label for="currency_id" class="form-label required">Account Currency</label>
                             <select class="form-select select2" id="currency_id" wire:model="currency_id">
                                 <option  value="">Select</option>
@@ -38,7 +50,7 @@
                         </div>
                         <div class="mb-3 col-md-3">
                             <label for="invoice_date" class="form-label required">As of</label>
-                            <input type="date" id="as_of" class="form-control" name="invoice_date" required
+                            <input type="date" id="as_of" class="form-control" min="{{ $min_date }}" max ="{{ $max_date }}" name="invoice_date" required
                                 wire:model.defer="invoice_date">
                             @error('invoice_date')
                                 <div class="text-danger text-small">{{ $message }}</div>
