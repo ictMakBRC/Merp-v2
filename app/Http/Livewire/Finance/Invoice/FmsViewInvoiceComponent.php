@@ -78,12 +78,14 @@ class FmsViewInvoiceComponent extends Component
     public $approved_at;
     public $acknowledged_at;
     public $paid_at;
+    public $services;
 
     public function mount($inv_no)
     {
         $this->invoiceCode = $inv_no;
         $this->budgetLines = collect([]);
-        $this->toBudgetLines = collect([]);
+        $this->toBudgetLines = collect([]);        
+        $this->services= collect([]);
         $this->ledger = [];
         $fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
         $this->fiscal_year = $fiscal_year->id;
@@ -106,7 +108,7 @@ class FmsViewInvoiceComponent extends Component
             // 'status' => 'required',
             'description' => 'required',
             'to_account' => 'required',
-            'to_budget_line_id' => 'required',
+            'to_budget_line_id' => 'nullable',
         ]);
         try {
             DB::transaction(function () use ($id) {
@@ -138,22 +140,26 @@ class FmsViewInvoiceComponent extends Component
                         $invoice->update(['status' => $status]);
                         $invoice->update(['paid_by' => auth()->user()->id]);
                         $invoice->update(['paid_at' => Carbon::now()]);
-
+                        $account_balance =0;
+                        $lineIncome =0;
+                        $line_balance = 0;
                         $this->ledgerIncome = exchangeCurrency($this->to_ledgerCur, 'foreign', $this->baseAmount);
-                        $ledgerAccount = FmsLedgerAccount::where('id', $this->to_account)->first();
-                        // dd($this->ledgerCur);
-                        $account_balance = $ledgerAccount->current_balance + $this->ledgerIncome;
-                        $ledgerAccount->current_balance = $account_balance;
-                        $ledgerAccount->save();
-
-                        $lineAccount = FmsBudgetLine::where('id', $this->to_budget_line_id)->with('budget.currency')->first();
-                        // dd($lineAccount);
-                        $lineCur = $lineAccount->budget->currency->code;
-                        $lineIncome = exchangeCurrency($lineCur, 'foreign', $this->baseAmount);
-                        $line_balance = $lineAccount->primary_balance + $lineIncome;
-                        $lineAccount->primary_balance = $line_balance;
-                        $lineAccount->save(); 
-
+                        if($this->to_account){
+                            $ledgerAccount = FmsLedgerAccount::where('id', $this->to_account)->first();
+                            // dd($this->ledgerCur);
+                            $account_balance = $ledgerAccount->current_balance + $this->ledgerIncome;
+                            $ledgerAccount->current_balance = $account_balance;
+                            $ledgerAccount->save();
+                        }
+                        if($this->to_budget_line_id){
+                            $lineAccount = FmsBudgetLine::where('id', $this->to_budget_line_id)->with('budget.currency')->first();
+                            // dd($lineAccount);
+                            $lineCur = $lineAccount->budget->currency->code;
+                            $lineIncome = exchangeCurrency($lineCur, 'foreign', $this->baseAmount);
+                            $line_balance = $lineAccount->primary_balance + $lineIncome;
+                            $lineAccount->primary_balance = $line_balance;
+                            $lineAccount->save(); 
+                        }
                         $requestable = null;
                         if ($invoice->project_id) {
                             $requestable = Project::find($invoice->project_id);
@@ -283,6 +289,7 @@ class FmsViewInvoiceComponent extends Component
     public $budgetNewBal = 0;
     public $viewSummary = false;
     public $budgetLines, $ledger, $to_ledger;
+
     public function updatedBudgetLineId()
     {
         $this->budgetLineCur = 0;
@@ -497,7 +504,7 @@ class FmsViewInvoiceComponent extends Component
             $this->currency_id = $invoiceData->currency_id;
             // $this->payment_amount = $this->amount - $this->balance;
 
-            $data['ledgers'] = FmsLedgerAccount::where('department_id', $invoiceData->department_id)->get();
+            $data['ledgers'] = FmsLedgerAccount::where('is_active', true)->get();
             $data['items'] = FmsInvoiceItem::where('invoice_id', $data['invoice_data']->id)->with(['uintService.service'])->get();
         } else {
             $data['items'] = collect([]);

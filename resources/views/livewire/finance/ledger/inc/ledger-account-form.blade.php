@@ -34,7 +34,7 @@
                         </div>
                         <div class="mb-3 col-3">
                             <label for="account_type" class="form-label required">Account Currency</label>
-                            <select class="form-select select2" id="currency_id" wire:model.defer="currency_id">
+                            <select class="form-select select2" id="currency_id" wire:model="currency_id">
                                 <option  value="">Select</option>
                                 @foreach ($currencies as $currency)
                                     <option value="{{ $currency->id }}">{{ $currency->name.' '.$currency->code }}</option>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="mb-3 col-3 d-none">
                             <label for="account_type" class="form-label required">Account Type</label>
-                            <select class="form-select select2" id="account_type" wire:model.defer="account_type">
+                            <select class="form-select select2" id="account_type" wire:model="account_type">
                                 <option  value="">Select</option>
                                 @foreach ($types as $type)
                                     <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -74,7 +74,7 @@
                         </div>
                         <div class="mb-3 col-md-2">
                             <label for="is_active" class="form-label required">{{ __('public.status') }}</label>
-                            <select class="form-select select2" id="is_active" wire:model.defer="is_active">
+                            <select class="form-select select2" id="is_active" wire:model="is_active">
                                 <option selected value="">Select</option>
                                 <option value='1'>Active</option>
                                 <option value='0'>Inactive</option>
