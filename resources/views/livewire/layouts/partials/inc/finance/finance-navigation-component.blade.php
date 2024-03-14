@@ -95,7 +95,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#ledger" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="ledger">
-                            Ledger
+                            Accounts
                         </a>
                         <div class="collapse " id="ledger">
                             <ul class="nav flex-column">
@@ -307,6 +307,9 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('finance-aging') }}" class="nav-link ">Debtors List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('finance-creditors') }}" class="nav-link ">Creditors List</a>
                             </li>
                         </ul>
                         <!--end nav-->
