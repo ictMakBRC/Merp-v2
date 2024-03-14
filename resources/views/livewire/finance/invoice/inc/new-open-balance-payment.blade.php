@@ -1,10 +1,10 @@
-<div wire:ignore.self class="modal fade" id="NewPaymentModal" tabindex="-1" role="dialog"
-    aria-labelledby="NewPaymentModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+<div wire:ignore.self class="modal fade" id="NewOpenBalanceModal" tabindex="-1" role="dialog"
+    aria-labelledby="NewOpenBalanceModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title m-0" id="NewPaymentModal">
-                   New invoice payment
+                <h6 class="modal-title m-0" id="NewOpenBalanceModal">
+                   New Open Balance payment
                 </h6>
                 <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" wire:click="close()"
                     aria-label="Close"></button>

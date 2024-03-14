@@ -95,7 +95,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
+                            <table id="datableButton" class="table table-striped mb-0 w-100 sortable table-sm">
                                 <thead class="table-light">
                                     <tr>
                                         <th>No.</th>
@@ -106,6 +106,7 @@
                                         <th>Email</th>
                                         <th>Contact</th>
                                         <th>Company</th>
+                                        <th>Openning Balance</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -120,6 +121,7 @@
                                             <td>{{ $customer->email }}</td>
                                             <td>{{ $customer->contact }}</td>
                                             <td>{{ $customer->company_name }}</td>
+                                            <td>@moneyFormat($customer->opening_balance)</td>
                                             <td class="table-action">                                                  
                                                     {{-- @livewire('fms.partials.status-component', ['model' => $customer, 'field' => 'is_active'], key($customer->id)) --}}
                                                     <button type="button" data-bs-toggle="modal" data-bs-target="#updateCreateModal" wire:click="editData({{ $customer->id }})" class="action-ico btn-sm btn btn-outline-success mx-1">
@@ -127,7 +129,8 @@
                                                     </button>
                                                     <a href="{{ URL::SignedRoute('finance-customer_view',$customer->id) }}" class="action-ico btn-sm btn btn-outline-info mx-1">
                                                         <i class="fa fa-eye"></i></a>
-                                                    <button wire:click="selectCustomer({{ $customer->id }})" data-bs-toggle="modal" data-bs-target="#addOpeningBalance" class="action-ico btn-sm btn btn-outline-info mx-1"><i class="fa fa-bill"></i></button>
+                                                    <button title="Add/Update Client Openning Balance" wire:click="selectCustomer({{ $customer->id }})" data-bs-toggle="modal" data-bs-target="#addOpeningBalance" class="action-ico btn-sm btn btn-outline-info mx-1">
+                                                        <i class="fas fa-money-bill-wave"></i></button>
                                                     
                                             </td>
                                         </tr>
@@ -149,10 +152,10 @@
     </div>
     @include('livewire.general.import-data')
    @include('livewire.finance.customer.inc.new-balance-form-modal')
-
 @push('scripts')
    <script>
        window.addEventListener('close-modal', event => {
+           $('#addOpeningBalance').modal('hide');
            $('#updateCreateModal').modal('hide');
            $('#delete_modal').modal('hide');
            $('#show-delete-confirmation-modal').modal('hide');

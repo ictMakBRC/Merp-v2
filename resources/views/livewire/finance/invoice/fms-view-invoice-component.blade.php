@@ -165,7 +165,7 @@
                                             @elseif($invoice_data->invoice_type == 'Opening Balance')
                                             @if ($invoice_data->status == 'Acknowledged' || $invoice_data->status == 'Partially Paid')
                                                 <a type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#internalTransferModal"
+                                                    data-bs-target="#NewOpenBalanceModal"
                                                     class="btn btn-sm me-2 btn-primary float-end">
                                                     <i class="fa fa-plus"></i>Payment
                                                 </a>
