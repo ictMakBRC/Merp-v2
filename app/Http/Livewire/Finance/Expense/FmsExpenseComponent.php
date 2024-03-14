@@ -16,6 +16,7 @@ use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Transactions\FmsTransaction;
 use App\Models\Finance\Accounting\FmsChartOfAccount;
+use App\Models\Procurement\Settings\Provider;
 
 class FmsExpenseComponent extends Component
 {
@@ -75,6 +76,8 @@ class FmsExpenseComponent extends Component
     public $active_year;
     public $description;
     public $ledgers;
+    public $supplier_id;
+    public $tax;
 
     public function updatedCreateNew()
     {
@@ -122,7 +125,9 @@ class FmsExpenseComponent extends Component
             'total_amount' => 'required',
             'coa_id' => 'required|integer',
             'bank_id' => 'required|numeric',
+            'supplier_id' => 'required|numeric',
             'rate' => 'required|numeric',
+            'tax' => 'nullable|numeric',
             'fiscal_year' => 'required|integer',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
@@ -160,9 +165,9 @@ class FmsExpenseComponent extends Component
             $ledgerAccount->update();
 
             if($this->budget_line_id){
-            $budget = FmsBudgetLine::find($this->budget_line_id);
-            $budget->primary_balance -= $this->budgetExpense;
-            $budget->update();
+                $budget = FmsBudgetLine::find($this->budget_line_id);
+                $budget->primary_balance -= $this->budgetExpense;
+                $budget->update();
             }
             $amountLocal = $total_amount*$this->rate;
             $bank = FmsBank::find($this->bank_id);
@@ -182,6 +187,8 @@ class FmsExpenseComponent extends Component
             $trans->total_amount = $total_amount;
             $trans->ledger_account = $this->ledger_account;
             $trans->rate = $this->rate;
+            $trans->tax = $this->tax;
+            $trans->supplier_id = $this->supplier_id;
             $trans->amount_local = $total_amount*$this->rate; 
             $trans->department_id = $this->department_id;
             $trans->project_id = $this->project_id;
@@ -327,6 +334,8 @@ class FmsExpenseComponent extends Component
             'trx_date',
             'total_amount',
             'rate',
+            'tax',
+            'supplier_id',
             'department_id',
             'project_id',
             'billed_department',
@@ -382,6 +391,7 @@ class FmsExpenseComponent extends Component
         $data['expenses'] = $this->mainQuery()->with('requestable')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
+        $data['suppliers'] = Provider::where('is_active', 1)->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['departments'] = Department::all();
         $data['projects'] = Project::all();

@@ -34,7 +34,7 @@
                 </div>   
                 <div class="mb-3 col-2">
                     <label for="budget_line_id" class="form-label required">Budget Line</label>
-                    <select id="budget_line_id" class="form-control" name="budget_line_id" required wire:model="budget_line_id">
+                    <select id="budget_line_id" class="form-control" name="budget_line_id" wire:model="budget_line_id">
                         <option value="">Select</option>
                         @foreach ($budgetLines as $budgetLine)
                             <option value="{{$budgetLine->id}}">{{$budgetLine->name}}</option>
@@ -88,7 +88,32 @@
                     @error('total_amount')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
-                </div>            
+                </div>      
+                <div class="mb-3 col-2">
+                    <label for="tax" class="form-label required">Tax</label>
+                    <div class="input-group">
+                    <input type="number" id="tax"  class="form-control" name="tax" 
+                        wire:model="tax">                       
+                    </div>
+                    @error('tax')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>  
+                <div class="mb-3 col-2">
+                    <label for="bank_id" class="form-label required">Supplier</label>
+                    <div class="input-group">
+                        <select id="supplier_id" class="form-control" name="supplier_id" required wire:model="supplier_id">
+                            <option value="">Select</option>
+                            @foreach ($suppliers as $supplier)
+                                <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                
+                    @error('supplier_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>      
                 <div class="mb-3 col-2">
                     <label for="bank_id" class="form-label required">Bank</label>
                     <div class="input-group">
