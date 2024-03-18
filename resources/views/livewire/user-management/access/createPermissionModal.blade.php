@@ -13,17 +13,27 @@
                      @csrf
 
                      <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label for="display_name" class="form-label required">{{ __('user-mgt.display_name') }}</label>
+                            <input type="text" id="display_name" class="form-control" name="display_name"
+                                placeholder="Edit user profile" required>
+                        </div>
                          <div class="mb-3 col-md-6">
                              <label for="name" class="form-label required">{{ __('user-mgt.name') }}</label>
                              <input type="text" id="name" class="form-control" name="name"
                                  placeholder="this-will-be-the-code-name" required>
                          </div>
-                         <div class="mb-3 col-md-6">
-                             <label for="display_name" class="form-label required">{{ __('user-mgt.display_name') }}</label>
-                             <input type="text" id="display_name" class="form-control" name="display_name"
-                                 placeholder="Edit user profile" required>
+                         <div class="col-md-2">
+                            <label for="operation" class="form-label required">{{ __('user-mgt.operation') }}</label>
+                            <select name="operation" id="operation" class="form-select">
+                                <option value="">Select</option>
+                                <option value="Create">Create</option>
+                                <option value="Update">Update</option>
+                                <option value="Read">Read</option>
+                                <option value="Delete">Delete</option>
+                            </select>
                          </div>
-                         <div class="col-md-6">
+                         <div class="col-md-5">
                             <label for="target_module" class="form-label required">{{ __('user-mgt.target_module') }}</label>
                             <select name="target_module" id="target_module" class="form-select">
                                 <option value="">Select</option>
@@ -38,7 +48,7 @@
                                 <option value="Helpdesk">Helpdesk</option>
                             </select>
                          </div>
-                         <div class="mb-3 col-md-6">
+                         <div class="mb-3 col-md-5">
                              <label for="description" class="form-label">{{ __('public.description') }}</label>
                              <textarea type="email" id="description" class="form-control" name="description"
                                  placeholder="Some description for the permission"></textarea>

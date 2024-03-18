@@ -41,7 +41,7 @@ return new class extends Migration
             $table->foreignId('invoice_id')->nullable()->constrained('fms_invoices','id')->onUpdate('cascade')->onDelete('restrict');    
             $table->foreignId('payment_id')->nullable()->constrained('fms_invoice_payments','id')->onUpdate('cascade')->onDelete('restrict'); 
             $table->enum('trx_type',['Income','Expense','Transfer'])->default('Expense');
-            $table->enum('entry_type',['Internal','External','Invoice'])->default('External'); 
+            $table->enum('entry_type',['Internal','External','Invoice','Bank'])->default('External'); 
             $table->enum('status',['Paid','Pending','Approved','Canceled'])->default('Pending'); 
             $table->tinyText('description')->nullable();             
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');

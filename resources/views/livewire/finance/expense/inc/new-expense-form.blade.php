@@ -88,14 +88,21 @@
                     @error('total_amount')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
-                </div>      
+                </div>
                 <div class="mb-3 col-2">
-                    <label for="tax" class="form-label required">Tax</label>
+                    <label for="tax_id" class="form-label required">Tax</label>
                     <div class="input-group">
-                    <input type="number" id="tax"  class="form-control" name="tax" 
-                        wire:model="tax">                       
+                        <select id="tax_id" @if ($baseAmount) @else disabled @endif class="form-control" name="tax_id" required wire:model="tax_id">
+                            <option value="">NA</option>
+                            @foreach ($taxes as $tax)
+                                <option value="{{$tax->id}}">{{$tax->name.' '.$tax->rate}}</option>
+                            @endforeach
+                        </select>
+                        <span class="input-group-text">=</span>
+                        <input id="tax" class="form-control" name="tax" required wire:model="tax"  type="number">
                     </div>
-                    @error('tax')
+                
+                    @error('tax_id')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div>  

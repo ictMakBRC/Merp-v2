@@ -402,11 +402,15 @@
                                         <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit
                                             Services</a>
                                     </li>
-                                    <!--end nav-item-->
+                                    <!--end nav-item--> 
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_years']))
                                     <li class="nav-item">
                                         <a href="{{ route('finance-years') }}" class="nav-link ">Financial Years</a>
+                                    </li><!--end nav-item-->
+                                    <li class="nav-item">
+                                        <a href="{{ route('finance-taxes') }}" class="nav-link ">
+                                            Taxes</a>
                                     </li>
                                 @endif
                             </ul>

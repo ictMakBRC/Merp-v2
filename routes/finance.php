@@ -55,6 +55,7 @@ use App\Http\Livewire\Finance\Settings\ChartOfAccountsSubTypesComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestDetailsComponent;
 use App\Http\Livewire\Finance\Requests\FmsPaymentRequestSettingComponent;
 use App\Http\Livewire\Finance\Requests\Internal\FmsInternalTransferRequestsComponent;
+use App\Http\Livewire\Finance\Settings\FmsTaxComponent;
 
 Route::group(['prefix' => 'finance'], function () {
     Route::get('dashboard', FinanceMainDashboardComponent::class)->name('finance-dashboard');
@@ -109,6 +110,7 @@ Route::group(['prefix' => 'finance'], function () {
         Route::get('services', FmsServicesComponent::class)->name('finance-services');
         Route::get('unit/services', FmsUnitServicesComponent::class)->name('finance-unit_services');
         Route::get('years', FmsFinancialYearsComponent::class)->name('finance-years');
+        Route::get('taxes', FmsTaxComponent::class)->name('finance-taxes');
         Route::get('positions', FmsPaymentRequestSettingComponent::class)->name('finance-req_settings');
         Route::get('banks', FmsBanksComponent::class)->name('finance-banks');
         Route::get('institutions', FmsFinanceInstitutionsComponent::class)->name('finance-institutions');

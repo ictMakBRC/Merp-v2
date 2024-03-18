@@ -16,6 +16,7 @@ use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Transactions\FmsTransaction;
 use App\Models\Finance\Accounting\FmsChartOfAccount;
+use App\Models\Finance\Settings\FmsTax;
 use App\Models\Procurement\Settings\Provider;
 
 class FmsExpenseComponent extends Component
@@ -77,7 +78,8 @@ class FmsExpenseComponent extends Component
     public $description;
     public $ledgers;
     public $supplier_id;
-    public $tax;
+    public $tax = 0;
+    public $tax_id;
 
     public function updatedCreateNew()
     {
@@ -118,6 +120,19 @@ class FmsExpenseComponent extends Component
         ]);
     }
 
+    function updatedTaxId()  {
+        if($this->tax_id){
+            $tax = FmsTax::Where('id', $this->tax_id)->first();
+            if($tax && $tax->rate>0){
+                $rate = $tax->rate/100;
+                $this->tax = $this->baseAmount*$rate;
+            }else{                
+                $this->tax = 0;
+            }
+        }else{
+            $this->tax = 0;
+        }
+    }
     public function storeTransaction()
     {
         $this->validate([
@@ -128,6 +143,7 @@ class FmsExpenseComponent extends Component
             'supplier_id' => 'required|numeric',
             'rate' => 'required|numeric',
             'tax' => 'nullable|numeric',
+            'tax_id' => 'nullable|numeric',
             'fiscal_year' => 'required|integer',
             'department_id' => 'nullable|integer',
             'project_id' => 'nullable|integer',
@@ -188,6 +204,7 @@ class FmsExpenseComponent extends Component
             $trans->ledger_account = $this->ledger_account;
             $trans->rate = $this->rate;
             $trans->tax = $this->tax;
+            $trans->tax_id = $this->tax_id;
             $trans->supplier_id = $this->supplier_id;
             $trans->amount_local = $total_amount*$this->rate; 
             $trans->department_id = $this->department_id;
@@ -349,7 +366,8 @@ class FmsExpenseComponent extends Component
             'is_department',
             'ledger_account',
             'baseAmount',
-            'bank_id'
+            'bank_id',
+            'tax_id'
         ]);
         $this->viewSummary = false;
     }
@@ -391,12 +409,13 @@ class FmsExpenseComponent extends Component
         $data['expenses'] = $this->mainQuery()->with('requestable')
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
-        $data['suppliers'] = Provider::where('is_active', 1)->get();
-        $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
-        $data['departments'] = Department::all();
+        $data['suppliers'] = Provider::where('is_active', true)->get();
+        $data['currencies'] = FmsCurrency::where('is_active', true)->get();
+        $data['departments'] = Department::where('is_active', true)->get();
         $data['projects'] = Project::all();
         $data['years'] = FmsFinancialYear::all();
-        $data['banks'] = FmsBank::all();
+        $data['banks'] = FmsBank::where('is_active', true)->get();
+        $data['taxes'] = FmsTax::where('is_active', true)->get();
         $data['expense_types'] = FmsChartOfAccount::where(['is_active'=> 1, 'account_type'=> 3])->whereIn('is_budget',[1])->with(['type'])->get();
         return view('livewire.finance.expense.fms-expense-component', $data);
     }
