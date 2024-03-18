@@ -135,7 +135,7 @@ class FinanceMainDashboardComponent extends Component
             ->groupBy('new_date')
             ->orderBy('new_date', 'ASC')
             ->get();
-            $data['expenseIncome'] = FmsTransaction::latest()
+            $data['expenseIncome'] =$this->transactions()
     ->select('requestable_type', 'requestable_id')
     ->selectRaw('SUM(CASE WHEN trx_type = "Income" THEN total_amount*rate ELSE 0 END) AS total_income')
     ->selectRaw('SUM(CASE WHEN trx_type = "Expense" THEN total_amount*rate ELSE 0 END) AS total_expense')
