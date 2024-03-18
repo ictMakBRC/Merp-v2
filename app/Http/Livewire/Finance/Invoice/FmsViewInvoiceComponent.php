@@ -435,7 +435,7 @@ class FmsViewInvoiceComponent extends Component
     }
     public function render()
     {
-        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'billedDepartment', 'billedProject', 'currency', 'payments'])->first();
+        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'billedDepartment', 'billedProject', 'currency', 'payments','requestable','billtable'])->first();
         if ($invoiceData) {
             $latestRate = FmsCurrencyUpdate::where('currency_id', $invoiceData->currency_id)->latest()->first();
 
