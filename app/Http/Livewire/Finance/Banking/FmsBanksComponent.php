@@ -186,7 +186,7 @@ class FmsBanksComponent extends Component
         $incomeTrans->trx_type = 'Income';
         $incomeTrans->status = 'Approved';
         $incomeTrans->description = 'Opening Balance';
-        $incomeTrans->entry_type = 'Internal';
+        $incomeTrans->entry_type = 'Bank';
         $incomeTrans->requestable()->associate($requestable);
         $incomeTrans->save();
     });

@@ -67,7 +67,7 @@ class FinanceMainDashboardComponent extends Component
 
     public function transactions()
     {
-        $data = FmsTransaction::with('requestable')->when($this->from_date != '' && $this->to_date != '', function ($query) {
+        $data = FmsTransaction::where('entry_type', '!=','Bank')->with('requestable')->when($this->from_date != '' && $this->to_date != '', function ($query) {
             $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
         }, function ($query) {
             return $query;
