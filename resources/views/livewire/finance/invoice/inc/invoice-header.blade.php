@@ -10,34 +10,29 @@
                             <div class="">
                                 <address class="font-13">
                                     <strong class="font-14">Billed By :</strong><br>
-                                    {{$biller->name??'N/A'}}<br>
-                                    {{$biller->prefix??'N/A'}}
+                                    {{$invoice_data->requestable->name??'MAKERERE UNIVERSITY BIOMEDICAL RESEARCH CENTRE'}}<br>
+                                    {{$invoice_data->requestable->description??''}}
                                 </address>
                             </div>
                         </div><!--end col--> 
                         <div class="col-md-3 d-print-flex">
-                            @if ($invoice_data->customer_id!=null)                                    
-                                <div class="">
-                                    <address class="font-13">
-                                        <strong class="font-14">Billed To:</strong><br>
-                                        {{$billed->name??'N/A'}}<br>
-                                        {{$billed->address??'N/A'}},
-                                        {{$billed->nationality??'N/A'}}<br>
-                                        <abbr title="Phone">P:</abbr> {{$billed->contact??'N/A'}}<br>
-                                        <abbr title="Phone">Proj:</abbr> {{$invoice_data->project->name??'N/A'}}
-                                    </address>
-                                </div>
-                            @else
                             
                             <div class="">
                                 <address class="font-13">
                                     <strong class="font-14">Billed To:</strong><br>
-                                    {{$billed->name??'N/A'}}<br>
-                                    {{$billed->prefix??'N/A'}},
-                                    {{$billed->description??'N/A'}}<br>                                   
+                                    @if ($invoice_data == 'Opening Balance')                                        
+                                    {{'MAKERERE UNIVERSITY BIOMEDICAL RESEARCH CENTRE'}}<br>
+                                    {{'P.O BOX 75018 || Clock Tower Kampala, Uganda'}},
+                                    @else
+                                    {{$invoice_data->billtable->name??'N/A'}}<br>
+                                    {{$billed->billtable->prefix??'N/A'}},
+                                    {{$billed->billtable->description??''}}<br> 
+                                    @if ($invoice_data->customer_id!=null) 
+                                        <abbr title="Phone">P:</abbr> {{$invoice_data?->billtable->contact??'N/A'}}<br>
+                                        <abbr title="Phone">Proj:</abbr> {{$invoice_data->project->name??'N/A'}} 
+                                    @endif   
+                                    @endif                              
                                 </address>
                             </div>
-                                
-                            @endif
                         </div> <!--end col-->                       
                     </div><!--end row-->

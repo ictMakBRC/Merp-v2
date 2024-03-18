@@ -63,7 +63,7 @@
                                 <tr>
                                     <td>{{ $number }}</td>
                                     <td>{{ $budget->name }}</td>
-                                    <td>{{ $budget->description }}</td>                                               
+                                    <td>{!! $budget->description !!}</td>                                               
                                     <td>{{ $budget->quantity??1 }}</td>
                                     <td>@moneyFormat($budget->allocated_amount)</td>
                                     <td>@moneyFormat($budget->primary_balance)</td>
@@ -104,7 +104,7 @@
                                 <tr>
                                     <td>{{ $number }}</td>
                                     <td>{{ $budget->name }}</td>
-                                    <td>{{ $budget->description }}</td>
+                                    <td>{!! $budget->description !!}</td>
                                     <td>{{ $budget->quantity??1 }}</td>
                                     <td>@moneyFormat($budget->primary_balance)</td>
                                     <td>@moneyFormat($budget->amount_held)</td>

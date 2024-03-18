@@ -27,7 +27,7 @@
                         <div class="col-md-8">
                             <label for="allocated_amount">Budget
                                 Amount({{ $budget_data->currency->code ?? 'N/A' }}):</label>
-                            <input type="number" required class="form-control" wire:model.defer="allocated_amount">
+                            <input type="number" step="any" required class="form-control" wire:model.defer="allocated_amount">
                             @error('allocated_amount')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror

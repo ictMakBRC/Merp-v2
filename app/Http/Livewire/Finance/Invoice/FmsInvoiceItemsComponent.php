@@ -157,7 +157,7 @@ class FmsInvoiceItemsComponent extends Component
     }
     public function render()
     {
-        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'billedDepartment','billedProject', 'currency','bank'])->first();
+        $data['invoice_data'] = $invoiceData = FmsInvoice::where('invoice_no', $this->invoiceCode)->with(['department', 'project', 'customer', 'billedDepartment','billedProject', 'currency','bank','requestable','billtable'])->first();
         if ($invoiceData) {
             if($invoiceData->invoice_type =='External'){                
                 $this->billed = $invoiceData->customer;
