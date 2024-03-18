@@ -41,7 +41,7 @@
             <hr class="hr-custom">
                 <h4>{{ $income->name }}</h4>                      
                 <div class="ms-auto text-end">
-                    <button wire:click="selectLine({{ $income->id }},'Revenue')" data-bs-target="#newItemBudgetModal" data-bs-toggle="modal" class="btn btn-success btn-sm" type="submit">Save Item</button>
+                    <button wire:click="selectLine({{ $income->id }},'Revenue')" data-bs-target="#newItemBudgetModal" data-bs-toggle="modal" class="btn btn-success btn-sm" type="submit">Add Item</button>
                 </div>
                 @if (count($budget_lines->where('chat_of_account', $income->id)) > 0)
                     <div class="table-responsive-sm pt-2">
@@ -92,7 +92,7 @@
                 <hr class="hr-custom">
                 <h4>{{ $expense->name }} </h4>        
                 <div class="ms-auto text-end">
-                    <button wire:click="selectLine({{ $expense->id }},'Expense')" data-bs-target="#newItemBudgetModal" data-bs-toggle="modal" class="btn btn-info btn-sm" type="submit">Save Item</button>
+                    <button wire:click="selectLine({{ $expense->id }},'Expense')" data-bs-target="#newItemBudgetModal" data-bs-toggle="modal" class="btn btn-info btn-sm" type="submit">Add Item</button>
                 </div>
                 @if (count($budget_lines->where('chat_of_account', $expense->id)) > 0)
                     <div class="table-responsive-sm pt-2">
