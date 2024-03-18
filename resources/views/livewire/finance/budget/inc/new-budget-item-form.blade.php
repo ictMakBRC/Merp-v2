@@ -43,29 +43,7 @@
 
                         <div class="col-md-12 wire:ignore" wire:ignore>
                             <label for="description">Expense description:</label>
-                            <textarea required class="form-control" id="description" wire:model.defer="description">
-                                    <table border="0" cellpadding="0" cellspacing="0" width="764" style="border-collapse: collapse;width:100%">
-                                        <tbody>
-                                            <tr height="21" style="height:15.6pt">
-                                                <td height="21" class="xl65" width="36" style="height:15.6pt;width:27pt">No.</td>
-                                                <td class="xl65" width="210" style="width:158pt">Item</td>
-                                                <td class="xl65" width="214" style="width:161pt">Category</td>
-                                                <td class="xl65" width="77" style="width:58pt">Quantity<span>&nbsp;</span></td>
-                                                <td class="xl65" width="103" style="width:77pt">Unit cost</td>
-                                                <td class="xl65" width="124" style="width:93pt">Amount</td>
-                                            </tr>
-                                            <tr height="19" style="height:14.4pt">
-                                                <td height="19" class="xl66" align="right" style="height:14.4pt">1</td>
-                                                <td class="xl67x"></td>
-                                                <td class="xl66x"></td>
-                                                <td class="xl66x"></td>
-                                                <td class="xl66x"></td>
-                                                <td class="xl66x"></td>
-                                            </tr>
-                                        </tbody>
-                                </table>
-                                <br>
-                                </textarea>
+                            <textarea required class="form-control" id="description" wire:model.defer="description"></textarea>
                             @error('description')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
