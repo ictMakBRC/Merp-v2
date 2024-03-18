@@ -4,7 +4,7 @@
 
         <div class="row">
             @if ($unit_type == 'all')
-                @include('livewire.partials.project-department-toggle')
+            @include('livewire.finance.invoice.inc.units-toggle')
             @else
                 @include('livewire.partials.single-project-department-toggle')
             @endif
@@ -12,7 +12,9 @@
                 <label for="invoice_to" class="form-label required">Billed To</label>
                 <select class="form-control form-select" id="invoice_to" wire:model='invoice_to'>
                     <option selected value="">Select</option>
+                    @if($entry_type !='Supplier')                        
                     <option value="Customer">Customer</option>
+                    @endif
                     <option value="Department">Department</option>
                     <option value="Project">Project</option>
                 </select>
@@ -96,7 +98,7 @@
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
-
+            @if($entry_type !='Supplier') 
             <div class="mb-3 col-2">
                 <label for="bank_id" class="form-label required">Bank</label>
                 <select id="bank_id" class="form-control form-select" name="bank_id" required
@@ -106,11 +108,11 @@
                         <option value="{{ $bank->id }}">{{ $bank->name.' '.$bank->account_no }}</option>
                     @endforeach
                 </select>
-                @error('currency_id')
+                @error('bank_id')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
-
+            @endif
             <div class="mb-3 col-2">
                 <label for="opening_balance" class="form-label required">As of</label>
                 <input type="date" id="invoice_date" max="{{date('Y-m-d')}}" class="form-control" wire:model='invoice_date'>

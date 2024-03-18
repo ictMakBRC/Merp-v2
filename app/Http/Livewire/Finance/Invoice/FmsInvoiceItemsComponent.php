@@ -82,11 +82,22 @@ class FmsInvoiceItemsComponent extends Component
     }
     public function saveItem($id)
     {
-        $this->validate([
-            'item_id' => 'required',
-            'quantity' => 'required',
-            'unit_price' => 'required',
-        ]);
+     
+        if($this->invoiceData->invoice_type !='Incoming'){
+            $this->validate([
+                'item_id' => 'required|integer',
+                'quantity' => 'required',
+                'unit_price' => 'required',
+                'description' => 'required',
+            ]);
+        }else{
+            $this->validate([
+                'item_id' => 'nullable|integer',
+                'quantity' => 'required',
+                'unit_price' => 'required',
+                'description' => 'required',
+            ]);
+        }
 
         $invoiceItem = new FmsInvoiceItem();
         $invoiceItem->invoice_id = $id;

@@ -24,7 +24,7 @@
                                 <table class="table table-bordered mb-0">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>Project Breakdown</th>
+                                            <th>Item</th>
                                             <th>Rate({{$baseCurrency->code??'UGX'}} @ {{ $invoice_data->rate }})</th>
                                             <th>Qty</th> 
                                             <th>Subtotal({{$baseCurrency->code}})</th>
@@ -34,16 +34,21 @@
                                     <tbody>
                                         <tr>
                                             <form wire:submit.prevent='saveItem({{$invoice_data->id}})'>
-                                                        
-                                            <td>
-                                                <select  id="item_id" wire:model='item_id' class="form-control-sm form-select">
-                                                    <option value="">Select</option>
-                                                    @foreach ($services as $uservice)
-                                                        <option value="{{$uservice->id}}">{{$uservice->service->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('item_id')<div class="text-danger text-small">{{ $message }}</div>@enderror
-                                            </td>
+                                                <td>
+                                              @if ($invoice_data->invoice_type !='Incoming')
+                                             
+                                                  <select  id="item_id" wire:model='item_id' class="form-control-sm form-select">
+                                                      <option value="">Select</option>
+                                                      @foreach ($services as $uservice)
+                                                          <option value="{{$uservice->id}}">{{$uservice->service->name}}</option>
+                                                      @endforeach
+                                                  </select>
+                                                  @error('item_id')<div class="text-danger text-small">{{ $message }}</div>@enderror
+                                                                                        
+                                              @endif
+                                                <input type="text" placeholder="Description"  id="description" wire:model.lazy='description' class="form-control-sm">
+                                                @error('description')<div class="text-danger text-small">{{ $message }}</div>@enderror
+                                            </td> 
                                             <td>
                                                 <input type="number" step="any" id="unit_price" class="form-control" required  wire:model="unit_price">
                                                 @error('unit_price')<div class="text-danger text-small">{{ $message }}</div> @enderror
@@ -60,8 +65,8 @@
                                             
                                         <tr>
                                             <td>
-                                                <h5 class="mt-0 mb-1 font-14">{{$item->uintService->service->name??'N/A'}}</h5>
-                                                <p class="mb-0 text-muted">{{$item->uintService->service->description??''}}</p>
+                                                <h5 class="mt-0 mb-1 font-14">{{$item->uintService->service->name??''}}</h5>
+                                                <p class="mb-0 text-muted">{{$item->description??''}}</p>
                                             </td>
                                             <td>@moneyFormat($item->unit_price??0)</td>
                                             <td>{{$item->quantity??'N/A'}}</td>

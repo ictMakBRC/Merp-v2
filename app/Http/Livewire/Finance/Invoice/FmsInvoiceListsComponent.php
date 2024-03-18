@@ -10,6 +10,7 @@ use App\Models\Finance\Banking\FmsBank;
 use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
+use App\Models\Procurement\Settings\Provider;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Settings\FmsCurrencyUpdate;
 
@@ -78,9 +79,9 @@ class FmsInvoiceListsComponent extends Component
     public $rate;
     public $bank_id;
     public $entry_type = 'Department';
-    public $invoice_to = 'Customer';
+    public $invoice_to;
     public $reminder_sent_at;
-
+    public $supplier_id;
     public $billed_by;
     public $billed_to;
     public $unit_type ='department';
@@ -126,7 +127,7 @@ class FmsInvoiceListsComponent extends Component
             'due_date' => 'required|date',
             'recurring' => 'required|numeric',
             'rate'=> 'required|numeric',
-            'bank_id' => 'required|numeric',
+            'bank_id' => 'nullable|numeric',
             'cancel_overdue_reminders' => 'required|numeric',
             'cycles' => 'nullable|numeric',
             // 'recurring_from'=> 'nullable',
@@ -168,20 +169,31 @@ class FmsInvoiceListsComponent extends Component
             ]);
             $requestable  = Project::find($this->project_id);
             $this->department_id = null;
+            $invoice_type = 'Internal';
         } elseif ($this->entry_type == 'Department') {
             $this->validate([
                 'department_id' => 'required|integer',
             ]);
             $this->project_id = null;
+            $invoice_type = 'Internal';
             $requestable  = Department::find($this->department_id);
-        }
+        }elseif ($this->entry_type == 'Supplier') {
+        $this->validate([
+            'supplier_id' => 'required|integer',
+        ]);
+        $this->project_id = null;
+        $this->department_id = null;
+        $invoice_type = 'Incoming';
+        $requestable  = Provider::find($this->supplier_id);
+    }
 
         if ($this->invoice_to == 'Customer') {
             $this->validate([
-                'customer_id' => 'required|integer',
+            'bank_id' => 'required|numeric',
+            'customer_id' => 'required|integer',
             ]);
             
-            $invoice_type = 'External';
+            $invoice_type = 'Outgoing';
             $this->billed_department = null;
             $this->billed_project = null;
             $billtable  = FmsCustomer::find($this->customer_id);
@@ -189,7 +201,6 @@ class FmsInvoiceListsComponent extends Component
                 $this->validate([
                     'billed_project' => 'required|integer',
                 ]);                
-                $invoice_type = 'Internal';
                 $this->billed_department = null;                
                 $this->customer_id = null;                
                 $billtable  = Project::find($this->billed_project);
@@ -205,7 +216,6 @@ class FmsInvoiceListsComponent extends Component
                 $this->validate([
                     'billed_department' => 'required|integer',
                 ]);
-                $invoice_type = 'Internal';
                 $this->billed_project = null;              
                 $this->customer_id = null;  
                 $billtable  = Department::find($this->billed_department);
@@ -388,6 +398,7 @@ class FmsInvoiceListsComponent extends Component
         $data['customers'] = FmsCustomer::where('is_active', 1)->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['banks'] = FmsBank::where('is_active', 1)->get();
+        $data['suppliers'] = Provider::where('is_active', true)->get();
         $data['departments'] = Department::where('is_active', 1)->get();
         $data['projects'] = Project::all();
         return view('livewire.finance.invoice.fms-invoice-lists-component', $data);

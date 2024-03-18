@@ -4,7 +4,7 @@
         <option selected value="">Select</option>
         <option value="Department">Department</option>
         <option value="Project">Project</option>
-        <option value="Customer">Customer</option>
+        <option value="Supplier">Supplier</option>
     </select>
     @error('entry_type')
         <div class="text-danger text-small">{{ $message }}</div>
