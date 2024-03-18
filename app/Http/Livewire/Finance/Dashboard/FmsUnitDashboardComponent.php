@@ -73,11 +73,11 @@ class FmsUnitDashboardComponent extends Component
             $this->requestable_type =  get_class($requestable);
         }elseif($type == 'project'){
             $this->project_id = $id;
-             if(!$requestable){
+            $this->requestable_type  = $requestable = 'App\Models\Grants\Project\Project';
+            $this->requestable =  Project::find($id);            
+            if(!$requestable){
                 abort(403, 'Unauthorized access or action.'); 
             }
-            $this->requestable_type  = 'App\Models\Grants\Project\Project';
-            $this->requestable =  Project::find($id);
         }
         $this->fiscal_year = FmsFinancialYear::where('is_budget_year', 1)->first();
 

@@ -135,13 +135,13 @@ class FinanceMainDashboardComponent extends Component
             ->groupBy('new_date')
             ->orderBy('new_date', 'ASC')
             ->get();
-            $data['expenseIncome'] = FmsTransaction::latest()
-    ->select('requestable_type', 'requestable_id')
-    ->selectRaw('SUM(CASE WHEN trx_type = "Income" THEN total_amount*rate ELSE 0 END) AS total_income')
-    ->selectRaw('SUM(CASE WHEN trx_type = "Expense" THEN total_amount*rate ELSE 0 END) AS total_expense')
-    ->groupBy('requestable_type', 'requestable_id')
-    ->with('requestable')
-    ->get();
+            $data['expenseIncome'] =$this->transactions()
+            ->select('requestable_type', 'requestable_id')
+            ->selectRaw('SUM(CASE WHEN trx_type = "Income" THEN total_amount*rate ELSE 0 END) AS total_income')
+            ->selectRaw('SUM(CASE WHEN trx_type = "Expense" THEN total_amount*rate ELSE 0 END) AS total_expense')
+            ->groupBy('requestable_type', 'requestable_id')
+            ->with('requestable')
+            ->get();
         DB::statement("SET sql_mode=(SELECT CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY'));");
         $data['invoice_chart'] = $this->filterInvoices()->select(DB::raw('count(id) as inv_count'), 'status')->groupBy('status')->get();
         $data['invoice_amounts'] = $this->filterInvoices()->whereIn('status', ['Partially Paid', 'Paid', 'Approved'])->select(DB::raw('sum(total_amount) as amount'), 'status')->groupBy('status')->get();
