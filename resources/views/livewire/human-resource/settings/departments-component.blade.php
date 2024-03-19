@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        System departments (<span class="text-danger fw-bold">{{ $departments->total() }}</span>)
+                                        Departments (<span class="text-danger fw-bold">{{ $departments->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
                                         Edit department

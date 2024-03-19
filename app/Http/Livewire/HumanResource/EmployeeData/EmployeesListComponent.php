@@ -9,6 +9,7 @@ use App\Models\HumanResource\Settings\Station;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\Settings\Designation;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Exports\HumanResource\EmployeeData\EmployeeListExport;
 
 class EmployeesListComponent extends Component
 {
@@ -84,7 +85,7 @@ class EmployeesListComponent extends Component
     public function export()
     {
         if (count($this->employeeIds) > 0) {
-            return (new EmployeesExport($this->employeeIds))->download('Employees_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+            return (new EmployeeListExport($this->employeeIds))->download('Employees_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'info',

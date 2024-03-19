@@ -5,6 +5,7 @@ namespace App\Http\Livewire\HumanResource\Settings;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Designation;
+use App\Exports\HumanResource\Settings\DesignationListExport;
 
 class DesignationsComponent extends Component
 {
@@ -136,8 +137,8 @@ class DesignationsComponent extends Component
 
     public function export()
     {
-        if (count($this->DesignationIds) > 0) {
-            // return (new DesignationsExport($this->DesignationIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+        if (count($this->designationIds) > 0) {
+            return (new DesignationListExport($this->designationIds))->download('Designations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEventBrowserEvent('swal:modal', [
                 'type' => 'warning',

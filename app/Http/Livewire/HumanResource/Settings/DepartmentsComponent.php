@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\HumanResource\Settings;
 
-use App\Models\HumanResource\EmployeeData\Employee;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\EmployeeData\Employee;
+use App\Exports\HumanResource\Settings\DepartmentListExport;
 
 class DepartmentsComponent extends Component
 {
@@ -183,7 +184,7 @@ class DepartmentsComponent extends Component
     public function export()
     {
         if (count($this->departmentIds) > 0) {
-            // return (new DepartmentsExport($this->departmentIds))->download('Departments_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+            return (new DepartmentListExport($this->departmentIds))->download('Departments_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',
