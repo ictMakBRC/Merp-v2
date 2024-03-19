@@ -64,7 +64,7 @@ class FmsDebtorReportComponent extends Component
     public $parent_id;
     public $code;
     function mainQuery()  {
-        return FmsInvoice::search($this->search)
+        return FmsInvoice::search($this->search)->where('invoice_type', '!=', 'Incoming')
         ->when($this->from_date != '' && $this->to_date != '', function ($query) {
             $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
         })->where('status', '!=', 'Fully Paid')

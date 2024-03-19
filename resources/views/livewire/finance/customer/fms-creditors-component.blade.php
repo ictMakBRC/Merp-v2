@@ -7,16 +7,10 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    @if (!$toggleForm)
-                                        Customers (<span class="text-danger fw-bold">{{ $customers->total() }}</span>)
-                                        @include('livewire.layouts.partials.inc.filter-toggle')
-                                    @else
-                                        Edit Customer
-                                    @endif
+                                        Dbtors (<span class="text-danger fw-bold">{{ $debtors->total() }}</span>)
+                                        @include('livewire.layouts.partials.inc.filter-toggle')                              
 
                                 </h5>
-                                {{-- @include('livewire.layouts.partials.inc.create-resource-alpine')
-                                <button data-bs-target="#importModal" data-bs-toggle="modal" class="btn btn-info btn-sm"><i class="fa fa-import"></i> Import</button> --}}
                             </div>
                         </div>
                     </div>
@@ -24,7 +18,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="row mb-0" @if (!$filter) hidden @endif>
-                            <h6>Filter Customers</h6>
+                            <h6>Filter debtors</h6>
 
                             <div class="mb-3 col-md-3">
                                 <label for="is_active" class="form-label">Status</label>
@@ -97,44 +91,49 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>Short Code</th>
-                                        <th>Origin</th>
-                                        <th>Address</th>
                                         <th>Email</th>
                                         <th>Contact</th>
-                                        <th>Company</th>
-                                        <th>Openning Balance</th>
-                                        <th>Action</th>
+                                        <th class="text-end">< 30 Days</th>
+                                        <th class="text-end">31 to 60 Days</th>
+                                        <th class="text-end">61 to 90 Days</th>
+                                        <th class="text-end">> 90 Days</th>
+                                        <th class="text-end">Total Amount</th>
+                                        {{-- <th>Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($customers as $key => $customer)
+                                    @foreach ($debtors as $key => $debtor)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $customer->name }}</td>
-                                            <td>{{ $customer->code }}</td>
-                                            <td>{{ $customer->nationality??'N/A' }}</td>
-                                            <td>{{ $customer->address??'N/A' }}</td>
-                                            <td>{{ $customer->email }}</td>
-                                            <td>{{ $customer->contact }}</td>
-                                            <td>{{ $customer->company_name }}</td>
-                                            <td>@moneyFormat($customer->opening_balance)</td>
-                                            <td class="table-action"> 
-                                                    {{-- <a disabled href="{{ URL::SignedRoute('finance-customer_view',$customer->id) }}" class="action-ico btn-sm btn btn-outline-info mx-1">
-                                                        <i class="fa fa-eye"></i></a> --}}
-                                                    <button title="Add/Update Client Openning Balance" wire:click="selectCustomer({{ $customer->id }})" data-bs-toggle="modal" data-bs-target="#addOpeningBalance" class="action-ico btn-sm btn btn-outline-info mx-1">
-                                                        <i class="fas fa-money-bill-wave"></i></button>
-                                                    
-                                            </td>
+                                            <td>{{ $debtor->requestable->name??'N/A' }}</td>
+                                            <td>{{ $debtor->requestable->email??'N/A' }}</td>
+                                            <td>{{ $debtor->requestable->contact??'N/A' }}</td>
+                                            <td class="text-end">@moneyFormat($debtor->aging_30_days??'N/A')</td>
+                                            <td class="text-end">@moneyFormat($debtor->aging_31_60_days??'N/A')</td>
+                                            <td class="text-end">@moneyFormat($debtor->aging_61_90_days??'N/A')</td>
+                                            <td class="text-end">@moneyFormat($debtor->aging_91_days??'N/A')</td>
+                                            <td class="text-end">@moneyFormat($debtor->total_debt_amount??'N/A')</td>
+                                            {{-- <td class="table-action">  
+                                                    <a href="{{ URL::SignedRoute('finance-customer_view',$debtor->billtable_id) }}" class="action-ico btn-sm btn btn-outline-info mx-1">
+                                                        <i class="fa fa-eye"></i></a>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
+                                    <tr>
+                                        <td colspan="4" class="text-end"><b>Total Amount</b></td>
+                                        <td class="text-end text-strong"><b>@moneyFormat($debtors->sum('aging_30_days'))</b></td>
+                                        <td class="text-end text-strong"><b>@moneyFormat($debtors->sum('aging_31_60_days'))</b></td>
+                                        <td class="text-end text-strong"><b>@moneyFormat($debtors->sum('aging_61_90_days'))</b></td>
+                                        <td class="text-end text-strong"><b>@moneyFormat($debtors->sum('aging_91_days'))</b></td>
+                                        <td colspan="2" class="text-end text-strong"><b>@moneyFormat($debtors->sum('total_debt_amount'))</b></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div> <!-- end preview-->
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $customers->links('vendor.livewire.bootstrap') }}
+                                    {{ $debtors->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -143,12 +142,12 @@
             </div> <!-- end card -->
         </div><!-- end col-->
     </div>
-    @include('livewire.general.import-data')
-   @include('livewire.finance.customer.inc.new-balance-form-modal')
+
+   
+
 @push('scripts')
    <script>
        window.addEventListener('close-modal', event => {
-           $('#addOpeningBalance').modal('hide');
            $('#updateCreateModal').modal('hide');
            $('#delete_modal').modal('hide');
            $('#show-delete-confirmation-modal').modal('hide');

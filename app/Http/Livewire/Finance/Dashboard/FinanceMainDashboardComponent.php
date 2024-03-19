@@ -143,15 +143,15 @@ class FinanceMainDashboardComponent extends Component
             ->with('requestable')
             ->get();
         DB::statement("SET sql_mode=(SELECT CONCAT(@@sql_mode, ',ONLY_FULL_GROUP_BY'));");
-        $data['invoice_chart'] = $this->filterInvoices()->select(DB::raw('count(id) as inv_count'), 'status')->groupBy('status')->get();
-        $data['invoice_amounts'] = $this->filterInvoices()->whereIn('status', ['Partially Paid', 'Paid', 'Approved'])->select(DB::raw('sum(total_amount) as amount'), 'status')->groupBy('status')->get();
+        $data['invoice_chart'] = $this->filterInvoices()->select(DB::raw('count(id) as inv_count'), 'status')->groupBy('status')->where('invoice_type', '!=', 'Incoming')->get();
+        $data['invoice_amounts'] = $this->filterInvoices()->whereIn('status', ['Partially Paid', 'Paid', 'Approved'])->select(DB::raw('sum(total_amount) as amount'), 'status')->where('invoice_type', '!=', 'Incoming')->groupBy('status')->get();
         $data['requests'] = $this->paymentRequests()->whereIn('status', ['Approved', 'Completed'])->orderBy('status', 'asc')->latest()->limit(10)->get();
         $data['request_counts'] = $this->paymentRequests()->get();
         $data['transactions_all'] = $this->transactions()->get();
         $data['transactions'] = $this->transactions()->latest()->limit(10)->get();
         $data['budget'] = $this->budgetQuery()->with(['fiscalYear'])->select('fiscal_year', DB::raw('sum(estimated_income_local) as total_income'), DB::raw('sum(estimated_expense_local) as total_expenses'))
             ->groupBy('fiscal_year')->first();
-        $data['invoice_counts'] = $this->filterInvoices()->get();
+        $data['invoice_counts'] = $this->filterInvoices()->where('invoice_type', '!=', 'Incoming')->get();
         return view('livewire.finance.dashboard.finance-main-dashboard-component', $data)->layout('layouts.app');
     }
 }
