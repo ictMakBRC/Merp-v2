@@ -162,18 +162,18 @@
                                 <!--end nav-item-->
                                 @if (Auth::user()->hasPermission(['view_organization_budget']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-budgets', 'all') }}" class="nav-link ">All
-                                            Budgets</a>
+                                        <a href="{{ route('finance-main_budget') }}" class="nav-link ">Main
+                                            Budget</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-main_budget') }}" class="nav-link ">Main
+                                        <a href="{{ route('finance-budgets', 'all') }}" class="nav-link ">Unit
                                             Budgets</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->hasPermission(['view_unit_budget']))
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-budgets', 'unit') }}" class="nav-link ">Unit
-                                            Budgets</a>
+                                        <a href="{{ route('finance-budgets', 'unit') }}" class="nav-link ">My
+                                            Budget</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ route('finance-unit_lines') }}" class="nav-link ">Unit Lines</a>
