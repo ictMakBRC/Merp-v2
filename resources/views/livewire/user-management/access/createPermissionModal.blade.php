@@ -24,7 +24,7 @@
                                  placeholder="this-will-be-the-code-name" required>
                          </div>
                          <div class="col-md-2">
-                            <label for="operation" class="form-label required">{{ __('user-mgt.operation') }}</label>
+                            <label for="operation" class="form-label required">{{ __('Operation') }}</label>
                             <select name="operation" id="operation" class="form-select">
                                 <option value="">Select</option>
                                 <option value="Create">Create</option>

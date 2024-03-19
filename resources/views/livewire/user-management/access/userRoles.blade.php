@@ -84,7 +84,7 @@
     </div><!-- end col-->
     </div>
     <!-- end row-->
-    {{-- @include('livewire.user-management.access.createRoleModal') --}}
+    @include('livewire.user-management.access.createRoleModal')
     @push('scripts')
     <script src="{{ asset('assets/libs/datatable/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatable/js/dataTables.bootstrap5.min.js') }}"></script>

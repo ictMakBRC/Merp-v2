@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
+use App\Exports\Projects\GrantListExport;
 
 class GrantsComponent extends Component
 {
@@ -60,6 +61,19 @@ class GrantsComponent extends Component
         $this->projectIds = $projects->pluck('id')->toArray();
 
         return $projects;
+    }
+
+    public function export()
+    {
+        if (count($this->projectIds) > 0) {
+            return (new GrantListExport($this->projectIds))->download('Grants_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+        } else {
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'info',
+                'message' => 'Oops! Not Found!',
+                'text' => 'No Grants selected for export!',
+            ]);
+        }
     }
 
     public function render()

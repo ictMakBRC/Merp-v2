@@ -19,12 +19,8 @@ class TwoFactorAuthenticationComponent extends Component
 
         if ($this->token == $user->two_factor_code && $user->two_factor_expires_at > now()) {
             $user->resetTwoFactorCode();
-
-            if ($user->category === 'Courier-Staff') {
-                redirect()->route('courier.referral_requests');
-            } else {
-                redirect()->route('home');
-            }
+// dd('okkkk');
+            redirect()->route('home');
 
         } else {
 
@@ -39,12 +35,13 @@ class TwoFactorAuthenticationComponent extends Component
 
     public function resendToken()
     {
+        // dd('OK)');
         $user = auth()->user();
         $user->generateTwoFactorCode();
 
         if ($user->two_factor_channel == 'email') {
 
-            $user->notify(new TwoFactorCode());
+            // $user->notify(new TwoFactorCode());
 
         } else {
             // code...
