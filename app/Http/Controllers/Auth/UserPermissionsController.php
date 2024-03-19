@@ -34,6 +34,7 @@ class UserPermissionsController
     {
         $data = $request->validate([
             'name' => 'required|string|unique:roles,name',
+            'operation' => 'required|string',
             'display_name' => 'nullable|string',
             'target_module' => 'required|string',
             'description' => 'nullable|string',

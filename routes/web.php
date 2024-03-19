@@ -27,7 +27,7 @@ Route::get('lang/{locale}', function ($locale) {
     return redirect()->back();
 })->name('lang');
 
-
+Route::get('/2fa/verify', [AuthenticatedSessionController::class, 'twoFactorAuthentication'])->middleware('auth')->name('two-factor-auth');
 Route::group(['middleware' => ['auth',  'suspended_user','twofactor']], function () {
     Route::get('/home', function () {
         return view('home');

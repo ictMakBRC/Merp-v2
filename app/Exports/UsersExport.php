@@ -32,14 +32,14 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
     {
         return [
             'creator' => auth()->user()->fullName,
-            'lastModifiedBy' => 'NIMS',
+            'lastModifiedBy' => 'MERP',
             'title' => 'Users',
             'description' => 'Users export',
             'subject' => 'Users export',
-            'keywords' => 'NIMS exports',
-            'category' => 'NIMS Exports',
-            'manager' => 'AFRICA PGI',
-            'company' => 'AFRICA PGI',
+            'keywords' => 'MERP exports',
+            'category' => 'MERP Exports',
+            'manager' => 'MAKBRC',
+            'company' => 'MAKBRC',
         ];
     }
 
@@ -58,7 +58,7 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
             $user->category ?? 'N/A',
             $user->email ?? 'N/A',
             $user->contact ?? 'N/A',
-            $user->is_active === 1 ? 'Active' : 'Suspended',
+            $user->is_active == 1 ? 'Active' : 'Suspended',
         ];
     }
 
@@ -67,7 +67,6 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
         return [
             '#',
             'Name',
-            'Username',
             'Category',
             'Email',
             'Contact',
