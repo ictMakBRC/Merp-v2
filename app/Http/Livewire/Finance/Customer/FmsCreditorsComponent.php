@@ -74,7 +74,10 @@ class FmsCreditorsComponent extends Component
         })->where('status', '!=', 'Fully Paid')
         ->groupBy('requestable_type', 'requestable_id')->with('requestable')
         ->selectRaw(' requestable_type, requestable_id,  
-            SUM( total_amount*rate - total_paid*rate - adjustment*rate) AS total_debt_amount,            
+            SUM( total_amount*rate - total_paid*rate - adjustment*rate) AS total_debt_amount,
+            SUM(CASE
+                WHEN due_date > CURDATE() THEN total_amount * rate - total_paid * rate - adjustment * rate
+                ELSE 0 END) AS future_debt_amount,
             SUM(CASE
                 WHEN due_date BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() - INTERVAL 1 DAY THEN total_amount*rate - total_paid*rate - adjustment*rate
                 ELSE 0 END) AS aging_30_days,
