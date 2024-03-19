@@ -9,7 +9,7 @@
                 <strong class="text-inverse">{{ __('Category') }}:
                 </strong>{{ $project->project_category ?? 'N/A' }}<br>
                 <strong class="text-inverse">{{ __('Funding source') }}:
-                </strong>{{ $project->funding_source ?? 'N/A' }}<br>
+                </strong>{{ $project->sponsor->name ?? 'N/A' }}<br>
                 <strong class="text-inverse">{{ __('Funding amount') }}:
                 </strong>@moneyFormat($project->funding_amount)<br>
                 <strong class="text-inverse">{{ __('Currency') }}:

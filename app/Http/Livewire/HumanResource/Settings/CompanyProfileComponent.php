@@ -197,7 +197,7 @@ class CompanyProfileComponent extends Component
             'logo2' => $logo2Path,
         ]);
 
-        $this->dispatch('alert', ['type' => 'success',  'message' => 'Company profile updated successfully']);
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Company profile updated successfully']);
     }
 
     public function render()
