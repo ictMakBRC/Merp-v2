@@ -106,9 +106,9 @@
                                     @foreach ($debtors as $key => $debtor)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $debtor->requestable->name??'N/A' }}</td>
-                                            <td>{{ $debtor->requestable->email??'N/A' }}</td>
-                                            <td>{{ $debtor->requestable->contact??'N/A' }}</td>
+                                            <td>{{ $debtor->billtable->name??'N/A' }}</td>
+                                            <td>{{ $debtor->billtable->email??'N/A' }}</td>
+                                            <td>{{ $debtor->billtable->contact??'N/A' }}</td>
                                             <td class="text-end">@moneyFormat($debtor->future_debt_amount??'N/A')</td>
                                             <td class="text-end">@moneyFormat($debtor->aging_30_days??'N/A')</td>
                                             <td class="text-end">@moneyFormat($debtor->aging_31_60_days??'N/A')</td>
