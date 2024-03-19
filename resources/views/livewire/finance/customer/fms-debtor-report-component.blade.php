@@ -93,6 +93,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Contact</th>
+                                        <th class="text-end">Future Debt</th>
                                         <th class="text-end">< 30 Days</th>
                                         <th class="text-end">31 to 60 Days</th>
                                         <th class="text-end">61 to 90 Days</th>
@@ -105,9 +106,10 @@
                                     @foreach ($debtors as $key => $debtor)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $debtor->billtable->name }}</td>
+                                            <td>{{ $debtor->billtable->name??'N/A' }}</td>
                                             <td>{{ $debtor->billtable->email??'N/A' }}</td>
                                             <td>{{ $debtor->billtable->contact??'N/A' }}</td>
+                                            <td class="text-end">@moneyFormat($debtor->future_debt_amount??'N/A')</td>
                                             <td class="text-end">@moneyFormat($debtor->aging_30_days??'N/A')</td>
                                             <td class="text-end">@moneyFormat($debtor->aging_31_60_days??'N/A')</td>
                                             <td class="text-end">@moneyFormat($debtor->aging_61_90_days??'N/A')</td>
@@ -121,6 +123,7 @@
                                     @endforeach
                                     <tr>
                                         <td colspan="4" class="text-end"><b>Total Amount</b></td>
+                                        <td class="text-end text-strong"><b>@moneyFormat($debtors->sum('future_debt_amount'))</b></td>
                                         <td class="text-end text-strong"><b>@moneyFormat($debtors->sum('aging_30_days'))</b></td>
                                         <td class="text-end text-strong"><b>@moneyFormat($debtors->sum('aging_31_60_days'))</b></td>
                                         <td class="text-end text-strong"><b>@moneyFormat($debtors->sum('aging_61_90_days'))</b></td>
