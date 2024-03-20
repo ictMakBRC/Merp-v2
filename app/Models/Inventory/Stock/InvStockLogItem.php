@@ -57,7 +57,7 @@ class InvStockLogItem extends Model
         return empty($search) ? static::query()
             : static::query()
                 ->where('brand', 'like', '%'.$search.'%')
-                ->orWhereHas('item', function ($query) use ($search) {
+                ->orWhereHas('departmentItem', function ($query) use ($search) {
                     $query->where('name', 'like', '%'.$search.'%');
                 })
                 ->orWhereHas('unitable', function ($query) use ($search) {

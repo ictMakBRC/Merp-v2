@@ -23,7 +23,7 @@
                                 <table class="table table-bordered mb-0">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>Project Breakdown</th>
+                                            <th>Item Breakdown</th>
                                             <th>Rate({{ $invoice_data->currency->code ?? 'UG' }})</th>
                                             <th>Qty</th>
                                             <th>Subtotal({{ $currency }})</th>
@@ -40,9 +40,9 @@
                                                         {{ $item->uintService->service->description ?? '' }}
                                                     </p>
                                                 </td>
-                                                <td>@moneyFormat($item->unit_price / $invoice_data->rate)</td>
+                                                <td>@moneyFormat($item->unit_price??0)</td>
                                                 <td>{{ $item->quantity ?? 'N/A' }}</td>
-                                                <td>@moneyFormat($item->line_total / $invoice_data->rate ?? 0)</td>
+                                                <td>@moneyFormat($item->line_total?? 0)</td>
                                             </tr><!--end tr-->
                                         @endforeach
                                         <tr>
@@ -56,14 +56,14 @@
                                             <td colspan="2" class="border-0"></td>
                                             <td class="border-0 font-14 text-dark"><b>Discount Total</b></td>
                                             <td class="border-0 font-14 text-dark">
-                                                <b></b>{{ $currency }}@moneyFormat($invoice_data->discount_total / $invoice_data->rate)
+                                                <b></b>{{ $currency }}@moneyFormat($invoice_data->discount_total)
                                             </td>
                                         </tr><!--end tr-->
                                         <tr>
                                             <td colspan="2" class="border-0"></td>
                                             <td class="border-0 font-14 text-dark"><b>Adjustment Total</b></td>
                                             <td class="border-0 font-14 text-dark">
-                                                <b></b>{{ $currency }}@moneyFormat($invoice_data->adjustment / $invoice_data->rate)
+                                                <b></b>{{ $currency }}@moneyFormat($invoice_data->adjustment)
                                             </td>
                                         </tr><!--end tr-->
                                         <tr>

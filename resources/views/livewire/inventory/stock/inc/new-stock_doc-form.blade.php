@@ -2,7 +2,7 @@
     <form wire:submit.prevent="storeData" >             
         @include('layouts.messages')
             <div class="row">          
-                <div class="mb-3 col-md-3  col-sm-3">
+                <div class="mb-3 col-md-3  col-sm-2">
                     <label for="entry_type" class="form-label required">Entry Unit Type</label>
                     <select class="form-control form-select" id="entry_type" wire:model='entry_type'>
                         <option selected value="">Select</option>
@@ -13,7 +13,7 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div>
-                  <div class="mb-3 col-md-4">
+                  <div class="mb-3 col-md-3">
                     <label for="unit_id" class="form-label" required>Unit</label>
                     <select class="form-select" wire:model.defer="unit_id" required>
         
@@ -26,7 +26,20 @@
                     <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                   </div>
-                <div class="mb-3 col-3">
+                  <div class="mb-3 col-md-3">
+                    <label for="unit_id" class="form-label">Procurement Request</label>
+                    <select class="form-select" wire:model.defer="procurement_id">
+        
+                      <option value="">Select...</option>
+                      @foreach ($procurements as $key => $prequest)
+                      <option value="{{$value->id}}">{{$value->subject}}</option>
+                      @endforeach
+                    </select>
+                    @error('procurement_id')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                  </div>
+                <div class="mb-3 col-2">
                     <label for="date_added" class="form-label required">Date Added</label>
                     <input type="date" id="date_added" max="{{ $todayDate }}"  class="form-control" name="date_added" required
                         wire:model="date_added">

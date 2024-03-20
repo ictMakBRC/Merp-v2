@@ -32,14 +32,31 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-3">
+                            <div class="mb-3 col-2">
+                                <label for="fiscal_year" class="form-label required">Fiscal year</label>
+                                <select id="fiscal_year" class="form-control" name="fiscal_year" required wire:model="fiscal_year">
+                                    <option value="">Select</option>
+                                    @foreach ($years as $fy)
+                                        <option value="{{$fy->id}}">{{$fy->name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('fiscal_year')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        <div class="mb-3 col-4">
                             <label for="account_type" class="form-label required">Account Currency</label>
+                            <div class="input-group">
                             <select class="form-select select2" id="currency_id" wire:model="currency_id">
                                 <option  value="">Select</option>
                                 @foreach ($currencies as $currency)
                                     <option value="{{ $currency->id }}">{{ $currency->name.' '.$currency->code }}</option>
                                 @endforeach
                             </select>
+                            <span class="input-group-text">Rate</span>
+                            <input type="text" id="rate" oninput="formatAmount(this)" class="form-control"  name="rate" required
+                            wire:model.defer="rate">
+                        </div>
                             @error('currency_id')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror

@@ -10,19 +10,26 @@
             <li class="nav-item">
                 <a href="#" class="nav-link"> Stock Card</a>
             </li>
+            @if (Auth::user()->hasPermission(['access_stock_management']))
             <li class="nav-item">
                 <a href="{{ route('inventory-stock_status', 'all') }}" class="nav-link ">All Status</a>
             </li>
+            @endif
+            @if (Auth::user()->hasPermission(['make_inventory_request']))
             <li class="nav-item">
                 <a href="{{ route('inventory-stock_status', 'unit') }}" class="nav-link ">Unit Status</a>
             </li>
+            @endif
+            @if (Auth::user()->hasPermission(['access_stock_management']))
             <li class="nav-item">
                 <a href="{{ route('inventory-stock_doc', 'all') }}" class="nav-link ">All Documents</a>
             </li>
+            @endif
+            @if (Auth::user()->hasPermission(['make_inventory_request']))
             <li class="nav-item">
                 <a href="{{ route('inventory-stock_doc', 'unit') }}" class="nav-link ">Unit Documents</a>
             </li>
-
+            @endif
             <!-- @if (\Auth::user()->category != 'Department-staff')
             -->
 

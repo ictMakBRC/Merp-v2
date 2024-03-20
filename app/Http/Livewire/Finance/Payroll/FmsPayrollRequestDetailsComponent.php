@@ -161,6 +161,11 @@ class FmsPayrollRequestDetailsComponent extends Component
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'request item created successfully!']);
     }
+    function deleteRecord($id) {
+        $requestEmployee = FmsRequestEmployee::where('id',$id)->first();
+        $requestEmployee->delete();
+        $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'request item deleted successfully!']);
+    }
     public function resetInputs()
     {
         $this->reset([

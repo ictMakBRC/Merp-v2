@@ -2,6 +2,27 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
+                <div class="row row-cols-3 d-flex justify-content-md-between">
+                    <div class="col-md-6 d-print-flex">
+                        <div class="">
+                            <h6 class="mb-0"><b>Document Date :</b> {{ $stockLog->date_added }}</h6>
+                            <h6><b>Document Code :</b> # {{ $stockLog->stock_code }}</h6>
+                            <h6><b>LPO :</b> # {{ $stockLog->lpo }}</h6>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-md-6 d-print-flex">
+                        <div class="">
+                            <address class="font-13">
+                                <strong class="font-14">Unit Details:</strong><br>
+                                    {{ $stockLog->unitable->name ?? 'MAKERERE UNIVERSITY BIOMEDICAL RESEARCH CENTRE' }}<br>
+                                    {{ $stockLog->unitable->description ?? '' }}
+                            </address>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div>
+            @if ($stockLog->status == 'Pending')             
+            <div class="card-header">
                 <form wire:submit.prevent='storeItem'>
                     @csrf
                     <div class="row mb-2 mt-3">
@@ -90,6 +111,9 @@
                     </div>
                 </form>
             </div>
+            @else
+
+            @endif
             <div class="card-body">
                 <form method="POST" wire:submit.prevent='SaveStock()'>
                     @csrf
@@ -128,10 +152,14 @@
                                                         name="amount"
                                                         value="{{ $value->unit_cost * $value->stock_qty }} "></td>
                                                 <td>
+                                                    @if ($stockLog->status == 'Pending') 
                                                     <a href="javascript: void(0);"
                                                         wire:click="confirmDelete({{ $value->id }})"
                                                         title="Delete!" class="action-icon"> <i
                                                             class="mdi mdi-delete"></i></a>
+                                                    @else
+                                                    NA
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -145,6 +173,7 @@
                         <input type="hidden" class="form-control" name="stockcode" readonly
                             value="{{ $code }}">
                         <input type="hidden" class="form-control" name="stktotalamt" id="stktotalamt" readonly>
+                        @if ($stockLog->status == 'Pending') 
                         <div class="row mt-3">
                             <div class="col mt-1">
                                 <div class="input-group">
@@ -175,6 +204,7 @@
                                     Doc</a>
                             </div>
                         </div>
+                        @endif
 
                     </div> <!-- end tab-content-->
                 </form>

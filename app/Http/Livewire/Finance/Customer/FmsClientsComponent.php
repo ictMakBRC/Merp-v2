@@ -437,8 +437,7 @@ class FmsClientsComponent extends Component
                 $this->dispatchBrowserEvent('close-modal');
                 $this->resetInputs();
                 $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice created successfully!']);
-                }
-               
+                }               
             });
         }
 
