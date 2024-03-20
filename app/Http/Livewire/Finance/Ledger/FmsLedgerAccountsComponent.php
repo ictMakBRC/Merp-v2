@@ -8,6 +8,7 @@ use App\Services\GeneratorService;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grants\Project\Project;
 use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\Finance\Transactions\FmsTransaction;
@@ -52,11 +53,21 @@ class FmsLedgerAccountsComponent extends Component
     public $current_balance;
     public $account_type;
     public $as_of;
+    public $rate;
     public $is_active;
     public $currency_id;
     public $entry_type = 'Department';
     public $unit_type = 'department';
-    public $unit_id = 0;
+    public $unit_id = 0;  public $max_date;
+    public $min_date;
+    public $active_year;    
+    public $fiscal_year;
+    public function updatedFiscalYear()
+    {
+        $this->active_year = FmsFinancialYear::where('id', $this->fiscal_year)->first();
+        $this->max_date =$this->active_year->end_date;
+        $this->min_date = $this->active_year->start_date;
+    }
     public function mount($type)
     {
         if ($type == 'all') {
@@ -221,7 +232,7 @@ class FmsLedgerAccountsComponent extends Component
             }
 
             $opening_balance = (float) str_replace(',', '', $this->opening_balance);
-            $current_balance = (float) str_replace(',', '', $this->current_balance);
+            $rate = (float) str_replace(',', '', $this->rate);
 
             $account = new FmsLedgerAccount();
             $account->name = $this->name;
@@ -239,6 +250,7 @@ class FmsLedgerAccountsComponent extends Component
             $account->requestable()->associate($requestable);
             $account->save();
 
+            if($opening_balance){
             $incomeTrans = new FmsTransaction();
             $incomeTrans->trx_no = 'TRL' . GeneratorService::getNumber(7);
             $incomeTrans->trx_ref = $account->account_number ?? 'TRF' . GeneratorService::getNumber(7);;
@@ -247,7 +259,7 @@ class FmsLedgerAccountsComponent extends Component
             $incomeTrans->account_amount = $account->current_balance;
             $incomeTrans->account_balance = $account->current_balance;
             $incomeTrans->ledger_account = $account->id;
-            $incomeTrans->rate = 1;
+            $incomeTrans->rate = $rate;
             $incomeTrans->department_id = $account->department_id;
             $incomeTrans->project_id = $account->project_id;
             $incomeTrans->currency_id = $account->currency_id;
@@ -261,6 +273,7 @@ class FmsLedgerAccountsComponent extends Component
             $incomeTrans->requestable_type = $account->requestable_type;
             $incomeTrans->requestable_id = $account->requestable_id;
             $incomeTrans->save();
+        }
 
         });
         $this->dispatchBrowserEvent('close-modal');
@@ -354,6 +367,7 @@ class FmsLedgerAccountsComponent extends Component
         $data['departments'] = Department::where('is_active', 1)->get();
         $data['currencies'] = FmsCurrency::where('is_active', 1)->get();
         $data['projects'] = Project::get();
+        $data['years'] = FmsFinancialYear::all();
         $data['types'] = FmsChartOfAccountsType::get();
         $data['accounts'] = $this->filterAccount()->where('is_active', 1)->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);

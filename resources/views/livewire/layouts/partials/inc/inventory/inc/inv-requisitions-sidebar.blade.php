@@ -8,16 +8,18 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('inventory-requests','unit') }}">Unit Requests</a>
             </li>
+            @if (Auth::user()->hasPermission(['receive_inventory_request']))
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('inventory-requests','all') }}">Manage Requests</a>
             </li>
-            <li class="nav-item">
+            @endif
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="{{ route('consumption-based') }}">Consumption Based
                     Request</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('forecast') }}">Forecasts</a>
-            </li>
+            </li> --}}
           
 
             {{-- @if (\Auth::user()->hasPermission(['manage_inventory']))

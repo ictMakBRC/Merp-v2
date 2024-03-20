@@ -97,6 +97,9 @@
                 @error('year')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
+                @error('selectedEmployee')
+                <div class="text-danger text-small">{{ $message }}</div>
+            @enderror
             </div>                        
 
             <div class="col">
@@ -155,7 +158,7 @@
                 <th class="text-end">NSSF 5%({{ $cur }})</th>
                 <th class="text-end">NSSF 15%({{ $cur }})</th>
                 <th class="text-end">Net({{ $cur }})</th>
-                {{-- <th class="text-end">Gross + NSSF 10%({{ $cur }})</th> --}}
+                <th class="text-end">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -209,17 +212,17 @@
                         @moneyFormat($netSalary)                                        
                         <input type="hidden" name="netIncome" value="{{ $netSalary }}">                                          
                     </td>
-                    {{-- <td class="text-end">
-                        @php
+                    <td class="text-end">
+                        {{-- @php
                             $grossSalary = $req_employee->amount + $employerNssf;
                         @endphp
-                        @moneyFormat($grossSalary)       
+                        @moneyFormat($grossSalary)        --}}
                         
-                        <a href="javascript:void(0)" wire:click="confirmDelete('{{ $req_employee->id }}')"
+                        <a href="javascript:void(0)" wire:click="deleteRecord('{{ $req_employee->id }}')"
                             class="text-danger">
                             <i class="fa fa-trash"></i>
                         </a>                                 
-                    </td> --}}
+                    </td>
                 </tr>
             @empty
                 <tr class="btop">

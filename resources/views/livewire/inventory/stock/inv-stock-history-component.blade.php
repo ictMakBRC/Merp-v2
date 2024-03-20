@@ -7,10 +7,12 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Payement Stock Docuements (<span class="text-danger fw-bold">{{ $stock_docs->total() }}</span>)
+                                    Unit Stock Docuements (<span class="text-danger fw-bold">{{ $stock_docs->total() }}</span>)
                                     @include('livewire.layouts.partials.inc.filter-toggle')
                                 </h5>
+                                @if (Auth::user()->hasPermission(['create_stockcard_entry']))                                  
                                 @include('livewire.layouts.partials.inc.create-resource-alpine')
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -31,7 +33,6 @@
                                     <option value="0">Suspended</option>
                                 </select>
                             </div>
-
                         </div>
                         <x-table-utilities>
                             <div class="mb-1 col">

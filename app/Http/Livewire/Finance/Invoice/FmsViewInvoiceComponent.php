@@ -479,8 +479,8 @@ class FmsViewInvoiceComponent extends Component
                     $query->where(['department_id' => $invoiceData->department_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
                 })->get();
                 $this->to_ledger = FmsLedgerAccount::where('department_id', $invoiceData->department_id)->first();
-                $this->to_account = $this->to_ledger->id;
-                $this->biller = $invoiceData->department;
+                $this->to_account = $this->to_ledger->id??null;
+                $this->biller = $invoiceData->department??null;
                 $this->to_ledgerCur = $this->to_ledger->currency->code ?? '';
 
             } elseif ($invoiceData->project_id) {
@@ -489,9 +489,9 @@ class FmsViewInvoiceComponent extends Component
                     $query->where(['project_id' => $invoiceData->project_id, 'fiscal_year' => $this->fiscal_year])->with(['project', 'department', 'currency', 'budgetLines']);
                 })->get();
                 $this->to_ledger = FmsLedgerAccount::where('project_id', $invoiceData->project_id)->first();
-                $this->biller = $invoiceData->project;
-                $this->to_account = $this->to_ledger->id;
-                $this->to_ledgerCur = $this->to_ledger->currency->code ?? '';
+                $this->biller = $invoiceData?->project??null;
+                $this->to_account = $this->to_ledger?->id??null;
+                $this->to_ledgerCur = $this->to_ledger?->currency->code ?? '';
             }
 
             $this->invoiceData = $invoiceData;

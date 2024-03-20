@@ -16,7 +16,7 @@
                 <div class="card-body">
                     @include('livewire.finance.invoice.inc.invoice-header')
                     @php
-                      $currency =  $baseCurrency->code??'UG';
+                      $currency =  $invoiceData->Currency->code??'UG';
                     @endphp
                     <div class="row">
                         <div class="col-lg-12">
@@ -54,7 +54,7 @@
                                                 @error('unit_price')<div class="text-danger text-small">{{ $message }}</div> @enderror
                                             </td>
                                             <td> 
-                                                <input type="number" min="1" id="quantity" class="form-control" required wire:model="quantity">
+                                                <input type="number" min="1"  step="any" id="quantity" class="form-control" required wire:model="quantity">
                                                 @error('quantity')<div class="text-danger text-small">{{ $message }}</div> @enderror
                                             </td>
                                             <td>@moneyFormat($line_total)</td>
@@ -125,7 +125,7 @@
                         </div>  <!--end col-->                                      
                     </div><!--end row-->
 
-                    <div class="row">
+                    <div class="row d-none">
                         <div class="col-lg-6">
                             <h5 class="mt-4">Terms And Condition :</h5>
                             <ul class="ps-3">

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Inventory\Stock;
 use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Inventory\Stock\InvStockLog;
+use App\Models\Procurement\Request\ProcurementRequest;
 use App\Services\GeneratorService;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -53,9 +54,33 @@ class InvStockHistoryComponent extends Component
     public $unitable_type;
     public $unitable_id;
     public $todayDate;
+    public $unit_type;
+    public $requestable;
+    public $requestable_type;
+    public $requestable_id;
 
     public function mount($type)
     {
+        if ($type == 'all') {
+            $this->unit_type = 'all';
+            $this->unit_id = '0';
+        } else {
+            if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                $this->unit_id = session('unit_id');
+                $this->unit_type = session('unit_type');
+                $this->requestable = $requestable = Project::find($this->unit_id);
+            } else {
+                $this->unit_id = auth()->user()->employee->department_id ?? 0;
+                $this->unit_type = 'department';
+                $this->requestable = $requestable = Department::find($this->unit_id);
+            }
+            if ($requestable) {
+                $this->unitable_type = get_class($requestable);
+                $this->unitable_id = $this->unit_id;
+            }else{
+                abort(403, 'Unauthorized access or action.'); 
+            }
+        }
         $this->todayDate = date('Y-m-d');
         $this->date_added = date('Y-m-d');
     }
@@ -141,6 +166,7 @@ class InvStockHistoryComponent extends Component
         } else {
             $data['units'] = Department::orderBy('name', 'asc')->get();
         }
+        $data['procurements'] = ProcurementRequest::all();
 
         return view('livewire.inventory.stock.inv-stock-history-component', $data);
     }

@@ -33,8 +33,11 @@ class FmsInvoiceItemsComponent extends Component
     public function updatedItemId()
     {
         $service = FmsService::where('id', $this->item_id)->first();
-        $this->unit_price = $service->sale_price ?? 0;
-        $this->description = $service->description ?? 'N/A';
+        $unit_price = $service->sale_price ?? 0;
+        if($unit_price && $this->invoiceData->rate){
+            $this->unit_price = $unit_price/$this->invoiceData->rate;
+        }
+        $this->description = $service->description ??null;
         if ($this->quantity != "" && $this->unit_price != '') {
             $this->line_total = $this->unit_price * $this->quantity;
         }
@@ -135,8 +138,8 @@ class FmsInvoiceItemsComponent extends Component
         $this->dispatchBrowserEvent('alert', ['type' => 'warning', 'message' => 'Invoice already submitted!']);
         return redirect()->SignedRoute('finance-invoice_view', $this->invoiceData->invoice_no);
        }else{
-       $invoice->total_amount = $this->totalAmount/$invoice->rate;
-       $invoice->amount_local = $this->totalAmount;
+       $invoice->total_amount = $this->totalAmount;
+       $invoice->amount_local = $this->totalAmount*$invoice->rate;
        $invoice->discount_type = $this->discount_type;
        $invoice->discount_total = $this->discount_total;
        $invoice->discount = $this->discount;

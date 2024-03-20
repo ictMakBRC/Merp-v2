@@ -95,7 +95,7 @@
                                         <p class="mb-0 text-secondary">
                                             {{ __('Forecasting, Acquisition, Consumption, and Tracking') }}
                                             {{-- @if (Auth::user()->hasPermission(['access_user_management_module'])) --}}
-                                                <a href="{{ route('inventory-dashboard') }}"
+                                                <a href="{{ route('inventory-dashboard','all') }}"
                                                     class="btn btn-sm btn-outline-success">
                                                     <i class="ti ti-arrow-bar-right me-1"></i>
                                                 </a>

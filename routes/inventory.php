@@ -20,6 +20,7 @@ use App\Http\Livewire\Inventory\Requisitions\ConsumptionBasedRequisitionsCompone
 use App\Http\Livewire\Inventory\Stock\InvItemsStockStatusComponent;
 use App\Http\Livewire\Inventory\Stock\InvStockHistoryComponent;
 use App\Http\Livewire\Inventory\Stock\InvStockItemComponent;
+use App\Http\Livewire\Inventory\Stock\InvViewItemStockCardComponent;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'inventory','middleware' => ['permission:access_inventory_module']], function () {
@@ -28,7 +29,7 @@ Route::group(['prefix' => 'inventory','middleware' => ['permission:access_invent
 
   Route::get('inventory-home', InvUnitOfMeasuresComponent::class)->name('inventory-home');
 
-  Route::get('dashboard', InventoryMainDashboardComponent::class)->name('inventory-dashboard');
+  Route::get('dashboard/{type}', InventoryMainDashboardComponent::class)->name('inventory-dashboard');
 
   Route::group(['prefix' => 'manage','middleware' => ['permission:manage_inventory']], function () {
     Route::get('stores', InvStoresComponent::class)->name('inventory-stores');
@@ -41,13 +42,14 @@ Route::group(['prefix' => 'inventory','middleware' => ['permission:access_invent
     // Route::get('unit_of_measures', InvUnitOfMeasuresComponent::class)->name('inventory-unit_of_measures');
   });
 
-  Route::group(['prefix' => 'stock/manage','middleware' => ['permission:access_stock_management']], function () {
+  Route::group(['prefix' => 'stock/manage','middleware' => ['permission:access_inventory_module']], function () {
     Route::get('stores/sections', InvStorageSectionsComponent::class)->name('inventory-sections');
     Route::get('stores/sections/bins', InvStorageSubSectionsComponent::class)->name('inventory-storage_bins');
     Route::get('unit_of_measures', InvUnitOfMeasuresComponent::class)->name('inventory-unit_of_measures');
     Route::get('documents/{type}', InvStockHistoryComponent::class)->name('inventory-stock_doc');
     Route::get('document/items/{code}', InvStockItemComponent::class)->name('inventory-stock_doc_items');
     Route::get('status/{type}', InvItemsStockStatusComponent::class)->name('inventory-stock_status');
+    Route::get('stock_card/{id}', InvViewItemStockCardComponent::class)->name('inventory-stock_card');
   });
 
   Route::group(['prefix' => 'requisitions','middleware' => ['permission:access_department_request']], function () {
