@@ -25,9 +25,9 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Item</th>
-                                            <th>Rate({{$baseCurrency->code??'UGX'}} @ {{ $invoice_data->rate }})</th>
+                                            <th>Rate({{$currency??'UGX'}} @ {{ $invoice_data->rate }})</th>
                                             <th>Qty</th> 
-                                            <th>Subtotal({{$baseCurrency->code}})</th>
+                                            <th>Subtotal({{$currency}})</th>
                                             <th>Action</th>
                                         </tr><!--end tr-->
                                     </thead>
@@ -143,6 +143,9 @@
                         </div><!--end col-->
                     </div><!--end row-->
                     <hr>
+                    <div class="card-body">
+                        @include('livewire.finance.invoice.inc.new-invoice-attachment-form')
+                    </div>
                     <div class="row d-flex justify-content-center">
                         <div class="col-lg-12 col-xl-4 ms-auto align-self-center">
                             <div class="text-center"><small class="font-12">Thank you very much for doing business with us.</small></div>

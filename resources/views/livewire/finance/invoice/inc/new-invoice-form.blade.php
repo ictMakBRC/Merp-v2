@@ -182,7 +182,7 @@
 
             <div class="mb-3 col">
                 <label for="address" class="form-label">Description</label>
-                <textarea id="description" class="form-control text-uppercase"
+                <textarea id="description" class="form-control"
                     wire:model.defer='description'></textarea>
                 @error('description')
                     <div class="text-danger text-small">{{ $message }}</div>

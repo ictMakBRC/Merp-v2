@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Payement Requests (<span class="text-danger fw-bold">{{ $requests->total() }}</span>)
+                                    Payment Requests (<span class="text-danger fw-bold">{{ $requests->total() }}</span>)
                                     @include('livewire.layouts.partials.inc.filter-toggle')
                                 </h5>
                                 @include('livewire.layouts.partials.inc.create-resource-alpine')
