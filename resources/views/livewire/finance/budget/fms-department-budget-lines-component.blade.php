@@ -276,6 +276,7 @@
                         $('#deptItemupdateCreateModal').modal('hide');
                         $('#delete_modal').modal('hide');
                         $('#confirmDelete').modal('hide');
+                        $('#updateLine').modal('hide');
                     });
                     window.addEventListener('show-modal', event => {
                         $('#deptItemupdateCreateModal').modal('show');

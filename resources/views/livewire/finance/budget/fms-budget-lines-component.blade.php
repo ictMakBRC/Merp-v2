@@ -15,7 +15,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Fiscal Year</th>
-                        <th>Department/Project</th>
+                        <th>Unit</th>
                         <th>Revenue</th>
                         <th>Expenditure</th>
                         <th>Currency</th>
@@ -25,7 +25,7 @@
                     <tr>
                         <td>{{ $budget_data->name }}</td>
                         <td>{{ $budget_data->fiscalYear->name ?? 'N/A' }}</td>
-                        <td>{{ $budget_data->project->name ?? ($budget->department->name ?? 'N/A') }}</td>
+                        <td>{{ $budget_data->requestable->name ?? 'N/A' }}</td>
                         <td>{{ $budget_data->estimated_income }}</td>
                         <td>{{ $budget_data->estimated_expenditure }}</td>
                         <td>{{ $budget_data->currency->code ?? 'N/A' }}</td>
