@@ -116,6 +116,7 @@
                         </div><!--end col-->
                         <div class="col-lg-12 col-xl-4">
                             <div class="float-end d-print-none mt-2 mt-md-0">
+                                <button class="btn btn-de-primary btn-sm" wire:click="downloadAttachment({{ $invoice_data->id }})">Download Attachment</button>
                                 <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
                                 {{-- @if ($invoice_data->status == 'Submitted') --}}
                                 @if ($invoice_data->status == 'Submitted' && $invoice_data->requestable->supervisor == auth()->user()->employee?->id && Auth::user()->hasPermission(['approve_unit_invoice']))

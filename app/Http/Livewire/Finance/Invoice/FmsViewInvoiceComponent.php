@@ -2,22 +2,23 @@
 
 namespace App\Http\Livewire\Finance\Invoice;
 
-use App\Models\Finance\Accounting\FmsLedgerAccount;
-use App\Models\Finance\Budget\FmsBudgetLine;
+use Carbon\Carbon;
+use Livewire\Component;
+use App\Services\GeneratorService;
+use Illuminate\Support\Facades\DB;
+use App\Models\Grants\Project\Project;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Finance\Invoice\FmsInvoice;
+use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Invoice\FmsInvoiceItem;
 use App\Models\Finance\Invoice\FmsInvoicePayment;
-use App\Models\Finance\Requests\FmsPaymentRequest;
-use App\Models\Finance\Requests\FmsPaymentRequestAttachment;
-use App\Models\Finance\Settings\FmsCurrencyUpdate;
 use App\Models\Finance\Settings\FmsFinancialYear;
-use App\Models\Finance\Transactions\FmsTransaction;
-use App\Models\Grants\Project\Project;
 use App\Models\HumanResource\Settings\Department;
-use App\Services\GeneratorService;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Livewire\Component;
+use App\Models\Finance\Requests\FmsPaymentRequest;
+use App\Models\Finance\Settings\FmsCurrencyUpdate;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Transactions\FmsTransaction;
+use App\Models\Finance\Requests\FmsPaymentRequestAttachment;
 
 class FmsViewInvoiceComponent extends Component
 {
@@ -431,6 +432,38 @@ class FmsViewInvoiceComponent extends Component
                 'message' => 'Oops! Something went wrong!',
                 'text' => 'Failed to save due to this error ' . $e->getMessage(),
             ]);
+        }
+    }
+    public function downloadAttachment($mediaId)
+    {
+        // $media = $this->invoiceData->getFirstMedia();
+        $media = FmsInvoice::findOrFail($mediaId)
+        ->getFirstMedia('invoice_attachments');
+        // dd($media);
+        if ($media) {
+            $path = $media->getPath(); // Get the path to the media file
+    
+            // Retrieve the original file name
+            $fileName = $media->name;
+            $disk = $media->disk;
+    
+            // Determine the MIME type based on the file extension
+            $mimeType = Storage::disk($disk)->mimeType($path);
+    
+            // Set the appropriate content type header
+            $headers = [
+                'Content-Type' => $mimeType,
+            ];
+    
+            // Return the file with the original file name and correct content type
+            return response()->download($path, $fileName, $headers);
+        } else {
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'warning',
+                'message' => 'Oops! Something went wrong!',
+                'text' => 'Media not found ',
+            ]);
+            // abort(404, 'Media not found');
         }
     }
     public function render()
