@@ -2,21 +2,32 @@
 
 namespace App\Models\Finance\Invoice;
 
-use App\Models\Finance\Banking\FmsBank;
+use App\Models\Comment;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
+use App\Models\Finance\Banking\FmsBank;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
 use App\Models\HumanResource\Settings\Department;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class FmsInvoice extends Model
+class FmsInvoice extends Model implements HasMedia
 {
     use HasFactory, LogsActivity;
+    
+    use InteractsWithMedia;
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

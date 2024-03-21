@@ -82,6 +82,13 @@
                                                                     class="text-danger">
                                                                     <i class="fa fa-trash"></i>
                                                                 </a>
+                                                                <a href="javascript:void(0)"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#updateLine"
+                                                                    wire:click="editData('{{ $budget->id }}')"
+                                                                    class="text-info">
+                                                                    <i class="fa fa-edit"></i>
+                                                                </a>
 
                                                             </td>
                                                         </tr>
@@ -220,7 +227,7 @@
                                     <div class="mb-3 col-md-12">
                                         <label for="name" class="form-label required">Name</label>
                                         <input type="text" id="name" class="form-control" name="name"
-                                            required wire:model.defer="name">
+                                            required wire:model="name">
                                         @error('name')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror
@@ -229,7 +236,7 @@
                                         <label for="is_active"
                                             class="form-label required">{{ __('public.status') }}</label>
                                         <select class="form-select select2" id="is_active"
-                                            wire:model.defer="is_active">
+                                            wire:model="is_active">
                                             <option selected value="">Select</option>
                                             <option value='1'>Active</option>
                                             <option value='0'>Inactive</option>
@@ -240,7 +247,7 @@
                                     </div>
                                     <div class="mb-3 col-md-12">
                                         <label for="countryName" class="form-label">Description</label>
-                                        <textarea id="description" class="form-control" name="description" wire:model.defer="description"></textarea>
+                                        <textarea id="description" class="form-control" name="description" wire:model="description"></textarea>
                                         @error('description')
                                             <div class="text-danger text-small">{{ $message }}</div>
                                         @enderror

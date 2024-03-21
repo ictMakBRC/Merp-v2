@@ -251,7 +251,7 @@ class FmsDepartmentBudgetLinesComponent extends Component
             {
                 $data['budget_lines'] = $this->filterCategories()
                     ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-                    ->paginate($this->perPage);
+                    ->get();
                     $data['incomes'] = FmsChartOfAccount::where(['is_active'=> 1, 'account_type'=> 4])->with(['type'])->whereIn('is_budget',[1,2])->get();
                     $data['expenses'] = FmsChartOfAccount::where(['is_active'=> 1, 'account_type'=> 3])->whereIn('is_budget',[1,2])->with(['type'])->get();
                     return view('livewire.finance.budget.fms-department-budget-lines-component', $data);

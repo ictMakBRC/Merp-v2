@@ -3,6 +3,9 @@
 namespace App\Http\Livewire\Finance\Invoice;
 
 use Livewire\Component;
+use Illuminate\Support\Str;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Finance\Invoice\FmsInvoice;
 use App\Models\Finance\Settings\FmsService;
 use App\Models\Finance\Invoice\FmsInvoiceItem;
@@ -10,6 +13,7 @@ use App\Models\Finance\Settings\FmsUnitService;
 
 class FmsInvoiceItemsComponent extends Component
 {
+    use WithFileUploads;
     public $invoiceCode;
     public $invoiceData;
     public $invoice_id;
@@ -29,6 +33,7 @@ class FmsInvoiceItemsComponent extends Component
     public $totalAmount = 0;
     public $biller;
     public $billed;
+    public $file_upload;
     public $adjustment = 0,$discount_type='Percent', $discount = 0,$discount_total = 0 ;
     public function updatedItemId()
     {
@@ -82,6 +87,61 @@ class FmsInvoiceItemsComponent extends Component
     {
         $this->invoiceCode = $inv_no;
 
+    }
+    public $file_name;
+    function saveAttachment() {
+        $this->validate([
+            'file_upload' => 'required|mimes:jpg,png,pdf,xlsx|max:10240|file|min:1',
+            'file_name' => 'required|string',
+        ]);
+        // if ($this->file_upload) {
+        //     $this->invoiceData->addMedia($this->file_upload)->toMediaCollection();
+        //     $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice attachment uploaded successfully!']);
+        // } 
+        if ($this->file_upload) {
+            // Generate a unique file name
+            $fileName = Str::uuid()->toString() . '.' . $this->file_upload->getClientOriginalExtension();    
+            // Specify the storage format
+            $storageFormat = 'Finance'; // Example: 's3', 'local', 'public', etc.
+    
+            // Add the media with the specified name and storage format
+            $media = $this->invoiceData->addMedia($this->file_upload)
+                ->usingFileName($fileName) // Specify the file names
+                ->toMediaCollection('invoice_attachments', $storageFormat); // Specify the collection name and storage format
+            
+            // Set custom name for the media
+            $media->update(['name' => $this->file_name. '.' . $this->file_upload->getClientOriginalExtension()]);
+    
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Invoice attachment uploaded successfully!']);
+        } 
+    }
+    public function downloadAttachment($mediaId)
+    {
+        // $media = $this->invoiceData->getFirstMedia();
+        $media = FmsInvoice::findOrFail($mediaId)
+        ->getFirstMedia('invoice_attachments');
+        // dd($media);
+        if ($media) {
+            $path = $media->getPath(); // Get the path to the media file
+    
+            // Retrieve the original file name
+            $fileName = $media->name;
+            $disk = $media->disk;
+    
+            // Determine the MIME type based on the file extension
+            $mimeType = Storage::disk($disk)->mimeType($path);
+    
+            // Set the appropriate content type header
+            $headers = [
+                'Content-Type' => $mimeType,
+            ];
+    
+            // Return the file with the original file name and correct content type
+            return response()->download($path, $fileName, $headers);
+        } else {
+            // Media not found, handle the situation
+            abort(404, 'Media not found');
+        }
     }
     public function saveItem($id)
     {
