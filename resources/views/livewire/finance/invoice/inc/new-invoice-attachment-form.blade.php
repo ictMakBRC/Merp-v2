@@ -28,4 +28,4 @@
     </form>
     <hr>
 <!-- Trigger download from Blade view -->
-<button wire:click="downloadAttachment({{ $invoice_data->id }})">Download Attachment</button>
+{{-- <button wire:click="downloadAttachment({{ $invoice_data->id }})">Download Attachment</button> --}}
