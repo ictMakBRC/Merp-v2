@@ -108,7 +108,7 @@ Route::group(['prefix' => 'finance'], function () {
         Route::get('currencies/rates', FmsCurrencyUpdatesComponent::class)->name('finance-currency_rates');
         Route::get('categories', FmsServiceCategoriesComponent::class)->name('finance-categories');
         Route::get('services', FmsServicesComponent::class)->name('finance-services');
-        Route::get('unit/services', FmsUnitServicesComponent::class)->name('finance-unit_services');
+        Route::get('unit/services/{type}', FmsUnitServicesComponent::class)->name('finance-unit_services');
         Route::get('years', FmsFinancialYearsComponent::class)->name('finance-years');
         Route::get('taxes', FmsTaxComponent::class)->name('finance-taxes');
         Route::get('positions', FmsPaymentRequestSettingComponent::class)->name('finance-req_settings');

@@ -46,6 +46,38 @@ class FmsUnitServicesComponent extends Component
     public $sale_price;
     public $created_by;
     public $entry_type='Department';
+    public $unitable_type;
+    public $unitable_id;
+    public $unit_id;
+    public $unit_type;
+    public $type;
+
+    public function mount($type)
+    {
+        if ($type == 'all') {
+            $this->unit_type = 'all';
+            $this->unit_id = '0';
+            $this->type = $type;
+        } else {
+            if (session()->has('unit_type') && session()->has('unit_id') && session('unit_type') == 'project') {
+                $this->unit_id = session('unit_id');
+                $this->unit_type = session('unit_type');
+                $this->unitable = $unitable = Project::find($this->unit_id);
+                $this->project_id = $unitable->id;
+            } else {
+                $this->unit_id = auth()->user()->employee->department_id ?? 0;
+                $this->unit_type = 'department';
+                $this->unitable = $unitable = Department::find($this->unit_id);
+                $this->department_id = $unitable->id;
+            }
+            if ($unitable) {
+                $this->unitable_type = get_class($unitable);
+                $this->unitable_id = $this->unit_id;
+            }else{
+                abort(403, 'Unauthorized access or action.'); 
+            }
+        }
+    }
 
   public function updatedCreateNew()
         {
@@ -78,6 +110,7 @@ class FmsUnitServicesComponent extends Component
             ]);
 
             $unitable= null;
+            $unitable_type = null;
             if ($this->entry_type == 'Project') {
                 $this->validate([
                     'project_id' => 'required|integer',
@@ -91,17 +124,31 @@ class FmsUnitServicesComponent extends Component
                 $this->project_id = null;
                 $unitable  = Department::find($this->department_id);
             }
-    
+            if($unitable){
+                $unitable_type = get_class($unitable);
+            }
+
+
+            $record = FmsUnitService::where(['service_id'=>$this->service_id, 'unitable_id'=> $unitable->unitable_id,'unitable_type' => $unitable_type])->first();
+            if($record)  {         
+            $record->sale_price =  $this->sale_price;
+            $record->is_active =  $this->is_active;
+            $record->service_id =  $this->service_id;
+            $record->update();
+            $this->dispatchBrowserEvent('close-modal');
+            $this->resetInputs();
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'service updated successfully!']);
+            }else{
             $service = new FmsUnitService();           
             $service->sale_price =  $this->sale_price;
             $service->is_active =  $this->is_active;
             $service->service_id =  $this->service_id;
             $service->unitable()->associate($unitable);
-
             $service->save();
             $this->dispatchBrowserEvent('close-modal');
             $this->resetInputs();
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'service created successfully!']);
+            }
         }
     
         public function editData(FmsUnitService $service)
@@ -152,7 +199,7 @@ class FmsUnitServicesComponent extends Component
             $this->toggleForm = false;
             $this->dispatchBrowserEvent('close-modal');
             $this->resetInputs();
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'service updated successfully!']);
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Service updated successfully!']);
         }
     
         public function refresh()
@@ -175,8 +222,9 @@ class FmsUnitServicesComponent extends Component
     
         public function filterServices()
         {
-            $services = FmsUnitService::search($this->search)
-                ->when($this->from_date != '' && $this->to_date != '', function ($query) {
+            $services = FmsUnitService::search($this->search)->when($this->unitable_id && $this->unitable_type, function ($query) {
+                $query->where(['unitable_id'=> $this->unitable_id,'unitable_type' => $this->unitable_type]);
+            })->when($this->from_date != '' && $this->to_date != '', function ($query) {
                     $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
                 }, function ($query) {
                     return $query;

@@ -48,7 +48,9 @@ class FmsViewLedgerComponent extends Component
      
         $data['ledger_account']=  $ledger_account = FmsLedgerAccount::where('id', $this->ledger_id)->with('currency','requestable')->first();
         $data['transaction_types'] = FmsUnitBudgetLine::search($this->search)->where('requestable_id', $ledger_account?->requestable_id)
-        ->where('requestable_type', $ledger_account?->requestable_type)->get();
+        ->where('requestable_type', $ledger_account?->requestable_type)->when($this->transaction_type, function ($query) {
+            $query->where(['coa_id'=> $this->transaction_type]);
+        })->get();
         $data['transactions'] = FmsTransaction::where('ledger_account', $this->ledger_id)->when($this->from_date != '' && $this->to_date != '', function ($query) {
             $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
         }, function ($query) {
