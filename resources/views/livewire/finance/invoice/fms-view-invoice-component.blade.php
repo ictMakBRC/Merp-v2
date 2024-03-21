@@ -117,15 +117,16 @@
                         <div class="col-lg-12 col-xl-4">
                             <div class="float-end d-print-none mt-2 mt-md-0">
                                 <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
-                                @if ($invoice_data->status == 'Submitted')
+                                {{-- @if ($invoice_data->status == 'Submitted') --}}
+                                @if ($invoice_data->status == 'Submitted' && $invoice_data?->requestable->supervisor == auth()->user()->id && Auth::user()->hasPermission(['approve_unit_invoice']))
                                     <a href="javascript:voide(0)" wire:click="reviewInvoice({{ $invoice_data->id }})"
                                         class="btn btn-de-primary btn-sm">Mark Reviewed</a>
                                 @endif
-                                @if ($invoice_data->status == 'Reviewed')
+                                @if ($invoice_data->status == 'Reviewed' && Auth::user()->hasPermission(['approve_all_invoices']))
                                     <a href="javascript:voide(0)" wire:click="approveInvoice({{ $invoice_data->id }})"
-                                        class="btn btn-de-primary btn-sm">Approve Inovice</a>
+                                        class="btn btn-de-primary btn-sm">Approve Invoice</a>
                                 @endif
-                                @if ($invoice_data->status == 'Approved')
+                                @if ($invoice_data->status == 'Approved' && $invoice_data?->billtable->supervisor == auth()->user()->id && Auth::user()->hasPermission(['approve_unit_invoice']))
                                     <a href="javascript:voide(0)"
                                         wire:click="acknowledgeInvoice({{ $invoice_data->id }})"
                                         class="btn btn-de-primary btn-sm">Acknowledge Invoice</a>
