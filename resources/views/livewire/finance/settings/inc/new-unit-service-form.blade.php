@@ -18,9 +18,11 @@
                 @if ($toggleForm) wire:submit.prevent="updateFmsService" @else wire:submit.prevent="storeFmsService" @endif>
                 <div class="modal-body">
                     <div class="row">
-                        @if (!$toggleForm)
-                            @include('livewire.partials.project-department-toggle')
-                        @endif
+                        {{-- @if ($type == 'all') --}}
+                            @if (!$toggleForm)
+                                @include('livewire.partials.project-department-toggle')
+                            @endif                            
+                        {{-- @endif --}}
                         <div class="mb-3 col-md-4">
                             <label for="service_id" class="form-label required">{{ __('Service') }}</label>
                             <select class="form-select select2" id="service_id" wire:model.lazy="service_id">

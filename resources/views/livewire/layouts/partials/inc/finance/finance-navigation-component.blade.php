@@ -80,7 +80,7 @@
                                         <a href="{{ route('finance-invoices_out') }}" class="nav-link ">Outgoing</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit
+                                        <a href="{{ route('finance-unit_services','unit') }}" class="nav-link ">Unit
                                             Services</a>
                                     </li>
                                 @endif
@@ -399,7 +399,7 @@
                                     <!--end nav-item-->
                                     <!--end nav-item-->
                                     <li class="nav-item">
-                                        <a href="{{ route('finance-unit_services') }}" class="nav-link ">Unit
+                                        <a href="{{ route('finance-unit_services','all') }}" class="nav-link ">Unit
                                             Services</a>
                                     </li>
                                     <!--end nav-item--> 
