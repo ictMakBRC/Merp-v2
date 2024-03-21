@@ -9,7 +9,7 @@
                     <p>Name:{{ $budget_data->name }}</p>
                 </div>
                 <div class="col-3">
-                    <p>Unit:{{ $requestable->name??'N/A' }}</p>
+                    <p>Unit:{{ $budget_data->requestable->name??'N/A' }}</p>
                 </div>
                 <div class="col-3">
                     <p>Fiscal Year:{{ $budget_data->fiscalYear->name??'N/A' }}</p>
