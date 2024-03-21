@@ -271,7 +271,7 @@ class ProcurementBidManagementComponent extends Component
             $this->read_only=true;
         } else {
             $this->net_payment=100-$data['request']?->payment_requests?->sum('net_payment_terms');
-            $this->payment_description = 'Payment Request For '.$this->procurementRequest->bestBidders->first()->name.' who is the approved provider for procurement request  with reference #'.$this->procurementRequest->reference_no.' and LPO Number #'.$this->procurementRequest->lpo_no;
+            $this->payment_description = 'Payment Request For '.$this->procurementRequest?->bestBidders?->first()->name.' who is the approved provider for procurement request  with reference #'.$this->procurementRequest->reference_no.' and LPO Number #'.$this->procurementRequest->lpo_no;
             $this->read_only=false;
         }
 
