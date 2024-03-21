@@ -184,12 +184,21 @@ class FmsDepartmentBudgetLinesComponent extends Component
             }
           
             public function deleteEntry()
-            {
-              $dept_item = FmsUnitBudgetLine::findOrFail($this->delete_id);
-              $dept_item->delete();
-          
-              $this->dispatchBrowserEvent('close-modal');
-              $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Entry successfully deleted!']);
+            {            
+                try{
+                    $dept_item = FmsUnitBudgetLine::findOrFail($this->delete_id);
+                    $dept_item->delete();            
+                    $this->dispatchBrowserEvent('close-modal');
+                    $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Entry successfully deleted!']);
+                } catch (\Exception $e) {
+                    $this->dispatchBrowserEvent('alert', ['type' => 'warning',  'message' => 'Entry can not deleted!']);
+                    $this->dispatchBrowserEvent('close-modal');
+                    // $this->dispatchBrowserEventBrowserEvent('swal:modal', [
+                    //     'type' => 'warning',
+                    //     'message' => 'Oops! Not Found!',
+                    //     'text' => 'No accountSubType selected for export!',
+                    // ]);
+                }
             }
         
             public function updateInvline()
