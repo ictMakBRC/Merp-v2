@@ -32,7 +32,7 @@
         
                       <option value="">Select...</option>
                       @foreach ($procurements as $key => $prequest)
-                      <option value="{{$value->id}}">{{$value->subject}}</option>
+                      <option value="{{$prequest->id}}">{{$value->prequest}}</option>
                       @endforeach
                     </select>
                     @error('procurement_id')
