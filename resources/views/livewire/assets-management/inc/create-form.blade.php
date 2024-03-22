@@ -1,23 +1,29 @@
 <div x-cloak x-show="create_new">
     <form wire:submit.prevent>
         <div class="row">
-            <div class="mb-3 col-md-3">
-                <label for="asset_categories_id" class="form-label required">{{ __('Category') }} </label>
-                <select class="form-select select2" id="asset_categories_id" wire:model.lazy="asset_categories_id">
+            <div class="mb-3 col-md-2">
+                <label for="entry_type" class="form-label required">{{ __('Entry Type') }}</label>
+                <select class="form-select" id="entry_type" wire:model.lazy="entry_type">
                     <option selected value="">Select</option>
-                    @foreach ($categories as $category)
-                        <option value='{{ $category->id }}'>{{ $category->name }} ({{$category->classification->name}})</option>
-                    @endforeach
+                    <option value="Department">Department</option>
+                    <option value="Project">Project/Study/Grant</option>
                 </select>
-                @error('asset_categories_id')
+                @error('entry_type')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-4">
-                <label for="asset_name" class="form-label required">{{ __('Asset Name') }} </label>
-                <input type="text" id="asset_name" class="form-control" wire:model.defer="asset_name">
-                @error('asset_name')
+            <div class="mb-3 col-md-3">
+                <label for="asset_category_id" class="form-label required">{{ __('Category') }} </label>
+                <select class="form-select select2" id="asset_category_id" wire:model.lazy="asset_category_id">
+                    <option selected value="">Select</option>
+                    @foreach ($categories as $category)
+                        <option value='{{ $category->id }}'>{{ $category->name }}
+                            ({{ $category->classification->name }})
+                        </option>
+                    @endforeach
+                </select>
+                @error('asset_category_id')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
@@ -71,7 +77,74 @@
             </div>
 
             <hr>
-             
+
+            <div class="mb-3 col-md-4">
+                <label for="station_id" class="form-label required">{{ __('Station') }} </label>
+                <select class="form-select select2" id="station_id" wire:model.lazy="station_id">
+                    <option selected value="">Select</option>
+                    @foreach ($stations as $station)
+                        <option value='{{ $station->id }}'>{{ $station->name }}</option>
+                    @endforeach
+                </select>
+                @error('station_id')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+
+
+            @if ($entry_type == 'Project')
+                <div class="mb-3 col-md-4">
+                    <label for="project_id"
+                        class="form-label @if ($entry_type == 'Project') required @endif">{{ __('Project') }}</label>
+                    <select class="form-select" id="project_id" wire:model.lazy="project_id"
+                        @if ($entry_type == 'Project') required @endif>
+                        <option selected value="">Select</option>
+                        @forelse ($projects as $project)
+                            <option value="{{ $project->id }}">{{ $project->project_code }}</option>
+                        @empty
+                        @endforelse
+                    </select>
+                    @error('project_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>
+            @endif
+
+            @if ($entry_type == 'Department')
+                <div class="mb-3 col-md-4">
+                    <label for="department_id"
+                        class="form-label @if ($entry_type == 'Department') required @endif">{{ __('Department') }}</label>
+                    <select class="form-select" id="department_id" wire:model.lazy="department_id"
+                        @if ($entry_type == 'Department') required @endif>
+                        <option selected value="">Select</option>
+                        @forelse ($departments as $department)
+                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                        @empty
+                        @endforelse
+                    </select>
+                    @error('department_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>
+            @endif
+
+            <div class="mb-3 col-md-4">
+                <label for="employee_id" class="form-label">{{ __('Employee') }}</label>
+                <select class="form-select" id="employee_id" wire:model.lazy="employee_id">
+                    <option selected value="">Select</option>
+                    @forelse ($employees as $employee)
+                        <option value="{{ $employee->id }}">{{ $employee->fullName }}</option>
+                    @empty
+                    @endforelse
+                </select>
+                @error('employee_id')
+                    <div class="text-danger text-small">{{ $message }}</div>
+                @enderror
+            </div>
+
+
+            <hr>
+
             <div class="mb-3 col-md-3">
                 <label for="acquisition_type" class="form-label required">{{ __('Acquisition Type') }} </label>
                 <select class="form-select" id="acquisition_type" wire:model.lazy="acquisition_type">
@@ -90,16 +163,20 @@
                 @enderror
             </div>
 
-            @if ($acquisition_type == 'Project')
+            @if ($acquisition_type == 'Purchase')
                 <div class="mb-3 col-md-4">
-                    <label for="project_id" class="form-label required">{{ __('Project') }} </label>
-                    <select class="form-select select2" id="project_id" wire:model.lazy="project_id">
+                    <label for="procurement_request_id"
+                        class="form-label @if ($acquisition_type == 'Purchase') required @endif">{{ __('Procurement Request') }}</label>
+                    <select class="form-select" id="procurement_request_id" wire:model.lazy="procurement_request_id"
+                        @if ($acquisition_type == 'Purchase') required @endif>
                         <option selected value="">Select</option>
-                        @foreach ($departments as $department)
-                            <option value='{{ $department->id }}'>{{ $department->name }}</option>
-                        @endforeach
+                        @forelse ($procurement_requests as $procurement_request)
+                            <option value="{{ $procurement_request->id }}">{{ $procurement_request->reference_no }}
+                            </option>
+                        @empty
+                        @endforelse
                     </select>
-                    @error('project_id')
+                    @error('procurement_request_id')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div>
@@ -107,13 +184,14 @@
 
             <div class="mb-3 col-md-2">
                 <label for="procurement_date" class="form-label">{{ __('Procurement Date') }} </label>
-                <input type="date" id="procurement_date" class="form-control" wire:model.defer="procurement_date">
+                <input type="date" id="procurement_date" class="form-control"
+                    wire:model.defer="procurement_date">
                 @error('procurement_date')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-3">
+            {{-- <div class="mb-3 col-md-3">
                 <label for="procurement_type" class="form-label">{{ __('Procurement Type') }} </label>
                 <select class="form-select" id="procurement_type" wire:model.lazy="procurement_type">
                     <option selected value="">Select</option>
@@ -134,7 +212,7 @@
                 @error('procurement_type')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
-            </div>
+            </div> --}}
 
             <div class="mb-3 col-md-2">
                 <label for="invoice_number" class="form-label">{{ __('#Invoice No') }} </label>
@@ -145,7 +223,7 @@
             </div>
 
             <div class="mb-3 col-md-2">
-                <label for="cost" class="form-label">{{ __('Purchase Price') }} </label>
+                <label for="cost" class="form-label">{{ __('Est Purchase Price') }} </label>
                 <input type="number" id="cost" class="form-control" wire:model.defer="cost" step="0.01">
                 @error('cost')
                     <div class="text-danger text-small">{{ $message }}</div>
@@ -153,12 +231,12 @@
             </div>
 
             <div class="mb-3 col-md-2">
-                <label for="currency" class="form-label">Currency</label>
-                <select class="form-select" id="currency" wire:model.lazy='currency'>
+                <label for="currency_id" class="form-label">Currency</label>
+                <select class="form-select" id="currency_id" wire:model.lazy='currency_id'>
                     <option selected value="">Select</option>
                     @include('layouts.currencies')
                 </select>
-                @error('currency')
+                @error('currency_id')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
@@ -167,8 +245,8 @@
                 <label for="supplier_id" class="form-label">{{ __('Supplier') }} </label>
                 <select class="form-select select2" id="supplier_id" wire:model.lazy="supplier_id">
                     <option selected value="">Select</option>
-                    @foreach ($departments as $department)
-                        <option value='{{ $department->id }}'>{{ $department->name }}</option>
+                    @foreach ($providers as $provider)
+                        <option value='{{ $provider->id }}'>{{ $provider->name }}</option>
                     @endforeach
                 </select>
                 @error('supplier_id')
@@ -207,8 +285,8 @@
                     <label for="service_provider" class="form-label">{{ __('Service Provider') }} </label>
                     <select class="form-select select2" id="service_provider" wire:model.lazy="service_provider">
                         <option selected value="">Select</option>
-                        @foreach ($departments as $department)
-                            <option value='{{ $department->id }}'>{{ $department->name }}</option>
+                        @foreach ($providers as $provider)
+                            <option value='{{ $provider->id }}'>{{ $provider->name }}</option>
                         @endforeach
                     </select>
                     @error('service_provider')
@@ -238,7 +316,7 @@
                 <label for="depreciation_method" class="form-label required">{{ __('Depreciation Method') }}</label>
                 <select class="form-select select2" id="depreciation_method" wire:model.lazy="depreciation_method">
                     <option selected value="">Select</option>
-                    <option value='Straight-Line Method'>Straight Line Method</option>
+                    <option value='Straight Line Method'>Straight Line Method</option>
                     <option value='Reducing Balance Method'>Reducing Balance Method</option>
                 </select>
                 @error('depreciation_method')
@@ -246,7 +324,7 @@
                 @enderror
             </div>
 
-            @if ($depreciation_method == 'Straight-Line Method')
+            @if ($depreciation_method == 'Straight Line Method')
                 <div class="mb-3 col-md-2">
                     <label for="salvage_value" class="form-label">{{ __('Salvage/Residual Value') }} </label>
                     <input type="number" id="salvage_value" class="form-control" wire:model.defer="salvage_value"
@@ -261,8 +339,8 @@
                 <label for="asset_condition" class="form-label required">{{ __('Asset Condition') }}</label>
                 <select class="form-select select2" id="asset_condition" wire:model.lazy="asset_condition">
                     <option selected value="">Select</option>
-                    <option value='Brand New'>Brand New</option>
-                    <option value='Refurbished'>Refurbished</option>
+                    <option value='New'>New</option>
+                    <option value='Used'>Used</option>
                 </select>
                 @error('asset_condition')
                     <div class="text-danger text-small">{{ $message }}</div>
@@ -273,8 +351,9 @@
                 <label for="operational_status" class="form-label required">{{ __('Operational Status') }}</label>
                 <select class="form-select" id="operational_status" wire:model.lazy="operational_status">
                     <option selected value="">Select</option>
-                    <option value='1'>Operational/In-use</option>
-                    <option value='0'>Retired/Decommissioned</option>
+                    <option value='Operational'>Operational/In-use</option>
+                    <option value='In-Stock'>In-Stock</option>
+                    <option value='Retired'>Retired/Decommissioned</option>
                 </select>
                 @error('operational_status')
                     <div class="text-danger text-small">{{ $message }}</div>

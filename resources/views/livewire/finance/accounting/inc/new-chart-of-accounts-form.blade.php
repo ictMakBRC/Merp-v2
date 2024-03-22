@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="mb-3 col-md-12">
+                            <div class="mb-3 col-md-6">
                                 <label for="countryName" class="form-label required">Account Type</label>
                                 <select name="" id="account_type" class="form-control" wire:model="account_type">
                                     <option value="">select...</option>
@@ -34,10 +34,10 @@
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-3 col-md-12">
-                                <label for="sub_account_type" class="form-label required">Account Type</label>
+                            <div class="mb-3 col-md-6">
+                                <label for="sub_account_type" class="form-label required">Account sub Type</label>
                                 <select name="sub_types" id="account_type" class="form-control"
-                                    wire:model="sub_account_type">
+                                    wire:model.lazy="sub_account_type">
                                     <option value="">select...</option>
                                     @foreach ($sub_types as $subtype)
                                         <option value="{{ $subtype->id }}">{{ $subtype->name }}</option>
@@ -47,6 +47,7 @@
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
+                            
                             <div class="col-md-12 mt-1">
                                 <div class="input-group">
                                     <label class="switch">
@@ -57,17 +58,26 @@
                                     </label>
                                     Is Sub-account
                                     <select @if (!$is_sub && $parent_account == null) disabled @endif name="parent_account"
-                                        id="parent_account" class="form-control" wire:model="parent_account">
+                                        id="parent_account" class="form-control" wire:model.lazy="parent_account">
                                         <option value="">select parent account</option>
                                         @foreach ($sub_accounts as $account)
                                             <option value="{{ $account->id }}">
-                                                {{ $account->name . ' (' . $account->type->name . ')' ?? '' }}</option>
+                                                @if ($account->parent_account)--@endif
+                                                {{ $account->name . ' (' . $account?->type?->name . ')' ?? '' }}</option>
                                         @endforeach
                                     </select>
                                     @error('parent_account')
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="code" class="form-label">Code <span class="text-danger">*</span></label>
+                                <input type="text" id="code" class="form-control" name="code" required
+                                    wire:model.lazy="code">
+                                @error('code')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -84,12 +94,39 @@
                             </div>
                             <div class="col-md-12">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea name="description" wire:model='description' id="description" class="form-control"></textarea>
+                                <textarea name="description" wire:model.defer='description' id="description" class="form-control"></textarea>
                                 @error('description')
                                     <div class="text-danger text-small">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6 mt-1">
+                            
+                            <div class="mb-3 col-md-6">
+                                <label for="is_budget" class="form-label required">Bugdetable ?</label>
+                                <select name="sub_types" id="is_budget" class="form-control"
+                                    wire:model.defer="is_budget">
+                                    <option value="">select...</option>
+                                    <option value="1">Yes</option>
+                                    <option value="2">Parent</option>
+                                    <option value="0">No</option>
+                                </select>
+                                @error('is_budget')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            
+                            <div class="mb-3 col-md-6">
+                                <label for="is_active" class="form-label required">Active ?</label>
+                                <select name="sub_types" id="is_active" class="form-control"
+                                    wire:model.defer="is_active">
+                                    <option value="">select...</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                                @error('is_active')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            {{-- <div class="col-md-6 mt-1">
                                 <div class="form-group">
                                     <label for="primary_balance" class="form-label">Balance</label>
                                     <input type="number" step="any" id="primary_balance" class="form-control"
@@ -108,7 +145,7 @@
                                         <div class="text-danger text-small">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
 
                     </div>

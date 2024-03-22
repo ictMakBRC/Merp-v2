@@ -29,7 +29,7 @@ class AssetCategory extends Model
 
     public function classification()
     {
-        return $this->belongsTo(AssetClassification::class, 'asset_classifications_id', 'id');
+        return $this->belongsTo(AssetClassification::class, 'asset_classification_id', 'id');
     }
 
     public static function boot()

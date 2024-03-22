@@ -32,14 +32,31 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-3">
+                            <div class="mb-3 col-2">
+                                <label for="fiscal_year" class="form-label required">Fiscal year</label>
+                                <select id="fiscal_year" class="form-control" name="fiscal_year" required wire:model="fiscal_year">
+                                    <option value="">Select</option>
+                                    @foreach ($years as $fy)
+                                        <option value="{{$fy->id}}">{{$fy->name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('fiscal_year')
+                                    <div class="text-danger text-small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        <div class="mb-3 col-4">
                             <label for="account_type" class="form-label required">Account Currency</label>
-                            <select class="form-select select2" id="currency_id" wire:model.defer="currency_id">
+                            <div class="input-group">
+                            <select class="form-select select2" id="currency_id" wire:model="currency_id">
                                 <option  value="">Select</option>
                                 @foreach ($currencies as $currency)
                                     <option value="{{ $currency->id }}">{{ $currency->name.' '.$currency->code }}</option>
                                 @endforeach
                             </select>
+                            <span class="input-group-text">Rate</span>
+                            <input type="text" id="rate" oninput="formatAmount(this)" class="form-control"  name="rate" required
+                            wire:model.defer="rate">
+                        </div>
                             @error('currency_id')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
@@ -52,9 +69,9 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-3">
+                        <div class="mb-3 col-3 d-none">
                             <label for="account_type" class="form-label required">Account Type</label>
-                            <select class="form-select select2" id="account_type" wire:model.defer="account_type">
+                            <select class="form-select select2" id="account_type" wire:model="account_type">
                                 <option  value="">Select</option>
                                 @foreach ($types as $type)
                                     <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -64,7 +81,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-2">
+                        <div class="mb-3 col-md-3">
                             <label for="as_of" class="form-label required">As of</label>
                             <input type="date" id="as_of" class="form-control" name="as_of" required
                                 wire:model.defer="as_of">
@@ -74,7 +91,7 @@
                         </div>
                         <div class="mb-3 col-md-2">
                             <label for="is_active" class="form-label required">{{ __('public.status') }}</label>
-                            <select class="form-select select2" id="is_active" wire:model.defer="is_active">
+                            <select class="form-select select2" id="is_active" wire:model="is_active">
                                 <option selected value="">Select</option>
                                 <option value='1'>Active</option>
                                 <option value='0'>Inactive</option>
@@ -83,7 +100,7 @@
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3 col-md-8">
+                        <div class="mb-3 col">
                             <label for="countryName" class="form-label">Description</label>
                             <textarea  id="description" class="form-control"
                             name="description" wire:model.defer="description"></textarea>

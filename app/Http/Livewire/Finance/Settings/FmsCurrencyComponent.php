@@ -2,9 +2,10 @@
 
 namespace App\Http\Livewire\Finance\Settings;
 
-use App\Models\Finance\Settings\FmsCurrency;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\Finance\Settings\FmsCurrencyUpdate;
 
 class FmsCurrencyComponent extends Component
 {
@@ -80,16 +81,27 @@ class FmsCurrencyComponent extends Component
 
         ]);
 
+        if($this->system_default == false){
+            $exRate = $this->exchange_rate;
+        }else{
+            $exRate = 1;
+        }
+
         $currency = new FmsCurrency();
         $currency->name = $this->name;
         $currency->is_active = $this->is_active;
         $currency->code = $this->code;
-        $currency->exchange_rate = $this->exchange_rate;
+        $currency->exchange_rate = $exRate;
         $currency->system_default = $this->system_default;
         $currency->save();
         if($this->system_default ==1){
             FmsCurrency::where('id', '!=', $currency->id)->update(['system_default'=>'0']);
         }
+            $rate = new FmsCurrencyUpdate();
+            $rate->currency_code = $currency->code;
+            $rate->exchange_rate = $exRate;
+            $rate->currency_id = $currency->id;
+            $rate->save();
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputs();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'currency created successfully!']);
@@ -128,17 +140,28 @@ class FmsCurrencyComponent extends Component
             'system_default' => 'required|integer',
             'exchange_rate' => 'required|numeric',
         ]);
+        if($this->system_default == false){
+            $exRate = $this->exchange_rate;
+        }else{
+            $exRate = 1;
+        }
 
         $currency = FmsCurrency::find($this->edit_id);
         $currency->name = $this->name;
-        $currency->exchange_rate = $this->exchange_rate;
+        $currency->exchange_rate = $exRate;        
         $currency->code = $this->code;
         $currency->is_active = $this->is_active;
         $currency->system_default = $this->system_default;
-        $currency->update();        
-        if($this->system_default ==1){
-            FmsCurrency::where('id', '!=', $currency->id)->update(['system_default'=>'0']);
-        }
+        $currency->update(); 
+        $rate = new FmsCurrencyUpdate();
+        $rate->currency_code = $currency->code;
+        $rate->exchange_rate = $exRate;       
+        $rate->currency_id = $currency->id;
+        $rate->save(); 
+        
+        // if($currency->system_default !=1){
+        //     FmsCurrency::where('id', '!=', $currency->id)->update(['system_default'=>'0']);
+        // }
         $this->resetInputs();
         $this->createNew = false;
         $this->toggleForm = false;

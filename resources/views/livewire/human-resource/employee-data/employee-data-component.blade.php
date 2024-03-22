@@ -6,16 +6,16 @@
                     <div class="col-sm-12 mt-1">
                         <div class="d-sm-flex align-items-center">
                             <h5 class="mb-2 mb-sm-0">
-                                Register new employee information <small class="text-success">{{$loadingInfo}}</small>
+                                Employee Centre <small class="text-success">{{$loadingInfo}}</small>
                             </h5>
                             <div class="ms-auto mb-2">
                                 <div class="row">
-                                    <label class="col-md-4 col-form-label text-end">Load Employee</label>
+                                    <label class="col-md-4 col-form-label text-end">Load</label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select" wire:model.lazy='employee_id'>
                                             <option selected value="">Select</option>
                                             @foreach ($employees as $employee)
-                                                <option value='{{ $employee->id }}'>{{ $employee->fullName }}</option>
+                                                <option value='{{ $employee->id }}'>{{ $employee->flatName }}</option>
                                             @endforeach
                                           </select>
                                     </div>

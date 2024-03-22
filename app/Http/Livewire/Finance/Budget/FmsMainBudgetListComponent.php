@@ -56,7 +56,7 @@ class FmsMainBudgetListComponent extends Component
     }
     public function render()
     {
-    $data['budgets'] = $this->mainQuery()->with(['fiscalYear'])->select('fiscal_year', DB::raw('sum(esitmated_income) as total_income'), DB::raw('sum(estimated_expenditure) as total_expenses'))
+    $data['budgets'] = $this->mainQuery()->with(['fiscalYear'])->select('fiscal_year', DB::raw('sum(estimated_income_local) as total_income'), DB::raw('sum(estimated_expense_local) as total_expenses'))
         ->orderBy('fiscal_year', 'desc')->groupBy('fiscal_year')
         ->paginate($this->perPage);
     $data['departments'] = Department::all();

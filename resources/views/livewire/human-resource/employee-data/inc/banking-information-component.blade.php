@@ -1,7 +1,10 @@
 <div>
     @include('livewire.human-resource.employee-data.inc.loading-info')
-    
-    <form wire:submit.prevent="storeBankingInformation">
+
+    <form
+        @if (!$toggleForm) wire:submit.prevent="storeBankingInformation"
+                        @else
+                        wire:submit.prevent="updateBankingInformation" @endif>
         <div class="row">
 
             <div class="mb-3 col-md-4">
@@ -37,12 +40,12 @@
             </div>
 
             <div class="mb-3 col-md-2">
-                <label for="currency" class="form-label required">Currency</label>
-                <select class="form-select select2" id="currency" wire:model.lazy='currency'>
+                <label for="currency_id" class="form-label required">Currency</label>
+                <select class="form-select select2" id="currency_id" wire:model.lazy='currency_id'>
                     <option selected value="">Select</option>
                     @include('layouts.currencies')
                 </select>
-                @error('currency')
+                @error('currency_id')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
@@ -61,8 +64,75 @@
         </div>
 
         <div class="modal-footer">
-            <x-button class="btn btn-success">{{ __('public.save') }}</x-button>
+
+            <x-button class="btn btn-success">
+                @if (!$toggleForm)
+                    {{ __('public.save') }}
+                @else
+                    {{ __('public.update') }}
+                @endif
+            </x-button>
         </div>
     </form>
+
+    <!--BANKING INFORMATION-->
+    @if (!$bankingInformation->isEmpty())
+        <div class="row">
+            <div class="col-lg-12">
+                <hr>
+                {{-- <div class="text-sm-end mt-3">
+                    <h4 class="header-title mb-3  text-center">BANKING INFORMATION</h4>
+                </div> --}}
+                <div class="table-responsive">
+                    <table class="table table-striped w-100 mb-0  text-center">
+                        <thead>
+                            <tr>
+                                <th>Bank Name</th>
+                                <th>Branch</th>
+                                <th>Account Name</th>
+                                <th>Currency</th>
+                                <th>Acct Number</th>
+                                <th>State</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @foreach ($bankingInformation as $bankingInfo)
+                            <tr>
+                                <td>
+                                    {{ $bankingInfo->bank_name }}
+
+                                </td>
+                                <td>
+                                    {{ $bankingInfo->branch ?? 'N/A' }}
+
+                                </td>
+                                <td>
+                                    {{ $bankingInfo->account_name }}
+                                </td>
+                                <td>
+                                    {{ $bankingInfo->currency->code }}
+                                </td>
+                                <td>
+                                    {{ $bankingInfo->account_number }}
+                                </td>
+                                @if ($bankingInfo->is_default)
+                                    <td><span class="badge bg-success">Primary</span></td>
+                                @else
+                                    <td><span class="badge bg-info">Secondary</span></td>
+                                @endif
+
+                                <td>
+                                    <button class="btn btn btn-sm btn-outline-success"
+                                        wire:click="editData({{ $bankingInfo->id }})" title="{{ __('public.edit') }}">
+                                        <i class="ti ti-edit fs-18"></i></button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div> <!-- end preview-->
+            </div>
+        </div>
+    @endif
+    <!-- end BANKING INFORMATION-->
 
 </div>

@@ -1,92 +1,5 @@
 <div>
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <div class="card overflow-hidden">
-                <div class="row g-0">
-                    <div class="col-md-6 col-lg-3 border-b border-e border-bo">
-                        <div class="card-body">
-                            <div class="row d-flex justify-content-center text-info">
-                                <div class="col">
-                                    <div class="media">
-                                        <div class="bg-light-alt d-flex justify-content-center align-items-center thumb-md  rounded-circle">
-                                            <i data-feather="package" class="align-self-center  icon-sm"></i>  
-                                        </div>
-                                        <div class="media-body align-self-center ms-2"> 
-                                            <p class=" mb-1 fw-semibold">Total</p>                                                            
-                                            <p class="mb-0 text-truncate ">Estimates</p>                                                                                   
-                                        </div><!--end media body-->
-                                    </div><!--end media-->                                                    
-                                </div><!--end col-->
-                                <div class="col-auto align-self-center">
-                                    <h5 class="my-1">@moneyFormat($invoices->where('status','!=','Canceled')->sum('total_amount'))</h5>
-                                </div><!--end col-->
-                            </div><!--end row-->
-                        </div><!--end card-body-->                                            
-                    </div> <!--end col--> 
-                    <div class="col-md-6 col-lg-3 border-b border-e border-bo">
-                        <div class="card-body">
-                            <div class="row d-flex justify-content-center text-primary">                                                
-                                <div class="col">
-                                    <div class="media">
-                                        <div class="bg-light-alt d-flex justify-content-center align-items-center thumb-md  rounded-circle">
-                                            <i class="align-self-center  icon-sm fas fa-money-bill-wave"></i>  
-                                        </div>
-                                        <div class="media-body align-self-center ms-2"> 
-                                            <p class=" mb-1 fw-semibold">Total</p>                                                            
-                                            <p class="mb-0 text-truncate ">Paid</p>
-                                        </div><!--end media body-->
-                                    </div><!--end media-->                                                    
-                                </div><!--end col-->
-                                <div class="col-auto align-self-center">
-                                    <h4 class="my-1">  <h5 class="my-1">@moneyFormat($invoices->where('status','Paid')->sum('total_amount'))</h5></h4>
-                                </div><!--end col-->
-                            </div><!--end row-->
-                        </div><!--end card-body-->                                            
-                    </div> <!--end col-->                         
-                    <div class="col-md-6 col-lg-3 border-b border-e">
-                        <div class="card-body">
-                            <div class="row d-flex justify-content-center text-warning">
-                                <div class="col">  
-                                    <div class="media">
-                                        <div class="bg-light-alt d-flex justify-content-center align-items-center thumb-md  rounded-circle">
-                                            <i data-feather="alert-octagon" class="align-self-center  icon-sm"></i>
-                                        </div>
-                                        <div class="media-body align-self-center ms-2"> 
-                                            <p class=" mb-1 fw-semibold">Total</p>                                                             
-                                            <p class="mb-0 text-truncate ">Unpaid</p>
-                                        </div><!--end media body-->
-                                    </div><!--end media-->                                                    
-                                </div><!--end col-->
-                                <div class="col-auto align-self-center">
-                                    <h5 class="my-1">@moneyFormat($invoices->whereIn('status',['Partially Paid','Approved'])->sum('total_amount'))</h5>                                                     
-                                </div><!--end col-->
-                            </div><!--end row-->
-                        </div><!--end card-body-->                                            
-                    </div> <!--end col--> 
-                    <div class="col-md-6 col-lg-3 ps-lg-0">
-                        <div class="card-body">
-                            <div class="row d-flex justify-content-center text-danger">                                                
-                                <div class="col">
-                                    <div class="media">
-                                        <div class="bg-light-alt d-flex justify-content-center align-items-center thumb-md  rounded-circle">
-                                            <i data-feather="alert-triangle" class="align-self-center  icon-sm"></i> 
-                                        </div>
-                                        <div class="media-body align-self-center ms-2"> 
-                                            <p class=" mb-1 fw-semibold">Total</p>                                                      
-                                            <p class="mb-0 text-truncate ">Overdue</p>
-                                        </div><!--end media body-->
-                                    </div><!--end media-->                                                     
-                                </div><!--end col-->
-                                <div class="col-auto align-self-center">
-                                    <h5 class="my-1">@moneyFormat($invoices->whereIn('status',['Partially Paid','Approved'])->where('as_of','>=',date('Y-m-d'))->sum('total_amount'))</h5>                       
-                                </div><!--end col-->
-                            </div><!--end row-->
-                        </div><!--end card-body-->                                            
-                    </div> <!--end col-->
-                </div><!--end row--> 
-            </div><!--end card-->
-        </div><!--end col-->           
-    </div><!--end row-->
+    @include('livewire.finance.invoice.inc.invoice-counts')
     <div class="row" x-data="{ filter_data: @entangle('filter'),create_new: @entangle('createNew') }">
         <div class="col-12">
             <div class="card">
@@ -179,52 +92,12 @@
                                     wire:model.debounce.300ms="search" placeholder="search">
                             </div>
                             <hr>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table id="datableButton" class="table table-striped mb-0 w-100 sortable">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Invice No.</th>
-                                        <th>Billed From</th>
-                                        <th>Billed To</th>
-                                        <th>Total Amount</th>
-                                        <th>Due Date</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($invoices as $key => $invoice)
-                                        <tr>
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $invoice->invoice_no }}</td>
-                                            <td>{{ $invoice->biller->name??'N/A' }}</td>
-                                            <td>{{ $invoice->customer->name??$invoice->department->name??'N/A' }}</td>
-                                            <td>@moneyFormat( $invoice->total_amount )</td>
-                                            <td>{{ $invoice->invoice_date }}</td>
-                                            <td>{{ $invoice->status }}</td>
-                                            <td class="table-action">     
-                                                @if ($invoice->status=='Pending')
-                                                    
-                                                    <a href="{{URL::signedRoute('finance-invoice_items', $invoice->invoice_no)}}" class="action-ico btn-sm btn btn-outline-success mx-1"><i class="fa fa-edit"></i></a>
-                                                @else
-                                                
-                                                    <a href="{{URL::signedRoute('finance-invoice_view', $invoice->invoice_no)}}" class="action-ico btn-sm btn btn-outline-success mx-1"><i class="fa fa-eye"></i></a>
-                                                    
-                                                @endif                                       
-                                                    
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div> <!-- end preview-->
+                        </div>                        
+                        @include('livewire.finance.invoice.inc.table-list')
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $invoices->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $invoices->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

@@ -4,52 +4,57 @@ namespace App\Services\Assets;
 
 use App\Models\Assets\AssetsCatalog;
 use App\Data\Assets\AssetCatalogData;
+use Illuminate\Database\Eloquent\Model;
 
 class AssetCatalogService
 {
-    public function createAsset(AssetCatalogData $assetCatalogDTO):AssetsCatalog
+    public function createAsset(Model $model,AssetCatalogData $assetCatalogDTO):AssetsCatalog
     {
-        $assetCatalog = new AssetsCatalog();
-        $this->fillAssetFromDTO($assetCatalog, $assetCatalogDTO);
-        $assetCatalog->save();
-
+        $assetCatalog = $model->assets()->create([
+            ...$this->fillAssetFromDTO($assetCatalogDTO)
+        ]);
+        
         return $assetCatalog;
     }
 
     public function updateAsset(AssetsCatalog $assetCatalog, AssetCatalogData $assetCatalogDTO):AssetsCatalog
     {
-        $this->fillAssetFromDTO($assetCatalog, $assetCatalogDTO);
-        $assetCatalog->save();
+        
+        $assetCatalog->update([
+            ...$this->fillAssetFromDTO($assetCatalogDTO)
+        ]);
 
         return $assetCatalog;
     }
 
-    private function fillAssetFromDTO(AssetsCatalog $assetCatalog, AssetCatalogData $assetCatalogDTO)
+    private function fillAssetFromDTO(AssetCatalogData $assetCatalogDTO)
     {
-        $assetCatalog->asset_categories_id = $assetCatalogDTO->asset_categories_id;
-        $assetCatalog->asset_name = $assetCatalogDTO->asset_name;
-        $assetCatalog->brand = $assetCatalogDTO->brand;
-        $assetCatalog->model = $assetCatalogDTO->model;
-        $assetCatalog->serial_number = $assetCatalogDTO->serial_number;
-        $assetCatalog->barcode = $assetCatalogDTO->barcode;
-        $assetCatalog->engraved_label = $assetCatalogDTO->engraved_label;
-        $assetCatalog->description = $assetCatalogDTO->description;
-        $assetCatalog->acquisition_type = $assetCatalogDTO->acquisition_type;
-        $assetCatalog->project_id = $assetCatalogDTO->project_id;
-        $assetCatalog->procurement_date = $assetCatalogDTO->procurement_date;
-        $assetCatalog->procurement_type = $assetCatalogDTO->procurement_type;
-        $assetCatalog->invoice_number = $assetCatalogDTO->invoice_number;
-        $assetCatalog->cost = $assetCatalogDTO->cost;
-        $assetCatalog->currency = $assetCatalogDTO->currency;
-        $assetCatalog->supplier_id = $assetCatalogDTO->supplier_id;
-        $assetCatalog->has_service_contract = $assetCatalogDTO->has_service_contract;
-        $assetCatalog->service_contract_expiry_date = $assetCatalogDTO->service_contract_expiry_date;
-        $assetCatalog->service_provider = $assetCatalogDTO->service_provider;
-        $assetCatalog->warranty_details = $assetCatalogDTO->warranty_details;
-        $assetCatalog->useful_years = $assetCatalogDTO->useful_years;
-        $assetCatalog->depreciation_method = $assetCatalogDTO->depreciation_method;
-        $assetCatalog->salvage_value = $assetCatalogDTO->salvage_value;
-        $assetCatalog->asset_condition = $assetCatalogDTO->asset_condition;
-        $assetCatalog->operational_status = $assetCatalogDTO->operational_status;
+        return [
+                'entry_type' => $assetCatalogDTO->entry_type,
+                'asset_category_id' => $assetCatalogDTO->asset_category_id,
+                'asset_name' => $assetCatalogDTO->asset_name,
+                'brand' => $assetCatalogDTO->brand,
+                'model' => $assetCatalogDTO->model,
+                'serial_number' => $assetCatalogDTO->serial_number,
+                'barcode' => $assetCatalogDTO->barcode,
+                'engraved_label' => $assetCatalogDTO->engraved_label,
+                'description' => $assetCatalogDTO->description,
+                'acquisition_type' => $assetCatalogDTO->acquisition_type,
+                'procurement_request_id' => $assetCatalogDTO->procurement_request_id,
+                'procurement_date' => $assetCatalogDTO->procurement_date,
+                'invoice_number' => $assetCatalogDTO->invoice_number,
+                'cost' => $assetCatalogDTO->cost,
+                'currency_id' => $assetCatalogDTO->currency_id,
+                'supplier_id' => $assetCatalogDTO->supplier_id,
+                'has_service_contract' => $assetCatalogDTO->has_service_contract,
+                'service_contract_expiry_date' => $assetCatalogDTO->service_contract_expiry_date,
+                'service_provider' => $assetCatalogDTO->service_provider,
+                'warranty_details' => $assetCatalogDTO->warranty_details,
+                'useful_years' => $assetCatalogDTO->useful_years,
+                'depreciation_method' => $assetCatalogDTO->depreciation_method,
+                'salvage_value' => $assetCatalogDTO->salvage_value,
+                'asset_condition' => $assetCatalogDTO->asset_condition,
+                'operational_status' => $assetCatalogDTO->operational_status,
+        ];
     }
 }

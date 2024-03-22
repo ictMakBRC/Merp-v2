@@ -93,6 +93,7 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
+                                        <th>Short Code</th>
                                         <th>Classification</th>
                                         <th>Description</th>
                                         <th>Action</th>
@@ -103,6 +104,7 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $category->name }}</td>
+                                            <td>{{ $category->short_code }}</td>
                                             <td>{{ $category->classification->name??'N/A' }}</td>
                                             <td>{{ $category->description ?? 'N/A' }}</td>
                                             <td class="table-action">
@@ -117,7 +119,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $categories->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $categories->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

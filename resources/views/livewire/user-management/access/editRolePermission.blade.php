@@ -63,18 +63,19 @@
                         <div class="accordion" id="accordionPermissions">
                             @forelse ($permissions as $module => $permission_operations)
                             <div class="accordion-item">
-                                <h6 class="accordion-header" id="heading{{ str_replace(' ', '', $module) }}">
+                                <h6 class="accordion-header"
+                                    id="heading{{str_replace('/', '',str_replace(' ', '', $module)) }}">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse{{ str_replace(' ', '', $module) }}"
+                                        data-bs-target="#collapse{{str_replace('/', '',str_replace(' ', '', $module)) }}"
                                         aria-expanded="true"
-                                        aria-controls="collapse{{ str_replace(' ', '', $module) }}">
+                                        aria-controls="collapse{{str_replace('/', '',str_replace(' ', '', $module)) }}">
                                         {{ $module }}
 
                                     </button>
                                 </h6>
-                                <div id="collapse{{ str_replace(' ', '', $module) }}"
+                                <div id="collapse{{str_replace('/', '',str_replace(' ', '', $module)) }}"
                                     class="accordion-collapse collapse @if ($loop->first) show @endif"
-                                    aria-labelledby="heading{{ str_replace(' ', '', $module) }}"
+                                    aria-labelledby="heading{{str_replace('/', '',str_replace(' ', '', $module)) }}"
                                     data-bs-parent="#accordionPermissions">
                                     <div class="accordion-body">
                                         <div class="row row-cols-1 row-cols-md-4 row-cols-xl-4">

@@ -1,20 +1,6 @@
 <div>
-    @include('livewire.procurement.requests.inc.loading-info')
     <form wire:submit.prevent="storeDocument">
         <div class="row">
-            {{-- <div class="mb-3 col-md-4">
-                <label for="provider_id" class="form-label required">{{ __('Provider') }}</label>
-                <select class="form-select" id="provider_id" wire:model.lazy="provider_id">
-                    <option selected value="">Select</option>
-                    @forelse ($providers as $provider)
-                        <option value="{{ $provider->id }}">{{ $provider->name }}</option>
-                    @empty
-                    @endforelse
-                </select>
-                @error('provider_id')
-                    <div class="text-danger text-small">{{ $message }}</div>
-                @enderror
-            </div> --}}
 
             <div class="mb-3 col-md-4">
                 <label for="document_category" class="form-label required">{{ __('Document Category') }}</label>
@@ -30,7 +16,7 @@
                 @enderror
             </div>
 
-            <div class="mb-3 col-md-4">
+            {{-- <div class="mb-3 col-md-4">
                 <label for="expires" class="form-label required">{{ __('Expires?') }}</label>
                 <select class="form-select" id="expires" wire:model.lazy="expires">
                     <option selected value="">Select</option>
@@ -40,7 +26,7 @@
                 @error('expires')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
-            </div>
+            </div> --}}
 
             <div class="mb-3 col-md-4">
                 <label for="document_name" class="form-label required">{{ __('Document Name') }}</label>
@@ -59,7 +45,7 @@
                 @enderror
             </div>
 
-            @if ($expires)
+            {{-- @if ($expires)
                 <div class="mb-3 col-md-4">
                     <label for="expiry_date" class="form-label required">{{ __('Expiry Date') }}</label>
                     <input type="date" id="expiry_date" class="form-control" wire:model.defer="expiry_date">
@@ -67,7 +53,7 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div>
-            @endif
+            @endif --}}
 
             <div class="mb-3 col-md-4">
                 <label for="description" class="form-label">{{ __('Description') }}</label>

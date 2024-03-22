@@ -32,7 +32,7 @@ class WorkingExperienceInformationService
         $workingExperienceInformation->company = $workingExperienceDTO->company;
         $workingExperienceInformation->position_held =  $workingExperienceDTO->position_held;
         $workingExperienceInformation->monthly_salary =  $workingExperienceDTO->monthly_salary;
-        $workingExperienceInformation->currency = $workingExperienceDTO->currency;
+        $workingExperienceInformation->currency_id = $workingExperienceDTO->currency_id;
         $workingExperienceInformation->employment_type = $workingExperienceDTO->employment_type;
         $workingExperienceInformation->key_responsibilities = $workingExperienceDTO->key_responsibilities;
     }

@@ -34,6 +34,16 @@
                                 </select>
                             </div>
 
+                            <div class="mb-3 col-md-3">
+                                <label for="countryName" class="form-label required">Account Type</label>
+                                <select name="" id="f_account_type" class="form-control" wire:model="f_account_type">
+                                    <option value="">select...</option>
+                                    @foreach ($types as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                         <div class="row mb-0">
                             <div class="mt-4 col-md-1">
@@ -96,11 +106,12 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
+                                        <th>Code</th>
                                         <th>Type</th>
                                         <th>Detail Type</th>
-                                        <th>Tax Rate</th>
+                                        {{-- <th>Tax Rate</th>
                                         <th>Balance</th>
-                                        <th>Bank Balance</th>
+                                        <th>Bank Balance</th> --}}
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -108,12 +119,17 @@
                                     @foreach ($accounts as $key => $account)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $account->name }}</td>
+                                            <td>{{ $account->name }} 
+                                            @if ($account->parent_account)
+                                                Parent ({{ $account->parent->name }})
+                                            @endif
+                                            </td>
+                                            <td>{{ $account->code??'N/A' }}</td>
                                             <td>{{ $account->type->name??'N/A' }}</td>
                                             <td>{{ $account->subType->name??'N/A' }}</td>
-                                            <td>{{ $account->type_id }}</td>
+                                            {{-- <td>{{ $account->type_id }}</td>
                                             <td>{{ $account->primary_balance }}</td>
-                                            <td>{{ $account->bank_balance }}</td>
+                                            <td>{{ $account->bank_balance }}</td> --}}
                                             <td class="table-action">                                                  
                                                     {{-- @livewire('fms.partials.status-component', ['model' => $account, 'field' => 'is_active'], key($account->id)) --}}
                                                     <div class="btn-group btn-sm">
@@ -142,7 +158,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $accounts->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $accounts->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

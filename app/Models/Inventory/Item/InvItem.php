@@ -2,10 +2,11 @@
 
 namespace App\Models\Inventory\Item;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\Inventory\Settings\InvCategory;
 use App\Models\Inventory\Settings\InvUnitOfMeasure;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class InvItem extends Model
 {
@@ -38,7 +39,7 @@ class InvItem extends Model
   public static function boot()
   {
     parent::boot();
-    if (\Auth::check()) {
+    if (Auth::check()) {
       self::creating(function ($model) {
         $model->created_by = auth()->id();
       });
@@ -51,6 +52,7 @@ class InvItem extends Model
     : static::query()
     ->where('name', 'like', '%'.$search.'%')
     ->orWhere('item_code', 'like', '%'.$search.'%')
+    ->orWhere('description', 'like', '%'.$search.'%')
     ->orWhereHas('category', function ($query) use ($search) {
       $query->where('name', 'like', '%'.$search.'%');
     })

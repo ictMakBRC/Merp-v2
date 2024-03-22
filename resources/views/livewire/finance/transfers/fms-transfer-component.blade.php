@@ -56,7 +56,7 @@
                                             <td>{{ $transfer->trx_ref }}</td>
                                             <td>{{ $transfer->trx_date??'N/A' }}</td>
                                             <td>{{ $transfer->project->name??$transfer->department->name??'N/A' }}</td>
-                                            <td>@moneyFormat($transfer->esitmated_income)</td>
+                                            <td>@moneyFormat($transfer->estimated_income)</td>
                                             <td>@moneyFormat($transfer->estimated_expenditure)</td>
                                             <td>{{ $transfer->currency->code??'N/A' }}</td>
                                             @if ($transfer->is_active == 0)
@@ -83,7 +83,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $transfers->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $transfers->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

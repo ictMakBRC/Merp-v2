@@ -14,6 +14,13 @@
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
+
+     <!-- iziToast CSS -->
+     <link href="{{ asset('assets/libs/izitoast/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
+
+     @stack('css')
+
+    @livewireStyles
 </head>
 
 <body id="body" class="auth-page"
@@ -48,7 +55,17 @@
     <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
     <!-- App js -->
+    <script src="{{ asset('assets/libs/izitoast/js/iziToast.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/sweetalert/sweetalert.min.js') }}"></script>
     <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script src="{{ asset('assets/js/index.js') }}"></script>
+
+    @livewireScripts
+
+    @stack('scripts')
+    
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 
 </html>

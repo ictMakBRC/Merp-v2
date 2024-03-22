@@ -1,5 +1,5 @@
 <div>
-    <div class="row" x-data="{ filter_data: @entangle('filter'),create_new: @entangle('createNew') }">
+    <div class="row" x-data="{ filter_data: @entangle('filter'), create_new: @entangle('createNew') }">
         <div class="col-12">
             <div class="card">
                 <div class="card-header pt-0">
@@ -8,7 +8,8 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        Transactions (<span class="text-danger fw-bold">{{ $transactions->total() }}</span>)
+                                        Transactions (<span
+                                            class="text-danger fw-bold">{{ $transactions->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
                                         Edit Transaction
@@ -36,14 +37,12 @@
                         </div>
                         <div class="row mb-0">
                             <div class="mt-4 col-md-1">
-                                <a type="button" class="btn btn-outline-success me-2"
-                                    wire:click="export()">Export</a>
+                                <a type="button" class="btn btn-outline-success me-2" wire:click="export()">Export</a>
                             </div>
 
                             <div class="mb-3 col-md-2">
                                 <label for="from_date" class="form-label">From Date</label>
-                                <input id="from_date" type="date" class="form-control"
-                                    wire:model.lazy="from_date">
+                                <input id="from_date" type="date" class="form-control" wire:model.lazy="from_date">
                             </div>
 
                             <div class="mb-3 col-md-2">
@@ -63,13 +62,11 @@
                             </div>
 
                             <div class="mb-3 col-md-2">
-                                <label for="orderBy" class="form-label">OrderBy</label>
-                                <select wire:model="orderBy" class="form-select">
-                                    <option value="name">Name</option>
-                                    <option value="contact">Contact</option>
-                                    <option value="email">Email</option>
-                                    <option value="id">Latest</option>
-                                    <option value="is_active">Status</option>
+                                <label for="trx_type" class="form-label">Trx Type</label>
+                                <select wire:model="trx_type" class="form-select">
+                                    <option value="0">All</option>
+                                    <option value="Expense">Expense</option>
+                                    <option value="Income">Income</option>
                                 </select>
                             </div>
 
@@ -94,11 +91,13 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>No.</th>
+                                        <th>Unit</th>
                                         <th>Trx No.</th>
                                         <th>Date</th>
-                                        <th>Amount</th>
                                         <th>Type</th>
                                         <th>Currency</th>
+                                        <th>Amount</th>
+                                        <th>Amount ({{ $baseCurrency->code }})</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -106,17 +105,20 @@
                                     @foreach ($transactions as $key => $transaction)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $transaction->trx_no??'' }}</td>
-                                            <td>{{ $transaction->trx_date??'N/A' }}</td>
-                                            <td>{{ $transaction->total_amount }}</td>
+                                            <td>{{ $transaction->requestable->name ?? '' }}</td>
+                                            <td>{{ $transaction->trx_no ?? '' }}</td>
+                                            <td>{{ $transaction->trx_date ?? 'N/A' }}</td>
                                             <td>{{ $transaction->trx_type }}</td>
-                                            <td>{{ $transaction->currency->code??'UGX' }}</td>
-                                            <td class="table-action">                                                  
-                                               
-                                                <a  href="{{URL('finance-main_transaction_view',$transaction->id)}}" class="btn btn-sm btn-outline-secondary">
+                                            <td>{{ $transaction->currency->code ?? 'UGX' }}</td>
+                                            <td>@moneyFormat($transaction->total_amount)</td>
+                                            <td>@moneyFormat($transaction->total_amount * $transaction->rate)</td>
+                                            <td class="table-action">
+
+                                                <a href="{{ URL('finance-main_transaction_view', $transaction->id) }}"
+                                                    class="btn btn-sm btn-outline-secondary">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                   
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -126,7 +128,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $transactions->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $transactions->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>
@@ -136,19 +138,18 @@
         </div><!-- end col-->
     </div>
 
-   
 
-@push('scripts')
-   <script>
-       window.addEventListener('close-modal', event => {
-           $('#updateCreateModal').modal('hide');
-           $('#delete_modal').modal('hide');
-           $('#show-delete-confirmation-modal').modal('hide');
-       });
-       window.addEventListener('delete-modal', event => {
-           $('#delete_modal').modal('show');
-       });
-   </script>
-@endpush
+
+    @push('scripts')
+        <script>
+            window.addEventListener('close-modal', event => {
+                $('#updateCreateModal').modal('hide');
+                $('#delete_modal').modal('hide');
+                $('#show-delete-confirmation-modal').modal('hide');
+            });
+            window.addEventListener('delete-modal', event => {
+                $('#delete_modal').modal('show');
+            });
+        </script>
+    @endpush
 </div>
-

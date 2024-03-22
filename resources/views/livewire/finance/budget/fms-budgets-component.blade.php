@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        budgets (<span class="text-danger fw-bold">{{ $budgets->total() }}</span>)
+                                        Budgets (<span class="text-danger fw-bold">{{ $budgets->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
                                         Edit Customer
@@ -20,6 +20,8 @@
                         </div>
                     </div>
                 </div>
+                
+                    
                 <div class="card-body">
                     @include('livewire.finance.budget.inc.new-budget-form')
                 </div>
@@ -99,12 +101,12 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>fiscal_year</th>
+                                        <th>Fiscal Year</th>
                                         <th>Department/Project</th>
                                         <th>Revenue</th>
                                         <th>Expenditure</th>
                                         <th>Currency</th>
-                                        <th>status</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -115,7 +117,7 @@
                                             <td>{{ $budget->name }}</td>
                                             <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
                                             <td>{{ $budget->project->name??$budget->department->name??'N/A' }}</td>
-                                            <td>@moneyFormat($budget->esitmated_income)</td>
+                                            <td>@moneyFormat($budget->estimated_income)</td>
                                             <td>@moneyFormat($budget->estimated_expenditure)</td>
                                             <td>{{ $budget->currency->code??'N/A' }}</td>
                                             @if ($budget->is_active == 0)
@@ -142,7 +144,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $budgets->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $budgets->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

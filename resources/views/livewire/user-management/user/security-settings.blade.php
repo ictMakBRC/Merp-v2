@@ -19,19 +19,23 @@
                             <div class="accordion-body">
                                 <ul class="list-group list-group-flush">
                                     <li
-                                        class="list-group-item d-flex justify-content-between align-items-center bg-transparent border-top">
-                                        <strong>{{ __('Email 2FA') }}</strong>
+                                        class="list-group-item d-flex justify-content-between align-items-cente bg-transparent border-top">
 
-                                        @if (auth()->user()->two_factor_auth_enabled && auth()->user()->two_factor_channel == 'email')
-                                            <x-button class="btn-outline-danger"
-                                                wire:click="disableTwoFactorAuthentication()">{{ __('public.disable') }}
-                                            </x-button>
-                                        @else
-                                            <x-button class="btn-outline-success"
-                                                wire:click="enableTwoFactorAuthentication('email')">
-                                                {{ __('public.enable') }}
-                                            </x-button>
-                                        @endif
+                                        <div class="modal-footer">
+                                            <strong>{{ __('Email 2FA') }}</strong>
+
+                                            @if (auth()->user()->two_factor_auth_enabled && auth()->user()->two_factor_channel == 'email')
+                                                <x-button class="btn btn-sm btn-outline-danger ms-3"
+                                                    wire:click="disableTwoFactorAuthentication()">{{ __('public.disable') }}
+                                                </x-button>
+                                            @else
+                                                <x-button class="btn btn-sm btn-outline-success ms-3"
+                                                    wire:click="enableTwoFactorAuthentication('email')">
+                                                    {{ __('public.enable') }}
+                                                </x-button>
+                                            @endif
+                                        </div>
+                                     
 
                                     </li>
 

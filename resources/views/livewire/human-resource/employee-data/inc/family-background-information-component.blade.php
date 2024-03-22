@@ -1,7 +1,10 @@
 <div>
     @include('livewire.human-resource.employee-data.inc.loading-info')
 
-    <form wire:submit.prevent="storeFamilyInformation">
+    <form
+        @if (!$toggleForm) wire:submit.prevent="storeFamilyInformation"
+    @else
+    wire:submit.prevent="updateFamilyInformation" @endif>
         <div class="row">
             <div class="mb-3 col-md-3">
                 <label for="member_type" class="form-label required">Member Type</label>
@@ -105,44 +108,83 @@
             </div>
         </div>
         <div class="modal-footer">
-            <x-button class="btn-success">{{__('public.save')}}</x-button>
+            <x-button class="btn btn-success">
+                @if (!$toggleForm)
+                    {{ __('public.save') }}
+                @else
+                    {{ __('public.update') }}
+                @endif
+            </x-button>
         </div>
         <hr>
     </form>
+    <!--FAMILY BACKGROUND INFORMATION-->
+    @if (!$familyInformation->isEmpty())
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped w-100 mb-0">
+                        <thead>
+                            <tr>
 
-    {{-- <div class="row pt-3">
-        <div class="col-12">
-            <div class="card-header pt-0">
-                <div class="row mb-2">
-                    <div class="col-sm-12">
-                        <div class="text-sm-end mt-3">
-                            <h4 class="header-title mb-3  text-center">Children/Dependants</h4>
-                        </div>
-                    </div>
-                </div>
+                                <th>Member</th>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>Occupation</th>
+                                <th>Employer</th>
+                                <th>Employer-Address</th>
+                                <th>Employer-Contact</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        @foreach ($familyInformation as $familybackground)
+                            <tr>
+                                <td>
+                                    {{ $familybackground->member_type }}
+
+                                </td>
+                                <td>
+                                    {{ $familybackground->fullName }}
+                                </td>
+                                <td>
+                                    {{ $familybackground->address ?? 'N/A' }}
+
+                                </td>
+                                <td>
+                                    {{ $familybackground->contact ?? 'N/A' }}
+                                </td>
+                                <td>
+                                    {{ $familybackground->occupation ?? 'N/A' }}
+                                </td>
+                                <td>
+                                    {{ $familybackground->employer ?? 'N/A' }}
+                                </td>
+                                <td>
+                                    {{ $familybackground->employer_address ?? 'N/A' }}
+                                </td>
+                                <td>
+                                    {{ $familybackground->employer_contact ?? 'N/A' }}
+                                </td>
+                                @if ($familybackground->member_status == 'Alive')
+                                    <td><span class="badge bg-success">Alive</span></td>
+                                @else
+                                    <td><span class="badge bg-danger">Deceased</span></td>
+                                @endif
+                                <td>
+                                    <button class="btn btn btn-sm btn-outline-success"
+                                        wire:click="editData({{ $familybackground->id }})"
+                                        title="{{ __('public.edit') }}">
+                                        <i class="ti ti-edit fs-18"></i></button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div> <!-- end preview-->
             </div>
-
-            <div class="card-body">
-                <form>
-                    <div class="row">
-                        <div class="mb-3 col-md-5">
-                            <label for="child_name" class="form-label required">Name of Child</label>
-                            <input type="text" id="child_name" class="form-control" wire:model.defer="child_name"
-                                required>
-                        </div>
-                        <div class="mb-3 col-md-3">
-                            <label for="birth_date" class="form-label required">Birth Date</label>
-                            <input type="date" id="birth_date" class="form-control" wire:model.defer="birth_date"
-                                required>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <x-button class="btn-success">{{__('public.save')}}</x-button>
-                    </div>
-                </form>
-            </div> <!-- end card body-->
-        </div><!-- end col-->
-    </div> --}}
+        </div>
+        <!-- end FAMILY BACKGROUND-->
+    @endif
 
 </div>

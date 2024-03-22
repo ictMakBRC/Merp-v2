@@ -25,7 +25,7 @@
                         </div>
                         <div class="mb-3 col-md-3">
                             <label for="sku" class="form-label required">Sku</label>
-                            <input type="text" id="sku" class="form-control" name="sku" required
+                            <input type="text" id="sku" class="form-control" name="sku" 
                                 wire:model.defer="sku">
                             @error('sku')
                                 <div class="text-danger text-small">{{ $message }}</div>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="mb-3 col-md-3">
                             <label for="sale_price" class="form-label required">Sale Price</label>
-                            <input type="number" step="any" id="sale_price" class="form-control" name="sale_price" required
+                            <input type="number" step="any" id="sale_price" class="form-control" name="sale_price" 
                                 wire:model.defer="sale_price">
                             @error('sale_price')
                                 <div class="text-danger text-small">{{ $message }}</div>

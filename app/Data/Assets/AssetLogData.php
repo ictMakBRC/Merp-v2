@@ -29,7 +29,7 @@ class AssetLogData extends Data
     public ?string $resolution_status;
     public ?string $serviced_by;
     public ?float $cost;
-    public ?string $currency;
+    public ?string $currency_id;
     public ?string $next_service_date;
 
     // Validation rules for the properties
@@ -66,7 +66,7 @@ class AssetLogData extends Data
         return [
         'asset_catalog_id'=>'required|integer',
         'log_type'=>'required|string',
-        'asset_breakdown_id'=>'required|integer',
+        'asset_breakdown_id'=>'nullable|integer',
         'service_type'=>'required|string',
         'date_serviced'=>'required|date|before_or_equal:today',
         'service_action'=>'required|string',
@@ -74,7 +74,7 @@ class AssetLogData extends Data
         'resolution_status'=>'required|string',
         'serviced_by'=>'required|string',
         'cost'=>'required|numeric',
-        'currency'=>'required|string',
+        'currency_id'=>'required|integer',
         'next_service_date'=>'required|date|after:date_serviced',
 
         ];

@@ -1,252 +1,534 @@
 <div>
-    {{-- <div class="page-wrapper">
+    <x-report-layout>
+        <h5 class="text-center">Employee Personal Datasheet</h5>
 
-        <!-- Page Content-->
-        <div class="page-content-tab">
-
-            <div class="container-fluid"> --}}
-                <!-- Page-Title -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="page-title-box">
-                            <div class="float-end">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Metrica</a></li>
-                                    <li class="breadcrumb-item"><a href="#">Apps</a></li>
-                                    <li class="breadcrumb-item active">Invoice</li>
-                                </ol>
-                            </div>
-                            <h4 class="page-title">Invoice</h4>
+        <div class="bg-light">
+            <table class="table">
+                <tr>
+                    <td>
+                        <div>
+                            <strong class="text-inverse">{{ __('public.name') }}:
+                            </strong>{{ $employee->fullName ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Employee No') }}:
+                            </strong>{{ $employee->employee_number ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('NIN') }}:
+                            </strong>{{ $employee->nin_number ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Gender') }}:
+                            </strong>{{ $employee->gender ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Nationality') }}:
+                            </strong>{{ $employee->nationality ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('DoB') }}: </strong>
+                            @formatDate($employee->birth_date ?? now()) <strong>Age:</strong> {{ $employee->employeeAge }} yrs<br>
+                            <strong class="text-inverse">{{ __('Place of Birth') }}:
+                            </strong>{{ $employee->birth_place ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Religious Affiliation') }}:
+                            </strong>{{ $employee->religious_affiliation ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Height') }}:
+                            </strong>{{ $employee->height ?? 'N/A' }}
                         </div>
-                        <!--end page-title-box-->
+                    </td>
+                    <td>
+                        <div>
+                            <strong class="text-inverse">{{ __('Weight') }}:
+                            </strong>{{ $employee->weight ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Blood Type') }}:
+                            </strong>{{ $employee->blood_type ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('CIvil Status') }}:
+                            </strong>{{ $employee->civil_status ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Address') }}:
+                            </strong>{{ $employee->address ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Email') }}:
+                            </strong>{{ $employee->email ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Alternative Email') }}: </strong>
+                            {{ $employee->alt_email }}<br>
+                            <strong class="text-inverse">{{ __('Contact') }}:
+                            </strong>{{ $employee->contact ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Alternative Contact') }}:
+                            </strong>{{ $employee->alt_contact ?? 'N/A' }}<br>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <strong class="text-inverse">{{ __('Position') }}:
+                            </strong>{{ $employee->designation?->name ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Duty Station') }}:
+                            </strong>{{ $employee->station?->name ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Department') }}:
+                            </strong>{{ $employee->department?->name ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Supervisor') }}:
+                            </strong>{{ $employee->supervisor?->fullName ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Work Type') }}:
+                            </strong>{{ $employee->work_type ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('Join Date') }}:
+                            </strong>@formatDate($employee->join_date ?? now())<br>
+                            <strong class="text-inverse">{{ __('TIN') }}:
+                            </strong>{{ $employee->tin_number ?? 'N/A' }}<br>
+                            <strong class="text-inverse">{{ __('NSSF No') }}:
+                            </strong>{{ $employee->nssf_number ?? 'N/A' }}<br>
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!--OFFICIAL CONTRACTS-->
+        @if (!$officialContracts->isEmpty())
+            <div class="row mt-0">
+                <div class="col-lg-12">
+                    <hr>
+                    <div class="card-header">
+                        <h4 class="header-title">Official Contract Information</h4>
                     </div>
-                    <!--end col-->
+                    <div class="table-responsiv">
+                        <table class="table w-100 mb-0 table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Contract Summary</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>G-Pay</th>
+                                    <th>Contract</th>
+                                </tr>
+                            </thead>
+                            @foreach ($officialContracts as $officialContract)
+                                <tr>
+                                    <td>
+                                        {{ $officialContract->contract_summary }}
+                                    </td>
+                                    <td>
+                                        @formatDate($officialContract->start_date)
+                                    </td>
+                                    <td>
+                                        @formatDate($officialContract->end_date)
+                                    </td>
+                                    <td>
+                                        {{ $officialContract->currency->code }} @moneyFormat($officialContract->gross_salary)
+
+                                    </td>
+                                    <td class="table-action ">
+                                        <a href="#" class="btn-outline-success no-print"><i
+                                                class="ti ti-download"></i></a>
+
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div> <!-- end preview-->
                 </div>
-                <!-- end page title end breadcrumb -->
-                <div class="row">
-                    <div class="col-lg-10 mx-auto">
-                        <div class="card">
-                            <div class="card-body invoice-head"> 
-                                <div class="row">
-                                    <div class="col-md-4 align-self-center">                                                
-                                        <img src="assets/images/logo-sm.png" alt="logo-small" class="logo-sm me-1" height="24">                                            
-                                        <img src="assets/images/logo-dark.png" alt="logo-large" class="logo-lg brand-dark" height="16">  
-                                        <img src="assets/images/logo.png" alt="logo-large" class="logo-lg brand-light" height="16"> 
-                                        <p class="mt-2 mb-0 text-muted">If account is not paid within 7 days the credits details supplied as confirmation.</p>                                             
-                                    </div><!--end col-->    
-                                    <div class="col-md-8">
-                                            
-                                        <ul class="list-inline mb-0 contact-detail float-end">                                                   
-                                            <li class="list-inline-item">
-                                                <div class="ps-3">
-                                                    <i class="mdi mdi-web"></i>
-                                                    <p class="text-muted mb-0">www.abcdefghijklmno.com</p>
-                                                    <p class="text-muted mb-0">www.qrstuvwxyz.com</p>
-                                                </div>                                                
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <div class="ps-3">
-                                                    <i class="mdi mdi-phone"></i>
-                                                    <p class="text-muted mb-0">+123 123456789</p>
-                                                    <p class="text-muted mb-0">+123 123456789</p>
-                                                </div>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <div class="ps-3">
-                                                    <i class="mdi mdi-map-marker"></i>
-                                                    <p class="text-muted mb-0">2821 Kensington Road,</p>
-                                                    <p class="text-muted mb-0">Avondale Estates, GA 30002 USA.</p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div><!--end col-->    
-                                </div><!--end row-->     
-                            </div><!--end card-body-->
-                            <div class="card-body">
-                                <div class="row row-cols-3 d-flex justify-content-md-between">
-                                    <div class="col-md-3 d-print-flex">
-                                        <div class="">
-                                            <h6 class="mb-0"><b>Order Date :</b> 11/05/2021</h6>
-                                            <h6><b>Order ID :</b> # 23654789</h6>
-                                        </div>
-                                    </div><!--end col--> 
-                                    <div class="col-md-3 d-print-flex">                                            
-                                        <div class="">
-                                            <address class="font-13">
-                                                <strong class="font-14">Billed To :</strong><br>
-                                                Joe Smith<br>
-                                                795 Folsom Ave<br>
-                                                San Francisco, CA 94107<br>
-                                                <abbr title="Phone">P:</abbr> (123) 456-7890
-                                            </address>
-                                        </div>
-                                    </div><!--end col--> 
-                                    <div class="col-md-3 d-print-flex">
-                                        <div class="">
-                                            <address class="font-13">
-                                                <strong class="font-14">Shipped To:</strong><br>
-                                                Joe Smith<br>
-                                                795 Folsom Ave<br>
-                                                San Francisco, CA 94107<br>
-                                                <abbr title="Phone">P:</abbr> (123) 456-7890
-                                            </address>
-                                        </div>
-                                    </div> <!--end col-->                       
-                                </div><!--end row-->
+            </div>
+        @endif
+        <!-- end OFFICIAL CONTRACTS-->
 
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="table-responsive project-invoice">
-                                            <table class="table table-bordered mb-0">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th>Project Breakdown</th>
-                                                        <th>Hours</th>
-                                                        <th>Rate</th> 
-                                                        <th>Subtotal</th>
-                                                    </tr><!--end tr-->
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <h5 class="mt-0 mb-1 font-14">Project Design</h5>
-                                                            <p class="mb-0 text-muted">It is a long established fact that a reader will be distracted.</p>
-                                                        </td>
-                                                        <td>60</td>
-                                                        <td>$50</td>
-                                                        <td>$3000.00</td>
-                                                    </tr><!--end tr-->
-                                                    <tr>
-                                                        <td>
-                                                            <h5 class="mt-0 mb-1 font-14">Development</h5>
-                                                            <p class="mb-0 text-muted">It is a long established fact that a reader will be distracted.</p>
-                                                        </td>
-                                                        <td>100</td>
-                                                        <td>$50</td>
-                                                        <td>$5000.00</td>
-                                                    </tr><!--end tr-->
-                                                    <tr>
-                                                        <td>
-                                                            <h5 class="mt-0 mb-1 font-14">Testing & Bug Fixing</h5>
-                                                            <p class="mb-0 text-muted">It is a long established fact that a reader will be distracted.</p>
-                                                        </td>
-                                                        <td>10</td>
-                                                        <td>$20</td>
-                                                        <td>$200.00</td>
-                                                    </tr><!--end tr-->
-                                                    
-                                                    <tr>                                                        
-                                                        <td colspan="2" class="border-0"></td>
-                                                        <td class="border-0 font-14 text-dark"><b>Sub Total</b></td>
-                                                        <td class="border-0 font-14 text-dark"><b>$82,000.00</b></td>
-                                                    </tr><!--end tr-->
-                                                    <tr>
-                                                        <th colspan="2" class="border-0"></th>                                                        
-                                                        <td class="border-0 font-14 text-dark"><b>Tax Rate</b></td>
-                                                        <td class="border-0 font-14 text-dark"><b>$0.00%</b></td>
-                                                    </tr><!--end tr-->
-                                                    <tr class="bg-black text-white">
-                                                        <th colspan="2" class="border-0"></th>                                                        
-                                                        <td class="border-0 font-14"><b>Total</b></td>
-                                                        <td class="border-0 font-14"><b>$82,000.00</b></td>
-                                                    </tr><!--end tr-->
-                                                </tbody>
-                                            </table><!--end table-->
-                                        </div>  <!--end /div-->                                          
-                                    </div>  <!--end col-->                                      
-                                </div><!--end row-->
-
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <h5 class="mt-4">Terms And Condition :</h5>
-                                        <ul class="ps-3">
-                                            <li><small class="font-12">All accounts are to be paid within 7 days from receipt of invoice. </small></li>
-                                            <li><small class="font-12">To be paid by cheque or credit card or direct payment online.</small ></li>
-                                            <li><small class="font-12"> If account is not paid within 7 days the credits details supplied as confirmation of work undertaken will be charged the agreed quoted fee noted above.</small></li>                                            
-                                        </ul>
-                                    </div> <!--end col-->                                       
-                                    <div class="col-lg-6 align-self-center">
-                                        <div class="float-none float-md-end" style="width: 30%;">
-                                            <small>Account Manager</small>
-                                            <img src="assets/images/signature.png" alt="" class="mt-2 mb-1" height="20">
-                                            <p class="border-top">Signature</p>
-                                        </div>
-                                    </div><!--end col-->
-                                </div><!--end row-->
-                                <hr>
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-lg-12 col-xl-4 ms-auto align-self-center">
-                                        <div class="text-center"><small class="font-12">Thank you very much for doing business with us.</small></div>
-                                    </div><!--end col-->
-                                    <div class="col-lg-12 col-xl-4">
-                                        <div class="float-end d-print-none mt-2 mt-md-0">
-                                            <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
-                                            <a href="#" class="btn btn-de-primary btn-sm">Submit</a>
-                                            <a href="#" class="btn btn-de-danger btn-sm">Cancel</a>
-                                        </div>
-                                    </div><!--end col-->
-                                </div><!--end row-->
-                            </div><!--end card-body-->
-                        </div><!--end card-->
-                    </div><!--end col-->
-                </div><!--end row-->
-
-            {{-- </div><!-- container --> --}}
-
-            <!--Start Rightbar-->
-            <!--Start Rightbar/offcanvas-->
-            {{-- <div class="offcanvas offcanvas-end" tabindex="-1" id="Appearance" aria-labelledby="AppearanceLabel">
-                <div class="offcanvas-header border-bottom">
-                  <h5 class="m-0 font-14" id="AppearanceLabel">Appearance</h5>
-                  <button type="button" class="btn-close text-reset p-0 m-0 align-self-center" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+         <!--PROJECT CONTRACTS-->
+         @if (!$employee->projects->isEmpty())
+         <div class="row">
+             <div class="col-lg-12">
+                <hr>
+                <div class="card-header">
+                    <h4 class="header-title">Project/Study Contract Information</h4>
                 </div>
-                <div class="offcanvas-body">  
-                    <h6>Account Settings</h6>
-                    <div class="p-2 text-start mt-3">
-                        <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="settings-switch1">
-                            <label class="form-check-label" for="settings-switch1">Auto updates</label>
-                        </div><!--end form-switch-->
-                        <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="settings-switch2" checked>
-                            <label class="form-check-label" for="settings-switch2">Location Permission</label>
-                        </div><!--end form-switch-->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="settings-switch3">
-                            <label class="form-check-label" for="settings-switch3">Show offline Contacts</label>
-                        </div><!--end form-switch-->
-                    </div><!--end /div-->
-                    <h6>General Settings</h6>
-                    <div class="p-2 text-start mt-3">
-                        <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="settings-switch4">
-                            <label class="form-check-label" for="settings-switch4">Show me Online</label>
-                        </div><!--end form-switch-->
-                        <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="settings-switch5" checked>
-                            <label class="form-check-label" for="settings-switch5">Status visible to all</label>
-                        </div><!--end form-switch-->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="settings-switch6">
-                            <label class="form-check-label" for="settings-switch6">Notifications Popup</label>
-                        </div><!--end form-switch-->
-                    </div><!--end /div-->               
-                </div><!--end offcanvas-body-->
-            </div> --}}
-            <!--end Rightbar/offcanvas-->
-            <!--end Rightbar-->
-            
-           <!--Start Footer-->
-           <!-- Footer Start -->
-           <footer class="footer text-center text-sm-start">
-               &copy; <script>
-                   document.write(new Date().getFullYear())
-               </script> Metrica <span class="text-muted d-none d-sm-inline-block float-end">Crafted with <i
-                       class="mdi mdi-heart text-danger"></i> by Mannatthemes</span>
-           </footer>
-           <!-- end Footer -->                
-           <!--end footer-->
-        {{-- </div>
-        <!-- end page content -->
-    </div> --}}
+                 <div class="table-responsiv">
+                     <table
+                         class="table  w-100 mb-0 table-striped text-center">
+                         <thead>
+                             <tr>
+                                 <th>Project</th>
+                                 <th>Contract Summary</th>
+                                 <th>Designation</th>
+                                 <th>From</th>
+                                 <th>To</th>
+                                 <th>FTE</th>
+                                 <th>G-Pay(UGX)</th>
+                                 <th>Contract</th>
+                             </tr>
+                         </thead>
+                         @foreach ($employee->projects as $project)
+                             <tr>
+                                 <td>
+                                     {{ $project->project_code }}
+
+                                 </td>
+                                 <td>
+                                     {{ $project->pivot->contract_summary }}
+                                 </td>
+                                 <td>
+                                     {{ $project->pivot->designation->name }}
+
+                                 </td>
+                                 <td>
+                                     @formatDate($project->pivot->start_date)
+                                 </td>
+                                 <td>
+                                     @formatDate($project->pivot->end_date)
+                                 </td>
+                                 <td>
+                                     {{ $project->pivot->fte ? $project->pivot->fte : 'N/A' }}
+                                 </td>
+                                 <td>
+                                    {{ $project->currency->code }} @moneyFormat($project->pivot->gross_salary)
+
+                                 </td>
+                                 <td class="table-action">
+
+                                    @if ($project->pivot->contract_file != null)
+                                        <a href="#"
+                                            class="btn-outline-success"><i
+                                                class="ti ti-download"></i></a>
+                                    @else
+                                        N/A
+                                    @endif
+                                 </td>
+                             </tr>
+                         @endforeach
+                     </table>
+                 </div> <!-- end preview-->
+             </div>
+         </div>
+     @else
+         <div></div>
+     @endif
+     <!-- end PROJECT CONTRACTS-->
+
+        <!--BANKING INFORMATION-->
+        @if (!$bankingInformation->isEmpty())
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr>
+                    <div class="card-header">
+                        <h4 class="header-title">Banking Information</h4>
+                    </div>
+                    <div class="table-responsiv">
+                        <table class="table table-striped w-100 mb-0  ">
+                            <thead>
+                                <tr>
+                                    <th>Bank Name</th>
+                                    <th>Branch</th>
+                                    <th>Account Name</th>
+                                    <th>Currency</th>
+                                    <th>Acct Number</th>
+                                    <th>State</th>
+                                </tr>
+                            </thead>
+                            @foreach ($bankingInformation as $bankingInfo)
+                                <tr>
+                                    <td>
+                                        {{ $bankingInfo->bank_name }}
+
+                                    </td>
+                                    <td>
+                                        {{ $bankingInfo->branch ?? 'N/A' }}
+
+                                    </td>
+                                    <td>
+                                        {{ $bankingInfo->account_name }}
+                                    </td>
+                                    <td>
+                                        {{ $bankingInfo->currency->code }}
+                                    </td>
+                                    <td>
+                                        {{ $bankingInfo->account_number }}
+                                    </td>
+                                    @if ($bankingInfo->is_default)
+                                        <td><span class="badge bg-success">Primary</span></td>
+                                    @else
+                                        <td><span class="badge bg-info">Secondary</span></td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div> <!-- end preview-->
+                </div>
+            </div>
+        @endif
+        <!-- end BANKING INFORMATION-->
+
+        <!--FAMILY BACKGROUND INFORMATION-->
+        @if (!$familyInformation->isEmpty())
+            <div class="row">
+                <hr>
+                <div class="card-header">
+                    <h4 class="header-title">Family Background Information</h4>
+                </div>
+                <div class="col-lg-12">
+                    <div class="table-responsiv">
+                        <table class="table table-striped w-100 mb-0">
+                            <thead>
+                                <tr>
+
+                                    <th>Member</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Contact</th>
+                                    <th>Occupation</th>
+                                    <th>Employer</th>
+                                    <th>Employer-Address</th>
+                                    <th>Employer-Contact</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            @foreach ($familyInformation as $familybackground)
+                                <tr>
+                                    <td>
+                                        {{ $familybackground->member_type }}
+
+                                    </td>
+                                    <td>
+                                        {{ $familybackground->fullName }}
+                                    </td>
+                                    <td>
+                                        {{ $familybackground->address ?? 'N/A' }}
+
+                                    </td>
+                                    <td>
+                                        {{ $familybackground->contact ?? 'N/A' }}
+                                    </td>
+                                    <td>
+                                        {{ $familybackground->occupation ?? 'N/A' }}
+                                    </td>
+                                    <td>
+                                        {{ $familybackground->employer ?? 'N/A' }}
+                                    </td>
+                                    <td>
+                                        {{ $familybackground->employer_address ?? 'N/A' }}
+                                    </td>
+                                    <td>
+                                        {{ $familybackground->employer_contact ?? 'N/A' }}
+                                    </td>
+                                    @if ($familybackground->member_status == 'Alive')
+                                        <td><span class="badge bg-success">Alive</span></td>
+                                    @else
+                                        <td><span class="badge bg-danger">Deceased</span></td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div> <!-- end preview-->
+                </div>
+            </div>
+        @endif
+        <!-- end FAMILY BACKGROUND-->
+
+        <!--EMERGENCY CONTACT INFORMATION-->
+        @if (!$emergencyInformation->isEmpty())
+            <div class="row">
+                <hr>
+                <div class="card-header">
+                    <h4 class="header-title">Emergency Contact Information</h4>
+                </div>
+                <div class="col-lg-12">
+                    <div class="table-responsiv">
+                        <table class="table table-striped w-100 ">
+                            <thead>
+                                <tr>
+
+                                    <th>Name</th>
+                                    <th>Relationship</th>
+                                    <th>Address</th>
+                                    <th>Contract</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            @foreach ($emergencyInformation as $emergencycontact)
+                                <tr>
+                                    <td>
+                                        {{ $emergencycontact->contact_name }}
+
+                                    </td>
+                                    <td>
+                                        {{ $emergencycontact->contact_relationship }}
+                                    </td>
+                                    <td>
+                                        {{ $emergencycontact->contact_address }}
+
+                                    </td>
+                                    <td>
+                                        {{ $emergencycontact->contact_phone }}
+                                    </td>
+                                    <td>
+                                        {{ $emergencycontact->contact_email }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div> <!-- end preview-->
+                </div>
+            </div>
+            <!-- end EMERGENCY CONTACT INFORMATION-->
+        @endif
+
+        <!--EXPERIENCE BACKGROUND-->
+        @if (!$workExperienceInformation->isEmpty())
+            <div class="row">
+                <hr>
+                <div class="card-header">
+                    <h4 class="header-title">Working Experience Information</h4>
+                </div>
+                <div class="col-lg-12">
+                    <div class="table-responsiv">
+                        <table class="table w-100 mb-0 table-striped ">
+                            <thead>
+                                <tr>
+                                    <th>Organisation</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Position</th>
+                                    <th>Emp-Type</th>
+                                    <th>Responsibility</th>
+                                </tr>
+                            </thead>
+                            @foreach ($workExperienceInformation as $experience)
+                                <tr>
+                                    <td>
+                                        {{ $experience->company }}
+                                    </td>
+                                    <td>
+                                        @formatDate($experience->start_date)
+                                    </td>
+                                    <td>
+                                        @formatDate($experience->end_date)
+                                    </td>
+                                    <td>
+                                        {{ $experience->position_held }}
+
+                                    </td>
+
+                                    <td>
+                                        {{ $experience->employment_type }}
+                                    </td>
+                                    <td>
+                                        {{ $experience->key_responsibilities }}
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                        </table>
+                    </div> <!-- end preview-->
+                </div>
+            </div>
+        @endif
+        <!-- end WORK EXPERIENCE-->
+
+        <!--TRAINING PROGRAMS-->
+        @if (!$trainingInformation->isEmpty())
+            <div class="row">
+                <hr>
+                <div class="card-header">
+                    <h4 class="header-title">Trainings Information</h4>
+                </div>
+                <div class="col-lg-12">
+                    <div class="table-responsiv">
+                        <table class="table w-100 mb-0 table-striped ">
+                            <thead>
+                                <tr>
+                                    <th>Training</th>
+                                    <th>Organisation</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Description</th>
+                                    <th>Certificate</th>
+                                </tr>
+                            </thead>
+                            @foreach ($trainingInformation as $training)
+                                <tr>
+                                    <td>
+                                        {{ $training->training_title }}
+
+                                    </td>
+                                    <td>
+                                        {{ $training->organised_by }}
+                                    </td>
+                                    <td>
+                                        @formatDate($training->start_date)
+                                    </td>
+                                    <td>
+                                        @formatDate($training->end_date)
+                                    </td>
+
+                                    <td>
+                                        {{ $training->description }}
+                                    </td>
+                                    <td class="table-action ">
+                                        @if ($training->certificate != null)
+                                            <a href="#" class="btn-outline-success no-print"><i
+                                                    class="ti ti-download"></i></a>
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div> <!-- end preview-->
+                </div>
+            </div>
+        @endif
+        <!-- end TRAINING PROGRAMS-->
+
+        <!--EDUCATION BACKGROUND-->
+        @if (!$educationInformation->isEmpty())
+            <div class="row">
+                <hr>
+                <div class="card-header">
+                    <h4 class="header-title">Education Background Information</h4>
+                </div>
+                <div class="col-lg-12">
+                    <div class="table-responsiv">
+                        <table class="table w-100 mb-0 table-striped ">
+                            <thead>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Institution</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Award</th>
+                                    <th>File</th>
+                                </tr>
+                            </thead>
+                            @foreach ($educationInformation as $award)
+                                <tr>
+                                    <td>
+                                        {{ $award->level }}
+                                    </td>
+                                    <td>
+                                        {{ $award->school }}
+
+                                    </td>
+                                    <td>
+                                        @formatDate($award->start_date)
+                                    </td>
+                                    <td>
+                                        @formatDate($award->end_date)
+                                    </td>
+                                    <td>
+                                        {{ $award->award }}
+                                    </td>
+                                    <td class="table-action ">
+                                        @if ($award->award_document != null)
+                                            <a href="#" class="btn-outline-success"><i
+                                                    class="ti ti-download"></i></a>
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div> <!-- end preview-->
+                </div>
+            </div>
+        @endif
+        <!-- end EDUCATION BACKGROUND-->
+
+        
+
+        <x-slot:action>
+            <div class="col-lg-12 col-xl-12">
+                <div class="float-end d-print-none mt-2 mt-md-0">
+                    <a href="javascript:window.print()" class="btn btn-de-info btn-sm">Print</a>
+                </div>
+            </div>
+        </x-slot>
+    </x-report-layout>
+
 </div>

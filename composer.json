@@ -43,7 +43,9 @@
         },
         "files": [
             "app/Lib/constants.php",
-            "app/Lib/helpers.php"
+            "app/Lib/helpers.php",
+            "app/Helpers/helpers.php",
+            "app/Helpers/finance_helpers.php"
         ]
     },
     "autoload-dev": {

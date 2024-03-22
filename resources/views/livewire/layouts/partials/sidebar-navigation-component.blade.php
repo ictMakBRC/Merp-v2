@@ -38,7 +38,7 @@
 
                         <li class="nav-item" data-bs-toggle="tooltip" data-bs-placement="right" title="Finance"
                             data-bs-trigger="hover">
-                            <a href="#financeManagement" id="financeManagement-tab" class="nav-link">
+                            <a  href="#financeManagement" id="financeManagement-tab" class="nav-link">
                                 <i class="ti ti-report-money menu-icon"></i>
                             </a>
                             <!--end nav-link-->
@@ -163,15 +163,17 @@
                 <!--end grants and projects -->
 
                 <!--start finance -->
-                <livewire:layouts.partials.inc.finance.finance-navigation-component />
+                @if (Auth::user()->hasPermission(['access_finance_module']))
+                    <livewire:layouts.partials.inc.finance.finance-navigation-component />
+                @endif
                 <!--end finance -->
 
                 <!--start inventory -->
-                <livewire:layouts.partials.inc.inventory.inventory-navigation-component />
+                {{-- <livewire:layouts.partials.inc.inventory.inventory-navigation-component /> --}}
                 <!--end inventory -->
 
                 <!--start assets -->
-                <livewire:layouts.partials.inc.assets.assets-navigation-component />
+                {{-- <livewire:layouts.partials.inc.assets.assets-navigation-component /> --}}
                 <!--end assets -->
 
                 <!--start procurement -->
@@ -179,8 +181,20 @@
                 <!--end procurement -->
 
                 <!--start documents -->
-                <livewire:layouts.partials.inc.documents.documents-navigation-component />
+                @if (Auth::user()->hasPermission(['access_document_management_module']))
+                    <livewire:layouts.partials.inc.documents.documents-navigation-component />
+                @endif
                 <!--end documents -->
+
+                <!--start inventory -->
+                <livewire:layouts.partials.inc.inventory.inventory-navigation-component />
+                <!--end inventory -->
+
+                <!--start assets -->
+                <livewire:layouts.partials.inc.assets.assets-navigation-component />
+                <!--end assets --> 
+
+
 
                 <!--start user-management -->
                 @include('livewire.layouts.partials.inc.user-management.user-mgt-nav')
@@ -190,5 +204,6 @@
             <!--end menu-body-->
         </div><!-- end main-menu-inner-->
     </div>
+    @include('livewire.layouts.partials.inc.inventory.inc.select-user-department-modal')
 </div>
-@include('livewire.layouts.partials.inc.inventory.inc.select-user-department-modal')
+

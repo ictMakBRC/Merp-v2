@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\HumanResource\Settings;
 
-use App\Models\HumanResource\EmployeeData\Employee;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Department;
+use App\Models\HumanResource\EmployeeData\Employee;
+use App\Exports\HumanResource\Settings\DepartmentListExport;
 
 class DepartmentsComponent extends Component
 {
@@ -75,7 +76,7 @@ class DepartmentsComponent extends Component
             'is_active' => 'required|string',
             'description' => 'nullable|string',
             'type' => 'required|string',
-            'prefix' => 'required|string',
+            'prefix' => 'required|string|unique:departments',
             'parent_department' => 'nullable|integer',
             'supervisor' => 'nullable|integer',
             'asst_supervisor' => 'nullable|integer',
@@ -89,7 +90,7 @@ class DepartmentsComponent extends Component
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
             'type' => 'required|string',
-            'prefix' => 'required|string',
+            'prefix' => 'required|string|unique:departments',
             'parent_department' => 'nullable|integer',
             'supervisor' => 'nullable|integer',
             'asst_supervisor' => 'nullable|integer',
@@ -103,7 +104,7 @@ class DepartmentsComponent extends Component
         $department->supervisor = $this->supervisor??null;
         $department->asst_supervisor = $this->asst_supervisor??null;
         $department->type = $this->type;
-        $department->prefix = $this->prefix;
+        $department->prefix = removeSymbolsAndTransform($this->prefix);
         $department->parent_department = $this->parent_department??null;
         $department->save();
         $this->dispatchBrowserEvent('close-modal');
@@ -141,15 +142,20 @@ class DepartmentsComponent extends Component
     public function updateDepartment()
     {
         $this->validate([
-            'name' => 'required|unique:Departments,name,'.$this->edit_id.'',
+            'name' => 'required|unique:departments,name,'.$this->edit_id.'',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
             'type' => 'required|string',
-            'prefix' => 'required|string',
+            'prefix' => 'required|string|unique:departments,prefix,'.$this->edit_id.'',
             'parent_department' => 'nullable|integer',
             'supervisor' => 'nullable|integer',
             'asst_supervisor' => 'nullable|integer',
         ]);
+        if(!$this->parent_department || $this->parent_department==0){
+            $parent_department = null;
+        }else{
+            $parent_department = $this->parent_department;
+        }
 
         $department = Department::find($this->edit_id);
         $department->name = $this->name;
@@ -158,8 +164,8 @@ class DepartmentsComponent extends Component
         $department->supervisor = $this->supervisor;
         $department->asst_supervisor = $this->asst_supervisor;
         $department->type = $this->type;
-        $department->prefix = $this->prefix;
-        $department->parent_department = $this->parent_department;
+        $department->prefix = removeSymbolsAndTransform($this->prefix);
+        $department->parent_department = $parent_department;
         $department->update();
 
         $this->resetInputs();
@@ -178,7 +184,7 @@ class DepartmentsComponent extends Component
     public function export()
     {
         if (count($this->departmentIds) > 0) {
-            // return (new DepartmentsExport($this->departmentIds))->download('Departments_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+            return (new DepartmentListExport($this->departmentIds))->download('Departments_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'warning',

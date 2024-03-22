@@ -7,6 +7,14 @@
                 <div class="row">
 
                     <div class="mb-3 col-md-12">
+                        <label for="item_name" class="form-label required">{{ __('Item Name') }}</label>
+                        <input type="text" id="item_name" class="form-control" wire:model.defer="item_name">
+                        @error('item_name')
+                            <div class="text-danger text-small">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 col-md-12">
                         <label for="description" class="form-label required">{{ __('Description') }}</label>
                         <textarea type="text" id="description" class="form-control" wire:model.defer="description" rows="3"></textarea>
                         @error('description')
@@ -65,6 +73,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
+                                    <th>{{ __('Item Name') }}</th>
                                     <th>{{ __('Description') }}</th>
                                     <th>{{ __('Quantity') }}</th>
                                     <th>{{ __('Estimated Unit Cost') }}</th>
@@ -76,33 +85,41 @@
                                 @foreach ($items as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
+                                        <td>{{ $item->item_name??'N/A' }}</td>
                                         <td>{!! nl2br(e($item->description)) !!}</td>
                                         <td>{{ $item->quantity }}</td>
-                                        <td>{{ $item->estimated_unit_cost }}</td>
-                                        <td>{{ $item->total_cost }}</td>
+                                        <td>@moneyFormat($item->estimated_unit_cost)</td>
+                                        <td>@moneyFormat($item->total_cost)</td>
 
                                         <td>
-                                            <button class="btn btn btn-sm btn-outline-danger" wire:click="deleteItem({{ $item->id }})" data-bs-toggle="tooltip" data-bs-placement="right" title="{{__('public.delete')}}" data-bs-trigger="hover">
-                                    <i class="ti ti-x fs-18"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                wire:click="deleteItem({{ $item->id }})" title="{{ __('public.delete') }}">
+                                                <i class="ti ti-x fs-18"></i></button>
                                         </td>
                                     </tr>
+                                    
                                 @endforeach
+                                <tr>
+                                    <td colspan="5" class="text-end">Total ({{ $procurementRequest->currency->code }})</td>
+                                    <td>@moneyFormat($items->sum('total_cost'))</td>
+
+                                </tr>
                             </tbody>
                         </table>
                     </div> <!-- end preview-->
 
                 </div> <!-- end tab-content-->
             @else<div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-                <div class="d-flex align-items-center">
-                    <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
-                    </div>
-                    <div class="ms-3">
-                        <h6 class="mb-0 text-warning">{{ __('Items') }}</h6>
-                        <div>{{ __('public.not_found') }}
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-warning"><i class='bx bx-primary-circle'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-warning">{{ __('Items') }}</h6>
+                            <div>{{ __('public.not_found') }}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>

@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    expenses (<span class="text-danger fw-bold">{{ $expenses->total() }}</span>)
+                                    Expense Transactions (<span class="text-danger fw-bold">{{ $expenses->total() }}</span>)
                                     @include('livewire.layouts.partials.inc.filter-toggle')
                                 </h5>
                                 @include('livewire.layouts.partials.inc.create-resource-alpine')
@@ -74,7 +74,7 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $expense->trx_ref }}</td>
                                             <td>{{ $expense->trx_date ?? 'N/A' }}</td>
-                                            <td>{{ $expense->project->name ?? ($expense->department->name ?? 'N/A') }}
+                                            <td>{{ $expense->requestable->name ?? 'N/A' }}
                                             </td>
                                             <td>@moneyFormat($expense->total_amount)</td>
                                             <td>@moneyFormat($expense->rate)</td>
@@ -105,7 +105,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $expenses->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $expenses->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

@@ -2,14 +2,15 @@
 
 namespace App\Models\Finance\Budget;
 
-use App\Models\Finance\Settings\FmsCurrency;
-use App\Models\Finance\Settings\FmsFinancialYear;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Finance\Settings\FmsCurrency;
+use App\Models\Finance\Settings\FmsFinancialYear;
 use App\Models\HumanResource\Settings\Department;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FmsBudget extends Model
@@ -26,6 +27,11 @@ class FmsBudget extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
+    }
+
+    public function requestable(): MorphTo
+    {
+        return $this->morphTo();
     }
 
     public function project()
@@ -52,6 +58,9 @@ class FmsBudget extends Model
        return $this->belongsTo(FmsFinancialYear::class, 'fiscal_year', 'id');
     }
       
+    // function adjustments() {
+    //     return $this->hasMany(B)
+    // }
     public static function boot()
     {
         parent::boot();
@@ -74,7 +83,7 @@ class FmsBudget extends Model
 
     protected $fillable =[
         'name',           
-        'esitmated_income',
+        'estimated_income',
         'estimated_expenditure',     
         'fiscal_year',
         'department_id',
@@ -83,5 +92,8 @@ class FmsBudget extends Model
         'created_by',
         'updated_by',
         'is_active',
+        'estimated_income_local',
+        'estimated_expense_local',
+        'rate'
     ];
 }

@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Traits\CurrencyTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OfficialContract extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory,LogsActivity,CurrencyTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -27,11 +28,6 @@ class OfficialContract extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
-    }
-
-    public function currency()
-    {
-        return $this->belongsTo(FmsCurrency::class, 'currency', 'code');
     }
 
     public function currencyUpdates()
@@ -76,6 +72,7 @@ class OfficialContract extends Model
             });
         }
     }
+    
     public static function search($search)
     {
         return empty($search) ? static::query()

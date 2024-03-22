@@ -11,6 +11,9 @@ use App\Models\Finance\Settings\FmsCurrency;
 use App\Models\Finance\Settings\FmsCustomer;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\Finance\Accounting\FmsLedgerAccount;
+use App\Models\Finance\Budget\FmsBudgetLine;
+use App\Models\Finance\Budget\FmsUnitBudgetLine;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FmsTransaction extends Model
@@ -28,14 +31,23 @@ class FmsTransaction extends Model
             ->dontSubmitEmptyLogs();
         // Chain fluent methods for configuration options
     }
+    public function requestable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+    public function budgetLine()
+    {
+        return $this->belongsTo(FmsBudgetLine::class, 'budget_line_id', 'id');
+    }
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 
+
     public function fromAccount()
     {
-        return $this->belongsTo(FmsLedgerAccount::class, 'from_account', 'id');
+        return $this->belongsTo(FmsLedgerAccount::class, 'ledger_account', 'id');
     }
 
     public function toAccount()
@@ -82,7 +94,9 @@ class FmsTransaction extends Model
         'trx_ref',
         'trx_date',
         'total_amount',
+        'amount_local',
         'rate',
+        'rate_to',
         'department_id',    
         'project_id',
         'billed_department',    
@@ -90,7 +104,7 @@ class FmsTransaction extends Model
         'customer_id',
         'currency_id',
         'budget_line_id',
-        'from_account',
+        'ledger_account',
         'to_account',
         'trx_type',
         'entry_type',
@@ -100,5 +114,9 @@ class FmsTransaction extends Model
         'updated_by',
         'is_active',
         'is_department',
+        'line_balance', 
+        'line_amount', 
+        'account_amount', 
+        'account_balance', 
     ];
 }

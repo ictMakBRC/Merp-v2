@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\Grants\Dashboard\ProjectsDashboardComponent;
 use App\Http\Livewire\Grants\GrantProfileComponent;
 use App\Http\Livewire\Grants\GrantsComponent;
 use App\Http\Livewire\Grants\Projects\ProjectComponent;
@@ -15,4 +16,6 @@ Route::group(['prefix' => 'grants'], function () {
         Route::get('manage', ProjectComponent::class)->name('manage-projects');
         Route::get('{id}/profile', ProjectProfileComponent::class)->name('project-profile');
     });
+
+    Route::get('dashboard', ProjectsDashboardComponent::class)->name('projects-dashboard');
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Finance\Settings;
 
+use App\Models\Finance\Accounting\FmsChartOfAccount;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Finance\Settings\FmsServiceCategory;
@@ -31,7 +32,7 @@ class FmsServiceCategoriesComponent extends Component
     
         public $description;
     
-        public $totalMembers;
+        public $account_id;
     
         public $delete_id;
     
@@ -61,6 +62,7 @@ class FmsServiceCategoriesComponent extends Component
             $this->validateOnly($fields, [
                 'name' => 'required|string',
                 'is_active' => 'required|integer',
+                'account_id' => 'required|integer',
                 'description' => 'nullable|string',
             ]);
         }
@@ -69,12 +71,14 @@ class FmsServiceCategoriesComponent extends Component
         {
             $this->validate([
                 'name' => 'required|string|unique:fms_service_categories',
+                'account_id' => 'required|integer',
                 'is_active' => 'required|numeric',
                 'description' => 'nullable|string',
     
             ]);
     
             $category = new FmsServiceCategory();
+            $category->account_id = $this->account_id;
             $category->name = $this->name;
             $category->is_active = $this->is_active;
             $category->description = $this->description;
@@ -86,6 +90,7 @@ class FmsServiceCategoriesComponent extends Component
     
         public function editData(FmsServiceCategory $category)
         {
+            $this->account_id = $category->account_id;
             $this->edit_id = $category->id;
             $this->name = $category->name;
             $this->is_active = $category->is_active;
@@ -116,6 +121,7 @@ class FmsServiceCategoriesComponent extends Component
     
             $category = FmsServiceCategory::find($this->edit_id);
             $category->name = $this->name;
+            $category->account_id = $this->account_id;
             $category->is_active = $this->is_active;
             $category->description = $this->description;
             $category->update();
@@ -148,7 +154,7 @@ class FmsServiceCategoriesComponent extends Component
     
         public function filterCategories()
         {
-            $categorys = FmsServiceCategory::search($this->search)
+            $categorys = FmsServiceCategory::search($this->search)->with('category')
                 ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                     $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
                 }, function ($query) {
@@ -165,6 +171,7 @@ class FmsServiceCategoriesComponent extends Component
             $data['categories'] = $this->filterCategories()
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->paginate($this->perPage);
+                $data['accounts']= FmsChartOfAccount::where(['account_type'=>4,'is_budget'=>2])->get();
             return view('livewire.finance.settings.fms-service-categories-component', $data);
         }
 }

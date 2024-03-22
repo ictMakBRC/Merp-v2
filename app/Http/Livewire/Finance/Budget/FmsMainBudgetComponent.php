@@ -50,8 +50,10 @@ class FmsMainBudgetComponent extends Component
     public $incomes;
     public $departMentBudgets;
     public $projecttBudgets;
+    public $financialYear;
     public function mount($year)
     {
+        $this->financialYear = FmsFinancialYear::where('id',$year)->first();
         $this->fiscal_year = $year;
         $this->budget_lines  = collect([]);
         $this->budget_data  = null;
@@ -144,7 +146,7 @@ class FmsMainBudgetComponent extends Component
                 
         
                     // Group the converted amount by chart_of_account_id along with chart of account details
-                    if (isset($projectBudgets[$budgetProject])) {
+                    if (isset($projectBudgets[$budgetProject]) && isset($projectBudgets[$budgetProject]['amount'])) {
                         $projectBudgets[$budgetProject]['amount'] += $convertedProjectAmount;
                     } else {
                         $projectBudgets[$budgetProject] = [

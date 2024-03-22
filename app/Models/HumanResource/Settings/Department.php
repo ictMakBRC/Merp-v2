@@ -2,20 +2,22 @@
 
 namespace App\Models\HumanResource\Settings;
 
-use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
-use App\Models\AssetsManagement\Asset;
 use App\Models\Grants\Project\Project;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\ProcurementRequestableTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Finance\Accounting\FmsLedgerAccount;
 use App\Models\HumanResource\EmployeeData\Employee;
+use App\Traits\AssetableTrait;
+use App\Traits\AssetLoggableTrait;
+use App\Traits\DocumentableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Department extends Model
 {
-    use HasFactory,LogsActivity, ProcurementRequestableTrait;
+    use HasFactory,LogsActivity, ProcurementRequestableTrait,DocumentableTrait,AssetableTrait,AssetLoggableTrait;
 
     public function getActivitylogOptions(): LogOptions
     {
@@ -32,10 +34,11 @@ class Department extends Model
 
     protected $parentColumn = 'parent_department';
 
-    public function requests(): MorphMany
-    {
-        return $this->morphMany(Request::class, 'requestable');
-    }
+    // public function requests(): MorphMany
+    // {
+    //     return $this->morphMany(Request::class, 'requestable');
+    // }
+
     public function parent()
     {
         return $this->belongsTo(Department::class,$this->parentColumn);
@@ -51,25 +54,35 @@ class Department extends Model
         return $this->children()->with('allChildren');
     }
 
-    public function supervisor()
+    public function employees()
     {
-        return $this->hasOne(Employee::class,'supervisor','id');
+        return $this->hasMany(Employee::class, 'department_id','id');
+    }
+
+    public function dept_supervisor()
+    {
+        return $this->belongsTo(Employee::class,'supervisor','id');
     }
 
     public function ast_supervisor()
     {
-        return $this->hasOne(Employee::class,'asst_supervisor','id');
+        return $this->belongsTo(Employee::class,'asst_supervisor','id');
     }
 
-    public function assets()
-    {
-        return $this->hasMany(Asset::class);
-    }
+    // public function assets()
+    // {
+    //     return $this->hasMany(AssetsCatalog::class);
+    // }
 
     public function projects()
     {
         return $this->belongsToMany(Project::class,'department_project','department_id','project_id')
         ->withTimestamps();
+    }
+
+    public function ledger()
+    {
+        return $this->HasOne(FmsLedgerAccount::class, 'department_id', 'id');
     }
 
     public static function boot()

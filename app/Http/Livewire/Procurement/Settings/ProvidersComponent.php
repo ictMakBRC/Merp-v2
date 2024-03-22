@@ -44,8 +44,8 @@ class ProvidersComponent extends Component
 
     public function updatedCreateNew()
     {
-        // $this->reset();
-        $this->toggleForm = !$this->toggleForm;
+        // $this->resetInputs();
+        $this->toggleForm = false;
     }
 
     public function updatingSearch()
@@ -53,10 +53,22 @@ class ProvidersComponent extends Component
         $this->resetPage();
     }
 
+    public function loadProvider(Provider $provider):void
+    {
+        $loadingInfo = 'For '.$provider->name.' | '.$provider->code;
+            $this->emit('loadProvider', [
+                'providerId' => $provider->id,
+                'info'=>$loadingInfo,
+            ]);
+           
+        $this->createNew = true;
+        $this->toggleForm = true;
+    }
+
     
     public function filterProviders()
     {
-        $providers = Provider::search($this->search)
+        $providers = Provider::search($this->search)->with('procurement_requests')
             ->when($this->from_date != '' && $this->to_date != '', function ($query) {
                 $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
             }, function ($query) {

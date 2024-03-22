@@ -19,15 +19,15 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="mb-3 col-md-12">
-                            <label for="asset_classifications_id" class="form-label">Classification</label>
-                            <select class="form-select select2" id="asset_classifications_id"
-                                wire:model.defer="asset_classifications_id">
+                            <label for="asset_classification_id" class="form-label">Classification</label>
+                            <select class="form-select select2" id="asset_classification_id"
+                                wire:model.defer="asset_classification_id">
                                 <option selected value="">Select</option>
                                 @foreach ($classifications as $classification)
                                     <option value="{{ $classification->id }}">{{ $classification->name }}</option>
                                 @endforeach
                             </select>
-                            @error('asset_classifications_id')
+                            @error('asset_classification_id')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div>
@@ -37,6 +37,16 @@
                             </label>
                             <input type="text" id="category" class="form-control" wire:model.defer="name">
                             @error('name')
+                                <div class="text-danger text-small">{{ $message }}</div>
+                            @enderror
+                        </div> <!-- end col -->
+
+                        <div class="mb-3 col-md-12">
+                            <label for="short_code" class="form-label">
+                                Short Code
+                            </label>
+                            <input type="text" class="form-control" wire:model.defer="short_code">
+                            @error('short_code')
                                 <div class="text-danger text-small">{{ $message }}</div>
                             @enderror
                         </div> <!-- end col -->

@@ -8,7 +8,7 @@
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
                                     @if (!$toggleForm)
-                                        budgets (<span class="text-danger fw-bold">{{ $budgets->total() }}</span>)
+                                        Main Budgets (<span class="text-danger fw-bold">{{ $budgets->total() }}</span>)
                                         @include('livewire.layouts.partials.inc.filter-toggle')
                                     @else
                                         Edit Customer
@@ -95,9 +95,9 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Name</th>
-                                        <th>fiscal_year</th>
-                                        {{-- <th>Revenue</th>
-                                        <th>Expenditure</th> --}}
+                                        <th>Fiscal Year</th>
+                                        <th>Revenue</th>
+                                        <th>Expenditure</th>
                                         <th>Currency</th>
                                         <th>Action</th>
                                     </tr>
@@ -108,8 +108,8 @@
                                             <td>{{ $key + 1 }}</td>
                                             <td>MakBRC BUDGET{{ $budget->fiscalYear->name??'' }}</td>
                                             <td>{{ $budget->fiscalYear->name??'N/A' }}</td>
-                                            {{-- <td>{{ $budget->total_income }}</td>
-                                            <td>{{ $budget->total_expenses }}</td> --}}
+                                            <td>@moneyFormat($budget->total_income)</td>
+                                            <td>@moneyFormat($budget->total_expenses)</td>
                                             <td>{{ $budget->currency->code??'UGX' }}</td>
                                             <td class="table-action">                                                  
                                                
@@ -126,7 +126,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $budgets->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $budgets->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

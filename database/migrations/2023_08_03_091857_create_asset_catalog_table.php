@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('asset_catalog', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('asset_categories_id')->constrained('asset_categories', 'id')->onUpdate('cascade')->onDelete('restrict');
+            $table->string('entry_type');
+            $table->morphs('assetable');
+            $table->foreignId('asset_category_id')->constrained('asset_categories', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('asset_name');
             $table->string('brand')->nullable();
             $table->string('model')->nullable();
@@ -22,19 +24,18 @@ return new class extends Migration
             $table->string('engraved_label')->nullable()->unique();
             $table->string('description')->nullable();
            
-            $table->string('acquisition_type')->nullable();
-            $table->unsignedBigInteger('project_id')->nullable();
-
+            $table->string('acquisition_type');
+            $table->foreignId('procurement_request_id')->nullable()->constrained('procurement_requests', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->date('procurement_date')->nullable();
-            $table->string('procurement_type')->nullable();
+            // $table->string('procurement_type')->nullable();
             $table->string('invoice_number')->nullable();
             $table->float('cost',12,2)->nullable();
-            $table->string('currency')->nullable();
-            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('supplier_id')->nullable()->references('id')->on('providers')->constrained()->onUpdate('cascade')->onDelete('restrict');
 
             $table->boolean('has_service_contract')->default(false);
             $table->date('service_contract_expiry_date')->nullable();
-            $table->unsignedBigInteger('service_provider')->nullable();
+            $table->foreignId('service_provider')->nullable()->references('id')->on('providers')->constrained()->onUpdate('cascade')->onDelete('restrict');
 
             $table->text('warranty_details')->nullable();
 
@@ -43,7 +44,7 @@ return new class extends Migration
             $table->string('salvage_value')->nullable();
 
             $table->string('asset_condition');
-            $table->boolean('operational_status')->default(1);
+            $table->string('operational_status');
             $table->foreignId('created_by')->nullable()->constrained('users', 'id')->onUpdate('cascade')->onDelete('restrict');
 
             $table->timestamps();

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('grant_type')->nullable();
             $table->string('funding_source')->nullable();
             $table->decimal('funding_amount', 10, 2)->nullable();
-            $table->string('currency')->nullable();
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->date('proposal_submission_date');

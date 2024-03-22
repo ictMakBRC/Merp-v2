@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\HumanResource\EmployeeData\Employee;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Procurement\Request\ProcurementRequestApproval;
 
 class User extends Authenticatable
 {
@@ -57,11 +58,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'funder_projects' => 'array',
+        'monitored_departments' => 'array',
     ];
 
     public function employee()
     {
         return $this->belongsTo(Employee::class,'employee_id','id');
+    }
+
+    public function procurement_request_approvals()
+    {
+        return $this->hasMany(ProcurementRequestApproval::class, 'approver_id');
     }
 
     protected function passwordUpdatedAt(): Attribute

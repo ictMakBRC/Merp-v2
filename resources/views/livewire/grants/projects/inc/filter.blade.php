@@ -1,28 +1,106 @@
 <div class="row mb-0" x-show="filter_data">
-    <h6>{{ __('user-mgt.filter_users') }}</h6>
-
+    <h6>{{ __('Filter Projects') }}</h6>
     <div class="mb-3 col-md-3">
-        <label for="user_category" class="form-label">{{ __('user-mgt.user_category') }}</label>
-        <select class="form-select select2" id="user_category" wire:model='user_category'>
-            <option selected value="">All</option>
-            <option value='Normal-User'>Normal User</option>
-            <option value='System-Admin'>System Admin</option>
-            <option value='External-Application'>External Application</option>
+        <label for="project_category" class="form-label required">{{ __('Category') }}</label>
+        <select class="form-select" id="project_category" wire:model.lazy="project_category">
+            <option selected value="">Select</option>
+            <option value="Project">Project</option>
+            <option value="Study">Study</option>
+            <option value="Grant">Grant</option>
         </select>
-        <div class="text-info" wire:loading wire:target='user_category'>
+        <div class="text-info" wire:loading wire:target='project_category'>
             <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
                 <span class='sr-only'></span>
             </div>
         </div>
     </div>
+
     <div class="mb-3 col-md-3">
-        <label for="user_status" class="form-label">{{ __('public.status') }}</label>
-        <select wire:model="user_status" class="form-select select2" id="user_status">
-            <option value="">Select</option>
-            <option value="1">Active</option>
-            <option value="0">Suspended</option>
+        <label for="project_type" class="form-label required">{{ __('Type') }}</label>
+        <select class="form-select" id="project_type" wire:model.lazy="project_type">
+            <option selected value="">Select</option>
+            @if ($project_category == 'Grant')
+                <option value="Research">Research Grant</option>
+                <option value="Health-Medical">Health and Medical Research Grant</option>
+                <option value="Education">Education Grant</option>
+                <option value="Equipment">Equipment Grant</option>
+                <option value="Training">Training Grant</option>
+                <option value="Program-Development">Program Development Grant</option>
+                <option value="Community-Outreach">Community Outreach Grant</option>
+                <option value="Capacity-Building">Capacity Building Grant</option>
+                <option value="International-Collaboration">International Collaboration Grant
+                </option>
+                <option value="Environmental">Environmental Grant</option>
+                <option value="Humanitarian">Humanitarian Grant</option>
+                <option value="Technology-Innovation">Technology Innovation Grant</option>
+                <option value="Innovation-Entrepreneurship">Innovation and Entrepreneurship Grant
+                </option>
+                <option value="Arts-Culture">Arts and Culture Grant</option>
+                <option value="Travel">Travel Grant</option>
+            @else
+                <option value="Primary">Primary</option>
+                <option value="Non-Primary">Non-Primary</option>
+            @endif
         </select>
-        <div class="text-info" wire:loading wire:target='user_status'>
+        <div class="text-info" wire:loading wire:target='project_type'>
+            <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
+                <span class='sr-only'></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 col-md-3 ">
+        <label for="pi" class="form-label">Principal Investigator</label>
+        <select class="form-select" wire:model='pi'>
+            <option value="0" selected>All</option>
+            @forelse ($employees as $employee)
+                <option value="{{ $employee->id }}">{{ $employee->fullName }}
+                </option>
+            @empty
+            @endforelse
+        </select>
+        <div class="text-info" wire:loading wire:target='pi'>
+            <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
+                <span class='sr-only'></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3 col-md-3">
+        <label for="progress_status" class="form-label required">{{ __('Progress Status') }}</label>
+        <select class="form-select" id="progress_status" wire:model.lazy="progress_status">
+            <option selected value="">Select</option>
+            @if ($project_category == 'Grant')
+                <option value="proposal_submission">Proposal Submission</option>
+                <option value="pending_review">Pending Review</option>
+                <option value="under_evaluation">Under Evaluation</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="funded">Funded</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="expired">Expired</option>
+                <option value="terminated">Terminated</option>
+            @else
+                <option value="Planning">Planning</option>
+                <option value="Pending Funding">Pending Funding</option>
+                <option value="Implementation">Implementation</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Data Analysis">Data Analysis</option>
+                <option value="Quality Assurance">Quality Assurance</option>
+                <option value="Evaluation">Evaluation</option>
+                <option value="Iteration">Iteration/Refinement</option>
+                <option value="Milestone Achieved">Milestone Achieved</option>
+                <option value="Reporting">Reporting</option>
+                <option value="Transition">Transition</option>
+                <option value="Completed">Completed</option>
+                <option value="Delayed">Delayed</option>
+                <option value="Pending Review">Pending Review</option>
+                <option value="On-hold">On Hold</option>
+                <option value="Terminated">Terminated</option>
+            @endif
+        </select>
+        <div class="text-info" wire:loading wire:target='progress_status'>
             <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
                 <span class='sr-only'></span>
             </div>
@@ -30,10 +108,9 @@
     </div>
 
 </div>
-<div class="row mb-0">
-    <div class="mt-4 col-md-1">
-        <x-export-button></x-export-button>
-    </div>
+
+<div class="row">
+
     <div class="mb-3 col-md-2">
         <label for="from_date" class="form-label">{{ __('public.from_date') }}</label>
         <input id="from_date" type="date" class="form-control" wire:model.lazy="from_date">
@@ -57,6 +134,7 @@
     <div class="mb-3 col-md-1">
         <label for="perPage" class="form-label">{{ __('public.per_page') }}</label>
         <select wire:model="perPage" class="form-select" id="perPage">
+            <option value="5">5</option>
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="30">30</option>
@@ -73,11 +151,10 @@
     <div class="mb-3 col-md-2">
         <label for="orderBy" class="form-label">{{ __('public.order_by') }}</label>
         <select wire:model="orderBy" class="form-select">
-            <option value="name">Name</option>
-            <option value="email">Email</option>
+            <option value="end_date">End Date</option>
             <option value="id">Latest</option>
-            <option value="is_active">Status</option>
         </select>
+
         <div class="text-info" wire:loading wire:target='orderBy'>
             <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
                 <span class='sr-only'></span>
@@ -100,13 +177,16 @@
 
     <div class="mb-3 col-md-3">
         <label for="search" class="form-label">{{ __('public.search') }}</label>
-        <input id="search" type="text" class="form-control" wire:model.lazy="search"
-            placeholder="search">
+        <input id="search" type="text" class="form-control" wire:model.lazy="search" placeholder="search">
         <div class="text-info" wire:loading wire:target='search'>
             <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
                 <span class='sr-only'></span>
             </div>
         </div>
     </div>
-    <hr>
+
+    <div class="mt-4 col-md-1">
+        <x-export-button></x-export-button>
+    </div>
 </div>
+<hr>

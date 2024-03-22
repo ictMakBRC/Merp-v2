@@ -127,7 +127,7 @@
                                                             <i class="mdi mdi-chevron-left"></i>
                                                           </button>
                                                           <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="#">Account History</a>
+                                                            <a class="dropdown-item" href="{{ route('finance-ledger_view', $account->id) }}">Account History</a>
                                                             <a class="dropdown-item" href="#">Run Report</a>
                                                             
                                                         </div>
@@ -146,7 +146,7 @@
                         <div class="row mt-4">
                             <div class="col-md-12">
                                 <div class="btn-group float-end">
-                                    {{ $accounts->links('vendor.pagination.bootstrap-5') }}
+                                    {{ $accounts->links('vendor.livewire.bootstrap') }}
                                 </div>
                             </div>
                         </div>

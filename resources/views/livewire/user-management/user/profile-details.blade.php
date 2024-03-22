@@ -40,7 +40,15 @@
                     @endif
     
                 </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                    {{__('Signature')}}
+                    
+                    <img src="{{ Auth::user()->signature ? asset('storage/' . $user->signature) : asset('assets/images/users/user-vector.png') }}"
+                    class="shadow" width="120px"  alt="">
+    
+                </li>
             </ul>
+
         </div>
     </div>
 </div>

@@ -9,6 +9,7 @@
                     <th>{{ __('public.name') }}</th>
                     <th>{{ __('user-mgt.user_category') }}</th>
                     <th>{{ __('public.email_address') }}</th>
+                    <th>{{ __('public.contact') }}</th>
                     <th>{{ __('public.status') }}</th>
                     <th>{{ __('user-mgt.created_at') }}</th>
                     <th>{{ __('public.action') }}</th>
@@ -21,6 +22,7 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->category ?? 'N/A' }}</td>
                     <td>{{ $user->email ?? 'N/A' }}</td>
+                    <td>{{ $user->contact ?? 'N/A' }}</td>
                     @if ($user->is_active == 0)
                     <td><span class="badge bg-danger">Suspended</span></td>
                     @else
@@ -28,7 +30,7 @@
                     @endif
                     <td>{{ date('d-m-Y', strtotime($user->created_at)) }}</td>
                     <td>
-                        <button class="btn btn btn-sm btn-outline-primary" wire:click="editData({{ $user->id }})"
+                        <button class="btn btn-sm btn-outline-primary" wire:click="editData({{ $user->id }})"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="{{__('public.edit')}}"
                             data-bs-trigger="hover">
                             <i class="ti ti-edit fs-18"></i></button>
@@ -41,7 +43,7 @@
     <div class="row mt-4">
         <div class="col-md-12">
             <div class="btn-group float-end">
-                {{ $users->links('vendor.pagination.bootstrap-5') }}
+                {{ $users->links('vendor.livewire.bootstrap') }}
             </div>
         </div>
     </div>

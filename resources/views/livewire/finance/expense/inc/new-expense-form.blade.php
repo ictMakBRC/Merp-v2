@@ -1,6 +1,6 @@
 <div x-cloak x-show="create_new">
     <form wire:submit.prevent="storeTransaction" >             
-
+        @include('layouts.messages')
             <div class="row">          
 
                 @include('livewire.partials.project-department-toggle')           
@@ -17,14 +17,14 @@
                     @enderror
                 </div>
                 <div class="mb-3 col-2">
-                    <label for="from_account" class="form-label required">Ledger</label>
-                    <select id="from_account" class="form-control" name="from_account" required wire:model="from_account">
+                    <label for="ledger_account" class="form-label required">Ledger</label>
+                    <select id="ledger_account" class="form-control" name="ledger_account" required wire:model="ledger_account">
                         <option value="">Select</option>
                         @foreach ($ledgers as $ledger)
                             <option value="{{$ledger->id}}">{{$ledger->name}}</option>
                         @endforeach
                     </select>
-                    @error('from_account')
+                    @error('ledger_account')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                     @if ($ledgerBalance)
@@ -34,7 +34,7 @@
                 </div>   
                 <div class="mb-3 col-2">
                     <label for="budget_line_id" class="form-label required">Budget Line</label>
-                    <select id="budget_line_id" class="form-control" name="budget_line_id" required wire:model="budget_line_id">
+                    <select id="budget_line_id" class="form-control" name="budget_line_id" wire:model="budget_line_id">
                         <option value="">Select</option>
                         @foreach ($budgetLines as $budgetLine)
                             <option value="{{$budgetLine->id}}">{{$budgetLine->name}}</option>
@@ -47,6 +47,18 @@
                         <small class="text-primary"><strong>Balance:</strong>{{ $budgetLineBalance.' '.$budgetLineCur }}</small>
                         <small class="text-info"><strong>Balance:</strong>{{exchangeCurrency($budgetLineCur, 'base', $budgetLineBalance).' UGX' }}</small>
                     @endif
+                </div>   
+                <div class="mb-3 col-2">
+                    <label for="coa_id" class="form-label required">Expense Type</label>
+                    <select id="coa_id" class="form-control" name="coa_id" required wire:model="coa_id">
+                        <option value="">Select</option>
+                        @foreach ($expense_types as $expense_type)
+                            <option value="{{$expense_type->id}}">{{$expense_type->name}}</option>
+                        @endforeach
+                    </select>
+                    @error('coa_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
                 </div>   
                 <div class="mb-3 col-3">
                     <label for="currency_id" class="form-label required">Currency</label>
@@ -65,7 +77,7 @@
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
                 </div> 
-                <div class="mb-3 col">
+                <div class="mb-3 col-3">
                     <label for="total_amount" class="form-label required">Amount</label>
                     <div class="input-group">
                     <input type="text" id="total_amount"  class="form-control" name="total_amount" required
@@ -76,9 +88,65 @@
                     @error('total_amount')
                         <div class="text-danger text-small">{{ $message }}</div>
                     @enderror
-                </div>            
+                </div>
+                <div class="mb-3 col-2">
+                    <label for="tax_id" class="form-label required">Tax</label>
+                    <div class="input-group">
+                        <select id="tax_id" @if ($baseAmount) @else disabled @endif class="form-control" name="tax_id" required wire:model="tax_id">
+                            <option value="">NA</option>
+                            @foreach ($taxes as $tax)
+                                <option value="{{$tax->id}}">{{$tax->name.' '.$tax->rate}}</option>
+                            @endforeach
+                        </select>
+                        <span class="input-group-text">=</span>
+                        <input id="tax" class="form-control" name="tax" required wire:model="tax"  type="number">
+                    </div>
                 
-                <div class="mb-3 col-md-4">
+                    @error('tax_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>  
+                <div class="mb-3 col-2">
+                    <label for="bank_id" class="form-label required">Supplier</label>
+                    <div class="input-group">
+                        <select id="supplier_id" class="form-control" name="supplier_id" required wire:model="supplier_id">
+                            <option value="">Select</option>
+                            @foreach ($suppliers as $supplier)
+                                <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                
+                    @error('supplier_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>      
+                <div class="mb-3 col-2">
+                    <label for="bank_id" class="form-label required">Bank</label>
+                    <div class="input-group">
+                        <select id="bank_id" class="form-control" name="bank_id" required wire:model="bank_id">
+                            <option value="">Select</option>
+                            @foreach ($banks as $bank)
+                                <option value="{{$bank->id}}">{{$bank->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                
+                    @error('bank_id')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div> 
+                <div class="mb-3 col-2">
+                    <label for="trx_date" class="form-label required">Trx Date</label>
+                    <div class="input-group">
+                    <input type="date" id="trx_date" max="{{ $active_year->end_date }}" min="{{ $active_year->start_date }}" class="form-control" name="trx_date" required
+                        wire:model="trx_date">                        
+                    </div>
+                    @error('trx_date')
+                        <div class="text-danger text-small">{{ $message }}</div>
+                    @enderror
+                </div>  
+                <div class="mb-3 col">
                     <label for="description" class="form-label">Description</label>
                     <textarea  id="description" class="form-control"
                     name="description" wire:model.defer="description"></textarea>

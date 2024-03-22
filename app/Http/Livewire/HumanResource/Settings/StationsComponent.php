@@ -5,6 +5,7 @@ namespace App\Http\Livewire\HumanResource\Settings;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\HumanResource\Settings\Station;
+use App\Exports\HumanResource\Settings\StationListExport;
 
 class StationsComponent extends Component
 {
@@ -69,7 +70,7 @@ class StationsComponent extends Component
     public function storeStation()
     {
         $this->validate([
-            'name' => 'required|string|unique:Stations',
+            'name' => 'required|string|unique:stations',
             'is_active' => 'required|numeric',
             'description' => 'nullable|string',
 
@@ -137,7 +138,7 @@ class StationsComponent extends Component
     public function export()
     {
         if (count($this->stationIds) > 0) {
-            // return (new StationsExport($this->stationIds))->download('Stations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+            return (new StationListExport($this->stationIds))->download('Stations_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEventBrowserEvent('swal:modal', [
                 'type' => 'warning',

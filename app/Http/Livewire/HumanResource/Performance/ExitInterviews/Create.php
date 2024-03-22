@@ -58,7 +58,7 @@ class Create extends Component
         $this->validate();
 
         $warning = ExitInterview::create([
-                'employee_id' => auth()->user()->employee->id,
+                'employee_id' => auth()->user()->employee->id??50,
                 'reason_for_exit' => $this->reason_for_exit,
                 'factors_for_exit' => $this->factors_for_exit,
                 'processes_procedures_systems_for_exit' => $this->processes_procedures_systems_for_exit,
@@ -72,7 +72,7 @@ class Create extends Component
 
     public function render()
     {
-        // $this->authorize('create', ExitInterview::class);
+        $this->authorize('create', ExitInterview::class);
         return view('livewire.human-resource.performance.exit-interviews.create');
     }
 }

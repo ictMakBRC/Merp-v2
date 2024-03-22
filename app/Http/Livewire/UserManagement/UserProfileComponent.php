@@ -3,13 +3,15 @@
 namespace App\Http\Livewire\UserManagement;
 
 use App\Models\User;
+use Carbon\Carbon;
+use Livewire\Component;
+use Illuminate\Support\Str;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password;
 use Intervention\Image\Facades\Image;
-use Livewire\Component;
-use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\Password;
 
 class UserProfileComponent extends Component
 {
@@ -23,6 +25,9 @@ class UserProfileComponent extends Component
 
     public $avatarPath = '';
 
+    public $signature;
+    public $signaturePath;
+
     public $current_password;
 
     public $password;
@@ -31,6 +36,7 @@ class UserProfileComponent extends Component
 
     public $edit_id;
     public $allow_update = false;
+    public $dynamicID = 1;
 
     public function updated($fields)
     {
@@ -40,6 +46,7 @@ class UserProfileComponent extends Component
             'name' => 'required|string',
             'email' => 'required|email:filter',
             'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
+            'signature' => ['image', 'mimes:jpg,png', 'max:1024'],
             'current_password' => 'required|string',
         ]);
 
@@ -60,23 +67,18 @@ class UserProfileComponent extends Component
             'name' => 'required|string',
             'email' => 'required|email:filter',
             'current_password' => 'required|string',
+            'avatar' => 'nullable|mimes:jpg,png,jpeg|max:1024|file|min:1',
+            'signature' => 'nullable|mimes:jpg,png,jpeg|max:1024|file|min:1',
         ]);
         $user = auth()->user();
         if (Hash::check($this->current_password, auth()->user()->password)) {
-            if ($this->avatar != null) {
+             if ($this->avatar != null) {
                 $this->validate([
                     'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
                 ]);
 
-                $avatarName = date('YmdHis').$this->surname.'.'.$this->avatar->extension();
-
-                // Resize the photo to a width and height 150 pixels using intervention lib
-                $resizedPhoto = Image::make($this->avatar)->resize(150, 150, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-
-                $resizedPhoto->save(storage_path('photos/'.$avatarName,'public'));
-                $this->avatarPath = 'photos/'.$avatarName;
+                $avatarName = date('YmdHis').$this->name.'.'.$this->avatar->extension();
+                $this->avatarPath = $this->avatar->storeAs('photos', $avatarName, 'public');
 
                 if (file_exists(storage_path('app/public/').$user->avatar)) {
                     @unlink(storage_path('app/public/').$user->avatar);
@@ -85,14 +87,48 @@ class UserProfileComponent extends Component
                 $this->avatarPath = $user->avatar;
             }
 
+            // if ($this->avatar != null) {
+            //     $this->validate([
+            //         'avatar' => ['image', 'mimes:jpg,png', 'max:1024'],
+            //     ]);
+
+            //     $avatarName = date('YmdHis').$this->name.'.'.$this->avatar->extension();
+
+            //     // Resize the photo to a width and height 150 pixels using intervention lib
+            //     $resizedPhoto = Image::make($this->avatar)->resize(150, 150, function ($constraint) {
+            //         $constraint->aspectRatio();
+            //     });
+
+            //     $resizedPhoto->save(storage_path('photos/'.$avatarName,'public'));
+            //     $this->avatarPath = 'photos/'.$avatarName;
+
+            //     if (file_exists(storage_path('app/public/').$user->avatar)) {
+            //         @unlink(storage_path('app/public/').$user->avatar);
+            //     }
+            // } else {
+            //     $this->avatarPath = $user->avatar;
+            // }
+
+            if ($this->signature != null) {
+                $this->validate([
+                    'signature' => ['image', 'mimes:jpg,png', 'max:1024'],
+                ]);
+                $name = date('YmdHis').$user->name.'.'.$this->signature->extension();
+                $path = 'Signatures';
+                $file = $this->signature->storeAs($path, $name, 'public');
+                if ($user->signature != null) {
+                    Storage::disk('public')->delete($user->signature);
+                }
+                $user->signature = $file;
+            }
             $user->avatar = $this->avatarPath;
             $user->name = $this->name;
             $user->email = $this->email;
             $user->avatar = $this->avatarPath;
-
             $user->update();
             $this->current_password = null;
             $this->allow_update = false;
+            $this->dynamicID = rand();
             $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Account Information updated successfully!']);
         } else {
             $this->dispatchBrowserEvent('swal:modal', [
@@ -125,7 +161,7 @@ class UserProfileComponent extends Component
                 ]);
                 $currentUser->update([
                     'password' => Hash::make($this->password),
-                    'password_updated_at' => now(),
+                    'password_expires_at' => Carbon::now()->addDays(config('auth.password_expires_days')),
                 ]);
 
                 Auth::guard('web')->logout();

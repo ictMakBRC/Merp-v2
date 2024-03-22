@@ -32,20 +32,20 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
     {
         return [
             'creator' => auth()->user()->fullName,
-            'lastModifiedBy' => 'NIMS',
+            'lastModifiedBy' => 'MERP',
             'title' => 'Users',
             'description' => 'Users export',
             'subject' => 'Users export',
-            'keywords' => 'NIMS exports',
-            'category' => 'NIMS Exports',
-            'manager' => 'AFRICA PGI',
-            'company' => 'AFRICA PGI',
+            'keywords' => 'MERP exports',
+            'category' => 'MERP Exports',
+            'manager' => 'MAKBRC',
+            'company' => 'MAKBRC',
         ];
     }
 
     public function collection()
     {
-        return User::with('institution', 'institution.country', 'institution.country.region')->whereIn('id', $this->userIds)->latest()->get();
+        return User::whereIn('id', $this->userIds)->latest()->get();
     }
 
     public function map($user): array
@@ -54,15 +54,11 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
 
         return [
             $this->count,
-            $user->fullName,
             $user->name,
             $user->category ?? 'N/A',
-            $user->institution->country->region->name ?? 'N/A',
-            $user->institution->country->name ?? 'N/A',
-            $user->institution->name ?? 'N/A',
             $user->email ?? 'N/A',
-            str_replace('-', '', $user->contact ?? 'N/A'),
-            $user->is_active === 1 ? 'Active' : 'Suspended',
+            $user->contact ?? 'N/A',
+            $user->is_active == 1 ? 'Active' : 'Suspended',
         ];
     }
 
@@ -71,11 +67,7 @@ class UsersExport implements FromCollection, WithMapping, WithHeadings, WithStyl
         return [
             '#',
             'Name',
-            'Username',
             'Category',
-            'Region',
-            'Country',
-            'Institution',
             'Email',
             'Contact',
             'Status',

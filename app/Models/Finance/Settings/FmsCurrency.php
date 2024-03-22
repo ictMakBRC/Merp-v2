@@ -30,7 +30,7 @@ class FmsCurrency extends Model
         return LogOptions::defaults()
             ->logOnly(['*'])
             ->logFillable()
-            ->useLogName('Chart Of Accounts Sub types')
+            ->useLogName('Currencies')
             ->dontLogIfAttributesChangedOnly(['updated_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

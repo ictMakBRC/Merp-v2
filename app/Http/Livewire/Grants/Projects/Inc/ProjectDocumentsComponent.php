@@ -28,6 +28,7 @@ class ProjectDocumentsComponent extends Component
 
     protected $listeners = [
         'projectCreated' => 'setProjectId',
+        'loadProject' => 'setProjectId',
     ];
 
     public function setProjectId($details)
@@ -58,7 +59,7 @@ class ProjectDocumentsComponent extends Component
                 ]);
     
                 $documentName = date('YmdHis').$project->project_code.' '.$this->document_category.'.'.$this->document->extension();
-                $this->document_path = $this->document->storeAs('project_documents/', $documentName);
+                $this->document_path = $this->document->storeAs('project_documents', $documentName);
             } else {
                 $this->document_path = null;
             }

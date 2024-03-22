@@ -58,6 +58,26 @@ class GeneralEmployeeData extends Data
           'join_date' => 'required|date|before:today',
         ];
     }
+
+    public function updateRules(): array
+    {
+        return [
+          'entry_type' => 'required|string',
+          'nin_number' => 'nullable|string|max:20',
+          'title' => 'required|string',
+          'surname' => 'required|string|max:40',
+          'first_name' => 'required|string|max:40',
+          'gender' => 'required|string|max:6',
+          'nationality' => 'required|string',
+          'email' => 'required|string|email:filter|max:255',
+          'alt_email' => 'nullable|string|email:filter|max:255',
+          'designation_id' => 'required|integer',
+          'station_id' => 'required|integer',
+          'department_id' => 'required|integer',
+          'work_type' => 'required|string',
+          'join_date' => 'required|date|before:today',
+        ];
+    }
     
     // Validation rules for the properties
     public function resetInputs(): array

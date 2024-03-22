@@ -9,14 +9,15 @@ class ProjectData extends Data
   public ?string $project_code;
   public ?string $project_category;
   public ?string $project_type;
-  public ?int $associated_institution;
+  // public ?int $associated_institution;
   public ?string $name;
-  public ?int $grant_id;
-  public ?string $funding_source;
+  // public ?int $grant_id;
+  public ?string $sponsor_id;
   public ?float $funding_amount;
-  public ?string $currency;
-  public ?int $pi;
-  public ?int $co_pi;
+  public ?string $currency_id;
+  public ?string $proposal_submission_date;
+  // public ?int $pi;
+  // public ?int $co_pi;
   public ?string $start_date;
   public ?string $end_date;
   public ?string $project_summary;
@@ -48,18 +49,41 @@ class ProjectData extends Data
     return [
       'project_category' => 'required|string',
       'project_type' => 'required|string',
-      'associated_institution' => 'required|integer',
+      // 'associated_institution' => 'required|integer',
       'project_code' => 'required|string|unique:projects',
       'name' => 'required|string|unique:projects',
       // 'grant_id' => 'nullable|integer',
-      'funding_source' => 'nullable|string',
+      'sponsor_id' => 'nullable|string',
       'funding_amount' => 'nullable|numeric',
-      'currency' => 'required|string',
-      'pi' => 'required_if:project_category,Primary|integer',
-      'co_pi' => 'nullable|integer',
+      'currency_id' => 'required|integer',
       'start_date' => 'required|date',
       'end_date' => 'required|date|after:start_date',
-      'project_summary' => 'required|string|max:255',
+      'proposal_submission_date' => 'nullable|date',
+      // 'pi' => 'required_if:project_category,Primary|integer',
+      // 'co_pi' => 'nullable|integer',
+      'project_summary' => 'required|string',
+      'progress_status' => 'required|string',
+    ];
+  }
+
+  public function updateRules(): array
+  {
+    return [
+      'project_category' => 'required|string',
+      'project_type' => 'required|string',
+      // 'associated_institution' => 'required|integer',
+      'project_code' => 'required|string',
+      'name' => 'required|string',
+      // 'grant_id' => 'nullable|integer',
+      'sponsor_id' => 'nullable|string',
+      'funding_amount' => 'nullable|numeric',
+      'currency_id' => 'required|integer',
+      'start_date' => 'required|date',
+      'end_date' => 'required|date|after:start_date',
+      'proposal_submission_date' => 'nullable|date|before:start_date',
+      // 'pi' => 'required_if:project_category,Primary|integer',
+      // 'co_pi' => 'nullable|integer',
+      'project_summary' => 'required|string',
       'progress_status' => 'required|string',
     ];
   }
@@ -76,11 +100,10 @@ class ProjectData extends Data
       'contract_end_date' => 'required|date|after:contract_start_date',
       'fte' => 'nullable|numeric',
       'contract_file' => 'nullable|mimes:pdf|max:10000',
+      'gross_salary' => 'required|numeric',
       'status' => 'required|string',
     ];
   }
-
-
 
   // Validation rules for the properties
   public function resetInputs(): array

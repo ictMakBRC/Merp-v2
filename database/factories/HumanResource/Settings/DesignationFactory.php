@@ -22,6 +22,7 @@ class DesignationFactory extends Factory
      */
     public function definition(): array
     {
+        return false;
         return [
             'name' => $this->faker->unique()->words(3, true),
             'description' => $this->faker->realText(),

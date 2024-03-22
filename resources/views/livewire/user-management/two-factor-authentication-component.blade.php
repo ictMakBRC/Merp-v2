@@ -3,9 +3,9 @@
         <div class="card-body">
             <div class="border p-4 rounded">
                 <div class="text-center mb-4">
-                    <h3 class="">{{ __('Two Factor Authentication') }}</h3>
+                    <h3 class="">{{ __('2Factor Authentication') }}</h3>
                     <span
-                        class="d-block text-muted">{{ __('Please enter the Two Factor Authentication token/code to verify') }}</span>
+                        class="d-block text-muted">{{ __('Please enter the 2Factor Authentication code to verify') }}</span>
                 </div>
                 <div class="form-body">
                     <form class="row g-3" wire:submit.prevent="verifyToken">

@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('grant_id')->nullable()->constrained('grants', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->string('funding_source')->nullable();
-            $table->decimal('funding_amount', 10, 2)->nullable();
-            $table->string('currency')->nullable();
+            $table->float('funding_amount', 12, 2)->nullable();
+            $table->foreignId('currency_id')->nullable()->references('id')->on('fms_currencies')->constrained()->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('pi')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->foreignId('co_pi')->nullable()->constrained('employees', 'id')->onUpdate('cascade')->onDelete('restrict');
             $table->date('start_date');
