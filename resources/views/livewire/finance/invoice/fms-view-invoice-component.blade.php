@@ -123,10 +123,10 @@
                                     <a href="javascript:voide(0)" wire:click="reviewInvoice({{ $invoice_data->id }})"
                                         class="btn btn-de-primary btn-sm">Mark Reviewed</a>
                                 @endif
-                                {{-- @if ($invoice_data->status == 'Reviewed' && Auth::user()->hasPermission(['approve_all_invoices']))
+                                @if ($invoice_data->status == 'Reviewed' && Auth::user()->hasPermission(['approve_all_invoices']))
                                     <a href="javascript:voide(0)" wire:click="approveInvoice({{ $invoice_data->id }})"
                                         class="btn btn-de-primary btn-sm">Approve Invoice</a>
-                                @endif --}}
+                                @endif
                                 @if ($invoice_data->status == 'Approved' && $invoice_data?->billtable->supervisor == auth()->user()->employee?->id && Auth::user()->hasPermission(['update_all_invoices']))
                                     <a href="javascript:voide(0)"
                                         wire:click="acknowledgeInvoice({{ $invoice_data->id }})"
