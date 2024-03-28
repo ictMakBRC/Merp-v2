@@ -96,6 +96,7 @@ wire:submit.prevent="updateEmployee" @endif>
                 <option value='Volunteer'>Volunteer</option>
                 <option value='Intern'>Intern</option>
                 <option value='Trainee'>Trainee</option>
+                <option value='External'>External</option>
             </select>
             @error('entry_type')
                 <div class="text-danger text-small">{{ $message }}</div>

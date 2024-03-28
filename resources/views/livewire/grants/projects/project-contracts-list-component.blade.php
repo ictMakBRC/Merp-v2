@@ -7,7 +7,7 @@
                         <div class="col-sm-12 mt-3">
                             <div class="d-sm-flex align-items-center">
                                 <h5 class="mb-2 mb-sm-0">
-                                    Official Contracts (<span
+                                    Project Contracts (<span
                                         class="text-danger fw-bold">{{ $contracts->total() }}</span>)
 
                                 </h5>
@@ -19,16 +19,16 @@
                     <div class="tab-content">
                         <div class="row">
                             <div class="mb-3 col-md-3 ">
-                                <label for="department_id" class="form-label">Department</label>
-                                <select class="form-select" wire:model='department_id'>
+                                <label for="project_id" class="form-label">Project</label>
+                                <select class="form-select" wire:model='project_id'>
                                     <option value="0" selected>All</option>
-                                    @forelse ($departments as $department)
-                                        <option value="{{ $department->id }}">{{ $department->name }}
+                                    @forelse ($projects as $project)
+                                        <option value="{{ $project->id }}">{{ $project->name }}
                                         </option>
                                     @empty
                                     @endforelse
                                 </select>
-                                <div class="text-info" wire:loading wire:target='department_id'>
+                                <div class="text-info" wire:loading wire:target='project_id'>
                                     <div class='spinner-border spinner-border-sm text-dark mt-2' role='status'>
                                         <span class='sr-only'></span>
                                     </div>
@@ -137,43 +137,42 @@
                             <table class="table w-100 mb-0 table-striped">
                                 <thead>
                                     <tr>
+                                        <th>#</th>
                                         <th>Emp-No</th>
-                                        <th>Name</th>
-                                        <th>Dept</th>
+                                        <th>Employee Name</th>
+                                        <th>Project/Study</th>
                                         <th>Designation</th>
                                         {{-- <th>Contract Summary</th> --}}
                                         <th>From</th>
                                         <th>To</th>
+                                        <th>FTE</th>
                                         <th>G-Pay</th>
                                         <th>Contract</th>
                                         <th>Status</th>
                                         {{-- <th>Days to Expire</th> --}}
                                     </tr>
                                 </thead>
-
-                                @foreach ($contracts as $officialContract)
+                                @forelse ($contracts as $key => $contract)
                                     <tr>
-                                        <td>{{ $officialContract->employee->employee_number ?? 'N/A' }}</td>
-                                        <td>{{ $officialContract->employee->fullname ?? 'N/A' }}</td>
-                                        <td>{{ $officialContract->employee?->department?->name ?? 'N/A' }}</td>
-                                        <td>{{ $officialContract->employee?->designation?->name ?? 'N/A' }}</td>
-                                        {{-- <td>
-                                            {{ $officialContract->contract_summary }}
-                                        </td> --}}
-                                        <td>
-                                            @formatDate($officialContract->start_date)
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $contract->employee->employee_number ?? 'N/A' }}</td>
+                                        <td>{{ $contract->employee->fullname ?? 'N/A' }}</td>
+                                        <td>{{ $contract->project->project_code ?? 'N/A' }}</td>
+                                        <td>{{ $contract->designation->name ?? 'N/A' }}
                                         </td>
+                                        <td>@formatDate($contract->start_date)</td>
+                                        <td>@formatDate($contract->end_date)</td>
                                         <td>
-                                            @formatDate($officialContract->end_date)
+                                            {{ $contract->fte ?? 'N/A' }}
                                         </td>
-                                        <td>
-                                            {{ $officialContract->currency->code }} @moneyFormat($officialContract->gross_salary)
 
+                                        <td>
+                                            {{ getCurrencyCode($contract->project->currency_id) . ' ' . $contract->gross_salary ?? '0' }}
                                         </td>
-                                        <td class="table-action text-center">
-                                            @if ($officialContract->contract_file)
+                                        <td>
+                                            @if ($contract->contract_file_path)
                                                 <button
-                                                    wire:click='downloadContract("{{ $officialContract->contract_file }}")'
+                                                    wire:click='downloadContract("{{ $contract->contract_file_path }}")'
                                                     class="btn btn-sm btn-outline-success"
                                                     title="{{ __('public.download') }}"><i
                                                         class="ti ti-download"></i></button>
@@ -182,17 +181,18 @@
                                             @endif
 
                                         </td>
-                                        @if ($officialContract->end_date >= today())
-                                            <td><span class="badge bg-success">Running</span>
-                                                @if ($officialContract->days_to_expire >= 0)
-                                                    + ({{ $officialContract->days_to_expire }}) days
-                                                @else
-                                                @endif
+
+                                        @if ($contract->status == 'Running')
+                                            <td><span class="badge bg-success">{{ $contract->status }}</span>
                                             </td>
                                         @else
-                                            <td><span class="badge bg-danger">Expired</span></td>
+                                            <td><span class="badge bg-warning">{{ $contract->status }}</span>
+                                            </td>
                                         @endif
-                                @endforeach
+                                    </tr>
+                                @empty
+                                @endforelse
+
                             </table>
                         </div> <!-- end preview-->
                         <div class="row mt-4">

@@ -8,9 +8,16 @@
         <div class="row">
 
             <div class="mb-3 col-md-4">
-                <label for="bank_name" class="form-label required">Bank Name</label>
-                <input type="text" id="bank_name" class="form-control" wire:model.defer='bank_name'>
-                @error('bank_name')
+                <label for="bank_id" class="form-label required">Bank Name</label>
+                <select class="form-select select2" id="bank_id" wire:model.lazy='bank_id'>
+                    <option selected value="">Select</option>
+                    @forelse ($banks as $bank)
+                    <option value="{{$bank->id}}" >{{$bank->code}}</option>
+                    @empty
+
+                    @endforelse
+                </select>
+                @error('bank_id')
                     <div class="text-danger text-small">{{ $message }}</div>
                 @enderror
             </div>
@@ -99,7 +106,7 @@
                         @foreach ($bankingInformation as $bankingInfo)
                             <tr>
                                 <td>
-                                    {{ $bankingInfo->bank_name }}
+                                    {{ $bankingInfo->bank->name }}
 
                                 </td>
                                 <td>

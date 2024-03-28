@@ -5,13 +5,14 @@ namespace App\Http\Livewire\HumanResource\EmployeeData\Inc;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use App\Data\HumanResource\EmployeeData\EmployeeBankingData;
+use App\Models\Finance\Settings\FmsFinanceInstitutions;
 use App\Models\HumanResource\EmployeeData\BankingInformation;
 use App\Services\HumanResource\EmployeeData\EmployeeBankingInformationService;
 
 class BankingInformationComponent extends Component
 {
     public $employee_id;
-    public $bank_name;
+    public $bank_id;
     public $branch;
     public $account_name;
     public $account_number;
@@ -54,7 +55,7 @@ class BankingInformationComponent extends Component
         DB::transaction(function (){
             $bankingInformationDTO = EmployeeBankingData::from([
                 'employee_id'=>$this->employee_id,
-                'bank_name'=>    $this->bank_name,
+                'bank_id'=>    $this->bank_id,
                 'branch'=>    $this->branch,
                 'account_name'=>    $this->account_name,
                 'account_number'=>    $this->account_number,
@@ -78,7 +79,7 @@ class BankingInformationComponent extends Component
     {
         $this->bankingInfo = $bankingInformation;
 
-        $this->bank_name = $bankingInformation->bank_name;
+        $this->bank_id = $bankingInformation->bank_id;
         $this->branch = $bankingInformation->branch;
         $this->account_name = $bankingInformation->account_name;
         $this->account_number = $bankingInformation->account_number;
@@ -105,7 +106,7 @@ class BankingInformationComponent extends Component
         DB::transaction(function (){
             $bankingInformationDTO = EmployeeBankingData::from([
                 'employee_id'=>$this->employee_id,
-                'bank_name'=>    $this->bank_name,
+                'bank_id'=>    $this->bank_id,
                 'branch'=>    $this->branch,
                 'account_name'=>    $this->account_name,
                 'account_number'=>    $this->account_number,
@@ -130,6 +131,7 @@ class BankingInformationComponent extends Component
     {
       
         $data['bankingInformation'] = BankingInformation::with('currency')->where('employee_id',$this->employee_id)->get()??collect([]);
+        $data['banks'] = FmsFinanceInstitutions::get()??collect([]);
 
         return view('livewire.human-resource.employee-data.inc.banking-information-component',$data);
     }

@@ -7,7 +7,7 @@ use Spatie\LaravelData\Data;
 class EmployeeBankingData extends Data
 {
     public ?int $employee_id;
-    public ?string $bank_name;
+    public ?string $bank_id;
     public ?string $branch;
     public ?string $account_name;
     public ?string $account_number;
@@ -19,7 +19,7 @@ class EmployeeBankingData extends Data
     {
         return [
           'employee_id' => 'required|integer',
-          'bank_name' => 'required|string|max:100',
+          'bank_id' => 'required|integer',
           'branch' => 'required|string|max:100',
           'account_name' => 'required|string|max:100',
           'account_number' => 'required|max:255|unique:banking_information',
@@ -31,7 +31,7 @@ class EmployeeBankingData extends Data
     public function updateRules(): array
     {
         return [
-          'bank_name' => 'required|string|max:100',
+          'bank_id' => 'required|integer',
           'branch' => 'required|string|max:100',
           'account_name' => 'required|string|max:100',
           'account_number' => 'required|max:255',

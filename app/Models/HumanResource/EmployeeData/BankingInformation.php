@@ -2,6 +2,7 @@
 
 namespace App\Models\HumanResource\EmployeeData;
 
+use App\Models\Finance\Settings\FmsFinanceInstitutions;
 use App\Traits\CurrencyTrait;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,11 @@ class BankingInformation extends Model
     public $table = 'banking_information';
 
     protected $guarded = ['id'];
+
+    public function bank()
+    {
+        return $this->belongsTo(FmsFinanceInstitutions::class, 'bank_id');
+    }
 
     public static function boot()
     {

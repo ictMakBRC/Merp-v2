@@ -77,8 +77,14 @@ class OfficialContract extends Model
     {
         return empty($search) ? static::query()
             : static::query()
-                ->where('contract_summary', 'like', '%'.$search.'%');
+                
+                ->whereHas('employee', function($query) use($search){
+                    $query->where('surname', 'like', '%'.$search.'%')
+                    ->orWhere('first_name', 'like', '%'.$search.'%')
+                    ->orWhere('other_name', 'like', '%'.$search.'%');
+                });
     }
+    
     public static function searchMyContract($search)
     {
         return empty($search) ? static::query()

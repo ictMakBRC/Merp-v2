@@ -18,6 +18,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('manage-projects') }}">{{ __('Projects') }}</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('project-contracts') }}">{{ __('Contracts') }}</a>
+            </li>
             <!--end nav-item-->
 
             {{-- <li class="nav-item">

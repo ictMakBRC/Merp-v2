@@ -43,7 +43,7 @@ class EmployeeBankingInformationService
     private function fillBankingInformationFromDTO(BankingInformation $bankingInformation, EmployeeBankingData $bankingInformationDTO)
     {
         $bankingInformation->employee_id = $bankingInformationDTO->employee_id;
-        $bankingInformation->bank_name = $bankingInformationDTO->bank_name;
+        $bankingInformation->bank_id = $bankingInformationDTO->bank_id;
         $bankingInformation->branch = $bankingInformationDTO->branch;
         $bankingInformation->account_name = $bankingInformationDTO->account_name;
         $bankingInformation->account_number = $bankingInformationDTO->account_number;

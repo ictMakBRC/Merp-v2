@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\HumanResource\EmployeeData\OfficialContracts;
+namespace App\Http\Livewire\Grants\Projects;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
+use App\Models\Grants\Project\Project;
+use App\Models\Grants\Project\EmployeeProject;
 use App\Models\HumanResource\Settings\Department;
 use App\Models\HumanResource\EmployeeData\Employee;
-use App\Models\HumanResource\EmployeeData\OfficialContract\OfficialContract;
-use App\Exports\HumanResource\EmployeeData\OfficialContract\EmployeeContractExport;
+use App\Exports\Projects\ProjectEmployeeContractExport;
 
-class OfficialContractsListComponent extends Component
+class ProjectContractsListComponent extends Component
 {
     use WithPagination;
     public $from_date;
@@ -28,7 +30,7 @@ class OfficialContractsListComponent extends Component
     public $orderAsc = 0;
 
     public $is_active =1;
-    public $department_id;
+    public $project_id;
     public $employee_id;
     public $days_to_expire=0;
 
@@ -49,7 +51,7 @@ class OfficialContractsListComponent extends Component
     public function export()
     {
         if (count($this->contractIds) > 0) {
-            return (new EmployeeContractExport($this->contractIds))->download('OfficialContracts_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
+            return (new ProjectEmployeeContractExport($this->contractIds))->download('ProjectContracts_'.date('d-m-Y').'_'.now()->toTimeString().'.xlsx');
         } else {
             $this->dispatchBrowserEvent('swal:modal', [
                 'type' => 'info',
@@ -61,28 +63,18 @@ class OfficialContractsListComponent extends Component
 
     public function filterContracts()
     {
-        $contracts = OfficialContract::search($this->search)->with('employee','employee.department','employee.designation','currency')
-        ->when($this->department_id != 0, function ($query){
-            $query->whereHas('employee',function($query){
-                $query->where('department_id',$this->department_id);
-            });
-        })
-        ->when($this->employee_id != 0, function ($query){
-            $query->where('employee_id',$this->employee_id);
-        })
-        ->when($this->days_to_expire > 0, function ($query) {
-            $query->whereRaw('DATEDIFF(end_date, CURRENT_DATE()) = ?', [$this->days_to_expire]);
+        $contracts = EmployeeProject::with('employee','project','project.currency','designation')->when($this->employee_id != 0, function ($query) {
+            $query->where('employee_id', $this->employee_id);
+        }, function ($query) {
+            return $query;
+        })->when($this->project_id != 0, function ($query){
+            $query->where('id',$this->project_id);
         })
         ->when($this->from_date != '' && $this->to_date != '', function ($query) {
             $query->whereBetween('created_at', [$this->from_date, $this->to_date]);
         }, function ($query) {
             return $query;
-        })
-        ->addSelect([
-            'official_contracts.*', // Include other fields from the contracts table
-            DB::raw('DATEDIFF(end_date, CURRENT_DATE()) as days_to_expire')
-        ])
-        ;
+        });
 
         $this->contractIds = $contracts->pluck('id')->toArray();
 
@@ -90,7 +82,6 @@ class OfficialContractsListComponent extends Component
     }
 
     public function downloadContract($filePath){
-        // dd($filePath);
         try {
             return downloadFile($filePath);
         } catch (\Throwable $th) {
@@ -104,13 +95,14 @@ class OfficialContractsListComponent extends Component
 
     public function render()
     {
+        // dd($this->filterContracts()->get());
         $data['contracts'] = $this->filterContracts()
             ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
             ->paginate($this->perPage);
             
-        $data['employees'] = Employee::where('is_active',true)->get();
-        $data['departments'] = Department::where('is_active',true)->get();
+        $data['employees'] = Employee::where('is_active',true)->orderBy('first_name','asc')->get();
+        $data['projects'] = Project::whereHas('employees')->get();
 
-        return view('livewire.human-resource.employee-data.official-contracts.official-contracts-list-component',$data);
+        return view('livewire.grants.projects.project-contracts-list-component',$data);
     }
 }

@@ -33,6 +33,18 @@ class ProjectProfileComponent extends Component
         }
     }
 
+    public function downloadContract($filePath){
+        try {
+            return downloadFile($filePath);
+        } catch (\Throwable $th) {
+            $this->dispatchBrowserEvent('swal:modal', [
+                'type' => 'error',
+                'message' => 'Not Found!',
+                'text' => 'Attachment not found!',
+            ]);
+        } 
+    }
+
     public function render()
     {
         $data['project']=Project::with('principalInvestigator','coordinator','procurementRequests','employees','departments','ledger','currency')->findOrFail($this->project_id);

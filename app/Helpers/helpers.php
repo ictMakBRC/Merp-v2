@@ -3,6 +3,7 @@
 use Illuminate\Support\Collection;
 use App\Enums\ProcurementRequestEnum;
 use App\Models\Grants\Project\Project;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Global\FacilityInformation;
 use App\Models\Finance\Budget\FmsBudgetLine;
 use App\Models\Finance\Settings\FmsCurrency;
@@ -242,4 +243,32 @@ function removeSymbolsAndTransform($inputString)
     $cleanString = str_replace($symbols, '', $uppercaseString);
 
     return $cleanString;
+}
+
+function formatDate($expression) {
+    return $expression != null? date('d-M-Y', strtotime($expression)) :"'N/A";
+}
+
+function moneyFormat($figure) {
+    return $figure != null? number_format($figure,2) :"'N/A";
+}
+
+function downloadFile($filePath)
+{
+  // Check if file exists
+  $fullPath = storage_path('app/' . $filePath);
+  if (!file_exists($fullPath)) {
+    abort(404, 'File not found');
+  }
+
+  // Get original filename (optional)
+  $originalFilename = basename($filePath);
+
+  // Generate downloadable response with appropriate headers
+  $headers = [
+    'Content-Type' => mime_content_type($fullPath),
+    'Content-Disposition' => "attachment; filename=\"$originalFilename\"",
+  ];
+
+  return response()->download($fullPath, $originalFilename, $headers);
 }

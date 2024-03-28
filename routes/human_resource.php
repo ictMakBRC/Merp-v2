@@ -53,7 +53,7 @@ use App\Http\Livewire\HumanResource\EmployeeData\OfficialContracts\OfficialContr
 use App\Http\Livewire\HumanResource\Settings\DepartmentProfile;
 
 Route::group(['prefix' => 'human-resource'], function () {
-    Route::get('dashboard', HumanResourceMainDashboardComponent::class)->name('human-resource-dashboard');
+    Route::get('dashboard/{dash?}', HumanResourceMainDashboardComponent::class)->name('human-resource-dashboard');
 
     Route::group(['prefix' => 'settings'], function () {
 
